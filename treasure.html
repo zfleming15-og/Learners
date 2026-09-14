@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-treasure.png">
+<meta name="apple-mobile-web-app-title" content="Treasure Hunt">
+<title>Treasure Hunt</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    font-family: -apple-system, "SF Pro Rounded", "Avenir Next", system-ui, sans-serif;
+    user-select: none; -webkit-user-select: none;
+    background: #1a0d2e;
+    touch-action: manipulation;
+  }
+  body {
+    background:
+      radial-gradient(ellipse at 20% 0%, #4a2c6d 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, #2a1845 0%, transparent 50%),
+      linear-gradient(180deg, #1a0d2e 0%, #0f0820 100%);
+    color: #fef3c7;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  #app { width: 100%; max-width: 480px; height: 100%; max-height: 900px; position: relative; }
+
+  .screen { position: absolute; inset: 0; display: none; flex-direction: column; padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .screen.active { display: flex; }
+
+  /* ============ KID PICKER ============ */
+  #picker-screen { justify-content: center; align-items: center; text-align: center; }
+  .picker-art { font-size: 64px; margin-bottom: 8px; animation: bob 3s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-8px) rotate(2deg);} }
+  .picker-title {
+    font-family: "Georgia", serif;
+    font-size: 32px; font-weight: 900;
+    color: #fcd34d;
+    text-shadow: 3px 3px 0 #92400e, 6px 6px 0 #451a03;
+    margin: 0 0 4px;
+    line-height: 1.1;
+  }
+  .picker-subtitle { color: #fde68a; font-size: 15px; opacity: 0.9; margin-bottom: 28px; font-style: italic; }
+  .kid-cards {
+    display: flex; flex-direction: column; gap: 14px;
+    width: 100%; max-width: 320px;
+  }
+  .kid-card {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 3px solid #92400e;
+    border-radius: 18px;
+    padding: 18px 20px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #451a03;
+    display: flex; align-items: center; gap: 16px;
+    text-align: left;
+    color: #451a03;
+    font-family: inherit;
+  }
+  .kid-card:active { transform: translateY(2px); box-shadow: 0 3px 0 #451a03; }
+  .kid-card .emoji { font-size: 56px; flex-shrink: 0; }
+  .kid-card .info { flex: 1; }
+  .kid-card .role { font-family: "Georgia", serif; font-size: 22px; font-weight: 900; line-height: 1; }
+  .kid-card .skill { font-size: 13px; margin-top: 4px; font-weight: 600; }
+  .kid-card.captain { background: linear-gradient(135deg, #fcd34d, #f59e0b); }
+  .kid-card.mate { background: linear-gradient(135deg, #93c5fd, #3b82f6); color: #1e3a8a; }
+  .kid-card.mate .role { color: #1e3a8a; }
+  .kid-card.mate .skill { color: #1e40af; }
+
+  /* ============ TITLE / MODE SELECT ============ */
+  #title-screen { justify-content: flex-start; align-items: center; text-align: center; padding-top: 16px; }
+  .title-art { font-size: 56px; margin-bottom: 4px; filter: drop-shadow(0 4px 12px rgba(255, 200, 50, 0.4)); animation: bob 3s ease-in-out infinite; }
+  .game-title {
+    font-family: "Georgia", serif;
+    font-size: 28px; font-weight: 900;
+    color: #fcd34d;
+    text-shadow: 3px 3px 0 #92400e, 6px 6px 0 #451a03;
+    margin: 0 0 4px;
+    line-height: 1;
+  }
+  .subtitle { color: #fde68a; font-size: 13px; opacity: 0.9; margin-bottom: 8px; font-style: italic; }
+  .pirate-name-tag {
+    background: rgba(252, 211, 77, 0.15);
+    border: 2px solid rgba(252, 211, 77, 0.4);
+    color: #fcd34d;
+    padding: 5px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  /* Activity tabs (for First Mate) */
+  .activity-tabs {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 12px;
+    background: rgba(0,0,0,0.25);
+    padding: 4px;
+    border-radius: 12px;
+  }
+  .activity-tab {
+    flex: 1;
+    padding: 8px 4px;
+    background: transparent;
+    color: #fde68a;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .activity-tab.active {
+    background: linear-gradient(135deg, #fcd34d, #f59e0b);
+    color: #451a03;
+    box-shadow: 0 2px 0 #92400e;
+  }
+
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 340px;
+    margin-bottom: 12px;
+  }
+  .mode-grid.dual {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .mode-grid.dual .big-mode-btn {
+    padding: 14px 8px;
+  }
+  .mode-grid.dual .big-mode-btn .symbol { font-size: 26px; }
+  .mode-grid.dual .big-mode-btn .label { font-size: 13px; }
+
+  .table-btn {
+    aspect-ratio: 0.95;
+    border: 2px solid #b45309;
+    background: linear-gradient(135deg, #fcd34d, #f59e0b);
+    color: #451a03;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #92400e;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2px; padding: 4px;
+    position: relative;
+  }
+  .table-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #92400e; }
+  .table-btn .num { font-size: 20px; line-height: 1; }
+  .table-btn .mastery-stars { font-size: 11px; line-height: 1; letter-spacing: -1px; min-height: 11px; }
+  .table-btn.mastered {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    border-color: #78350f;
+    box-shadow: 0 3px 0 #78350f, 0 0 12px rgba(252, 211, 77, 0.6);
+  }
+  .table-btn.mastered::after { content: '👑'; position: absolute; top: -8px; right: -6px; font-size: 18px; }
+
+  .big-mode-btn {
+    aspect-ratio: auto;
+    padding: 18px;
+    font-size: 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fcd34d, #f59e0b);
+    border: 3px solid #92400e;
+    box-shadow: 0 4px 0 #451a03;
+    color: #451a03;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    position: relative;
+  }
+  .big-mode-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #451a03; }
+  .big-mode-btn .symbol { font-size: 32px; line-height: 1; }
+  .big-mode-btn .label { font-size: 14px; font-weight: 700; }
+  .big-mode-btn .stars { font-size: 12px; min-height: 12px; }
+  .big-mode-btn.mastered { background: linear-gradient(135deg, #fbbf24, #d97706); }
+  .big-mode-btn.mastered::after { content: '👑'; position: absolute; top: -8px; right: -6px; font-size: 18px; }
+
+  .mixed-btn {
+    width: 100%;
+    max-width: 340px;
+    padding: 14px;
+    background: linear-gradient(135deg, #f87171, #dc2626);
+    border: 2px solid #7f1d1d;
+    box-shadow: 0 3px 0 #7f1d1d;
+    color: #fef2f2;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: inherit;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  .mixed-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #7f1d1d; }
+  .mixed-btn .smart-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Reading mode buttons (purple/teal scheme to differ from math) */
+  .reading-btn {
+    width: 100%;
+    max-width: 340px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #c4b5fd, #8b5cf6);
+    border: 3px solid #5b21b6;
+    box-shadow: 0 4px 0 #4c1d95;
+    color: white;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .reading-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #4c1d95; }
+  .reading-btn .ico { font-size: 36px; flex-shrink: 0; }
+  .reading-btn .body { flex: 1; }
+  .reading-btn .ttl { font-size: 17px; font-family: "Georgia", serif; line-height: 1; margin-bottom: 4px; }
+  .reading-btn .desc { font-size: 12px; opacity: 0.85; font-weight: 600; }
+  .reading-btn.alt {
+    background: linear-gradient(135deg, #5eead4, #14b8a6);
+    border-color: #115e59;
+    box-shadow: 0 4px 0 #134e4a;
+  }
+  .reading-btn.alt2 {
+    background: linear-gradient(135deg, #fca5a5, #ec4899);
+    border-color: #9d174d;
+    box-shadow: 0 4px 0 #831843;
+  }
+
+  .nav-buttons {
+    display: flex; gap: 10px;
+    width: 100%; max-width: 340px;
+    margin-top: 4px;
+  }
+  .nav-btn {
+    flex: 1;
+    background: rgba(254, 243, 199, 0.1);
+    border: 2px solid rgba(254, 243, 199, 0.3);
+    color: #fde68a;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .nav-btn:active { background: rgba(254, 243, 199, 0.2); }
+  .hint-text { color: #fde68a; font-size: 12px; opacity: 0.7; margin-top: 8px; }
+
+  /* ============ STATS ============ */
+  #stats-screen { padding-top: 16px; }
+  .stats-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; width: 100%;
+  }
+  .stats-title {
+    font-family: "Georgia", serif;
+    font-size: 24px;
+    color: #fcd34d;
+    margin: 0; flex: 1;
+    text-shadow: 2px 2px 0 #92400e;
+  }
+  .stats-list { flex: 1; overflow-y: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+  .stat-row {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(252, 211, 77, 0.08);
+    border: 1px solid rgba(252, 211, 77, 0.2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .stat-table-name { font-size: 16px; font-weight: 800; color: #fcd34d; width: 80px; }
+  .stat-bar-container { flex: 1; height: 18px; background: rgba(0,0,0,0.3); border-radius: 9px; overflow: hidden; }
+  .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #16a34a, #22c55e); border-radius: 9px; transition: width 0.5s; }
+  .stat-bar-fill.low { background: linear-gradient(90deg, #dc2626, #ef4444); }
+  .stat-bar-fill.mid { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .stat-percent { font-size: 13px; font-weight: 700; color: #fde68a; width: 56px; text-align: right; }
+  .stat-empty { color: #fde68a; opacity: 0.6; font-size: 13px; font-style: italic; width: 56px; text-align: right; }
+  .stat-mastery-icon { font-size: 20px; width: 24px; text-align: center; }
+  .reset-btn {
+    background: rgba(220, 38, 38, 0.15);
+    border: 2px solid rgba(220, 38, 38, 0.4);
+    color: #fca5a5;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 12px;
+    align-self: center;
+  }
+  .reset-btn:active { background: rgba(220, 38, 38, 0.3); }
+  .stats-summary {
+    background: linear-gradient(135deg, rgba(252, 211, 77, 0.15), rgba(180, 83, 9, 0.15));
+    border: 2px solid rgba(252, 211, 77, 0.3);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .stats-summary .total-gold {
+    font-size: 32px; font-weight: 900;
+    color: #fcd34d;
+    text-shadow: 2px 2px 0 #92400e;
+  }
+  .stats-summary .label { font-size: 13px; color: #fde68a; opacity: 0.9; }
+
+  /* ============ GAME ============ */
+  #game-screen { padding: 12px 16px 20px; overflow: hidden; }
+  .top-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; gap: 12px;
+  }
+  .back-btn {
+    background: rgba(254, 243, 199, 0.1);
+    border: 2px solid rgba(254, 243, 199, 0.3);
+    color: #fde68a;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .back-btn:active { background: rgba(254, 243, 199, 0.2); }
+  .gold-counter {
+    background: linear-gradient(135deg, #fcd34d, #d97706);
+    color: #451a03;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 16px;
+    border: 2px solid #92400e;
+    display: flex; align-items: center; gap: 4px;
+    min-width: 70px;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ============ TREASURE MAP PROGRESS ============ */
+  .treasure-path {
+    width: 100%;
+    max-width: 360px;
+    height: 70px;
+    margin: 0 auto 8px;
+    position: relative;
+  }
+  .treasure-path svg { width: 100%; height: 100%; overflow: visible; }
+  .path-bg {
+    fill: none;
+    stroke: rgba(252, 211, 77, 0.25);
+    stroke-width: 4;
+    stroke-dasharray: 6, 8;
+    stroke-linecap: round;
+  }
+  .path-fill {
+    fill: none;
+    stroke: #fcd34d;
+    stroke-width: 5;
+    stroke-dasharray: 6, 8;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 6px rgba(252, 211, 77, 0.6));
+    transition: stroke-dashoffset 0.6s ease-out;
+  }
+  .path-pirate {
+    font-size: 22px;
+    transition: offset-distance 0.6s ease-out, transform 0.6s;
+    offset-rotate: 0deg;
+  }
+  .path-x {
+    font-family: "Georgia", serif;
+    font-size: 26px;
+    font-weight: 900;
+    fill: #dc2626;
+    text-anchor: middle;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+  }
+  .path-chest {
+    font-size: 28px;
+    transition: transform 0.4s;
+  }
+  .path-chest.opened { animation: chestPop 0.6s ease-out; }
+  @keyframes chestPop { 0%{transform:scale(1);} 50%{transform:scale(1.4) rotate(-8deg);} 100%{transform:scale(1.1);} }
+
+  /* ============ STAGE ============ */
+  .treasure-stage {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+  }
+  .pirate-character {
+    font-size: 56px;
+    margin-bottom: 8px;
+    transition: transform 0.3s;
+  }
+  .pirate-character.celebrating { animation: celebrate 0.6s ease-out; }
+  @keyframes celebrate { 0%,100%{transform:scale(1) rotate(0);} 25%{transform:scale(1.2) rotate(-10deg);} 75%{transform:scale(1.2) rotate(10deg);} }
+
+  .speech-bubble {
+    background: #fef3c7;
+    color: #451a03;
+    padding: 10px 18px;
+    border-radius: 18px;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    position: relative;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+  }
+  .speech-bubble::before {
+    content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #fef3c7;
+  }
+
+  .problem-card {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 3px solid #92400e;
+    border-radius: 20px;
+    padding: 20px 24px;
+    box-shadow: 0 6px 0 #451a03, 0 12px 30px rgba(0,0,0,0.4);
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .problem-text {
+    font-family: "Georgia", serif;
+    font-size: 56px;
+    font-weight: 900;
+    color: #451a03;
+    text-align: center;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .array-visual {
+    display: grid;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 12px;
+  }
+  .array-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fcd34d, #d97706);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(0,0,0,0.2);
+    animation: pop 0.3s ease-out backwards;
+  }
+  @keyframes pop { from{transform:scale(0);} to{transform:scale(1);} }
+
+  .count-visual {
+    margin-top: 16px;
+    padding: 14px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    min-height: 64px;
+  }
+  .count-group {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    justify-content: center;
+    max-width: 120px;
+  }
+  .count-item {
+    width: 26px; height: 26px;
+    font-size: 22px;
+    line-height: 26px;
+    text-align: center;
+    animation: pop 0.3s ease-out backwards;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .count-item.removed {
+    opacity: 0.25;
+    transform: scale(0.9);
+    text-decoration: line-through;
+    text-decoration-color: #dc2626;
+    text-decoration-thickness: 3px;
+  }
+  .count-symbol {
+    font-size: 28px;
+    font-weight: 900;
+    color: #451a03;
+    font-family: "Georgia", serif;
+  }
+
+  .choices-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .choice-btn {
+    background: linear-gradient(135deg, #1e40af, #1e3a8a);
+    color: #fef3c7;
+    border: 3px solid #fcd34d;
+    border-radius: 16px;
+    padding: 18px;
+    font-size: 28px;
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #1e3a8a, 0 8px 20px rgba(0,0,0,0.3);
+    transition: all 0.15s;
+  }
+  .choice-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #1e3a8a; }
+  .choice-btn.correct {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-color: #fef3c7;
+    animation: correctPulse 0.5s ease-out;
+  }
+  .choice-btn.wrong {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    animation: shake 0.4s ease-out;
+  }
+  @keyframes correctPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-8px);} 75%{transform:translateX(8px);} }
+
+  /* ============ TREASURE REVEAL ============ */
+  #treasure-screen { justify-content: center; align-items: center; text-align: center; }
+  .chest-container {
+    font-size: 120px;
+    margin-bottom: 16px;
+    animation: chestBounce 0.6s ease-out;
+  }
+  @keyframes chestBounce {
+    0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+    60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); }
+  }
+  .treasure-title {
+    font-family: "Georgia", serif;
+    font-size: 36px;
+    color: #fcd34d;
+    text-shadow: 2px 2px 0 #92400e, 4px 4px 0 #451a03;
+    margin: 0 0 8px;
+  }
+  .treasure-msg { color: #fde68a; font-size: 18px; margin-bottom: 24px; }
+  .gold-burst {
+    font-size: 32px;
+    margin-bottom: 24px;
+    animation: shimmer 1s ease-out infinite;
+  }
+  @keyframes shimmer { 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.3);} }
+  .next-btn {
+    background: linear-gradient(135deg, #fcd34d, #f59e0b);
+    color: #451a03;
+    border: 3px solid #92400e;
+    border-radius: 16px;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #92400e;
+  }
+  .next-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #92400e; }
+
+  /* ============ VICTORY ============ */
+  #victory-screen { justify-content: center; align-items: center; text-align: center; }
+  .victory-emoji { font-size: 100px; margin-bottom: 16px; animation: bob 2s ease-in-out infinite; }
+  .victory-title {
+    font-family: "Georgia", serif;
+    font-size: 40px;
+    color: #fcd34d;
+    text-shadow: 3px 3px 0 #92400e, 6px 6px 0 #451a03;
+    margin: 0 0 12px;
+  }
+  .victory-stats {
+    background: rgba(252, 211, 77, 0.1);
+    border: 2px solid rgba(252, 211, 77, 0.4);
+    border-radius: 20px;
+    padding: 20px 32px;
+    margin-bottom: 16px;
+  }
+  .victory-stats div { font-size: 18px; color: #fde68a; margin: 6px 0; }
+  .victory-stats strong { color: #fcd34d; font-size: 26px; }
+  .mastery-up {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border: 2px solid #86efac;
+    border-radius: 16px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    color: #ecfdf5;
+    font-weight: 700;
+    font-size: 15px;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  .confetti {
+    position: absolute;
+    width: 10px; height: 10px;
+    pointer-events: none;
+    animation: confettiFall 2s ease-in forwards;
+  }
+  @keyframes confettiFall {
+    to { transform: translateY(600px) rotate(720deg); opacity: 0; }
+  }
+
+  /* ============ READING SCREENS (Letter Land) ============ */
+  #letterland-screen { padding: 12px 14px 16px; overflow: hidden; }
+  #letterland-screen .top-bar { margin-bottom: 8px; }
+  .letterland-title {
+    font-family: "Georgia", serif;
+    font-size: 20px;
+    color: #fcd34d;
+    text-align: center;
+    flex: 1;
+    text-shadow: 2px 2px 0 #92400e;
+    margin: 0;
+  }
+  .active-letter-banner {
+    background: rgba(252, 211, 77, 0.15);
+    border: 2px solid rgba(252, 211, 77, 0.4);
+    color: #fcd34d;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .active-letter-banner .big-letter {
+    font-family: "Georgia", serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: #fef3c7;
+  }
+  .reading-grid {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 0 8px;
+  }
+  .letter-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .letter-card {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    border: 3px solid;
+    font-family: "Georgia", serif;
+    font-size: 28px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s;
+  }
+  .letter-card:active { transform: translateY(2px) scale(0.95); }
+  .letter-card.active { animation: letterPop 0.5s ease-out; }
+  @keyframes letterPop { 0%,100%{transform:scale(1);} 50%{transform:scale(1.15);} }
+
+  .word-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .word-card {
+    border-radius: 16px;
+    border: 3px solid;
+    padding: 14px 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.15s;
+  }
+  .word-card:active { transform: translateY(2px); }
+  .word-card .word-emoji { font-size: 40px; line-height: 1; }
+  .word-card .word-letters {
+    display: flex;
+    gap: 3px;
+    font-family: "Georgia", serif;
+    font-size: 22px;
+    font-weight: 900;
+  }
+  .word-card .word-letter {
+    transition: transform 0.3s, color 0.3s;
+  }
+  .word-card .word-letter.active {
+    transform: translateY(-6px) scale(1.3);
+    color: #dc2626;
+  }
+
+  .sight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .sight-card {
+    aspect-ratio: 1.6;
+    border-radius: 14px;
+    border: 3px solid #5b21b6;
+    background: linear-gradient(135deg, #c4b5fd, #8b5cf6);
+    color: white;
+    font-family: "Georgia", serif;
+    font-size: 22px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #4c1d95;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .sight-card:active { transform: translateY(2px) scale(0.97); }
+  .sight-card.active { animation: letterPop 0.5s ease-out; }
+
+  /* Case Match game */
+  .cm-board {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 4px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    align-content: start;
+  }
+  .cm-tile {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    border: 3px solid #b45309;
+    background: linear-gradient(135deg, #fcd34d, #f59e0b);
+    color: #451a03;
+    font-family: "Georgia", serif;
+    font-size: 32px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #92400e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, opacity 0.3s;
+  }
+  .cm-tile:active { transform: translateY(2px) scale(0.95); }
+  .cm-tile.selected {
+    background: linear-gradient(135deg, #93c5fd, #3b82f6);
+    border-color: #1e3a8a;
+    color: white;
+    box-shadow: 0 3px 0 #1e3a8a, 0 0 16px rgba(59, 130, 246, 0.6);
+    transform: scale(1.05);
+  }
+  .cm-tile.matched {
+    background: linear-gradient(135deg, #86efac, #16a34a);
+    border-color: #14532d;
+    color: white;
+    pointer-events: none;
+    animation: matchPop 0.5s ease-out;
+  }
+  @keyframes matchPop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 0.3; }
+  }
+  .cm-tile.miss {
+    animation: shake 0.4s ease-out;
+    background: linear-gradient(135deg, #fca5a5, #dc2626);
+    color: white;
+    border-color: #7f1d1d;
+  }
+
+  /* ============ MODAL ============ */
+  .modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-backdrop.active { display: flex; }
+  .modal {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 3px solid #92400e;
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 320px;
+    text-align: center;
+    color: #451a03;
+    box-shadow: 0 8px 0 #451a03;
+  }
+  .modal h3 { margin: 0 0 12px; font-family: "Georgia", serif; font-size: 22px; }
+  .modal p { margin: 0 0 20px; font-size: 15px; line-height: 1.4; }
+  .modal-buttons { display: flex; gap: 10px; }
+  .modal-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #92400e;
+    font-weight: 800;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .modal-btn.primary { background: #dc2626; color: #fef3c7; border-color: #7f1d1d; }
+  .modal-btn.secondary { background: rgba(0,0,0,0.1); color: #451a03; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- KID PICKER -->
+  <div id="picker-screen" class="screen active">
+    <div class="picker-art">🏴‍☠️</div>
+    <h1 class="picker-title">Treasure<br>Hunt</h1>
+    <p class="picker-subtitle">Who be sailin' today?</p>
+    <div class="kid-cards">
+      <button class="kid-card captain" onclick="selectKid('captain')">
+        <span class="emoji">🧔‍♂️</span>
+        <div class="info">
+          <div class="role">The Captain</div>
+          <div class="skill">Times Tables × ÷</div>
+        </div>
+      </button>
+      <button class="kid-card mate" onclick="selectKid('mate')">
+        <span class="emoji">🧒</span>
+        <div class="info">
+          <div class="role">First Mate</div>
+          <div class="skill">Math + Reading</div>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div id="title-screen" class="screen">
+    <div class="title-art" id="title-art">🏴‍☠️</div>
+    <h1 class="game-title" id="title-text">Treasure Hunt</h1>
+    <p class="subtitle" id="subtitle-text">Adventure awaits!</p>
+    <div class="pirate-name-tag" id="pirate-tag">⚓ Captain Mathbeard</div>
+
+    <!-- Activity tabs (Mate only) -->
+    <div class="activity-tabs" id="activity-tabs" style="display:none">
+      <button class="activity-tab active" data-activity="math" onclick="switchActivity('math')">🧮 Math</button>
+      <button class="activity-tab" data-activity="reading" onclick="switchActivity('reading')">📚 Reading</button>
+    </div>
+
+    <!-- Captain's table grid -->
+    <div class="mode-grid" id="table-grid"></div>
+    <button class="mixed-btn" id="mixed-btn-multi" onclick="startGame({mode:'multi-mixed'})">
+      🎲 Mixed Challenge<span class="smart-tag">Smart</span>
+    </button>
+    <button class="mixed-btn" id="vault-btn" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);border-color:#5b21b6;box-shadow:0 3px 0 #4c1d95;" onclick="startVaultCrack()">
+      🔐 Treasure Vault Crack<span class="smart-tag">Find Missing</span>
+    </button>
+
+    <!-- Mate's add/sub grid -->
+    <div class="mode-grid dual" id="addsub-grid" style="display:none"></div>
+    <button class="mixed-btn" id="mixed-btn-addsub" onclick="startGame({mode:'addsub-mixed'})" style="display:none">
+      🎲 Mix It Up!<span class="smart-tag">Smart</span>
+    </button>
+
+    <!-- Mate's reading buttons -->
+    <div id="reading-modes" style="display:none; width:100%; max-width:340px;">
+      <button class="reading-btn" onclick="openLetterLand('letters')">
+        <span class="ico">🔤</span>
+        <div class="body">
+          <div class="ttl">Letter Sounds</div>
+          <div class="desc">Tap each letter to hear its sound</div>
+        </div>
+      </button>
+      <button class="reading-btn alt" onclick="openLetterLand('words')">
+        <span class="ico">📖</span>
+        <div class="body">
+          <div class="ttl">Word Cards</div>
+          <div class="desc">Tap a word to hear it spoken & spelled</div>
+        </div>
+      </button>
+      <button class="reading-btn alt2" onclick="openLetterLand('sight')">
+        <span class="ico">👀</span>
+        <div class="body">
+          <div class="ttl">Sight Words</div>
+          <div class="desc">Common words to know at a glance</div>
+        </div>
+      </button>
+      <button class="reading-btn" style="background:linear-gradient(135deg,#fbbf24,#f59e0b);border-color:#92400e;box-shadow:0 4px 0 #78350f;" onclick="startCaseMatch()">
+        <span class="ico">🔡</span>
+        <div class="body">
+          <div class="ttl">Case Match</div>
+          <div class="desc">Match BIG letters with little ones!</div>
+        </div>
+      </button>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="showStats()">📊 My Progress</button>
+      <button class="nav-btn" onclick="goPicker()">🔄 Switch Pirate</button>
+    </div>
+    <p class="hint-text" id="legend-text">⭐ = Practicing &nbsp;&nbsp; 👑 = Mastered</p>
+  </div>
+
+  <!-- STATS -->
+  <div id="stats-screen" class="screen">
+    <div class="stats-header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <h2 class="stats-title" id="stats-title">My Progress</h2>
+    </div>
+    <div class="stats-summary">
+      <div class="total-gold">🪙 <span id="total-gold-count">0</span></div>
+      <div class="label">Total Gold Earned</div>
+    </div>
+    <div class="stats-list" id="stats-list"></div>
+    <button class="reset-btn" onclick="confirmReset()">Reset My Progress</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="game-screen" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div style="flex:1"></div>
+      <div class="gold-counter">🪙 <span id="gold">0</span></div>
+    </div>
+
+    <!-- Treasure Path Progress -->
+    <div class="treasure-path">
+      <svg viewBox="0 0 360 70" preserveAspectRatio="none">
+        <!-- background dotted path -->
+        <path id="path-bg" class="path-bg"
+              d="M 18 50 Q 60 20, 100 45 T 180 35 T 260 50 T 330 30" />
+        <!-- filled path (animated stroke-dashoffset) -->
+        <path id="path-fill" class="path-fill"
+              d="M 18 50 Q 60 20, 100 45 T 180 35 T 260 50 T 330 30" />
+        <!-- X marks the spot, near the end -->
+        <text x="335" y="18" class="path-x">X</text>
+        <!-- pirate marker uses CSS offset-path -->
+        <foreignObject id="pirate-marker-fo" x="0" y="0" width="40" height="40">
+          <div xmlns="http://www.w3.org/1999/xhtml" id="path-pirate" class="path-pirate" style="line-height:1;">⛵</div>
+        </foreignObject>
+        <!-- chest at end -->
+        <foreignObject x="312" y="18" width="40" height="40">
+          <div xmlns="http://www.w3.org/1999/xhtml" id="path-chest" class="path-chest" style="line-height:1;">📦</div>
+        </foreignObject>
+      </svg>
+    </div>
+
+    <div class="treasure-stage">
+      <div class="pirate-character" id="pirate">🏴‍☠️</div>
+      <div class="speech-bubble" id="speech">What be the answer, matey?</div>
+      <div class="problem-card">
+        <p class="problem-text" id="problem">3 × 4</p>
+        <div class="array-visual" id="array" style="display:none"></div>
+        <div class="count-visual" id="count-visual" style="display:none"></div>
+      </div>
+      <div class="choices-grid" id="choices"></div>
+    </div>
+  </div>
+
+  <!-- TREASURE -->
+  <div id="treasure-screen" class="screen">
+    <div class="chest-container" id="chest">💰</div>
+    <h2 class="treasure-title" id="treasure-title">Treasure Found!</h2>
+    <p class="treasure-msg" id="treasure-msg">Ye solved it, brave sailor!</p>
+    <div class="gold-burst">🪙 +10 Gold!</div>
+    <button class="next-btn" onclick="nextProblem()">Sail On! ⛵</button>
+  </div>
+
+  <!-- VICTORY -->
+  <div id="victory-screen" class="screen">
+    <div class="victory-emoji">🏆</div>
+    <h2 class="victory-title">Quest Complete!</h2>
+    <div class="victory-stats">
+      <div>Gold Earned: <strong id="final-gold">0</strong></div>
+      <div>Riddles Solved: <strong id="final-correct">0</strong>/<strong id="final-total">5</strong></div>
+    </div>
+    <div class="mastery-up" id="mastery-up" style="display:none">⭐ Level Up! ⭐</div>
+    <button class="next-btn" onclick="goHome()">New Adventure 🗺️</button>
+  </div>
+
+  <!-- WORD PROBLEM (Captain final) -->
+  <div id="wordproblem-screen" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div style="flex:1"></div>
+      <div class="gold-counter">🪙 <span id="wp-gold">0</span></div>
+    </div>
+    <div class="treasure-stage" style="padding:0 8px">
+      <div style="font-size:48px; margin-bottom:4px;">📜</div>
+      <div style="font-family:Georgia,serif; font-size:22px; color:#fcd34d; text-shadow:2px 2px 0 #92400e; margin-bottom:8px;">Bonus Riddle!</div>
+      <div style="font-size:13px; color:#fde68a; opacity:0.8; margin-bottom:14px; font-style:italic;">Solve for double gold! 🪙🪙</div>
+      <div class="problem-card" style="padding:18px 20px; margin-bottom:18px;">
+        <p id="wp-text" style="font-family:Georgia,serif; font-size:18px; color:#451a03; line-height:1.4; margin:0; text-align:left;">
+          Captain Mathbeard finds 4 chests. Each holds 6 doubloons. How many doubloons in all?
+        </p>
+        <div id="wp-equation" style="text-align:center; font-family:Georgia,serif; font-size:32px; font-weight:900; color:#92400e; margin-top:12px;">
+          4 × 6 = ?
+        </div>
+      </div>
+      <div class="choices-grid" id="wp-choices"></div>
+      <button class="nav-btn" style="margin-top:12px; max-width:200px;" onclick="skipWordProblem()">Skip Riddle</button>
+    </div>
+  </div>
+
+  <!-- LETTER LAND (reading) -->
+  <div id="letterland-screen" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <h2 class="letterland-title" id="letterland-title">Letter Sounds</h2>
+      <div style="width: 40px;"></div>
+    </div>
+    <div class="active-letter-banner" id="letter-banner">
+      Tap any letter!
+    </div>
+    <div class="reading-grid" id="reading-grid"></div>
+  </div>
+
+  <!-- CASE MATCH GAME -->
+  <div id="casematch-screen" class="screen">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <h2 class="letterland-title">🔡 Case Match</h2>
+      <div class="gold-counter">🪙 <span id="cm-gold">0</span></div>
+    </div>
+    <div class="active-letter-banner" id="cm-banner">
+      Tap a BIG letter, then find its little one!
+    </div>
+    <div id="cm-board" class="cm-board"></div>
+  </div>
+
+  <!-- RESET MODAL -->
+  <div class="modal-backdrop" id="reset-modal">
+    <div class="modal">
+      <h3>Reset Progress?</h3>
+      <p>This will erase all gold and mastery for <strong id="reset-who">this pirate</strong>. This can't be undone!</p>
+      <div class="modal-buttons">
+        <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="resetCurrentKid()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ============ STORAGE ============
+  const STORAGE_KEY = 'treasureHunt_v3';
+  const ADDSUB_MODES = ['add10', 'add20', 'sub10', 'sub20', 'doubles', 'bonds10', 'compare'];
+  const ADDSUB_LABELS = {
+    add10:   { label: 'Add to 10',     symbol: '➕', short: '+ to 10' },
+    add20:   { label: 'Add to 20',     symbol: '➕', short: '+ to 20' },
+    sub10:   { label: 'Take Away',     symbol: '➖', short: '− from 10' },
+    sub20:   { label: 'Take Away Big', symbol: '➖', short: '− from 20' },
+    doubles: { label: 'Doubles!',      symbol: '✌️', short: 'Doubles' },
+    bonds10: { label: 'Make 10',       symbol: '🔟', short: 'Make 10' },
+    compare: { label: 'Bigger?',       symbol: '⚖️', short: 'Compare' }
+  };
+
+  function freshKidProgress(kid) {
+    const data = { totalGold: 0 };
+    if (kid === 'captain') {
+      data.tables = {};
+      for (let i = 1; i <= 10; i++) {
+        data.tables[i] = { attempts: 0, correct: 0, firstTryStreak: 0, facts: {} };
+      }
+    } else {
+      data.modes = {};
+      for (const m of ADDSUB_MODES) {
+        data.modes[m] = { attempts: 0, correct: 0, firstTryStreak: 0, facts: {} };
+      }
+    }
+    return data;
+  }
+
+  function freshAll() {
+    return {
+      currentKid: null,
+      kids: { captain: freshKidProgress('captain'), mate: freshKidProgress('mate') }
+    };
+  }
+
+  function loadAll() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return freshAll();
+      const parsed = JSON.parse(raw);
+      const fresh = freshAll();
+      if (!parsed.kids) return fresh;
+      if (!parsed.kids.captain) parsed.kids.captain = fresh.kids.captain;
+      if (!parsed.kids.mate) parsed.kids.mate = fresh.kids.mate;
+      if (!parsed.kids.captain.tables) parsed.kids.captain.tables = fresh.kids.captain.tables;
+      for (let i = 1; i <= 10; i++) {
+        if (!parsed.kids.captain.tables[i]) parsed.kids.captain.tables[i] = { attempts: 0, correct: 0, firstTryStreak: 0, facts: {} };
+        if (!parsed.kids.captain.tables[i].facts) parsed.kids.captain.tables[i].facts = {};
+      }
+      if (typeof parsed.kids.captain.totalGold !== 'number') parsed.kids.captain.totalGold = 0;
+      if (!parsed.kids.mate.modes) parsed.kids.mate.modes = fresh.kids.mate.modes;
+      for (const m of ADDSUB_MODES) {
+        if (!parsed.kids.mate.modes[m]) parsed.kids.mate.modes[m] = { attempts: 0, correct: 0, firstTryStreak: 0, facts: {} };
+        if (!parsed.kids.mate.modes[m].facts) parsed.kids.mate.modes[m].facts = {};
+      }
+      if (typeof parsed.kids.mate.totalGold !== 'number') parsed.kids.mate.totalGold = 0;
+      return parsed;
+    } catch(e) { return freshAll(); }
+  }
+
+  function saveAll() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(allData)); } catch(e) {}
+  }
+
+  function getMastery(td) {
+    const { attempts, correct } = td;
+    if (attempts < 5) return 0;
+    const acc = correct / attempts;
+    if (attempts >= 20 && acc >= 0.9) return 3;
+    if (attempts >= 10 && acc >= 0.75) return 2;
+    return 1;
+  }
+  function masteryStars(level) { return ['', '⭐', '⭐⭐', '⭐⭐⭐'][level]; }
+  function masteryIcon(level) { return ['🆕', '🌱', '⭐', '👑'][level]; }
+  function masteryLabel(level) { return ['New', 'Learning', 'Practicing', 'Mastered'][level]; }
+
+  // ============ STATE ============
+  let allData = loadAll();
+  let kid = allData.currentKid;
+  let kidProgress = null;
+  let currentActivity = 'math'; // for the Mate: 'math' or 'reading'
+
+  let state = {
+    mode: null,
+    opts: null,
+    problemsRemaining: 5,
+    totalProblems: 5,
+    gold: 0,
+    correct: 0,
+    currentAnswer: 0,
+    currentA: 0,
+    currentB: 0,
+    currentOp: '+',
+    primaryKey: null,
+    factKey: null,
+    kind: null,
+    subMode: null,
+    locked: false,
+    firstTry: true,
+    masteryBefore: {}
+  };
+
+  const speechLinesCaptain = [
+    "Arr, what be the answer?",
+    "Use yer noggin, sailor!",
+    "Count the dots if ye need to!",
+    "Ye can do it, matey!",
+    "Solve it true and bold!"
+  ];
+  const speechLinesMate = [
+    "What's the answer, little buddy?",
+    "You can do it!",
+    "Count them up!",
+    "Take your time!",
+    "Look at the picture!"
+  ];
+
+  const treasureItems = [
+    { emoji: "💰", title: "Bag o' Gold!", msg: "Pure pirate treasure!" },
+    { emoji: "💎", title: "A Diamond!", msg: "Sparkles like the sea!" },
+    { emoji: "👑", title: "A Royal Crown!", msg: "Fit for a pirate king!" },
+    { emoji: "🗝️", title: "Golden Key!", msg: "What does it unlock?" },
+    { emoji: "🏆", title: "Trophy of Legend!", msg: "Ye earned it, sailor!" },
+    { emoji: "📜", title: "Ancient Map!", msg: "More treasure awaits!" },
+    { emoji: "⚱️", title: "Magic Urn!", msg: "Filled with rubies!" },
+    { emoji: "🎁", title: "Mystery Gift!", msg: "What could it be?" }
+  ];
+
+  const COUNT_ICONS = ['⭐','🐟','🦀','🐚','🍎','🐢','⚓','🌟'];
+
+  // ============ AUDIO ============
+  function speak(text, opts) {
+    if (!('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = (opts && opts.rate) || (kid === 'mate' ? 0.85 : 0.95);
+      utter.pitch = (opts && opts.pitch) || (kid === 'mate' ? 1.2 : 1.1);
+      utter.volume = 1;
+      window.speechSynthesis.speak(utter);
+    } catch(e) {}
+  }
+
+  function speakDelayed(text, delay, opts) {
+    setTimeout(() => {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = (opts && opts.rate) || (kid === 'mate' ? 0.85 : 0.95);
+        utter.pitch = (opts && opts.pitch) || (kid === 'mate' ? 1.2 : 1.1);
+        utter.volume = 1;
+        window.speechSynthesis.speak(utter);
+      } catch(e) {}
+    }, delay);
+  }
+
+  // ============ KID PICKER ============
+  function selectKid(k) {
+    kid = k;
+    allData.currentKid = k;
+    kidProgress = allData.kids[k];
+    saveAll();
+    currentActivity = 'math';
+    setupTitleForKid();
+    showScreen('title-screen');
+  }
+
+  function goPicker() { showScreen('picker-screen'); }
+
+  function setupTitleForKid() {
+    const titleArt = document.getElementById('title-art');
+    const titleText = document.getElementById('title-text');
+    const subtitleText = document.getElementById('subtitle-text');
+    const pirateTag = document.getElementById('pirate-tag');
+    const tableGrid = document.getElementById('table-grid');
+    const mixedMulti = document.getElementById('mixed-btn-multi');
+    const addsubGrid = document.getElementById('addsub-grid');
+    const mixedAddsub = document.getElementById('mixed-btn-addsub');
+    const activityTabs = document.getElementById('activity-tabs');
+    const readingModes = document.getElementById('reading-modes');
+    const legend = document.getElementById('legend-text');
+
+    if (kid === 'captain') {
+      titleArt.textContent = '🏴‍☠️';
+      titleText.innerHTML = 'Times Table<br>Treasure Hunt';
+      subtitleText.textContent = 'Sail the seven seas of multiplication!';
+      pirateTag.innerHTML = '⚓ Captain Mathbeard';
+      activityTabs.style.display = 'none';
+      tableGrid.style.display = 'grid';
+      mixedMulti.style.display = '';
+      document.getElementById('vault-btn').style.display = '';
+      addsubGrid.style.display = 'none';
+      mixedAddsub.style.display = 'none';
+      readingModes.style.display = 'none';
+      legend.style.display = '';
+      buildTableGrid();
+    } else {
+      titleArt.textContent = '🦜';
+      titleText.innerHTML = 'First Mate Adventure';
+      subtitleText.textContent = 'Pick yer adventure!';
+      pirateTag.innerHTML = '🦜 First Mate Polly';
+      activityTabs.style.display = 'flex';
+
+      // Update tab states
+      document.querySelectorAll('.activity-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.activity === currentActivity);
+      });
+
+      document.getElementById('vault-btn').style.display = 'none';
+
+      if (currentActivity === 'math') {
+        tableGrid.style.display = 'none';
+        mixedMulti.style.display = 'none';
+        addsubGrid.style.display = 'grid';
+        mixedAddsub.style.display = '';
+        readingModes.style.display = 'none';
+        legend.style.display = '';
+        buildAddSubGrid();
+      } else {
+        tableGrid.style.display = 'none';
+        mixedMulti.style.display = 'none';
+        addsubGrid.style.display = 'none';
+        mixedAddsub.style.display = 'none';
+        readingModes.style.display = 'block';
+        legend.style.display = 'none';
+      }
+    }
+  }
+
+  function switchActivity(act) {
+    currentActivity = act;
+    setupTitleForKid();
+  }
+
+  function buildTableGrid() {
+    const grid = document.getElementById('table-grid');
+    grid.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      const td = kidProgress.tables[i];
+      const m = getMastery(td);
+      const btn = document.createElement('button');
+      btn.className = 'table-btn';
+      if (m === 3) btn.classList.add('mastered');
+      btn.innerHTML = `<span class="num">×${i}</span><span class="mastery-stars">${masteryStars(m)}</span>`;
+      btn.onclick = () => startGame({mode: 'multi-table', table: i});
+      grid.appendChild(btn);
+    }
+  }
+
+  function buildAddSubGrid() {
+    const grid = document.getElementById('addsub-grid');
+    grid.innerHTML = '';
+    for (const m of ADDSUB_MODES) {
+      const td = kidProgress.modes[m];
+      const lvl = getMastery(td);
+      const btn = document.createElement('button');
+      btn.className = 'big-mode-btn';
+      if (lvl === 3) btn.classList.add('mastered');
+      btn.innerHTML = `
+        <span class="symbol">${ADDSUB_LABELS[m].symbol}</span>
+        <span class="label">${ADDSUB_LABELS[m].label}</span>
+        <span class="stars">${masteryStars(lvl)}</span>
+      `;
+      btn.onclick = () => startGame({mode: 'addsub', subMode: m});
+      grid.appendChild(btn);
+    }
+  }
+
+  // ============ STATS ============
+  function showStats() {
+    document.getElementById('total-gold-count').textContent = kidProgress.totalGold;
+    document.getElementById('stats-title').textContent =
+      kid === 'captain' ? "Captain's Progress" : "First Mate's Progress";
+    const list = document.getElementById('stats-list');
+    list.innerHTML = '';
+    if (kid === 'captain') {
+      for (let i = 1; i <= 10; i++) renderStatRow(list, `×${i}`, kidProgress.tables[i]);
+    } else {
+      for (const m of ADDSUB_MODES) renderStatRow(list, ADDSUB_LABELS[m].short, kidProgress.modes[m]);
+    }
+    showScreen('stats-screen');
+  }
+
+  function renderStatRow(list, label, td) {
+    const m = getMastery(td);
+    const accuracy = td.attempts > 0 ? Math.round((td.correct / td.attempts) * 100) : 0;
+    const barClass = accuracy < 60 ? 'low' : accuracy < 80 ? 'mid' : '';
+    const barWidth = td.attempts > 0 ? accuracy : 0;
+    const row = document.createElement('div');
+    row.className = 'stat-row';
+    row.innerHTML = `
+      <div class="stat-table-name">${label}</div>
+      <div class="stat-mastery-icon" title="${masteryLabel(m)}">${masteryIcon(m)}</div>
+      <div class="stat-bar-container">
+        <div class="stat-bar-fill ${barClass}" style="width: ${barWidth}%"></div>
+      </div>
+      ${td.attempts > 0
+        ? `<div class="stat-percent">${accuracy}%</div>`
+        : `<div class="stat-empty">—</div>`}
+    `;
+    list.appendChild(row);
+  }
+
+  function confirmReset() {
+    document.getElementById('reset-who').textContent =
+      kid === 'captain' ? 'the Captain' : 'the First Mate';
+    document.getElementById('reset-modal').classList.add('active');
+  }
+  function closeModal() { document.getElementById('reset-modal').classList.remove('active'); }
+  function resetCurrentKid() {
+    allData.kids[kid] = freshKidProgress(kid);
+    kidProgress = allData.kids[kid];
+    saveAll();
+    closeModal();
+    showStats();
+    setupTitleForKid();
+  }
+
+  // ============ PROBLEM GENERATION ============
+  function pickSmartCaptainTable() {
+    let best = null, bestScore = -1;
+    for (let i = 1; i <= 10; i++) {
+      const td = kidProgress.tables[i];
+      const m = getMastery(td);
+      if (m === 3 && Math.random() < 0.7) continue;
+      const acc = td.attempts > 0 ? td.correct / td.attempts : 0.5;
+      const score = (1 - acc) * 3 + (td.attempts < 5 ? 2 : 0) + Math.random();
+      if (score > bestScore) { bestScore = score; best = i; }
+    }
+    return best || (Math.floor(Math.random() * 10) + 1);
+  }
+  function pickSmartMateMode() {
+    let best = null, bestScore = -1;
+    for (const m of ADDSUB_MODES) {
+      const td = kidProgress.modes[m];
+      const ml = getMastery(td);
+      if (ml === 3 && Math.random() < 0.7) continue;
+      const acc = td.attempts > 0 ? td.correct / td.attempts : 0.5;
+      const score = (1 - acc) * 3 + (td.attempts < 5 ? 2 : 0) + Math.random();
+      if (score > bestScore) { bestScore = score; best = m; }
+    }
+    return best || ADDSUB_MODES[Math.floor(Math.random() * 4)];
+  }
+
+  function generateProblem(opts) {
+    if (opts.mode === 'multi-table' || opts.mode === 'multi-mixed') {
+      const table = opts.mode === 'multi-mixed' ? pickSmartCaptainTable() : opts.table;
+      const other = Math.floor(Math.random() * 10) + 1;
+      let a = table, b = other;
+      let dispA = a, dispB = b;
+      if (Math.random() < 0.5) [dispA, dispB] = [dispB, dispA];
+      return { a: dispA, b: dispB, op: '×', answer: a * b, primaryKey: table, factKey: String(other), kind: 'multi' };
+    }
+
+    if (opts.mode === 'vault') {
+      // Missing factor: a × ? = product, or ? × b = product
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      const product = a * b;
+      // Randomly hide a or b
+      const hideFirst = Math.random() < 0.5;
+      return {
+        a, b, op: '×', answer: hideFirst ? a : b,
+        product, hideFirst,
+        primaryKey: hideFirst ? b : a, // count toward the visible factor's table
+        factKey: String(hideFirst ? a : b),
+        kind: 'vault'
+      };
+    }
+
+    const subMode = opts.mode === 'addsub-mixed' ? pickSmartMateMode() : opts.subMode;
+    let a, b, op, answer;
+    if (subMode === 'add10') {
+      a = Math.floor(Math.random() * 9) + 1;
+      b = Math.floor(Math.random() * (10 - a)) + 1;
+      op = '+'; answer = a + b;
+    } else if (subMode === 'add20') {
+      answer = Math.floor(Math.random() * 10) + 11;
+      a = Math.floor(Math.random() * (answer - 1)) + 1;
+      if (a > 10) a = 10;
+      b = answer - a;
+      if (b > 10) { b = 10; a = answer - b; }
+      op = '+';
+    } else if (subMode === 'sub10') {
+      a = Math.floor(Math.random() * 9) + 2;
+      b = Math.floor(Math.random() * a) + 1;
+      if (b === a) b = a - 1 || 1;
+      op = '−'; answer = a - b;
+    } else if (subMode === 'sub20') {
+      a = Math.floor(Math.random() * 9) + 11;
+      b = Math.floor(Math.random() * 10) + 1;
+      if (b >= a) b = a - 1;
+      op = '−'; answer = a - b;
+    } else if (subMode === 'doubles') {
+      // Doubles: 1+1 through 10+10
+      a = Math.floor(Math.random() * 10) + 1;
+      b = a;
+      op = '+'; answer = a + b;
+    } else if (subMode === 'bonds10') {
+      // Number bonds to 10: a + ? = 10, presented as fill-in
+      a = Math.floor(Math.random() * 9) + 1; // 1..9
+      b = 10 - a;
+      op = '+'; answer = b; // they answer the missing addend
+    } else if (subMode === 'compare') {
+      // Which is bigger? a vs b. Answer is the larger number.
+      a = Math.floor(Math.random() * 19) + 1;  // 1..19
+      do {
+        b = Math.floor(Math.random() * 19) + 1;
+      } while (b === a);
+      op = '?'; answer = Math.max(a, b);
+    }
+    return { a, b, op, answer, primaryKey: subMode, factKey: `${a}${op}${b}`, kind: 'addsub', subMode };
+  }
+
+  // ============ TREASURE PATH PROGRESS ============
+  let pathTotalLen = 0;
+  let pathEl = null;
+  let pirateMarkerEl = null;
+  let pathBgEl = null;
+
+  function setupPath() {
+    pathEl = document.getElementById('path-fill');
+    pathBgEl = document.getElementById('path-bg');
+    pirateMarkerEl = document.getElementById('pirate-marker-fo');
+    if (!pathEl) return;
+    pathTotalLen = pathEl.getTotalLength();
+    pathEl.style.strokeDasharray = pathTotalLen;
+    pathEl.style.strokeDashoffset = pathTotalLen;
+    // Move pirate to start
+    setPathPosition(0);
+    document.getElementById('path-chest').classList.remove('opened');
+    document.getElementById('path-chest').textContent = '📦';
+  }
+
+  function setPathPosition(fraction) {
+    if (!pathEl) return;
+    const f = Math.max(0, Math.min(1, fraction));
+    // Animate the dotted-line "fill" by adjusting dash on a separate copy
+    // Trick: we use stroke-dasharray with the full pattern but animate stroke-dashoffset
+    // For dotted lines we simulate a "filled" path by drawing it on top with different style
+    // Simpler approach: draw filled portion using the same path with pathLength
+    pathEl.style.strokeDasharray = pathTotalLen;
+    pathEl.style.strokeDashoffset = pathTotalLen * (1 - f);
+
+    // Move pirate marker to position f along the path
+    const pt = pathEl.getPointAtLength(pathTotalLen * f);
+    pirateMarkerEl.setAttribute('x', pt.x - 14);
+    pirateMarkerEl.setAttribute('y', pt.y - 24);
+  }
+
+  function openChest() {
+    const chest = document.getElementById('path-chest');
+    chest.classList.add('opened');
+    chest.textContent = '💰';
+  }
+
+  // ============ GAME FLOW ============
+  function startGame(opts) {
+    state.mode = opts.mode;
+    state.opts = opts;
+    state.problemsRemaining = 5;
+    state.totalProblems = 5;
+    state.gold = 0;
+    state.correct = 0;
+    state.wordProblemDone = false;
+    state.masteryBefore = {};
+
+    if (kid === 'captain') {
+      for (let i = 1; i <= 10; i++) state.masteryBefore['t'+i] = getMastery(kidProgress.tables[i]);
+    } else {
+      for (const m of ADDSUB_MODES) state.masteryBefore[m] = getMastery(kidProgress.modes[m]);
+    }
+
+    showScreen('game-screen');
+    document.getElementById('gold').textContent = '0';
+    // Setup path AFTER showing screen so SVG dimensions resolve
+    setTimeout(setupPath, 30);
+    nextProblem();
+  }
+
+  function startVaultCrack() {
+    startGame({ mode: 'vault' });
+  }
+
+  function nextProblem() {
+    if (state.problemsRemaining <= 0) { showVictory(); return; }
+    showScreen('game-screen');
+
+    const opts = state.opts;
+    const prob = generateProblem({
+      mode: opts.mode === 'multi-mixed' ? 'multi-mixed'
+           : opts.mode === 'multi-table' ? 'multi-table'
+           : opts.mode === 'vault' ? 'vault'
+           : opts.mode === 'addsub-mixed' ? 'addsub-mixed' : 'addsub',
+      table: opts.table, subMode: opts.subMode
+    });
+
+    state.currentA = prob.a;
+    state.currentB = prob.b;
+    state.currentOp = prob.op;
+    state.currentAnswer = prob.answer;
+    state.primaryKey = prob.primaryKey;
+    state.factKey = prob.factKey;
+    state.kind = prob.kind;
+    state.subMode = prob.subMode;
+    state.locked = false;
+    state.firstTry = true;
+
+    // Customize problem display per mode
+    if (prob.kind === 'vault') {
+      const display = prob.hideFirst
+        ? `? × ${prob.b} = ${prob.product}`
+        : `${prob.a} × ? = ${prob.product}`;
+      document.getElementById('problem').textContent = display;
+    } else if (prob.subMode === 'bonds10') {
+      document.getElementById('problem').textContent = `${prob.a} + ? = 10`;
+    } else if (prob.subMode === 'compare') {
+      document.getElementById('problem').textContent = `${prob.a}  vs  ${prob.b}`;
+    } else {
+      document.getElementById('problem').textContent = `${prob.a} ${prob.op} ${prob.b}`;
+    }
+
+    if (prob.kind === 'multi' || prob.kind === 'vault') {
+      buildArray(prob.a, prob.b);
+      document.getElementById('array').style.display = '';
+      document.getElementById('count-visual').style.display = 'none';
+    } else {
+      buildCountVisual(prob);
+      document.getElementById('array').style.display = 'none';
+      document.getElementById('count-visual').style.display = 'flex';
+    }
+
+    buildChoices(prob);
+    const lines = kid === 'captain' ? speechLinesCaptain : speechLinesMate;
+    document.getElementById('speech').textContent = lines[Math.floor(Math.random() * lines.length)];
+    document.getElementById('pirate').classList.remove('celebrating');
+    document.getElementById('pirate').textContent = kid === 'captain' ? '🏴‍☠️' : '🦜';
+
+    // Update path position based on completed problems
+    const done = state.totalProblems - state.problemsRemaining;
+    setPathPosition(done / state.totalProblems);
+  }
+
+  function buildArray(rows, cols) {
+    const arr = document.getElementById('array');
+    arr.innerHTML = '';
+    const maxCols = Math.min(cols, 10);
+    arr.style.gridTemplateColumns = `repeat(${maxCols}, 1fr)`;
+    const total = rows * cols;
+    let dotSize = 22;
+    if (total > 50) dotSize = 14;
+    else if (total > 30) dotSize = 18;
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'array-dot';
+      dot.style.width = dotSize + 'px';
+      dot.style.height = dotSize + 'px';
+      dot.style.animationDelay = (i * 0.015) + 's';
+      arr.appendChild(dot);
+    }
+  }
+
+  function buildCountVisual(prob) {
+    const container = document.getElementById('count-visual');
+    container.innerHTML = '';
+    const icon = COUNT_ICONS[Math.floor(Math.random() * COUNT_ICONS.length)];
+
+    if (prob.subMode === 'compare') {
+      // Two stacks of icons side by side with vs symbol
+      const groupA = makeGroup(prob.a, icon);
+      const vs = document.createElement('span');
+      vs.className = 'count-symbol';
+      vs.textContent = 'vs';
+      vs.style.fontSize = '20px';
+      const groupB = makeGroup(prob.b, icon);
+      container.appendChild(groupA);
+      container.appendChild(vs);
+      container.appendChild(groupB);
+      return;
+    }
+
+    if (prob.subMode === 'bonds10') {
+      // Show a 10-frame: prob.a filled, the rest empty (the "missing" amount)
+      const frame = document.createElement('div');
+      frame.style.display = 'grid';
+      frame.style.gridTemplateColumns = 'repeat(5, 1fr)';
+      frame.style.gap = '4px';
+      frame.style.padding = '6px';
+      frame.style.background = 'rgba(255,255,255,0.6)';
+      frame.style.border = '2px solid #92400e';
+      frame.style.borderRadius = '8px';
+      for (let i = 0; i < 10; i++) {
+        const cell = document.createElement('div');
+        cell.style.width = '24px';
+        cell.style.height = '24px';
+        cell.style.borderRadius = '50%';
+        cell.style.border = '2px solid #92400e';
+        cell.style.background = i < prob.a ? 'radial-gradient(circle at 30% 30%, #fcd34d, #d97706)' : 'transparent';
+        cell.style.animationDelay = (i * 0.04) + 's';
+        cell.className = 'count-item';
+        if (i >= prob.a) {
+          cell.style.opacity = '0.5';
+          cell.textContent = '?';
+          cell.style.fontSize = '14px';
+          cell.style.lineHeight = '20px';
+          cell.style.textAlign = 'center';
+          cell.style.color = '#92400e';
+          cell.style.fontWeight = '900';
+        }
+        frame.appendChild(cell);
+      }
+      container.appendChild(frame);
+      return;
+    }
+
+    if (prob.op === '+') {
+      const groupA = makeGroup(prob.a, icon);
+      const plus = document.createElement('span');
+      plus.className = 'count-symbol';
+      plus.textContent = '+';
+      const groupB = makeGroup(prob.b, icon);
+      container.appendChild(groupA);
+      container.appendChild(plus);
+      container.appendChild(groupB);
+    } else {
+      const group = makeGroup(prob.a, icon);
+      const items = group.querySelectorAll('.count-item');
+      const total = items.length;
+      setTimeout(() => {
+        for (let i = total - prob.b; i < total; i++) {
+          if (items[i]) items[i].classList.add('removed');
+        }
+      }, 400);
+      container.appendChild(group);
+    }
+  }
+
+  function makeGroup(count, icon) {
+    const group = document.createElement('div');
+    group.className = 'count-group';
+    for (let i = 0; i < count; i++) {
+      const span = document.createElement('span');
+      span.className = 'count-item';
+      span.textContent = icon;
+      span.style.animationDelay = (i * 0.04) + 's';
+      group.appendChild(span);
+    }
+    return group;
+  }
+
+  function buildChoices(prob) {
+    const correct = prob.answer;
+    const wrong = new Set();
+    const maxAns = (prob.kind === 'multi' || prob.kind === 'vault') ? 100 : 25;
+    let attempts = 0;
+    while (wrong.size < 3 && attempts < 50) {
+      attempts++;
+      let offset;
+      const r = Math.random();
+      if (prob.kind === 'addsub') {
+        offset = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? -1 : 1);
+      } else if (prob.kind === 'vault') {
+        // Vault answers are 1-10, keep wrongs close
+        offset = (Math.floor(Math.random() * 4) + 1) * (Math.random() < 0.5 ? -1 : 1);
+      } else {
+        if (r < 0.4) offset = (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? -1 : 1);
+        else if (r < 0.7) offset = (Math.floor(Math.random() * 10) + 1) * (Math.random() < 0.5 ? -1 : 1);
+        else offset = Math.floor(Math.random() * 20) - 10;
+      }
+      const candidate = correct + offset;
+      const minAns = prob.kind === 'vault' ? 1 : 0;
+      if (candidate >= minAns && candidate !== correct && candidate <= maxAns) wrong.add(candidate);
+    }
+    while (wrong.size < 3) {
+      const c = Math.max(0, correct + (wrong.size + 1));
+      if (c !== correct) wrong.add(c); else wrong.add(c + 10);
+    }
+    const choices = [correct, ...wrong];
+    for (let i = choices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [choices[i], choices[j]] = [choices[j], choices[i]];
+    }
+    const grid = document.getElementById('choices');
+    grid.innerHTML = '';
+    choices.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = c;
+      btn.onclick = () => handleChoice(btn, c);
+      grid.appendChild(btn);
+    });
+  }
+
+  function handleChoice(btn, choice) {
+    if (state.locked) return;
+    if (choice === state.currentAnswer) {
+      state.locked = true;
+      btn.classList.add('correct');
+      const td = (state.kind === 'multi' || state.kind === 'vault')
+        ? kidProgress.tables[state.primaryKey]
+        : kidProgress.modes[state.primaryKey];
+      td.attempts++;
+      if (state.firstTry) {
+        td.correct++;
+        td.firstTryStreak++;
+        state.correct++;
+      } else td.firstTryStreak = 0;
+      if (!td.facts[state.factKey]) td.facts[state.factKey] = { att: 0, cor: 0 };
+      td.facts[state.factKey].att++;
+      if (state.firstTry) td.facts[state.factKey].cor++;
+      state.gold += 10;
+      kidProgress.totalGold += 10;
+      saveAll();
+      document.getElementById('gold').textContent = state.gold;
+      document.getElementById('pirate').classList.add('celebrating');
+      let spokenAnswer;
+      if (state.subMode === 'bonds10') {
+        spokenAnswer = `${state.currentA} plus ${state.currentAnswer} equals 10!`;
+      } else if (state.subMode === 'compare') {
+        spokenAnswer = `${state.currentAnswer} is bigger!`;
+      } else {
+        const opWord = state.currentOp === '×' ? 'times' : state.currentOp === '+' ? 'plus' : 'minus';
+        spokenAnswer = `${state.currentA} ${opWord} ${state.currentB} equals ${state.currentAnswer}!`;
+      }
+      speak(spokenAnswer);
+      state.problemsRemaining--;
+      // Animate path advancement immediately
+      const done = state.totalProblems - state.problemsRemaining;
+      setPathPosition(done / state.totalProblems);
+      if (state.problemsRemaining === 0) {
+        setTimeout(openChest, 400);
+      }
+      setTimeout(showTreasure, 1100);
+    } else {
+      state.firstTry = false;
+      btn.classList.add('wrong');
+      speak("Try again!");
+      setTimeout(() => {
+        btn.classList.remove('wrong');
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+      }, 500);
+    }
+  }
+
+  function showTreasure() {
+    const t = treasureItems[Math.floor(Math.random() * treasureItems.length)];
+    document.getElementById('chest').textContent = t.emoji;
+    document.getElementById('treasure-title').textContent = t.title;
+    document.getElementById('treasure-msg').textContent = t.msg;
+    showScreen('treasure-screen');
+    spawnConfetti();
+  }
+
+  function showVictory(skipWordProblem) {
+    // For the Captain, before showing the final victory, give a bonus word problem
+    if (kid === 'captain' && !skipWordProblem && !state.wordProblemDone) {
+      state.wordProblemDone = true;
+      showWordProblem();
+      return;
+    }
+
+    document.getElementById('final-gold').textContent = state.gold;
+    document.getElementById('final-correct').textContent = state.correct;
+    document.getElementById('final-total').textContent = state.totalProblems;
+    let leveledUp = [];
+    if (kid === 'captain') {
+      for (let i = 1; i <= 10; i++) {
+        const before = state.masteryBefore['t'+i];
+        const after = getMastery(kidProgress.tables[i]);
+        if (after > before) leveledUp.push({ key: '×'+i, level: after });
+      }
+    } else {
+      for (const m of ADDSUB_MODES) {
+        const before = state.masteryBefore[m];
+        const after = getMastery(kidProgress.modes[m]);
+        if (after > before) leveledUp.push({ key: ADDSUB_LABELS[m].short, level: after });
+      }
+    }
+    const masteryEl = document.getElementById('mastery-up');
+    if (leveledUp.length > 0) {
+      const top = leveledUp[0];
+      let msg = top.level === 3 ? `👑 ${top.key} MASTERED! 👑`
+              : top.level === 2 ? `⭐ ${top.key} now Practicing! ⭐`
+              : `🌱 ${top.key} now Learning! 🌱`;
+      masteryEl.innerHTML = msg;
+      masteryEl.style.display = 'block';
+    } else masteryEl.style.display = 'none';
+    showScreen('victory-screen');
+    spawnConfetti();
+    setTimeout(() => spawnConfetti(), 400);
+    speak(kid === 'captain' ? "Quest complete!" : "Yay! All done!");
+    setupTitleForKid();
+  }
+
+  function spawnConfetti() {
+    const colors = ['#fcd34d', '#f59e0b', '#dc2626', '#16a34a', '#3b82f6', '#a855f7'];
+    const app = document.getElementById('app');
+    for (let i = 0; i < 30; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.left = Math.random() * 100 + '%';
+      c.style.top = '0';
+      c.style.animationDelay = (Math.random() * 0.5) + 's';
+      app.appendChild(c);
+      setTimeout(() => c.remove(), 2500);
+    }
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function goHome() {
+    setupTitleForKid();
+    showScreen('title-screen');
+  }
+
+  // ============ LETTER LAND (Reading) ============
+
+  // Letter phonetic sounds & colors
+  const LETTERS = {
+    'A':{sound:'aah', color:'#FF6B6B'}, 'B':{sound:'buh', color:'#4ECDC4'},
+    'C':{sound:'kuh', color:'#FFD93D'}, 'D':{sound:'duh', color:'#A8E6CF'},
+    'E':{sound:'eh', color:'#FF8B94'}, 'F':{sound:'fff', color:'#95E1D3'},
+    'G':{sound:'guh', color:'#F38181'}, 'H':{sound:'huh', color:'#AA96DA'},
+    'I':{sound:'ih', color:'#FCBAD3'}, 'J':{sound:'juh', color:'#A8D8EA'},
+    'K':{sound:'kuh', color:'#FFFFD2'}, 'L':{sound:'lll', color:'#B5EAD7'},
+    'M':{sound:'mmm', color:'#C7CEEA'}, 'N':{sound:'nnn', color:'#FFDAC1'},
+    'O':{sound:'oh', color:'#E2F0CB'}, 'P':{sound:'puh', color:'#FF9AA2'},
+    'Q':{sound:'kwuh', color:'#B5B9FF'}, 'R':{sound:'rrr', color:'#FFB7B2'},
+    'S':{sound:'sss', color:'#FFDAC1'}, 'T':{sound:'tuh', color:'#E0BBE4'},
+    'U':{sound:'uh', color:'#957DAD'}, 'V':{sound:'vvv', color:'#FEC8D8'},
+    'W':{sound:'wuh', color:'#FFDFD3'}, 'X':{sound:'ks', color:'#D5AAFF'},
+    'Y':{sound:'yuh', color:'#85E3FF'}, 'Z':{sound:'zzz', color:'#B28DFF'}
+  };
+
+  const SIMPLE_WORDS = [
+    {word:'CAT', emoji:'🐱', color:'#FFD93D'},
+    {word:'DOG', emoji:'🐶', color:'#A8E6CF'},
+    {word:'SUN', emoji:'☀️', color:'#FFB7B2'},
+    {word:'BUG', emoji:'🐞', color:'#FF6B6B'},
+    {word:'HAT', emoji:'🎩', color:'#AA96DA'},
+    {word:'PIG', emoji:'🐷', color:'#FCBAD3'},
+    {word:'BED', emoji:'🛏️', color:'#B5EAD7'},
+    {word:'CUP', emoji:'☕', color:'#FFDAC1'},
+    {word:'FOX', emoji:'🦊', color:'#FF9AA2'},
+    {word:'MAP', emoji:'🗺️', color:'#85E3FF'},
+    {word:'BAT', emoji:'🦇', color:'#C7CEEA'},
+    {word:'BEE', emoji:'🐝', color:'#FFFFD2'}
+  ];
+
+  // Common pre-K / K Dolch sight words
+  const SIGHT_WORDS = [
+    'the','and','I','to','a','is','you','it','in','said',
+    'for','up','look','my','of','we','can','like','go','see',
+    'are','at','do','he','she','was','have','no','yes'
+  ];
+
+  function openLetterLand(mode) {
+    const title = document.getElementById('letterland-title');
+    const banner = document.getElementById('letter-banner');
+    const grid = document.getElementById('reading-grid');
+
+    if (mode === 'letters') {
+      title.textContent = '🔤 Letter Sounds';
+      banner.innerHTML = 'Tap any letter!';
+      grid.innerHTML = '<div class="letter-grid" id="ll-letter-grid"></div>';
+      buildLetterCards();
+    } else if (mode === 'words') {
+      title.textContent = '📖 Word Cards';
+      banner.innerHTML = 'Tap a word to hear it!';
+      grid.innerHTML = '<div class="word-grid" id="ll-word-grid"></div>';
+      buildWordCards();
+    } else if (mode === 'sight') {
+      title.textContent = '👀 Sight Words';
+      banner.innerHTML = 'Tap a word to hear it!';
+      grid.innerHTML = '<div class="sight-grid" id="ll-sight-grid"></div>';
+      buildSightCards();
+    }
+    showScreen('letterland-screen');
+  }
+
+  function buildLetterCards() {
+    const grid = document.getElementById('ll-letter-grid');
+    Object.keys(LETTERS).forEach(letter => {
+      const data = LETTERS[letter];
+      const card = document.createElement('button');
+      card.className = 'letter-card';
+      card.style.background = data.color;
+      card.style.borderColor = data.color;
+      card.style.color = '#451a03';
+      card.textContent = letter;
+      card.onclick = () => {
+        // Show in banner
+        const banner = document.getElementById('letter-banner');
+        banner.innerHTML = `<span class="big-letter">${letter}</span> says "${data.sound}" 🔊`;
+        // Speak the sound
+        speak(data.sound, { rate: 0.7, pitch: 1.2 });
+        // Animate
+        document.querySelectorAll('.letter-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        setTimeout(() => card.classList.remove('active'), 500);
+      };
+      grid.appendChild(card);
+    });
+  }
+
+  function buildWordCards() {
+    const grid = document.getElementById('ll-word-grid');
+    SIMPLE_WORDS.forEach(wd => {
+      const card = document.createElement('button');
+      card.className = 'word-card';
+      card.style.background = wd.color;
+      card.style.borderColor = wd.color;
+      card.style.color = '#451a03';
+      const emoji = document.createElement('div');
+      emoji.className = 'word-emoji';
+      emoji.textContent = wd.emoji;
+      const letters = document.createElement('div');
+      letters.className = 'word-letters';
+      wd.word.split('').forEach(l => {
+        const span = document.createElement('span');
+        span.className = 'word-letter';
+        span.textContent = l;
+        letters.appendChild(span);
+      });
+      card.appendChild(emoji);
+      card.appendChild(letters);
+      card.onclick = () => {
+        const banner = document.getElementById('letter-banner');
+        banner.innerHTML = `<span class="big-letter">${wd.word}</span> ${wd.emoji}`;
+        // Say the word first
+        speak(wd.word, { rate: 0.75, pitch: 1.15 });
+        // Then spell out each letter sound
+        wd.word.split('').forEach((l, i) => {
+          const span = letters.children[i];
+          setTimeout(() => {
+            span.classList.add('active');
+            const data = LETTERS[l];
+            if (data) speak(data.sound, { rate: 0.7, pitch: 1.2 });
+            setTimeout(() => span.classList.remove('active'), 400);
+          }, 800 + i * 500);
+        });
+      };
+      grid.appendChild(card);
+    });
+  }
+
+  function buildSightCards() {
+    const grid = document.getElementById('ll-sight-grid');
+    SIGHT_WORDS.forEach(word => {
+      const card = document.createElement('button');
+      card.className = 'sight-card';
+      card.textContent = word;
+      card.onclick = () => {
+        const banner = document.getElementById('letter-banner');
+        banner.innerHTML = `<span class="big-letter">${word}</span> 🔊`;
+        speak(word, { rate: 0.7, pitch: 1.15 });
+        document.querySelectorAll('.sight-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        setTimeout(() => card.classList.remove('active'), 500);
+      };
+      grid.appendChild(card);
+    });
+  }
+
+  // ============ WORD PROBLEMS (Captain bonus) ============
+  // Templates: {template, op, generator}
+  // Each generator returns { a, b, answer, story, equation }
+  const WORD_PROBLEM_TEMPLATES = [
+    {
+      gen: () => {
+        const a = rnd(2,8), b = rnd(2,9);
+        return {
+          a, b, answer: a*b,
+          story: `Captain Mathbeard finds ${a} treasure chests. Each chest holds ${b} gold doubloons. How many doubloons in all?`,
+          equation: `${a} × ${b} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        const a = rnd(2,9), b = rnd(2,8);
+        return {
+          a, b, answer: a*b,
+          story: `${a} pirates each catch ${b} fish for dinner. How many fish did they catch all together?`,
+          equation: `${a} × ${b} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        const a = rnd(2,8), b = rnd(2,9);
+        return {
+          a, b, answer: a*b,
+          story: `A pirate ship has ${a} sails. Each sail has ${b} patches. How many patches total?`,
+          equation: `${a} × ${b} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        // Division: shares of treasure
+        const groups = rnd(2,6);
+        const each = rnd(2,8);
+        const total = groups * each;
+        return {
+          a: total, b: groups, answer: each,
+          story: `${total} doubloons are split equally between ${groups} pirates. How many doubloons does each pirate get?`,
+          equation: `${total} ÷ ${groups} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        const a = rnd(2,9), b = rnd(2,9);
+        return {
+          a, b, answer: a*b,
+          story: `Polly the parrot eats ${b} crackers a day. How many crackers does she eat in ${a} days?`,
+          equation: `${a} × ${b} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        const groups = rnd(2,5);
+        const each = rnd(3,7);
+        const total = groups * each;
+        return {
+          a: total, b: each, answer: groups,
+          story: `${total} cannonballs are stacked in piles of ${each}. How many piles are there?`,
+          equation: `${total} ÷ ${each} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        const a = rnd(3,8), b = rnd(2,7);
+        return {
+          a, b, answer: a*b,
+          story: `A treasure map shows ${a} islands. Each island has ${b} buried chests. How many chests in total?`,
+          equation: `${a} × ${b} = ?`
+        };
+      }
+    },
+    {
+      gen: () => {
+        const a = rnd(2,9), b = rnd(2,9);
+        return {
+          a, b, answer: a*b,
+          story: `The crew built ${a} rows of cannons with ${b} cannons in each row. How many cannons all together?`,
+          equation: `${a} × ${b} = ?`
+        };
+      }
+    }
+  ];
+
+  function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+  function showWordProblem() {
+    const tpl = WORD_PROBLEM_TEMPLATES[Math.floor(Math.random() * WORD_PROBLEM_TEMPLATES.length)];
+    const wp = tpl.gen();
+    state.wpAnswer = wp.answer;
+    state.wpLocked = false;
+    state.wpFirstTry = true;
+
+    document.getElementById('wp-text').textContent = wp.story;
+    document.getElementById('wp-equation').textContent = wp.equation;
+    document.getElementById('wp-gold').textContent = state.gold;
+
+    // Build choices
+    const correct = wp.answer;
+    const wrong = new Set();
+    let attempts = 0;
+    while (wrong.size < 3 && attempts < 50) {
+      attempts++;
+      const offset = (Math.floor(Math.random() * 8) + 1) * (Math.random() < 0.5 ? -1 : 1);
+      const cand = correct + offset;
+      if (cand > 0 && cand !== correct && cand <= 100) wrong.add(cand);
+    }
+    const choices = [correct, ...wrong];
+    for (let i = choices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [choices[i], choices[j]] = [choices[j], choices[i]];
+    }
+    const grid = document.getElementById('wp-choices');
+    grid.innerHTML = '';
+    choices.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = c;
+      btn.onclick = () => handleWordProblem(btn, c);
+      grid.appendChild(btn);
+    });
+
+    showScreen('wordproblem-screen');
+    speak("Bonus riddle! " + document.getElementById('wp-text').textContent.substring(0, 60));
+  }
+
+  function skipWordProblem() {
+    showVictory(true);
+  }
+
+  function handleWordProblem(btn, choice) {
+    if (state.wpLocked) return;
+    if (choice === state.wpAnswer) {
+      state.wpLocked = true;
+      btn.classList.add('correct');
+      const bonus = state.wpFirstTry ? 20 : 10;
+      state.gold += bonus;
+      kidProgress.totalGold += bonus;
+      saveAll();
+      document.getElementById('wp-gold').textContent = state.gold;
+      speak(`Yes! ${state.wpAnswer}! Bonus gold!`);
+      setTimeout(() => showVictory(true), 1100);
+    } else {
+      state.wpFirstTry = false;
+      btn.classList.add('wrong');
+      speak("Try again!");
+      setTimeout(() => {
+        btn.classList.remove('wrong');
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+      }, 500);
+    }
+  }
+  let cmState = {
+    pairs: [],          // letters in this round
+    selectedTile: null, // currently selected tile element
+    selectedLetter: null,
+    selectedCase: null, // 'upper' or 'lower'
+    matched: 0,
+    total: 0,
+    gold: 0,
+    locked: false
+  };
+
+  function startCaseMatch() {
+    // Pick 8 random letters for this round
+    const allLetters = Object.keys(LETTERS);
+    const shuffled = [...allLetters].sort(() => Math.random() - 0.5).slice(0, 8);
+    cmState.pairs = shuffled;
+    cmState.matched = 0;
+    cmState.total = shuffled.length;
+    cmState.gold = 0;
+    cmState.selectedTile = null;
+    cmState.selectedLetter = null;
+    cmState.selectedCase = null;
+    cmState.locked = false;
+    document.getElementById('cm-gold').textContent = '0';
+    document.getElementById('cm-banner').innerHTML = 'Tap a BIG letter, then find its little one!';
+
+    const board = document.getElementById('cm-board');
+    board.innerHTML = '';
+
+    // Build a shuffled list of tiles - both upper and lower of each letter
+    const tiles = [];
+    shuffled.forEach(l => {
+      tiles.push({ letter: l, case: 'upper', display: l });
+      tiles.push({ letter: l, case: 'lower', display: l.toLowerCase() });
+    });
+    // Shuffle tiles
+    for (let i = tiles.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+    }
+
+    tiles.forEach(t => {
+      const tile = document.createElement('button');
+      tile.className = 'cm-tile';
+      tile.textContent = t.display;
+      tile.dataset.letter = t.letter;
+      tile.dataset.case = t.case;
+      // Different styling for lowercase tiles to make distinction visual
+      if (t.case === 'lower') {
+        tile.style.background = 'linear-gradient(135deg, #c4b5fd, #8b5cf6)';
+        tile.style.borderColor = '#5b21b6';
+        tile.style.boxShadow = '0 3px 0 #4c1d95';
+        tile.style.color = 'white';
+      }
+      tile.onclick = () => handleCaseTileTap(tile, t);
+      board.appendChild(tile);
+    });
+
+    showScreen('casematch-screen');
+  }
+
+  function handleCaseTileTap(tile, t) {
+    if (cmState.locked) return;
+    if (tile.classList.contains('matched')) return;
+
+    // No tile selected yet — select this one
+    if (!cmState.selectedTile) {
+      cmState.selectedTile = tile;
+      cmState.selectedLetter = t.letter;
+      cmState.selectedCase = t.case;
+      tile.classList.add('selected');
+      // Speak the letter sound
+      const data = LETTERS[t.letter];
+      if (data) speak(data.sound, { rate: 0.7, pitch: 1.2 });
+      document.getElementById('cm-banner').innerHTML =
+        `<span class="big-letter">${t.display}</span> — find its match!`;
+      return;
+    }
+
+    // Tapping same tile - deselect
+    if (cmState.selectedTile === tile) {
+      tile.classList.remove('selected');
+      cmState.selectedTile = null;
+      cmState.selectedLetter = null;
+      cmState.selectedCase = null;
+      document.getElementById('cm-banner').innerHTML = 'Tap a BIG letter, then find its little one!';
+      return;
+    }
+
+    // Check match: same letter, different case
+    if (t.letter === cmState.selectedLetter && t.case !== cmState.selectedCase) {
+      // Match!
+      cmState.locked = true;
+      cmState.selectedTile.classList.remove('selected');
+      cmState.selectedTile.classList.add('matched');
+      tile.classList.add('matched');
+      cmState.matched++;
+      cmState.gold += 5;
+      document.getElementById('cm-gold').textContent = cmState.gold;
+      kidProgress.totalGold += 5;
+      saveAll();
+      const data = LETTERS[t.letter];
+      speak(`${t.letter}! ${data ? data.sound : ''}`, { rate: 0.85, pitch: 1.2 });
+      document.getElementById('cm-banner').innerHTML =
+        `🎉 <span class="big-letter">${t.letter}${t.letter.toLowerCase()}</span> matched!`;
+
+      cmState.selectedTile = null;
+      cmState.selectedLetter = null;
+      cmState.selectedCase = null;
+
+      setTimeout(() => {
+        cmState.locked = false;
+        if (cmState.matched >= cmState.total) {
+          // All matched!
+          setTimeout(() => {
+            document.getElementById('cm-banner').innerHTML = '🏆 All matched! Great job!';
+            speak('All matched! Great job!');
+            spawnConfetti();
+            setTimeout(() => spawnConfetti(), 400);
+            // Offer to play again
+            setTimeout(() => startCaseMatch(), 2200);
+          }, 400);
+        }
+      }, 600);
+    } else {
+      // Wrong - shake both
+      cmState.locked = true;
+      tile.classList.add('miss');
+      cmState.selectedTile.classList.add('miss');
+      speak('Try again!');
+      setTimeout(() => {
+        tile.classList.remove('miss');
+        cmState.selectedTile.classList.remove('miss');
+        cmState.selectedTile.classList.remove('selected');
+        cmState.selectedTile = null;
+        cmState.selectedLetter = null;
+        cmState.selectedCase = null;
+        cmState.locked = false;
+        document.getElementById('cm-banner').innerHTML = 'Tap a BIG letter, then find its little one!';
+      }, 600);
+    }
+  }
+
+  // ============ INIT ============
+  if (allData.currentKid && allData.kids[allData.currentKid]) {
+    kid = allData.currentKid;
+    kidProgress = allData.kids[kid];
+    setupTitleForKid();
+    showScreen('title-screen');
+  } else {
+    showScreen('picker-screen');
+  }
+</script>
+</body>
+</html>

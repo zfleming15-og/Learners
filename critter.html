@@ -1,0 +1,2148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-critter.png">
+<meta name="apple-mobile-web-app-title" content="Critter Quest">
+<title>Critter Quest</title>
+<style>
+  :root {
+    --bg-deep:  #0A0E27;
+    --bg-mid:   #151B3D;
+    --bg-soft:  #1E2749;
+    --ink:      #F0F4FF;
+    --muted:    #9AA5CC;
+    --gold:     #FFD93D;
+    --gold-dk:  #E5A800;
+
+    --ember:   #FF6B4A;
+    --splash:  #4AA8FF;
+    --sprout:  #4ADE80;
+    --spark:   #FFD93D;
+    --boulder: #B08968;
+    --frost:   #7DD3FC;
+    --gust:    #C4B5FD;
+    --shade:   #8B7FD4;
+
+    --ok:      #4ADE80;
+    --bad:     #FF6B6B;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    font-family: -apple-system, "SF Pro Rounded", "Avenir Next", system-ui, sans-serif;
+    user-select: none; -webkit-user-select: none;
+    touch-action: manipulation;
+    background: var(--bg-deep);
+  }
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 15% 0%, rgba(139,127,212,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 90% 100%, rgba(74,168,255,0.18) 0%, transparent 60%),
+      linear-gradient(175deg, var(--bg-deep) 0%, var(--bg-mid) 55%, #0D1230 100%);
+    color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  #app {
+    width: 100%; max-width: 480px;
+    height: 100%; max-height: 950px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .screen {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    padding: calc(14px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));
+  }
+  .screen.active { display: flex; }
+
+  /* ══════════ SHARED BITS ══════════ */
+  .btn {
+    font-family: inherit; font-weight: 800; cursor: pointer;
+    border-radius: 16px; border: none;
+    transition: transform 0.12s, filter 0.12s;
+  }
+  .btn:active { transform: translateY(3px) scale(0.98); filter: brightness(1.1); }
+
+  .btn-primary {
+    background: linear-gradient(160deg, var(--gold), var(--gold-dk));
+    color: #2A1A00;
+    padding: 15px 30px; font-size: 18px;
+    box-shadow: 0 5px 0 #A87C00, 0 10px 25px rgba(255,217,61,0.3);
+  }
+  .btn-primary:active { box-shadow: 0 2px 0 #A87C00; }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.07);
+    border: 2px solid rgba(255,255,255,0.15);
+    color: var(--muted);
+    padding: 10px 16px; font-size: 13px; font-weight: 700;
+    border-radius: 12px;
+  }
+  .btn-ghost:active { background: rgba(255,255,255,0.14); }
+
+  .icon-btn {
+    width: 42px; height: 42px; flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    border: 2px solid rgba(255,255,255,0.15);
+    color: var(--ink);
+    font-size: 19px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .icon-btn:active { background: rgba(255,255,255,0.16); }
+
+  .topbar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px; flex-shrink: 0;
+  }
+  .topbar h2 {
+    flex: 1; margin: 0; font-size: 19px; font-weight: 900;
+    letter-spacing: -0.3px;
+  }
+
+  .coin-pill {
+    background: linear-gradient(160deg, var(--gold), var(--gold-dk));
+    color: #2A1A00; font-weight: 900; font-size: 15px;
+    padding: 7px 14px; border-radius: 999px;
+    display: flex; align-items: center; gap: 5px;
+    box-shadow: 0 3px 0 #A87C00;
+    flex-shrink: 0;
+  }
+
+  /* ══════════ PATH PICKER ══════════ */
+  #picker { justify-content: center; align-items: center; text-align: center; }
+  .logo-mark {
+    width: 110px; height: 110px;
+    margin-bottom: 6px;
+    animation: floaty 3.5s ease-in-out infinite;
+  }
+  @keyframes floaty {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50%     { transform: translateY(-12px) rotate(3deg); }
+  }
+  .logo-title {
+    font-size: 42px; font-weight: 900; margin: 0 0 4px;
+    letter-spacing: -1.5px; line-height: 0.95;
+    background: linear-gradient(150deg, #FFD93D 0%, #FF6B4A 50%, #C4B5FD 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 14px rgba(255,217,61,0.25));
+  }
+  .logo-sub { color: var(--muted); font-size: 14px; margin: 0 0 30px; font-weight: 600; }
+
+  .path-card {
+    width: 100%; max-width: 330px;
+    border-radius: 22px;
+    padding: 18px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 15px;
+    text-align: left;
+    border: 2px solid rgba(255,255,255,0.14);
+    font-family: inherit;
+    color: var(--ink);
+    position: relative; overflow: hidden;
+    transition: transform 0.12s;
+  }
+  .path-card:active { transform: scale(0.975); }
+  .path-card.k  { background: linear-gradient(140deg, rgba(74,222,128,0.22), rgba(125,211,252,0.14)); }
+  .path-card.g3 { background: linear-gradient(140deg, rgba(255,107,74,0.22), rgba(196,181,253,0.14)); }
+  .path-card svg { width: 68px; height: 68px; flex-shrink: 0; }
+  .path-card .pc-body { flex: 1; min-width: 0; }
+  .path-card .pc-name { font-size: 20px; font-weight: 900; letter-spacing: -0.4px; line-height: 1.05; }
+  .path-card .pc-grade { font-size: 11px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+  .path-card .pc-desc { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.35; font-weight: 600; }
+  .path-card .pc-prog {
+    margin-top: 8px; height: 6px; border-radius: 3px;
+    background: rgba(0,0,0,0.35); overflow: hidden;
+  }
+  .path-card .pc-prog i { display: block; height: 100%; border-radius: 3px; background: var(--gold); }
+  .path-card .pc-progtxt { font-size: 10.5px; color: var(--muted); margin-top: 4px; font-weight: 700; }
+
+  /* ══════════ LEVEL MAP ══════════ */
+  #map-screen { padding-bottom: 0; }
+  .map-scroll {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 4px 0 calc(24px + env(safe-area-inset-bottom));
+    position: relative;
+  }
+  .map-inner { position: relative; padding: 8px 0; }
+  .map-line {
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 0; border-left: 4px dotted rgba(255,255,255,0.13);
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+  .node-row {
+    position: relative; z-index: 1;
+    display: flex; align-items: center;
+    margin-bottom: 16px;
+    min-height: 76px;
+  }
+  .node-row.left  { justify-content: flex-start; padding-right: 42%; }
+  .node-row.right { justify-content: flex-end;   padding-left: 42%; }
+
+  .node {
+    display: flex; align-items: center; gap: 11px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.13);
+    border-radius: 18px;
+    padding: 10px 13px;
+    cursor: pointer;
+    font-family: inherit; color: var(--ink);
+    width: 100%;
+    transition: transform 0.12s;
+    text-align: left;
+  }
+  .node:active { transform: scale(0.97); }
+  .node.locked { opacity: 0.42; cursor: default; }
+  .node.locked:active { transform: none; }
+  .node.current {
+    border-color: var(--gold);
+    background: linear-gradient(140deg, rgba(255,217,61,0.18), rgba(255,255,255,0.05));
+    box-shadow: 0 0 0 4px rgba(255,217,61,0.12), 0 6px 22px rgba(255,217,61,0.18);
+    animation: pulseGlow 2.2s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%,100% { box-shadow: 0 0 0 4px rgba(255,217,61,0.10), 0 6px 20px rgba(255,217,61,0.14); }
+    50%     { box-shadow: 0 0 0 7px rgba(255,217,61,0.05), 0 6px 26px rgba(255,217,61,0.26); }
+  }
+  .node.done { border-color: rgba(74,222,128,0.45); }
+
+  .node-badge {
+    width: 42px; height: 42px; flex-shrink: 0;
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; font-weight: 900;
+    background: rgba(0,0,0,0.3);
+  }
+  .node.done .node-badge { background: rgba(74,222,128,0.22); }
+  .node.current .node-badge { background: rgba(255,217,61,0.22); }
+
+  .node-body { flex: 1; min-width: 0; }
+  .node-title {
+    font-size: 14px; font-weight: 800; line-height: 1.15;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .node-goal { font-size: 10.5px; color: var(--muted); font-weight: 700; margin-top: 2px; }
+  .node-stars { font-size: 11px; letter-spacing: 1px; margin-top: 3px; }
+
+  .boss-row .node {
+    background: linear-gradient(140deg, rgba(255,107,74,0.2), rgba(139,127,212,0.14));
+    border-color: rgba(255,107,74,0.4);
+  }
+
+  /* ══════════ GAME ══════════ */
+  #game-screen { padding-top: calc(12px + env(safe-area-inset-top)); }
+  .game-hud {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px; flex-shrink: 0;
+  }
+  .goal-track {
+    flex: 1; height: 30px;
+    background: rgba(0,0,0,0.32);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .goal-fill {
+    position: absolute; inset: 0 auto 0 0;
+    background: linear-gradient(90deg, var(--sprout), var(--gold));
+    width: 0%;
+    transition: width 0.45s cubic-bezier(0.3,1.4,0.5,1);
+    border-radius: 999px;
+  }
+  .goal-label {
+    position: relative; z-index: 1;
+    width: 100%; text-align: center;
+    font-size: 12px; font-weight: 900;
+    color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    letter-spacing: 0.3px;
+  }
+
+  .stage {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2px; min-height: 0;
+    padding: 4px 0;
+  }
+  .stage .q-card { margin-top: 2px; }
+
+  .buddy-wrap {
+    display: flex; align-items: flex-end; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .buddy-wrap svg { width: 84px; height: 84px; }
+  .buddy-wrap svg.cheer { animation: cheer 0.65s ease-out; }
+  @keyframes cheer {
+    0%,100% { transform: translateY(0) rotate(0); }
+    25%     { transform: translateY(-14px) rotate(-11deg) scale(1.1); }
+    60%     { transform: translateY(-6px) rotate(9deg) scale(1.06); }
+  }
+  .buddy-say {
+    background: var(--ink); color: var(--bg-deep);
+    padding: 7px 13px; border-radius: 14px 14px 14px 3px;
+    font-size: 12.5px; font-weight: 800;
+    max-width: 200px; line-height: 1.25;
+    margin-bottom: 8px;
+  }
+
+  .q-card {
+    width: 100%; max-width: 370px;
+    background: rgba(255,255,255,0.055);
+    border: 2px solid rgba(255,255,255,0.13);
+    border-radius: 22px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .q-prompt {
+    font-size: 14.5px; font-weight: 700; color: var(--muted);
+    text-align: center; line-height: 1.35;
+    margin: 0 0 8px;
+  }
+  .q-big {
+    font-size: 46px; font-weight: 900; text-align: center;
+    letter-spacing: -1px; line-height: 1;
+    margin: 0;
+  }
+  .q-big.small { font-size: 30px; }
+  .q-big.words { font-size: 22px; line-height: 1.3; letter-spacing: 0; font-weight: 800; }
+  .q-visual {
+    margin-top: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 10px;
+    min-height: 0;
+  }
+  .q-visual:empty { display: none; }
+
+  .dotgrid { display: grid; gap: 5px; justify-content: center; }
+  .dot {
+    width: 19px; height: 19px; border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, #FFE68A, var(--gold-dk));
+    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.25);
+    animation: popIn 0.28s ease-out backwards;
+  }
+  @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+  .critter-count {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    justify-content: center; max-width: 310px;
+  }
+  .critter-count span {
+    font-size: 31px; line-height: 1.05;
+    animation: popIn 0.28s ease-out backwards;
+    transition: opacity 0.35s, filter 0.35s;
+  }
+  .critter-count span.gone {
+    opacity: 0.22; filter: grayscale(1);
+  }
+  .group-op {
+    font-size: 27px; font-weight: 900; color: var(--gold);
+  }
+
+  .tenframe {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 5px; padding: 8px;
+    background: rgba(0,0,0,0.25);
+    border: 2px solid rgba(255,255,255,0.16);
+    border-radius: 12px;
+  }
+  .tf-cell {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; color: var(--muted);
+  }
+  .tf-cell.filled {
+    background: radial-gradient(circle at 32% 30%, #FFE68A, var(--gold-dk));
+    border-color: transparent;
+  }
+
+  .choices {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 11px; width: 100%; max-width: 370px;
+    flex-shrink: 0;
+  }
+  .choice {
+    background: linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+    border: 2px solid rgba(255,255,255,0.18);
+    color: var(--ink);
+    border-radius: 17px;
+    padding: 20px 10px;
+    font-size: 27px; font-weight: 900;
+    font-family: inherit; cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+    transition: transform 0.12s, box-shadow 0.12s;
+    word-break: break-word;
+  }
+  .choice.txt { font-size: 19px; }
+  .choice:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.3); }
+  .choice.right {
+    background: linear-gradient(160deg, #5BE894, #2FA862);
+    border-color: #A8F5C8; color: #06301A;
+    animation: rightPop 0.45s ease-out;
+  }
+  .choice.wrong {
+    background: linear-gradient(160deg, #FF8080, #C93030);
+    border-color: #FFC0C0; color: #fff;
+    animation: nope 0.4s ease-out;
+  }
+  @keyframes rightPop { 0%,100%{transform:scale(1);} 45%{transform:scale(1.1);} }
+  @keyframes nope { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-9px);} 75%{transform:translateX(9px);} }
+
+  /* ══════════ SPORTS BONUS ══════════ */
+  #sport-screen { justify-content: center; align-items: center; text-align: center; }
+  .sport-head { font-size: 26px; font-weight: 900; margin: 0 0 3px; letter-spacing: -0.5px; }
+  .sport-sub { color: var(--muted); font-size: 13px; font-weight: 700; margin: 0 0 18px; }
+  .sport-field {
+    width: 100%; max-width: 330px;
+    height: 165px;
+    border-radius: 20px;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.14);
+  }
+  .sport-field.bball { background: linear-gradient(170deg, #7C4A22, #4A2A12); }
+  .sport-field.bball::after {
+    content: ''; position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    width: 74px; height: 12px; border-radius: 50%;
+    border: 5px solid #FF7043;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
+  }
+  .sport-field.soccer { background: linear-gradient(170deg, #2E7D4F, #14532D); }
+  .sport-field.soccer::after {
+    content: ''; position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 130px; height: 52px;
+    border: 5px solid rgba(255,255,255,0.85);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+  }
+  .sport-field.baseball { background: linear-gradient(170deg, #3C6E3C, #7A5230); }
+  .sport-field.baseball::after {
+    content: '⚾'; position: absolute; top: 20px; left: 50%;
+    transform: translateX(-50%); font-size: 26px;
+  }
+  .sport-ball {
+    font-size: 46px; z-index: 2;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45));
+    transition: transform 0.5s cubic-bezier(0.3,1.2,0.5,1);
+  }
+  .sport-ball.launch { transform: translateY(-105px) scale(0.5) rotate(360deg); }
+
+  .power-bar {
+    width: 100%; max-width: 330px;
+    height: 40px; border-radius: 999px;
+    background: rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.15);
+    position: relative; overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .power-zone {
+    position: absolute; top: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(74,222,128,0.55), rgba(74,222,128,0.28));
+    border-left: 2px solid var(--sprout);
+    border-right: 2px solid var(--sprout);
+  }
+  .power-zone.bull {
+    background: linear-gradient(180deg, rgba(255,217,61,0.75), rgba(255,217,61,0.4));
+    border-color: var(--gold);
+  }
+  .power-marker {
+    position: absolute; top: -3px; bottom: -3px;
+    width: 6px; border-radius: 3px;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,0.9);
+  }
+  .sport-result {
+    font-size: 21px; font-weight: 900; min-height: 30px;
+    margin-bottom: 14px;
+  }
+
+  /* ══════════ LEVEL COMPLETE ══════════ */
+  #done-screen { justify-content: center; align-items: center; text-align: center; }
+  .done-title {
+    font-size: 34px; font-weight: 900; margin: 0 0 4px;
+    letter-spacing: -1px;
+    background: linear-gradient(150deg, #FFD93D, #FF6B4A);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .star-row { font-size: 38px; letter-spacing: 5px; margin: 6px 0 14px; }
+  .star-row span {
+    display: inline-block;
+    animation: starIn 0.5s cubic-bezier(0.3,1.6,0.5,1) backwards;
+  }
+  @keyframes starIn { from { transform: scale(0) rotate(-160deg); opacity:0; } to { transform: scale(1) rotate(0); opacity:1; } }
+
+  .reward-box {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.14);
+    border-radius: 22px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    width: 100%; max-width: 320px;
+  }
+  .reward-box .rb-label {
+    font-size: 10.5px; letter-spacing: 1.3px; text-transform: uppercase;
+    color: var(--muted); font-weight: 900; margin-bottom: 8px;
+  }
+  .hatch-svg { width: 118px; height: 118px; margin: 0 auto 6px; display: block; }
+  .hatch-svg.pop { animation: hatchPop 0.9s cubic-bezier(0.3,1.5,0.5,1); }
+  @keyframes hatchPop {
+    0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
+    55%  { transform: scale(1.25) rotate(12deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); }
+  }
+  .hatch-name { font-size: 22px; font-weight: 900; letter-spacing: -0.4px; }
+  .type-chip {
+    display: inline-block; margin-top: 5px;
+    padding: 3px 12px; border-radius: 999px;
+    font-size: 10.5px; font-weight: 900;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: #0A0E27;
+  }
+  .stat-line {
+    display: flex; justify-content: space-between;
+    font-size: 14px; font-weight: 700; color: var(--muted);
+    padding: 5px 0;
+  }
+  .stat-line b { color: var(--ink); font-size: 16px; }
+
+  /* ══════════ DEX ══════════ */
+  .dex-grid {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; align-content: start;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+  .dex-cell {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.11);
+    border-radius: 16px;
+    padding: 8px 5px 9px;
+    text-align: center;
+  }
+  .dex-cell svg { width: 100%; height: 62px; }
+  .dex-cell .dx-name {
+    font-size: 10.5px; font-weight: 800; margin-top: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dex-cell.locked { opacity: 0.3; }
+  .dex-cell.locked svg { filter: grayscale(1) brightness(0.4); }
+  .dex-empty {
+    grid-column: 1/-1; text-align: center;
+    color: var(--muted); font-size: 13px; font-weight: 700;
+    padding: 30px 20px; line-height: 1.5;
+  }
+
+  /* ══════════ CONFETTI ══════════ */
+  .confetti {
+    position: absolute; width: 9px; height: 14px;
+    border-radius: 2px; pointer-events: none; z-index: 50;
+    animation: fall 2.1s ease-in forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(720px) rotate(760deg); opacity: 0; }
+  }
+
+  /* ══════════ MODAL ══════════ */
+  .backdrop {
+    position: absolute; inset: 0; z-index: 100;
+    background: rgba(5,8,20,0.82);
+    display: none; align-items: center; justify-content: center;
+    padding: 22px;
+  }
+  .backdrop.active { display: flex; }
+  .sheet {
+    background: linear-gradient(160deg, var(--bg-soft), var(--bg-mid));
+    border: 2px solid rgba(255,255,255,0.16);
+    border-radius: 24px;
+    padding: 24px; max-width: 320px; width: 100%;
+    text-align: center;
+  }
+  .sheet h3 { margin: 0 0 9px; font-size: 21px; font-weight: 900; }
+  .sheet p { margin: 0 0 18px; font-size: 14px; color: var(--muted); line-height: 1.45; font-weight: 600; }
+  .sheet .row { display: flex; gap: 10px; }
+  .sheet .row .btn { flex: 1; padding: 13px; font-size: 14px; }
+  .btn-danger {
+    background: linear-gradient(160deg, #FF6B6B, #C93030);
+    color: #fff; box-shadow: 0 4px 0 #8B1F1F;
+  }
+  .btn-neutral {
+    background: rgba(255,255,255,0.1);
+    color: var(--ink); border: 2px solid rgba(255,255,255,0.16);
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════ PATH PICKER ══════════ -->
+  <div id="picker" class="screen active">
+    <svg class="logo-mark" id="logo-critter" viewBox="0 0 100 100"></svg>
+    <h1 class="logo-title">Critter<br>Quest</h1>
+    <p class="logo-sub">Learn • Collect • Evolve</p>
+    <button class="path-card k" onclick="choosePath('k')">
+      <svg id="pc-k" viewBox="0 0 100 100"></svg>
+      <div class="pc-body">
+        <div class="pc-name">Sprout Scouts</div>
+        <div class="pc-grade">Kindergarten</div>
+        <div class="pc-desc">Counting, adding, letters &amp; first words</div>
+        <div class="pc-prog"><i id="prog-k"></i></div>
+        <div class="pc-progtxt" id="progtxt-k">Not started</div>
+      </div>
+    </button>
+    <button class="path-card g3" onclick="choosePath('g3')">
+      <svg id="pc-g3" viewBox="0 0 100 100"></svg>
+      <div class="pc-body">
+        <div class="pc-name">Storm Chasers</div>
+        <div class="pc-grade">Third Grade</div>
+        <div class="pc-desc">Times tables, division, fractions &amp; word problems</div>
+        <div class="pc-prog"><i id="prog-g3"></i></div>
+        <div class="pc-progtxt" id="progtxt-g3">Not started</div>
+      </div>
+    </button>
+  </div>
+
+  <!-- ══════════ LEVEL MAP ══════════ -->
+  <div id="map-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="show('picker')">←</button>
+      <h2 id="map-title">Sprout Scouts</h2>
+      <div class="coin-pill">🪙 <span id="map-coins">0</span></div>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:10px; flex-shrink:0;">
+      <button class="btn-ghost" style="flex:1" onclick="openDex()">📖 Critter Dex</button>
+      <button class="btn-ghost" style="flex:1" onclick="askReset()">↺ Reset</button>
+    </div>
+    <div class="map-scroll">
+      <div class="map-inner" id="map-inner">
+        <div class="map-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ GAME ══════════ -->
+  <div id="game-screen" class="screen">
+    <div class="game-hud">
+      <button class="icon-btn" onclick="quitLevel()">←</button>
+      <div class="goal-track">
+        <div class="goal-fill" id="goal-fill"></div>
+        <div class="goal-label" id="goal-label">0 / 8</div>
+      </div>
+      <div class="coin-pill">🪙 <span id="run-coins">0</span></div>
+    </div>
+    <div class="stage">
+      <div class="buddy-wrap">
+        <svg id="buddy" viewBox="0 0 100 100"></svg>
+      </div>
+      <div class="buddy-say" id="buddy-say">Let's go!</div>
+      <div class="q-card">
+        <p class="q-prompt" id="q-prompt">What is this?</p>
+        <p class="q-big" id="q-big">3 + 4</p>
+        <div class="q-visual" id="q-visual"></div>
+      </div>
+      <div class="choices" id="choices"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ SPORTS BONUS ══════════ -->
+  <div id="sport-screen" class="screen">
+    <h2 class="sport-head" id="sport-head">🏀 Bonus Shot!</h2>
+    <p class="sport-sub" id="sport-sub">Tap when the marker hits the green!</p>
+    <div class="sport-field bball" id="sport-field">
+      <div class="sport-ball" id="sport-ball">🏀</div>
+    </div>
+    <div class="power-bar" id="power-bar">
+      <div class="power-zone" id="power-zone"></div>
+      <div class="power-zone bull" id="power-bull"></div>
+      <div class="power-marker" id="power-marker"></div>
+    </div>
+    <div class="sport-result" id="sport-result"></div>
+    <button class="btn btn-primary" id="sport-btn" onclick="sportTap()">SHOOT!</button>
+  </div>
+
+  <!-- ══════════ LEVEL COMPLETE ══════════ -->
+  <div id="done-screen" class="screen">
+    <h2 class="done-title" id="done-title">Level Clear!</h2>
+    <div class="star-row" id="star-row"></div>
+    <div class="reward-box" id="reward-box">
+      <div class="rb-label" id="rb-label">New Critter!</div>
+      <svg class="hatch-svg" id="hatch-svg" viewBox="0 0 100 100"></svg>
+      <div class="hatch-name" id="hatch-name">Emberpup</div>
+      <div><span class="type-chip" id="hatch-type">Ember</span></div>
+    </div>
+    <div class="reward-box" style="padding:12px 20px">
+      <div class="stat-line"><span>Correct</span><b id="done-correct">8 / 8</b></div>
+      <div class="stat-line"><span>Coins earned</span><b id="done-coins">🪙 80</b></div>
+    </div>
+    <button class="btn btn-primary" onclick="afterLevel()">Continue →</button>
+  </div>
+
+  <!-- ══════════ DEX ══════════ -->
+  <div id="dex-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="show('map-screen')">←</button>
+      <h2>Critter Dex</h2>
+      <div class="coin-pill" id="dex-count">0/0</div>
+    </div>
+    <div class="dex-grid" id="dex-grid"></div>
+  </div>
+
+  <!-- ══════════ RESET MODAL ══════════ -->
+  <div class="backdrop" id="reset-modal">
+    <div class="sheet">
+      <h3>Start over?</h3>
+      <p>This erases all levels, stars, coins and critters for <b id="reset-path-name">this path</b>. It can't be undone.</p>
+      <div class="row">
+        <button class="btn btn-neutral" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="doReset()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CRITTER QUEST
+   Two progressive learning paths with collectible creatures.
+   All creature art is original, drawn procedurally as SVG.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ───────── TYPE PALETTE ───────── */
+const TYPES = {
+  ember:   { name: 'Ember',   c1: '#FF8A5B', c2: '#E03E1A', accent: '#FFD0A8' },
+  splash:  { name: 'Splash',  c1: '#5FB8FF', c2: '#1565C0', accent: '#BFE4FF' },
+  sprout:  { name: 'Sprout',  c1: '#6EE79A', c2: '#1E9E52', accent: '#C6F7D8' },
+  spark:   { name: 'Spark',   c1: '#FFE066', c2: '#E5A800', accent: '#FFF3B8' },
+  boulder: { name: 'Boulder', c1: '#C9A27E', c2: '#7A5638', accent: '#EBD9C6' },
+  frost:   { name: 'Frost',   c1: '#A5E4FF', c2: '#2B8FC7', accent: '#DAF3FF' },
+  gust:    { name: 'Gust',    c1: '#D6C9FF', c2: '#7C5CD6', accent: '#EFE8FF' },
+  shade:   { name: 'Shade',   c1: '#9B8FE0', c2: '#4A3E8F', accent: '#D8D1F5' }
+};
+
+/* ───────── PROCEDURAL CREATURE ART ─────────
+   Each critter is described by a small spec; this renders
+   original SVG monsters. body/top/tail/eyes vary by species. */
+
+function critterSVG(spec, opts) {
+  opts = opts || {};
+  const t = TYPES[spec.type];
+  const c1 = t.c1, c2 = t.c2, ac = t.accent;
+  const uid = 'g' + Math.random().toString(36).slice(2, 8);
+  const scale = spec.stage === 3 ? 1.12 : spec.stage === 2 ? 1.05 : 1;
+  let s = '';
+
+  s += `<defs>
+    <radialGradient id="${uid}b" cx="34%" cy="26%">
+      <stop offset="0%" stop-color="${c1}"/>
+      <stop offset="100%" stop-color="${c2}"/>
+    </radialGradient>
+    <radialGradient id="${uid}a" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="${c1}" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="${c1}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>`;
+
+  // aura behind evolved forms
+  if (spec.stage >= 2) s += `<circle cx="50" cy="52" r="44" fill="url(#${uid}a)"/>`;
+
+  s += `<g transform="translate(50,52) scale(${scale}) translate(-50,-52)">`;
+
+  /* ── body silhouette metrics (drives where everything else attaches) ── */
+  let bw, bh, by;                       // half-width, half-height, centre-y
+  if (spec.body === 'round')      { bw = 23; bh = 21; by = 50; }
+  else if (spec.body === 'egg')   { bw = 19; bh = 25; by = 48; }
+  else if (spec.body === 'squat') { bw = 27; bh = 17; by = 54; }
+  else if (spec.body === 'drop')  { bw = 22; bh = 24; by = 50; }
+  else                            { bw = 24; bh = 22; by = 50; }  // chunk
+  const bBot = by + bh;                 // bottom of the body
+  const bRight = 50 + bw;
+
+  /* ── WINGS (furthest back) ── */
+  if (spec.wings) {
+    s += `<path d="M${50-bw+3} ${by-4} q-22 -16 -25 3 q-1 12 11 10 q7 -2 14 -8z" fill="${ac}" opacity="0.9"/>
+          <path d="M${50+bw-3} ${by-4} q22 -16 25 3 q1 12 -11 10 q-7 -2 -14 -8z" fill="${ac}" opacity="0.9"/>`;
+  }
+
+  /* ── TAIL (pushed clear of the body so it actually reads) ── */
+  const tx = bRight - 3, ty = by + 4;
+  if (spec.tail === 'flame') {
+    s += `<path d="M${tx} ${ty} q13 1 17 -9 q3 -8 -2 -13 q10 5 10 16 q0 14 -15 15 q-8 0 -10 -9z" fill="${c1}"/>
+          <path d="M${tx+6} ${ty-2} q9 0 11 -8 q4 8 -2 13 q-6 4 -9 -5z" fill="${ac}" opacity="0.85"/>`;
+  } else if (spec.tail === 'fin') {
+    s += `<path d="M${tx} ${ty} q14 -3 18 -14 q6 12 0 22 q-6 9 -18 4z" fill="${c2}"/>
+          <path d="M${tx+4} ${ty} q9 -2 12 -9" stroke="${ac}" stroke-width="2" fill="none" opacity="0.7"/>`;
+  } else if (spec.tail === 'leaf') {
+    s += `<path d="M${tx} ${ty} q6 -16 22 -19 q3 17 -12 24 q-7 3 -10 -5z" fill="${c1}"/>
+          <path d="M${tx+3} ${ty-2} q8 -8 16 -12" stroke="${c2}" stroke-width="1.8" fill="none"/>`;
+  } else if (spec.tail === 'bolt') {
+    s += `<path d="M${tx} ${ty+2} l13 -14 l-4 10 l12 -3 l-18 20 l4 -12z" fill="${c1}" stroke="${c2}" stroke-width="1.4" stroke-linejoin="round"/>`;
+  } else if (spec.tail === 'puff') {
+    s += `<circle cx="${tx+9}" cy="${ty-1}" r="9" fill="${c1}" opacity="0.92"/>
+          <circle cx="${tx+16}" cy="${ty-8}" r="6.5" fill="${ac}" opacity="0.85"/>
+          <circle cx="${tx+19}" cy="${ty+1}" r="4.5" fill="${ac}" opacity="0.6"/>`;
+  } else if (spec.tail === 'curl') {
+    s += `<path d="M${tx} ${ty+2} q15 3 15 -8 q0 -9 -9 -8 q-6 1 -4 7" stroke="${c2}" stroke-width="5.5" fill="none" stroke-linecap="round"/>`;
+  }
+
+  /* ── FEET (in front of tail, behind body) ── */
+  s += `<ellipse cx="${50-bw*0.46}" cy="${bBot+4}" rx="9" ry="6" fill="${c2}"/>
+        <ellipse cx="${50+bw*0.46}" cy="${bBot+4}" rx="9" ry="6" fill="${c2}"/>
+        <ellipse cx="${50-bw*0.46}" cy="${bBot+3}" rx="5" ry="3" fill="${ac}" opacity="0.45"/>
+        <ellipse cx="${50+bw*0.46}" cy="${bBot+3}" rx="5" ry="3" fill="${ac}" opacity="0.45"/>`;
+
+  /* ── BODY ── */
+  if (spec.body === 'drop') {
+    s += `<path d="M50 ${by-bh} q${bw+4} ${bh*0.7} ${bw-2} ${bh*1.2}
+                   q-2 ${bh*0.8} -${bw-2} ${bh*0.8}
+                   q-${bw-2} 0 -${bw-2} -${bh*0.8}
+                   q-2 -${bh*0.5} ${bw-2} -${bh*1.2}z" fill="url(#${uid}b)"/>`;
+  } else if (spec.body === 'chunk') {
+    s += `<rect x="${50-bw}" y="${by-bh}" width="${bw*2}" height="${bh*2}" rx="${bw*0.62}" fill="url(#${uid}b)"/>`;
+  } else {
+    s += `<ellipse cx="50" cy="${by}" rx="${bw}" ry="${bh}" fill="url(#${uid}b)"/>`;
+  }
+
+  /* ── BELLY ── */
+  if (spec.belly) {
+    s += `<ellipse cx="50" cy="${by+bh*0.42}" rx="${bw*0.56}" ry="${bh*0.48}" fill="${ac}" opacity="0.55"/>`;
+  }
+
+  /* ── ARMS ── */
+  s += `<ellipse cx="${50-bw-1}" cy="${by+4}" rx="6.5" ry="9.5" fill="${c2}" transform="rotate(-22 ${50-bw-1} ${by+4})"/>
+        <ellipse cx="${50+bw+1}" cy="${by+4}" rx="6.5" ry="9.5" fill="${c2}" transform="rotate(22 ${50+bw+1} ${by+4})"/>`;
+
+  /* ── TOP FEATURE (sits on the crown of the body) ── */
+  const hy = by - bh;
+  if (spec.top === 'horns') {
+    s += `<path d="M${50-bw*0.5} ${hy+3} l-5 -17 l13 10z" fill="${c2}"/>
+          <path d="M${50+bw*0.5} ${hy+3} l5 -17 l-13 10z" fill="${c2}"/>
+          <path d="M${50-bw*0.5} ${hy+3} l-3 -10 l7 6z" fill="${ac}" opacity="0.5"/>
+          <path d="M${50+bw*0.5} ${hy+3} l3 -10 l-7 6z" fill="${ac}" opacity="0.5"/>`;
+  } else if (spec.top === 'ears') {
+    s += `<ellipse cx="${50-bw*0.62}" cy="${hy-3}" rx="9" ry="14" fill="${c2}" transform="rotate(-24 ${50-bw*0.62} ${hy-3})"/>
+          <ellipse cx="${50+bw*0.62}" cy="${hy-3}" rx="9" ry="14" fill="${c2}" transform="rotate(24 ${50+bw*0.62} ${hy-3})"/>
+          <ellipse cx="${50-bw*0.62}" cy="${hy-1}" rx="4" ry="7" fill="${ac}" opacity="0.75" transform="rotate(-24 ${50-bw*0.62} ${hy-1})"/>
+          <ellipse cx="${50+bw*0.62}" cy="${hy-1}" rx="4" ry="7" fill="${ac}" opacity="0.75" transform="rotate(24 ${50+bw*0.62} ${hy-1})"/>`;
+  } else if (spec.top === 'crest') {
+    s += `<path d="M50 ${hy-16} l-13 16 h26z" fill="${ac}"/>
+          <path d="M${50-11} ${hy-6} l-11 10 h16z" fill="${c2}" opacity="0.9"/>
+          <path d="M${50+11} ${hy-6} l11 10 h-16z" fill="${c2}" opacity="0.9"/>`;
+  } else if (spec.top === 'antenna') {
+    s += `<path d="M${50-7} ${hy+2} q-5 -14 -12 -19" stroke="${c2}" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="${50-19}" cy="${hy-19}" r="6" fill="${ac}"/>
+          <circle cx="${50-20.5}" cy="${hy-20.5}" r="2" fill="#fff" opacity="0.8"/>
+          <path d="M${50+7} ${hy+2} q5 -14 12 -19" stroke="${c2}" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="${50+19}" cy="${hy-19}" r="6" fill="${ac}"/>
+          <circle cx="${50+17.5}" cy="${hy-20.5}" r="2" fill="#fff" opacity="0.8"/>`;
+  } else if (spec.top === 'leafsprig') {
+    s += `<path d="M50 ${hy+2} q-3 -18 -16 -22 q1 18 16 22z" fill="${c1}"/>
+          <path d="M50 ${hy+2} q3 -14 14 -17 q-1 14 -14 17z" fill="${ac}"/>
+          <path d="M50 ${hy+2} q-6 -10 -11 -13" stroke="${c2}" stroke-width="1.4" fill="none" opacity="0.6"/>`;
+  } else if (spec.top === 'flametuft') {
+    s += `<path d="M50 ${hy+3} q-11 -12 -4 -24 q3 8 7 9 q4 -7 1 -15 q13 14 6 30z" fill="${c1}"/>
+          <path d="M50 ${hy+1} q-5 -7 -1 -13 q2 5 4 5 q2 -4 0 -8 q7 8 2 16z" fill="${ac}" opacity="0.85"/>`;
+  } else if (spec.top === 'crown') {
+    s += `<path d="M${50-17} ${hy+2} l4 -17 l8 9 l5 -14 l5 14 l8 -9 l4 17z" fill="${ac}" stroke="${c2}" stroke-width="1.6" stroke-linejoin="round"/>
+          <circle cx="${50-9}" cy="${hy-6}" r="2.4" fill="${c1}"/>
+          <circle cx="50" cy="${hy-10}" r="2.6" fill="${c1}"/>
+          <circle cx="${50+9}" cy="${hy-6}" r="2.4" fill="${c1}"/>`;
+  } else if (spec.top === 'shell') {
+    s += `<path d="M${50-bw} ${hy+6} q${bw} -24 ${bw*2} 0 q-${bw} -9 -${bw*2} 0z" fill="${c2}"/>
+          <path d="M50 ${hy-6} v10 M${50-9} ${hy-3} l2 9 M${50+9} ${hy-3} l-2 9" stroke="${ac}" stroke-width="1.6" opacity="0.6"/>`;
+  }
+
+  /* ── FACE ── */
+  const ey = by - bh * 0.15;
+  const ex = bw * 0.36;
+  if (spec.eyes === 'big') {
+    s += `<ellipse cx="${50-ex}" cy="${ey}" rx="7.5" ry="8.8" fill="#fff"/>
+          <ellipse cx="${50+ex}" cy="${ey}" rx="7.5" ry="8.8" fill="#fff"/>
+          <circle cx="${50-ex+1}" cy="${ey+1}" r="4.5" fill="#17203F"/>
+          <circle cx="${50+ex+1}" cy="${ey+1}" r="4.5" fill="#17203F"/>
+          <circle cx="${50-ex+2.4}" cy="${ey-1.6}" r="1.8" fill="#fff"/>
+          <circle cx="${50+ex+2.4}" cy="${ey-1.6}" r="1.8" fill="#fff"/>`;
+  } else if (spec.eyes === 'sleepy') {
+    s += `<path d="M${50-ex-7} ${ey+1} q7 -8 14 0" stroke="#17203F" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+          <path d="M${50+ex-7} ${ey+1} q7 -8 14 0" stroke="#17203F" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+  } else if (spec.eyes === 'fierce') {
+    s += `<ellipse cx="${50-ex}" cy="${ey+1}" rx="7.5" ry="7.8" fill="#fff"/>
+          <ellipse cx="${50+ex}" cy="${ey+1}" rx="7.5" ry="7.8" fill="#fff"/>
+          <ellipse cx="${50-ex+1}" cy="${ey+2}" rx="3.1" ry="5.2" fill="#17203F"/>
+          <ellipse cx="${50+ex+1}" cy="${ey+2}" rx="3.1" ry="5.2" fill="#17203F"/>
+          <path d="M${50-ex-8} ${ey-7} l15 4" stroke="${c2}" stroke-width="3.4" stroke-linecap="round"/>
+          <path d="M${50+ex+8} ${ey-7} l-15 4" stroke="${c2}" stroke-width="3.4" stroke-linecap="round"/>`;
+  } else {  // wide
+    s += `<circle cx="${50-ex}" cy="${ey}" r="9" fill="#fff"/>
+          <circle cx="${50+ex}" cy="${ey}" r="9" fill="#fff"/>
+          <circle cx="${50-ex}" cy="${ey}" r="5.2" fill="#17203F"/>
+          <circle cx="${50+ex}" cy="${ey}" r="5.2" fill="#17203F"/>
+          <circle cx="${50-ex+2}" cy="${ey-2.2}" r="2.1" fill="#fff"/>
+          <circle cx="${50+ex+2}" cy="${ey-2.2}" r="2.1" fill="#fff"/>`;
+  }
+
+  const my = ey + (spec.eyes === 'sleepy' ? 9 : 12);
+  if (spec.eyes === 'fierce') {
+    s += `<path d="M${50-6} ${my} q6 6 12 0" stroke="#17203F" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M${50-4} ${my+0.5} l2 3.5 l2 -3.5z" fill="#fff"/>
+          <path d="M${50+1} ${my+0.5} l2 3.5 l2 -3.5z" fill="#fff"/>`;
+  } else {
+    s += `<path d="M${50-5} ${my} q5 5.5 10 0" stroke="#17203F" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  }
+
+  if (spec.cheeks) {
+    s += `<circle cx="${50-bw*0.74}" cy="${my-2}" r="4.6" fill="${c1}" opacity="0.6"/>
+          <circle cx="${50+bw*0.74}" cy="${my-2}" r="4.6" fill="${c1}" opacity="0.6"/>`;
+  }
+
+  s += `</g>`;
+  return s;
+}
+
+function paintCritter(el, id) {
+  const c = CRITTERS[id];
+  if (!el || !c) return;
+  el.innerHTML = critterSVG(c);
+}
+
+/* ───────── CRITTER ROSTER ─────────
+   Original species. Chains of 2-3 evolve as levels progress. */
+const CRITTERS = {
+  // — Sprout Scouts (Kindergarten) —
+  pipling:   { name:'Pipling',   type:'sprout',  stage:1, body:'round', top:'leafsprig', eyes:'big',    tail:'leaf',  belly:1, cheeks:1 },
+  fernpal:   { name:'Fernpal',   type:'sprout',  stage:2, body:'egg',   top:'leafsprig', eyes:'big',    tail:'leaf',  belly:1, cheeks:1 },
+  grovemaw:  { name:'Grovemaw',  type:'sprout',  stage:3, body:'chunk', top:'crown',     eyes:'fierce', tail:'leaf',  belly:1 },
+
+  dewdrip:   { name:'Dewdrip',   type:'splash',  stage:1, body:'drop',  top:'shell',     eyes:'wide',   tail:'fin',   belly:1 },
+  tidalpup:  { name:'Tidalpup',  type:'splash',  stage:2, body:'round', top:'crest',     eyes:'big',    tail:'fin',   belly:1, cheeks:1 },
+
+  zaplet:    { name:'Zaplet',    type:'spark',   stage:1, body:'round', top:'antenna',   eyes:'wide',   tail:'bolt',  cheeks:1 },
+  voltmite:  { name:'Voltmite',  type:'spark',   stage:2, body:'egg',   top:'antenna',   eyes:'big',    tail:'bolt',  belly:1, cheeks:1 },
+
+  fluffle:   { name:'Fluffle',   type:'gust',    stage:1, body:'round', top:'ears',      eyes:'sleepy', tail:'puff',  belly:1, cheeks:1 },
+  breezle:   { name:'Breezle',   type:'gust',    stage:2, body:'egg',   top:'ears',      eyes:'big',    tail:'puff',  belly:1, cheeks:1, wings:1 },
+
+  pebblit:   { name:'Pebblit',   type:'boulder', stage:1, body:'squat', top:'horns',     eyes:'sleepy', tail:'curl',  belly:1 },
+  cragbud:   { name:'Cragbud',   type:'boulder', stage:2, body:'chunk', top:'horns',     eyes:'big',    tail:'curl',  belly:1 },
+
+  snowpip:   { name:'Snowpip',   type:'frost',   stage:1, body:'round', top:'crest',     eyes:'wide',   tail:'puff',  belly:1, cheeks:1 },
+  glacilo:   { name:'Glacilo',   type:'frost',   stage:2, body:'drop',  top:'crest',     eyes:'big',    tail:'fin',   belly:1 },
+
+  sunmoth:   { name:'Sunmoth',   type:'spark',   stage:3, body:'drop',  top:'crown',     eyes:'big',    tail:'puff',  belly:1, wings:1, cheeks:1 },
+  meadowking:{ name:'Meadowking',type:'sprout',  stage:3, body:'chunk', top:'crown',     eyes:'big',    tail:'leaf',  belly:1 },
+
+  // — Storm Chasers (Third Grade) —
+  cindercub: { name:'Cindercub', type:'ember',   stage:1, body:'round', top:'flametuft', eyes:'big',    tail:'flame', belly:1, cheeks:1 },
+  blazehound:{ name:'Blazehound',type:'ember',   stage:2, body:'egg',   top:'flametuft', eyes:'fierce', tail:'flame', belly:1 },
+  infernyx:  { name:'Infernyx',  type:'ember',   stage:3, body:'chunk', top:'crown',     eyes:'fierce', tail:'flame', belly:1, wings:1 },
+
+  ripplet:   { name:'Ripplet',   type:'splash',  stage:1, body:'drop',  top:'crest',     eyes:'big',    tail:'fin',   belly:1, cheeks:1 },
+  surgefin:  { name:'Surgefin',  type:'splash',  stage:2, body:'egg',   top:'crest',     eyes:'fierce', tail:'fin',   belly:1 },
+  maelstrom: { name:'Maelstrom', type:'splash',  stage:3, body:'chunk', top:'crown',     eyes:'fierce', tail:'fin',   belly:1, wings:1 },
+
+  gustling:  { name:'Gustling',  type:'gust',    stage:1, body:'round', top:'antenna',   eyes:'wide',   tail:'puff',  belly:1, cheeks:1 },
+  cyclonir:  { name:'Cyclonir',  type:'gust',    stage:2, body:'drop',  top:'crest',     eyes:'fierce', tail:'puff',  belly:1, wings:1 },
+
+  quarzite:  { name:'Quarzite',  type:'boulder', stage:1, body:'squat', top:'horns',     eyes:'big',    tail:'curl',  belly:1 },
+  bastionox: { name:'Bastionox', type:'boulder', stage:2, body:'chunk', top:'horns',     eyes:'fierce', tail:'curl',  belly:1 },
+
+  frostine:  { name:'Frostine',  type:'frost',   stage:1, body:'egg',   top:'crest',     eyes:'wide',   tail:'fin',   belly:1, cheeks:1 },
+  aurorix:   { name:'Aurorix',   type:'frost',   stage:3, body:'drop',  top:'crown',     eyes:'big',    tail:'fin',   belly:1, wings:1 },
+
+  umbrapup:  { name:'Umbrapup',  type:'shade',   stage:1, body:'round', top:'ears',      eyes:'fierce', tail:'curl',  belly:1 },
+  nocturnyx: { name:'Nocturnyx', type:'shade',   stage:3, body:'chunk', top:'crown',     eyes:'fierce', tail:'flame', belly:1, wings:1 },
+
+  voltaic:   { name:'Voltaic',   type:'spark',   stage:2, body:'egg',   top:'antenna',   eyes:'fierce', tail:'bolt',  belly:1, cheeks:1 },
+  thunderrex:{ name:'Thunderrex',type:'spark',   stage:3, body:'chunk', top:'crown',     eyes:'fierce', tail:'bolt',  belly:1, wings:1 }
+};
+
+/* ───────── LEARNING PATHS ─────────
+   Levels run easiest → hardest. Each has a skill, a goal
+   (number of correct answers) and a critter reward. */
+
+const PATHS = {
+  k: {
+    name: 'Sprout Scouts',
+    grade: 'Kindergarten',
+    buddy: 'pipling',
+    levels: [
+      { n:1,  title:'Counting Cove',   icon:'🐚', skill:'count',      arg:5,  goal:6,  reward:'pipling'    },
+      { n:2,  title:'Ten Tide Pools',  icon:'🌊', skill:'count',      arg:10, goal:8,  reward:null         },
+      { n:3,  title:'Bigger Bay',      icon:'⚖️', skill:'compare',    arg:10, goal:8,  reward:'dewdrip'    },
+      { n:4,  title:'Sum Sands',       icon:'➕', skill:'add',        arg:5,  goal:8,  reward:null         },
+      { n:5,  title:'Letter Lagoon',   icon:'🔤', skill:'letterstart',arg:0,  goal:8,  reward:'zaplet'     },
+      { n:6,  title:'Adder Atoll',     icon:'➕', skill:'add',        arg:10, goal:10, reward:null         },
+      { n:7,  title:'Case Cavern',     icon:'🔡', skill:'casematch',  arg:0,  goal:10, reward:'fluffle'    },
+      { n:8,  title:'Double Dunes',    icon:'✌️', skill:'doubles',    arg:10, goal:8,  reward:null         },
+      { n:9,  title:'Sight Word Shore',icon:'👀', skill:'sightword',  arg:0,  goal:10, reward:'pebblit'    },
+      { n:10, title:'Minus Marsh',     icon:'➖', skill:'sub',        arg:10, goal:10, reward:null         },
+      { n:11, title:'Make-Ten Meadow', icon:'🔟', skill:'bonds',      arg:10, goal:10, reward:'snowpip'    },
+      { n:12, title:'Rhyme Reef',      icon:'🎵', skill:'rhyme',      arg:0,  goal:8,  reward:'fernpal'    },
+      { n:13, title:'Word Woods',      icon:'📖', skill:'sightword2', arg:0,  goal:10, reward:'tidalpup'   },
+      { n:14, title:'Twenty Trail',    icon:'🔢', skill:'add',        arg:20, goal:10, reward:'voltmite'   },
+      { n:15, title:'Sprout Summit',   icon:'👑', skill:'mixK',       arg:0,  goal:12, reward:'meadowking', boss:1 }
+    ]
+  },
+
+  g3: {
+    name: 'Storm Chasers',
+    grade: 'Third Grade',
+    buddy: 'cindercub',
+    levels: [
+      { n:1,  title:'Easy Ember Ridge', icon:'✖️', skill:'mult',      arg:[2,5,10],    goal:8,  reward:'cindercub'  },
+      { n:2,  title:'Triple Trail',     icon:'✖️', skill:'mult',      arg:[3,4],       goal:8,  reward:null         },
+      { n:3,  title:'Array Arena',      icon:'▦',  skill:'area',      arg:0,           goal:8,  reward:'ripplet'    },
+      { n:4,  title:'Sixes Summit',     icon:'✖️', skill:'mult',      arg:[6,7],       goal:10, reward:null         },
+      { n:5,  title:'Nine Nexus',       icon:'✖️', skill:'mult',      arg:[8,9],       goal:10, reward:'gustling'   },
+      { n:6,  title:'Mixed Maelstrom',  icon:'🌀', skill:'mult',      arg:[2,3,4,5,6,7,8,9,10], goal:12, reward:'quarzite' },
+      { n:7,  title:'Vault Crack',      icon:'🔐', skill:'missing',   arg:0,           goal:10, reward:'blazehound' },
+      { n:8,  title:'Divide Delta',     icon:'➗', skill:'div',       arg:'easy',      goal:10, reward:null         },
+      { n:9,  title:'Quotient Quarry',  icon:'➗', skill:'div',       arg:'hard',      goal:12, reward:'frostine'   },
+      { n:10, title:'Fraction Falls',   icon:'🍕', skill:'fracname',  arg:0,           goal:8,  reward:'surgefin'   },
+      { n:11, title:'Compare Canyon',   icon:'⚖️', skill:'fraccomp',  arg:0,           goal:8,  reward:'umbrapup'   },
+      { n:12, title:'Rounding Ridge',   icon:'🎯', skill:'rounding',  arg:0,           goal:10, reward:'voltaic'    },
+      { n:13, title:'Story Straits',    icon:'📜', skill:'word1',     arg:0,           goal:8,  reward:'bastionox'  },
+      { n:14, title:'Two-Step Tundra',  icon:'🧩', skill:'word2',     arg:0,           goal:8,  reward:'cyclonir'   },
+      { n:15, title:'Storm Spire',      icon:'👑', skill:'mixG3',     arg:0,           goal:14, reward:'thunderrex', boss:1 }
+    ]
+  }
+};
+
+/* ───────── CONTENT BANKS ───────── */
+
+const LETTER_SOUNDS = {
+  A:'aah', B:'buh', C:'kuh', D:'duh', E:'eh',  F:'fff', G:'guh',
+  H:'huh', I:'ih',  J:'juh', K:'kuh', L:'lll', M:'mmm', N:'nnn',
+  O:'oh',  P:'puh', Q:'kwuh',R:'rrr', S:'sss', T:'tuh', U:'uh',
+  V:'vvv', W:'wuh', X:'ks',  Y:'yuh', Z:'zzz'
+};
+
+// Picture → starting letter
+const START_WORDS = [
+  { e:'🍎', w:'Apple',    l:'A' }, { e:'🐻', w:'Bear',    l:'B' },
+  { e:'🐱', w:'Cat',      l:'C' }, { e:'🐶', w:'Dog',     l:'D' },
+  { e:'🥚', w:'Egg',      l:'E' }, { e:'🐟', w:'Fish',    l:'F' },
+  { e:'🍇', w:'Grapes',   l:'G' }, { e:'🎩', w:'Hat',     l:'H' },
+  { e:'🧊', w:'Ice',      l:'I' }, { e:'🫙', w:'Jar',     l:'J' },
+  { e:'🔑', w:'Key',      l:'K' }, { e:'🦁', w:'Lion',    l:'L' },
+  { e:'🌙', w:'Moon',     l:'M' }, { e:'👃', w:'Nose',    l:'N' },
+  { e:'🐙', w:'Octopus',  l:'O' }, { e:'🐷', w:'Pig',     l:'P' },
+  { e:'👑', w:'Queen',    l:'Q' }, { e:'🌈', w:'Rainbow', l:'R' },
+  { e:'☀️', w:'Sun',      l:'S' }, { e:'🌳', w:'Tree',    l:'T' },
+  { e:'☂️', w:'Umbrella', l:'U' }, { e:'🎻', w:'Violin',  l:'V' },
+  { e:'🐋', w:'Whale',    l:'W' }, { e:'🦊', w:'Fox',     l:'F' },
+  { e:'🪀', w:'Yoyo',     l:'Y' }, { e:'🦓', w:'Zebra',   l:'Z' }
+];
+
+const SIGHT_1 = ['the','and','a','I','to','is','go','see','my','we','it','in','at','up','can','me','he','she','no','so'];
+const SIGHT_2 = ['said','you','they','have','was','with','look','like','play','come','what','were','there','little','from','when','your','some','make','away'];
+
+const RHYMES = [
+  { w:'CAT', ok:['HAT','BAT','MAT','RAT'], no:['DOG','SUN','CUP','PIG'] },
+  { w:'DOG', ok:['LOG','FROG','HOG','JOG'], no:['CAT','BED','SUN','TOP'] },
+  { w:'SUN', ok:['FUN','RUN','BUN'],        no:['CAT','MAP','BED','PIG'] },
+  { w:'BED', ok:['RED','FED','SLED'],       no:['CAT','SUN','DOG','CUP'] },
+  { w:'PIG', ok:['BIG','DIG','WIG','FIG'],  no:['CAT','SUN','BED','TOP'] },
+  { w:'CAKE',ok:['LAKE','RAKE','SNAKE'],    no:['DOG','SUN','PIG','BED'] },
+  { w:'STAR',ok:['CAR','JAR','FAR'],        no:['SUN','DOG','CUP','HAT'] },
+  { w:'TREE',ok:['BEE','KNEE','FREE','SEA'],no:['DOG','HAT','SUN','PIG'] },
+  { w:'MOON',ok:['SPOON','BALLOON','SOON'], no:['CAT','BED','DOG','PIG'] },
+  { w:'CUP', ok:['PUP','UP'],               no:['CAT','DOG','SUN','BED'] }
+];
+
+// Third-grade single-step story problems
+const WORD1 = [
+  () => { const a=rnd(3,8), b=rnd(3,9);
+    return { q:`A trainer keeps ${a} boxes. Each box holds ${b} berries. How many berries in all?`, eq:`${a} × ${b}`, ans:a*b }; },
+  () => { const a=rnd(3,9), b=rnd(2,8);
+    return { q:`${a} critters each found ${b} shiny stones. How many stones total?`, eq:`${a} × ${b}`, ans:a*b }; },
+  () => { const g=rnd(3,7), e=rnd(3,8), t=g*e;
+    return { q:`${t} berries are shared equally among ${g} critters. How many does each get?`, eq:`${t} ÷ ${g}`, ans:e }; },
+  () => { const g=rnd(3,6), e=rnd(4,9), t=g*e;
+    return { q:`${t} stones are stacked in piles of ${e}. How many piles are there?`, eq:`${t} ÷ ${e}`, ans:g }; },
+  () => { const a=rnd(4,9), b=rnd(3,8);
+    return { q:`A garden has ${a} rows with ${b} plants in each row. How many plants?`, eq:`${a} × ${b}`, ans:a*b }; },
+  () => { const a=rnd(3,8), b=rnd(4,9);
+    return { q:`Each critter eats ${b} snacks a day. How many snacks in ${a} days?`, eq:`${a} × ${b}`, ans:a*b }; },
+  () => { const g=rnd(2,6), e=rnd(5,9), t=g*e;
+    return { q:`${t} cards are dealt evenly to ${g} players. How many cards each?`, eq:`${t} ÷ ${g}`, ans:e }; },
+  () => { const a=rnd(4,9), b=rnd(3,7);
+    return { q:`A team scored ${b} points in each of ${a} games. How many points altogether?`, eq:`${a} × ${b}`, ans:a*b }; }
+];
+
+// Third-grade two-step story problems
+const WORD2 = [
+  () => { const a=rnd(3,6), b=rnd(3,7), c=rnd(2,9);
+    return { q:`${a} bags hold ${b} gems each. ${c} more gems are found. How many gems in all?`, eq:`${a} × ${b} + ${c}`, ans:a*b+c }; },
+  () => { // built backwards so the division always comes out even
+    const b=rnd(3,6), per=rnd(2,7), spent=b*rnd(1,3), total=per*b+spent;
+    return { q:`A trainer has ${total} coins, spends ${spent}, then splits the rest into ${b} equal piles. How many coins per pile?`, eq:`(${total} − ${spent}) ÷ ${b}`, ans:per }; },
+  () => { const a=rnd(3,7), b=rnd(3,6), c=rnd(2,6);
+    return { q:`${a} crates each hold ${b} apples. ${c} apples are eaten. How many are left?`, eq:`${a} × ${b} − ${c}`, ans:a*b-c }; },
+  () => { const a=rnd(2,5), b=rnd(4,8), c=rnd(2,5);
+    return { q:`A shop sells ${b} snacks a day for ${a} days, then gets ${c} more. How many snacks now?`, eq:`${a} × ${b} + ${c}`, ans:a*b+c }; },
+  () => { const p=rnd(3,6), q2=rnd(4,8), r=rnd(2,7);
+    return { q:`${p} teams have ${q2} players each. ${r} players go home. How many remain?`, eq:`${p} × ${q2} − ${r}`, ans:p*q2-r }; },
+  () => { const a=rnd(3,6), b=rnd(4,7);
+    return { q:`A critter collects ${b} shells each day for ${a} days, then doubles the pile. How many shells?`, eq:`${a} × ${b} × 2`, ans:a*b*2 }; }
+];
+
+function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ───────── QUESTION GENERATORS ─────────
+   Every generator returns:
+   { prompt, big, visual:{...}, choices:[], answer, say }        */
+
+const CRIT_ICONS = ['🐛','🦋','🐞','🐢','🐙','🦀','🐠','⭐','🍄','🌰'];
+
+function makeChoices(answer, opts) {
+  opts = opts || {};
+  const spread = opts.spread || 4;
+  const min = opts.min !== undefined ? opts.min : 0;
+  const max = opts.max !== undefined ? opts.max : 999;
+  const wrong = new Set();
+  let guard = 0;
+  while (wrong.size < 3 && guard++ < 80) {
+    const off = (rnd(1, spread)) * (Math.random() < 0.5 ? -1 : 1);
+    const c = answer + off;
+    if (c >= min && c <= max && c !== answer) wrong.add(c);
+  }
+  let bump = 1;
+  while (wrong.size < 3) {
+    const c = answer + bump++;
+    if (c !== answer && c <= max) wrong.add(c);
+  }
+  return shuffle([answer, ...wrong]);
+}
+
+function textChoices(answer, pool) {
+  const wrong = shuffle(pool.filter(x => x !== answer)).slice(0, 3);
+  return shuffle([answer, ...wrong]);
+}
+
+const GEN = {
+
+  /* ══ KINDERGARTEN ══ */
+
+  count(max) {
+    const n = rnd(1, max);
+    const icon = pick(CRIT_ICONS);
+    return {
+      prompt: 'How many critters do you see?',
+      big: '',
+      visual: { kind:'icons', count:n, icon:icon },
+      choices: makeChoices(n, { spread:3, min:1, max:max+3 }),
+      answer: n,
+      say: `${n}!`
+    };
+  },
+
+  compare(max) {
+    let a = rnd(1, max), b = rnd(1, max);
+    while (a === b) b = rnd(1, max);
+    const icon = pick(CRIT_ICONS);
+    return {
+      prompt: 'Which group has MORE?',
+      big: '',
+      visual: { kind:'twogroups', a:a, b:b, icon:icon },
+      choices: shuffle([a, b, Math.max(a,b)+rnd(1,3), Math.max(1,Math.min(a,b)-rnd(1,2))]).slice(0,4),
+      answer: Math.max(a, b),
+      say: `${Math.max(a,b)} is more!`,
+      forceChoices: shuffle([a, b])
+    };
+  },
+
+  add(max) {
+    let a, b;
+    if (max <= 5)       { a = rnd(1, 4); b = rnd(1, 5 - a); }
+    else if (max <= 10) { a = rnd(1, 9); b = rnd(1, 10 - a); }
+    else                { a = rnd(2, 10); b = rnd(2, Math.min(10, 20 - a)); }
+    const icon = pick(CRIT_ICONS);
+    return {
+      prompt: 'Add them up!',
+      big: `${a} + ${b}`,
+      visual: { kind:'twogroups', a:a, b:b, icon:icon, op:'+' },
+      choices: makeChoices(a + b, { spread:3, min:0, max:max + 4 }),
+      answer: a + b,
+      say: `${a} plus ${b} is ${a+b}!`
+    };
+  },
+
+  sub(max) {
+    const a = rnd(3, max);
+    const b = rnd(1, a - 1);
+    const icon = pick(CRIT_ICONS);
+    return {
+      prompt: 'Take them away!',
+      big: `${a} − ${b}`,
+      visual: { kind:'takeaway', total:a, gone:b, icon:icon },
+      choices: makeChoices(a - b, { spread:3, min:0, max:max }),
+      answer: a - b,
+      say: `${a} minus ${b} is ${a-b}!`
+    };
+  },
+
+  doubles(max) {
+    const a = rnd(1, max);
+    const icon = pick(CRIT_ICONS);
+    return {
+      prompt: 'Double it!',
+      big: `${a} + ${a}`,
+      visual: { kind:'twogroups', a:a, b:a, icon:icon, op:'+' },
+      choices: makeChoices(a * 2, { spread:3, min:0, max:max*2+4 }),
+      answer: a * 2,
+      say: `Double ${a} is ${a*2}!`
+    };
+  },
+
+  bonds() {
+    const a = rnd(1, 9);
+    return {
+      prompt: 'What makes 10?',
+      big: `${a} + ? = 10`,
+      visual: { kind:'tenframe', filled:a },
+      choices: makeChoices(10 - a, { spread:3, min:0, max:10 }),
+      answer: 10 - a,
+      say: `${a} plus ${10-a} makes 10!`
+    };
+  },
+
+  letterstart() {
+    const item = pick(START_WORDS);
+    const pool = Object.keys(LETTER_SOUNDS);
+    return {
+      prompt: 'Which letter does it start with?',
+      big: item.e,
+      bigClass: 'q-big',
+      visual: { kind:'caption', text: item.w },
+      choices: textChoices(item.l, pool),
+      answer: item.l,
+      say: `${item.w} starts with ${item.l}. ${LETTER_SOUNDS[item.l]}!`,
+      speakFirst: item.w
+    };
+  },
+
+  casematch() {
+    const pool = Object.keys(LETTER_SOUNDS);
+    const L = pick(pool);
+    const wrongs = shuffle(pool.filter(x => x !== L)).slice(0, 3).map(x => x.toLowerCase());
+    return {
+      prompt: 'Find the little letter that matches!',
+      big: L,
+      choices: shuffle([L.toLowerCase(), ...wrongs]),
+      answer: L.toLowerCase(),
+      say: `${L} and ${L.toLowerCase()} go together!`,
+      textBtns: true
+    };
+  },
+
+  sightword() {
+    const w = pick(SIGHT_1);
+    return {
+      prompt: '🔊 Tap the word you hear',
+      big: '👂',
+      choices: textChoices(w, SIGHT_1),
+      answer: w,
+      say: `${w}!`,
+      speakFirst: w,
+      textBtns: true
+    };
+  },
+
+  sightword2() {
+    const w = pick(SIGHT_2);
+    return {
+      prompt: '🔊 Tap the word you hear',
+      big: '👂',
+      choices: textChoices(w, SIGHT_2),
+      answer: w,
+      say: `${w}!`,
+      speakFirst: w,
+      textBtns: true
+    };
+  },
+
+  rhyme() {
+    const r = pick(RHYMES);
+    const good = pick(r.ok);
+    const bad = shuffle(r.no).slice(0, 3);
+    return {
+      prompt: `Which word rhymes with...`,
+      big: r.w,
+      choices: shuffle([good, ...bad]),
+      answer: good,
+      say: `${r.w} rhymes with ${good}!`,
+      speakFirst: r.w,
+      textBtns: true
+    };
+  },
+
+  mixK() {
+    const fns = ['count','compare','add','sub','doubles','bonds','letterstart','casematch','sightword','rhyme'];
+    const f = pick(fns);
+    const arg = (f === 'count') ? 10 : (f === 'add') ? 20 : (f === 'sub') ? 10 : (f === 'doubles') ? 10 : (f === 'compare') ? 10 : 0;
+    return GEN[f](arg);
+  },
+
+  /* ══ THIRD GRADE ══ */
+
+  mult(tables) {
+    const t = pick(tables);
+    const o = rnd(2, 10);
+    let a = t, b = o;
+    if (Math.random() < 0.5) { a = o; b = t; }
+    return {
+      prompt: 'Multiply!',
+      big: `${a} × ${b}`,
+      visual: { kind:'array', rows:a, cols:b },
+      choices: makeChoices(a * b, { spread:8, min:1, max:110 }),
+      answer: a * b,
+      say: `${a} times ${b} is ${a*b}!`,
+      table: t
+    };
+  },
+
+  area() {
+    const w = rnd(2, 9), h = rnd(2, 8);
+    return {
+      prompt: 'What is the AREA of this rectangle?',
+      big: `${h} rows × ${w} columns`,
+      bigSmall: true,
+      visual: { kind:'grid', rows:h, cols:w },
+      choices: makeChoices(w * h, { spread:7, min:1, max:100 }),
+      answer: w * h,
+      say: `${h} times ${w} is ${w*h} squares!`,
+      table: h
+    };
+  },
+
+  missing() {
+    const a = rnd(2, 10), b = rnd(2, 10);
+    const hideFirst = Math.random() < 0.5;
+    return {
+      prompt: 'Crack the vault — find the missing number!',
+      big: hideFirst ? `? × ${b} = ${a*b}` : `${a} × ? = ${a*b}`,
+      bigSmall: true,
+      visual: { kind:'array', rows:a, cols:b },
+      choices: makeChoices(hideFirst ? a : b, { spread:3, min:1, max:12 }),
+      answer: hideFirst ? a : b,
+      say: `${a} times ${b} is ${a*b}!`,
+      table: hideFirst ? b : a
+    };
+  },
+
+  div(level) {
+    const maxD = level === 'easy' ? 5 : 10;
+    const d = rnd(2, maxD);
+    const q = rnd(2, level === 'easy' ? 6 : 10);
+    const t = d * q;
+    return {
+      prompt: 'Divide it up!',
+      big: `${t} ÷ ${d}`,
+      visual: { kind:'array', rows:d, cols:q },
+      choices: makeChoices(q, { spread:3, min:1, max:12 }),
+      answer: q,
+      say: `${t} divided by ${d} is ${q}!`,
+      table: d
+    };
+  },
+
+  fracname() {
+    const den = pick([2,3,4,5,6,8]);
+    const num = rnd(1, den - 1);
+    const wrongs = new Set();
+    let guard = 0;
+    while (wrongs.size < 3 && guard++ < 40) {
+      const wn = rnd(1, den - 1), wd = pick([2,3,4,5,6,8]);
+      const s = `${wn}/${wd}`;
+      if (s !== `${num}/${den}`) wrongs.add(s);
+    }
+    return {
+      prompt: 'What fraction is shaded?',
+      big: '',
+      visual: { kind:'fraction', num:num, den:den },
+      choices: shuffle([`${num}/${den}`, ...Array.from(wrongs).slice(0,3)]),
+      answer: `${num}/${den}`,
+      say: `${num} out of ${den}!`,
+      textBtns: true
+    };
+  },
+
+  fraccomp() {
+    const den = pick([3,4,5,6,8]);
+    let n1 = rnd(1, den - 1), n2 = rnd(1, den - 1);
+    while (n1 === n2) n2 = rnd(1, den - 1);
+    const bigger = Math.max(n1, n2);
+    return {
+      prompt: 'Which fraction is BIGGER?',
+      big: '',
+      visual: { kind:'fraccompare', n1:n1, n2:n2, den:den },
+      choices: shuffle([`${n1}/${den}`, `${n2}/${den}`]),
+      answer: `${bigger}/${den}`,
+      say: `${bigger} out of ${den} is bigger!`,
+      textBtns: true,
+      twoUp: true
+    };
+  },
+
+  rounding() {
+    const toHundred = Math.random() < 0.45;
+    if (toHundred) {
+      const n = rnd(120, 980);
+      const ans = Math.round(n / 100) * 100;
+      const opts = [ans, ans + 100, Math.max(0, ans - 100), ans + 200];
+      return {
+        prompt: 'Round to the nearest HUNDRED',
+        big: String(n),
+        choices: shuffle(Array.from(new Set(opts)).slice(0, 4)),
+        answer: ans,
+        say: `${n} rounds to ${ans}!`
+      };
+    }
+    const n = rnd(12, 98);
+    const ans = Math.round(n / 10) * 10;
+    const opts = [ans, ans + 10, Math.max(0, ans - 10), ans + 20];
+    return {
+      prompt: 'Round to the nearest TEN',
+      big: String(n),
+      choices: shuffle(Array.from(new Set(opts)).slice(0, 4)),
+      answer: ans,
+      say: `${n} rounds to ${ans}!`
+    };
+  },
+
+  word1() {
+    let w, guard = 0;
+    do { w = pick(WORD1)(); } while (w.skip && guard++ < 12);
+    return {
+      prompt: w.q,
+      big: w.eq,
+      bigSmall: true,
+      choices: makeChoices(w.ans, { spread:8, min:1, max:130 }),
+      answer: w.ans,
+      say: `The answer is ${w.ans}!`,
+      story: true
+    };
+  },
+
+  word2() {
+    let w, guard = 0;
+    do { w = pick(WORD2)(); } while (w.skip && guard++ < 12);
+    return {
+      prompt: w.q,
+      big: w.eq,
+      bigSmall: true,
+      choices: makeChoices(w.ans, { spread:9, min:1, max:160 }),
+      answer: w.ans,
+      say: `The answer is ${w.ans}!`,
+      story: true
+    };
+  },
+
+  mixG3() {
+    const fns = ['mult','area','missing','div','fracname','rounding','word1','word2'];
+    const f = pick(fns);
+    const arg = (f === 'mult') ? [2,3,4,5,6,7,8,9,10] : (f === 'div') ? 'hard' : 0;
+    return GEN[f](arg);
+  }
+};
+
+function buildQuestion(level) {
+  return GEN[level.skill](level.arg);
+}
+
+/* ───────── VISUAL RENDERERS ───────── */
+
+function renderVisual(v) {
+  const box = document.getElementById('q-visual');
+  box.innerHTML = '';
+  if (!v) return;
+
+  if (v.kind === 'icons') {
+    const wrap = document.createElement('div');
+    wrap.className = 'critter-count';
+    for (let i = 0; i < v.count; i++) {
+      const s = document.createElement('span');
+      s.textContent = v.icon;
+      s.style.animationDelay = (i * 0.045) + 's';
+      wrap.appendChild(s);
+    }
+    box.appendChild(wrap);
+
+  } else if (v.kind === 'twogroups') {
+    const gA = document.createElement('div');
+    gA.className = 'critter-count';
+    gA.style.maxWidth = '130px';
+    for (let i = 0; i < v.a; i++) {
+      const s = document.createElement('span');
+      s.textContent = v.icon;
+      s.style.animationDelay = (i * 0.04) + 's';
+      gA.appendChild(s);
+    }
+    const op = document.createElement('div');
+    op.className = 'group-op';
+    op.textContent = v.op || 'vs';
+    if (!v.op) op.style.fontSize = '17px';
+    const gB = document.createElement('div');
+    gB.className = 'critter-count';
+    gB.style.maxWidth = '130px';
+    for (let i = 0; i < v.b; i++) {
+      const s = document.createElement('span');
+      s.textContent = v.icon;
+      s.style.animationDelay = (i * 0.04) + 's';
+      gB.appendChild(s);
+    }
+    box.appendChild(gA); box.appendChild(op); box.appendChild(gB);
+
+  } else if (v.kind === 'takeaway') {
+    const wrap = document.createElement('div');
+    wrap.className = 'critter-count';
+    const spans = [];
+    for (let i = 0; i < v.total; i++) {
+      const s = document.createElement('span');
+      s.textContent = v.icon;
+      s.style.animationDelay = (i * 0.04) + 's';
+      wrap.appendChild(s);
+      spans.push(s);
+    }
+    box.appendChild(wrap);
+    setTimeout(() => {
+      for (let i = v.total - v.gone; i < v.total; i++) {
+        if (spans[i]) spans[i].classList.add('gone');
+      }
+    }, 480);
+
+  } else if (v.kind === 'tenframe') {
+    const f = document.createElement('div');
+    f.className = 'tenframe';
+    for (let i = 0; i < 10; i++) {
+      const c = document.createElement('div');
+      c.className = 'tf-cell' + (i < v.filled ? ' filled' : '');
+      if (i >= v.filled) c.textContent = '?';
+      f.appendChild(c);
+    }
+    box.appendChild(f);
+
+  } else if (v.kind === 'array') {
+    const g = document.createElement('div');
+    g.className = 'dotgrid';
+    const cols = Math.min(v.cols, 10);
+    g.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    const total = v.rows * v.cols;
+    const size = total > 60 ? 11 : total > 36 ? 14 : 18;
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot';
+      d.style.width = size + 'px';
+      d.style.height = size + 'px';
+      d.style.animationDelay = (i * 0.009) + 's';
+      g.appendChild(d);
+    }
+    box.appendChild(g);
+
+  } else if (v.kind === 'grid') {
+    const cell = v.cols > 7 || v.rows > 6 ? 19 : 24;
+    const svgW = v.cols * cell, svgH = v.rows * cell;
+    let cells = '';
+    for (let r = 0; r < v.rows; r++) {
+      for (let c = 0; c < v.cols; c++) {
+        cells += `<rect x="${c*cell}" y="${r*cell}" width="${cell}" height="${cell}"
+                   fill="rgba(255,217,61,0.28)" stroke="#FFD93D" stroke-width="1.5"/>`;
+      }
+    }
+    box.innerHTML = `<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}">${cells}</svg>`;
+
+  } else if (v.kind === 'fraction') {
+    box.appendChild(fractionBar(v.num, v.den, 260));
+
+  } else if (v.kind === 'fraccompare') {
+    const col = document.createElement('div');
+    col.style.display = 'flex';
+    col.style.flexDirection = 'column';
+    col.style.gap = '10px';
+    const a = fractionBar(v.n1, v.den, 230);
+    const la = document.createElement('div');
+    la.style.cssText = 'text-align:center;font-weight:900;font-size:15px;color:#9AA5CC';
+    la.textContent = `${v.n1}/${v.den}`;
+    const b = fractionBar(v.n2, v.den, 230);
+    const lb = document.createElement('div');
+    lb.style.cssText = 'text-align:center;font-weight:900;font-size:15px;color:#9AA5CC';
+    lb.textContent = `${v.n2}/${v.den}`;
+    const w1 = document.createElement('div'); w1.appendChild(a); w1.appendChild(la);
+    const w2 = document.createElement('div'); w2.appendChild(b); w2.appendChild(lb);
+    col.appendChild(w1); col.appendChild(w2);
+    box.appendChild(col);
+
+  } else if (v.kind === 'caption') {
+    const c = document.createElement('div');
+    c.style.cssText = 'font-size:19px;font-weight:900;letter-spacing:1px;color:#FFD93D';
+    c.textContent = v.text;
+    box.appendChild(c);
+  }
+}
+
+function fractionBar(num, den, width) {
+  const h = 42;
+  const seg = width / den;
+  let parts = '';
+  for (let i = 0; i < den; i++) {
+    parts += `<rect x="${i*seg}" y="0" width="${seg}" height="${h}"
+              fill="${i < num ? '#FFD93D' : 'rgba(255,255,255,0.08)'}"
+              stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2"/>`;
+  }
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `<svg width="${width}" height="${h}" viewBox="0 0 ${width} ${h}" style="border-radius:8px;overflow:hidden">${parts}</svg>`;
+  return wrap;
+}
+
+/* ───────── STORAGE ───────── */
+const SAVE_KEY = 'critterQuest_v1';
+
+function freshPath() {
+  return { unlocked: 1, stars: {}, coins: 0, critters: [], skills: {} };
+}
+function freshSave() {
+  return { current: null, k: freshPath(), g3: freshPath() };
+}
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return freshSave();
+    const p = JSON.parse(raw);
+    const f = freshSave();
+    ['k','g3'].forEach(id => {
+      if (!p[id]) p[id] = f[id];
+      if (typeof p[id].unlocked !== 'number') p[id].unlocked = 1;
+      if (!p[id].stars) p[id].stars = {};
+      if (typeof p[id].coins !== 'number') p[id].coins = 0;
+      if (!Array.isArray(p[id].critters)) p[id].critters = [];
+      if (!p[id].skills) p[id].skills = {};
+    });
+    return p;
+  } catch (e) { return freshSave(); }
+}
+function persist() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {}
+}
+
+let save = loadSave();
+let pathId = null;
+let P = null;          // shortcut to save[pathId]
+
+/* ───────── RUN STATE ───────── */
+let run = {
+  level: null,
+  got: 0,
+  asked: 0,
+  firstTry: 0,
+  coins: 0,
+  q: null,
+  locked: false,
+  clean: true,
+  sinceSport: 0
+};
+
+/* ───────── SPEECH ───────── */
+function say(text, o) {
+  if (!('speechSynthesis' in window) || !text) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate  = (o && o.rate)  || (pathId === 'k' ? 0.85 : 0.95);
+    u.pitch = (o && o.pitch) || 1.1;
+    u.volume = 1;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+/* ───────── NAV ───────── */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function choosePath(id) {
+  pathId = id;
+  P = save[id];
+  save.current = id;
+  persist();
+  document.getElementById('map-title').textContent = PATHS[id].name;
+  buildMap();
+  show('map-screen');
+}
+
+/* ───────── LEVEL MAP ───────── */
+function buildMap() {
+  const path = PATHS[pathId];
+  const inner = document.getElementById('map-inner');
+  document.getElementById('map-coins').textContent = P.coins;
+  inner.innerHTML = '<div class="map-line"></div>';
+
+  path.levels.forEach((lv, i) => {
+    const row = document.createElement('div');
+    row.className = 'node-row ' + (i % 2 === 0 ? 'left' : 'right') + (lv.boss ? ' boss-row' : '');
+
+    const stars = P.stars[lv.n] || 0;
+    const isDone = stars > 0;
+    const isOpen = lv.n <= P.unlocked;
+    const isCurrent = lv.n === P.unlocked && !isDone;
+
+    const node = document.createElement('button');
+    node.className = 'node' + (!isOpen ? ' locked' : '') + (isDone ? ' done' : '') + (isCurrent ? ' current' : '');
+
+    const starTxt = isDone
+      ? '⭐'.repeat(stars) + '·'.repeat(3 - stars)
+      : (isOpen ? '' : '');
+
+    node.innerHTML = `
+      <div class="node-badge">${isOpen ? lv.icon : '🔒'}</div>
+      <div class="node-body">
+        <div class="node-title">${lv.n}. ${lv.title}</div>
+        <div class="node-goal">${isOpen ? 'Goal: ' + lv.goal + ' correct' : 'Locked'}</div>
+        ${starTxt ? `<div class="node-stars">${starTxt}</div>` : ''}
+      </div>`;
+
+    if (isOpen) node.onclick = () => startLevel(lv);
+    row.appendChild(node);
+    inner.appendChild(row);
+  });
+
+  // keep the current level in view
+  setTimeout(() => {
+    const cur = inner.querySelector('.node.current');
+    if (cur) cur.scrollIntoView({ block:'center', behavior:'smooth' });
+  }, 60);
+}
+
+function refreshPickerProgress() {
+  ['k','g3'].forEach(id => {
+    const done = Object.keys(save[id].stars || {}).length;
+    const total = PATHS[id].levels.length;
+    const pct = Math.round((done / total) * 100);
+    const bar = document.getElementById('prog-' + id);
+    const txt = document.getElementById('progtxt-' + id);
+    if (bar) bar.style.width = pct + '%';
+    if (txt) txt.textContent = done === 0
+      ? 'Not started'
+      : `${done} / ${total} levels · ${save[id].critters.length} critters`;
+  });
+}
+
+/* ───────── GAMEPLAY ───────── */
+
+const CHEERS_K = ['Nice one!','You got it!','Great job!','Yes!','Woohoo!','Super!','Awesome!'];
+const CHEERS_G = ['Nailed it!','Sharp!','Correct!','Great work!','Locked in!','Boom!','Clean solve!'];
+const NUDGE_K  = ['Try again!','Almost! Look closely.','Give it another go!'];
+const NUDGE_G  = ['Not quite — try again.','Close! One more look.','Try another.'];
+
+function startLevel(lv) {
+  run = { level: lv, got: 0, asked: 0, firstTry: 0, coins: 0,
+          q: null, locked: false, clean: true, sinceSport: 0 };
+  paintCritter(document.getElementById('buddy'), buddyFor());
+  document.getElementById('run-coins').textContent = '0';
+  updateGoal();
+  show('game-screen');
+  nextQuestion();
+}
+
+function buddyFor() {
+  // Your most-recently-earned critter tags along as the buddy
+  if (P.critters.length) return P.critters[P.critters.length - 1];
+  return PATHS[pathId].buddy;
+}
+
+function updateGoal() {
+  const lv = run.level;
+  const pct = Math.min(100, (run.got / lv.goal) * 100);
+  document.getElementById('goal-fill').style.width = pct + '%';
+  document.getElementById('goal-label').textContent = `${run.got} / ${lv.goal}`;
+}
+
+function nextQuestion() {
+  if (run.got >= run.level.goal) { finishLevel(); return; }
+
+  run.q = buildQuestion(run.level);
+  run.locked = false;
+  run.thisOneClean = true;
+  const q = run.q;
+
+  document.getElementById('q-prompt').textContent = q.prompt;
+
+  const big = document.getElementById('q-big');
+  big.textContent = q.big || '';
+  big.className = 'q-big' + (q.bigSmall ? ' small' : '') + (q.story ? ' words' : '');
+  big.style.display = q.big ? '' : 'none';
+
+  // Story problems put the text in the prompt, so shrink the equation
+  if (q.story) { big.className = 'q-big small'; }
+
+  renderVisual(q.visual);
+
+  const cw = document.getElementById('choices');
+  cw.innerHTML = '';
+  cw.style.gridTemplateColumns = q.twoUp ? '1fr 1fr' : '1fr 1fr';
+  const list = q.forceChoices || q.choices;
+  list.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'choice' + (q.textBtns ? ' txt' : '');
+    b.textContent = c;
+    b.onclick = () => answer(b, c);
+    cw.appendChild(b);
+  });
+
+  const line = pathId === 'k'
+    ? pick(['Your turn!','You can do it!','Take your time.','What do you think?'])
+    : pick(['Your move.','Go for it.','Think it through.','Show me.']);
+  document.getElementById('buddy-say').textContent = line;
+
+  if (q.speakFirst) setTimeout(() => say(q.speakFirst, { rate: 0.7 }), 260);
+}
+
+function answer(btn, choice) {
+  if (run.locked) return;
+  const q = run.q;
+  const correct = String(choice) === String(q.answer);
+
+  if (!correct) {
+    run.thisOneClean = false;
+    run.clean = false;
+    btn.classList.add('wrong');
+    document.getElementById('buddy-say').textContent =
+      pick(pathId === 'k' ? NUDGE_K : NUDGE_G);
+    say(pathId === 'k' ? 'Try again!' : 'Not quite.');
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      btn.disabled = true;
+      btn.style.opacity = '0.35';
+    }, 420);
+    return;
+  }
+
+  // ── correct
+  run.locked = true;
+  btn.classList.add('right');
+  run.got++;
+  run.asked++;
+  if (run.thisOneClean) run.firstTry++;
+
+  const gain = run.thisOneClean ? 10 : 5;
+  run.coins += gain;
+  document.getElementById('run-coins').textContent = run.coins;
+
+  // per-skill stats (quietly banked for future insight)
+  const key = q.table ? `${run.level.skill}:${q.table}` : run.level.skill;
+  if (!P.skills[key]) P.skills[key] = { att: 0, cor: 0 };
+  P.skills[key].att++;
+  if (run.thisOneClean) P.skills[key].cor++;
+
+  document.getElementById('buddy-say').textContent =
+    pick(pathId === 'k' ? CHEERS_K : CHEERS_G);
+  const bud = document.getElementById('buddy');
+  bud.classList.remove('cheer'); void bud.offsetWidth; bud.classList.add('cheer');
+
+  say(q.say);
+  updateGoal();
+
+  run.sinceSport++;
+
+  setTimeout(() => {
+    if (run.got >= run.level.goal) { finishLevel(); return; }
+    // Sports bonus every 4th correct answer
+    if (run.sinceSport >= 4) { run.sinceSport = 0; startSport(); return; }
+    nextQuestion();
+  }, 850);
+}
+
+function quitLevel() {
+  persist();
+  buildMap();
+  show('map-screen');
+}
+
+/* ───────── SPORTS BONUS ───────── */
+
+const SPORTS = [
+  { id:'bball',    ball:'🏀', head:'🏀 Bonus Shot!',   sub:'Tap when the marker hits the green!',  win:'SWISH!',      big:'NOTHING BUT NET!' },
+  { id:'soccer',   ball:'⚽', head:'⚽ Penalty Kick!',  sub:'Time it right to score!',              win:'GOAL!',       big:'TOP CORNER!' },
+  { id:'baseball', ball:'⚾', head:'⚾ Batter Up!',     sub:'Swing when the marker is in the zone!', win:'BASE HIT!',   big:'HOME RUN!' }
+];
+
+let sportAnim = null;
+let sportState = { pos: 0, dir: 1, speed: 1.4, zone: [0,0], bull: [0,0], done: false, sport: null };
+
+function startSport() {
+  const sp = pick(SPORTS);
+  sportState.sport = sp;
+  sportState.done = false;
+  sportState.pos = 0;
+  sportState.dir = 1;
+  sportState.speed = 1.1 + Math.random() * 0.8;
+
+  document.getElementById('sport-head').textContent = sp.head;
+  document.getElementById('sport-sub').textContent = sp.sub;
+  document.getElementById('sport-field').className = 'sport-field ' + sp.id;
+  const ballEl = document.getElementById('sport-ball');
+  ballEl.textContent = sp.ball;
+  ballEl.classList.remove('launch');
+  document.getElementById('sport-result').textContent = '';
+  const btn = document.getElementById('sport-btn');
+  btn.textContent = sp.id === 'baseball' ? 'SWING!' : sp.id === 'soccer' ? 'KICK!' : 'SHOOT!';
+  btn.disabled = false;
+  btn.style.opacity = '1';
+
+  // green zone somewhere in the middle-ish, gold bullseye inside it
+  const zoneW = 26;
+  const zoneStart = rnd(18, 100 - 18 - zoneW);
+  sportState.zone = [zoneStart, zoneStart + zoneW];
+  const bullW = 8;
+  const bullStart = zoneStart + (zoneW - bullW) / 2;
+  sportState.bull = [bullStart, bullStart + bullW];
+
+  const z = document.getElementById('power-zone');
+  z.style.left = zoneStart + '%';
+  z.style.width = zoneW + '%';
+  const bl = document.getElementById('power-bull');
+  bl.style.left = bullStart + '%';
+  bl.style.width = bullW + '%';
+
+  show('sport-screen');
+  runSportAnim();
+}
+
+function runSportAnim() {
+  cancelAnimationFrame(sportAnim);
+  const marker = document.getElementById('power-marker');
+  function step() {
+    if (sportState.done) return;
+    sportState.pos += sportState.dir * sportState.speed;
+    if (sportState.pos >= 100) { sportState.pos = 100; sportState.dir = -1; }
+    if (sportState.pos <= 0)   { sportState.pos = 0;   sportState.dir = 1;  }
+    marker.style.left = `calc(${sportState.pos}% - 3px)`;
+    sportAnim = requestAnimationFrame(step);
+  }
+  step();
+}
+
+function sportTap() {
+  if (sportState.done) return;
+  sportState.done = true;
+  cancelAnimationFrame(sportAnim);
+
+  const p = sportState.pos;
+  const sp = sportState.sport;
+  const inZone = p >= sportState.zone[0] && p <= sportState.zone[1];
+  const inBull = p >= sportState.bull[0] && p <= sportState.bull[1];
+
+  const res = document.getElementById('sport-result');
+  const btn = document.getElementById('sport-btn');
+  btn.disabled = true;
+  btn.style.opacity = '0.4';
+
+  let gain = 0;
+  if (inBull)      { gain = 25; res.textContent = '🌟 ' + sp.big;  res.style.color = '#FFD93D'; }
+  else if (inZone) { gain = 12; res.textContent = '✅ ' + sp.win;  res.style.color = '#4ADE80'; }
+  else             { gain = 2;  res.textContent = '😅 So close!';   res.style.color = '#9AA5CC'; }
+
+  if (inZone || inBull) {
+    document.getElementById('sport-ball').classList.add('launch');
+    confetti(inBull ? 26 : 14);
+    say(inBull ? sp.big : sp.win);
+  } else {
+    say('So close!');
+  }
+
+  run.coins += gain;
+  document.getElementById('run-coins').textContent = run.coins;
+
+  setTimeout(() => {
+    res.textContent = `+${gain} 🪙`;
+    res.style.color = '#FFD93D';
+  }, 900);
+
+  setTimeout(() => {
+    show('game-screen');
+    nextQuestion();
+  }, 1900);
+}
+
+/* ───────── LEVEL COMPLETE ───────── */
+
+function finishLevel() {
+  const lv = run.level;
+  const acc = run.asked ? run.firstTry / run.asked : 0;
+  const stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : 1;
+
+  // bank progress
+  const prev = P.stars[lv.n] || 0;
+  P.stars[lv.n] = Math.max(prev, stars);
+  P.coins += run.coins;
+  if (lv.n >= P.unlocked && lv.n < PATHS[pathId].levels.length) {
+    P.unlocked = lv.n + 1;
+  } else if (lv.n === PATHS[pathId].levels.length) {
+    P.unlocked = lv.n; // final level: stays
+  }
+
+  // critter reward (only the first time through)
+  let newCritter = null;
+  if (lv.reward && !P.critters.includes(lv.reward)) {
+    P.critters.push(lv.reward);
+    newCritter = lv.reward;
+  }
+  persist();
+
+  // ── paint the screen
+  document.getElementById('done-title').textContent = lv.boss ? 'PATH COMPLETE!' : 'Level Clear!';
+
+  const sr = document.getElementById('star-row');
+  sr.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement('span');
+    s.textContent = i < stars ? '⭐' : '☆';
+    s.style.animationDelay = (i * 0.16) + 's';
+    s.style.opacity = i < stars ? '1' : '0.25';
+    sr.appendChild(s);
+  }
+
+  const box = document.getElementById('reward-box');
+  if (newCritter) {
+    const c = CRITTERS[newCritter];
+    box.style.display = '';
+    document.getElementById('rb-label').textContent =
+      c.stage >= 3 ? '✨ Legendary Critter!' : c.stage === 2 ? '✨ Evolved Critter!' : 'New Critter!';
+    const svg = document.getElementById('hatch-svg');
+    svg.innerHTML = critterSVG(c);
+    svg.classList.remove('pop'); void svg.offsetWidth; svg.classList.add('pop');
+    document.getElementById('hatch-name').textContent = c.name;
+    const chip = document.getElementById('hatch-type');
+    chip.textContent = TYPES[c.type].name;
+    chip.style.background = TYPES[c.type].c1;
+  } else {
+    box.style.display = 'none';
+  }
+
+  document.getElementById('done-correct').textContent = `${run.firstTry} / ${run.asked} first try`;
+  document.getElementById('done-coins').textContent = `🪙 ${run.coins}`;
+
+  show('done-screen');
+  confetti(stars >= 3 ? 40 : 24);
+  setTimeout(() => confetti(16), 380);
+
+  const msg = newCritter
+    ? `Level complete! You found ${CRITTERS[newCritter].name}!`
+    : (lv.boss ? 'You finished the whole path! Amazing!' : 'Level complete! Nice work!');
+  say(msg);
+}
+
+function afterLevel() {
+  buildMap();
+  refreshPickerProgress();
+  show('map-screen');
+}
+
+/* ───────── CRITTER DEX ───────── */
+
+function openDex() {
+  const grid = document.getElementById('dex-grid');
+  grid.innerHTML = '';
+
+  // every critter this path can award, in level order
+  const roster = [];
+  PATHS[pathId].levels.forEach(lv => { if (lv.reward) roster.push(lv.reward); });
+
+  document.getElementById('dex-count').textContent = `${P.critters.length}/${roster.length}`;
+
+  if (!roster.length) {
+    grid.innerHTML = '<div class="dex-empty">No critters on this path yet.</div>';
+    show('dex-screen');
+    return;
+  }
+
+  roster.forEach(id => {
+    const c = CRITTERS[id];
+    const owned = P.critters.includes(id);
+    const cell = document.createElement('div');
+    cell.className = 'dex-cell' + (owned ? '' : ' locked');
+    const sv = document.createElement('svg');
+    cell.innerHTML = `<svg viewBox="0 0 100 100">${critterSVG(c)}</svg>
+      <div class="dx-name">${owned ? c.name : '???'}</div>`;
+    if (owned) {
+      cell.onclick = () => say(`${c.name}! A ${TYPES[c.type].name} type.`);
+    }
+    grid.appendChild(cell);
+  });
+
+  show('dex-screen');
+}
+
+/* ───────── CONFETTI ───────── */
+function confetti(n) {
+  const colors = ['#FFD93D','#FF6B4A','#4ADE80','#4AA8FF','#C4B5FD','#7DD3FC'];
+  const app = document.getElementById('app');
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.left = Math.random() * 100 + '%';
+    c.style.top = '-20px';
+    c.style.animationDelay = (Math.random() * 0.55) + 's';
+    app.appendChild(c);
+    setTimeout(() => c.remove(), 2700);
+  }
+}
+
+/* ───────── RESET ───────── */
+function askReset() {
+  document.getElementById('reset-path-name').textContent = PATHS[pathId].name;
+  document.getElementById('reset-modal').classList.add('active');
+}
+function closeModal() {
+  document.getElementById('reset-modal').classList.remove('active');
+}
+function doReset() {
+  save[pathId] = freshPath();
+  P = save[pathId];
+  persist();
+  closeModal();
+  buildMap();
+  refreshPickerProgress();
+}
+
+/* ───────── BOOT ───────── */
+(function init() {
+  // decorative critters on the picker screen
+  document.getElementById('logo-critter').innerHTML = critterSVG(CRITTERS.zaplet);
+  document.getElementById('pc-k').innerHTML  = critterSVG(CRITTERS.pipling);
+  document.getElementById('pc-g3').innerHTML = critterSVG(CRITTERS.cindercub);
+  refreshPickerProgress();
+
+  if (save.current && PATHS[save.current]) {
+    choosePath(save.current);
+  } else {
+    show('picker');
+  }
+})();
+</script>
+</body>
+</html>
