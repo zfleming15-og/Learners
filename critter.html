@@ -583,6 +583,202 @@
     background: rgba(255,255,255,0.1);
     color: var(--ink); border: 2px solid rgba(255,255,255,0.16);
   }
+
+  /* ══════════ v2: QUEST LOOP + WORLDS + GROWN-UPS ══════════ */
+  .beat-pill {
+    font-size: 11.5px; font-weight: 900; letter-spacing: 0.4px;
+    padding: 7px 12px; border-radius: 999px; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.08);
+  }
+  .beat-pill.learn { border-color: rgba(74,168,255,0.55); background: rgba(74,168,255,0.16); }
+  .beat-pill.world { border-color: rgba(74,222,128,0.55); background: rgba(74,222,128,0.16); }
+  .skip-btn { background: none; border: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; padding: 6px 8px; }
+
+  .lesson-card {
+    width: 100%; max-width: 380px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.14);
+    border-radius: 22px; padding: 18px 16px;
+    margin: 6px 0 16px; text-align: center;
+  }
+  .lesson-text { font-size: 19px; font-weight: 800; line-height: 1.4; letter-spacing: -0.2px; }
+  .lesson-visual { margin-top: 14px; }
+  .slide-dots { display: flex; gap: 7px; justify-content: center; margin-top: 14px; }
+  .slide-dots:empty { display: none; }
+  .slide-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .slide-dots i.on { background: var(--gold); }
+  .lesson-actions { display: flex; gap: 10px; width: 100%; max-width: 380px; }
+  .lesson-actions .btn-primary { flex: 2; padding: 15px 12px; }
+  .lesson-actions .btn-ghost { flex: 1; font-size: 14px; }
+
+  .rw-icon { font-size: 78px; line-height: 1; margin-bottom: 4px; animation: floaty 3.5s ease-in-out infinite; }
+  .rw-title { font-size: 23px; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.4px; }
+  .tryit {
+    margin-top: 14px; padding: 12px 14px; border-radius: 14px;
+    background: rgba(255,217,61,0.12); border: 2px dashed rgba(255,217,61,0.45);
+    font-size: 15px; font-weight: 700; line-height: 1.4; text-align: left;
+  }
+  .tryit b { color: var(--gold); }
+
+  .buddy-say.hint { background: #FFE68A; color: #2A1A00; max-width: 330px; }
+  .q-prompt { cursor: pointer; }
+  .choice.glow {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(255,217,61,0.4), 0 4px 0 rgba(0,0,0,0.3);
+    animation: glowPulse 1s ease-in-out infinite;
+  }
+  @keyframes glowPulse { 50% { box-shadow: 0 0 0 9px rgba(255,217,61,0.12), 0 4px 0 rgba(0,0,0,0.3); } }
+  .choice.pic {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; padding: 12px 8px; min-height: 92px;
+  }
+  .pic-label { font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: 0.2px; }
+  .choice.right .pic-label { color: #06301A; }
+
+  .pattern-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; font-size: 34px; line-height: 1; }
+  .pattern-row span { animation: popIn 0.28s ease-out backwards; }
+  .pat-q {
+    width: 44px; height: 44px; border-radius: 12px;
+    border: 3px dashed var(--gold); color: var(--gold);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900;
+  }
+  .pv-row { display: flex; gap: 8px; justify-content: center; }
+  .pv-cell {
+    width: 72px; padding: 8px 0; border-radius: 14px;
+    background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.15);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .pv-cell.hl { border-color: var(--gold); background: rgba(255,217,61,0.2); }
+  .pv-d { font-size: 42px; font-weight: 900; line-height: 1.1; }
+  .pv-l { font-size: 10px; font-weight: 900; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  .col-math { font: 900 34px/1.15 ui-monospace, "SF Mono", Menlo, monospace; border-collapse: collapse; margin: 0 auto; }
+  .col-math td { width: 30px; text-align: center; padding: 0; }
+  .col-math .carry td { font-size: 18px; color: var(--ember); height: 20px; }
+  .col-math .ans td { border-top: 3px solid var(--ink); color: var(--gold); }
+  .mach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mach-grid div { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 12px; font-weight: 800; color: var(--muted); }
+  .mach-grid span { font-size: 30px; }
+
+  .world-head {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 12px;
+    margin: 4px 0 16px; padding: 12px 14px; border-radius: 18px;
+    background: linear-gradient(140deg, rgba(255,217,61,0.16), rgba(139,127,212,0.14));
+    border: 2px solid rgba(255,255,255,0.13);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  }
+  .world-head + .node-row { margin-top: 0; }
+  .node-row + .world-head { margin-top: 26px; }
+  .wh-icon { font-size: 30px; }
+  .wh-name { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; }
+  .wh-sub { font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 2px; }
+
+  #done-screen { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #done-screen > :first-child { margin-top: auto; }
+  #done-screen > :last-child { margin-bottom: auto; flex-shrink: 0; }
+  #done-screen .hatch-svg { width: 100px; height: 100px; }
+  #done-screen .reward-box { margin-bottom: 12px; flex-shrink: 0; }
+  .fb-row { display: flex; gap: 7px; }
+  .fb-btn {
+    flex: 1; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.14);
+    border-radius: 14px; padding: 8px 2px; font-family: inherit; color: var(--ink);
+    font-size: 10.5px; font-weight: 800; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .fb-btn span { font-size: 27px; line-height: 1; }
+  .fb-btn.on { border-color: var(--gold); background: rgba(255,217,61,0.2); transform: scale(1.04); }
+
+  .hold-btn { position: relative; overflow: hidden; touch-action: none; }
+  .hold-btn .hold-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(255,217,61,0.3); pointer-events: none; }
+  .hold-btn .hold-label { position: relative; }
+
+  .gp-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+  .gp-card {
+    background: rgba(255,255,255,0.055); border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 18px; padding: 14px 16px; margin-bottom: 12px;
+  }
+  .gp-card h3 { margin: 0 0 8px; font-size: 14px; font-weight: 900; }
+  .gp-line {
+    display: flex; justify-content: space-between; gap: 12px;
+    font-size: 13.5px; font-weight: 700; color: var(--muted);
+    padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .gp-line:last-child { border-bottom: none; }
+  .gp-line b { color: var(--ink); white-space: nowrap; }
+  .gp-empty { font-size: 13px; color: var(--muted); font-weight: 600; line-height: 1.45; }
+  .gp-actions { display: flex; gap: 10px; }
+  .gp-actions .btn { flex: 1; padding: 13px; font-size: 14px; }
+  textarea.report {
+    width: 100%; height: 190px; margin-top: 10px;
+    background: rgba(0,0,0,0.3); color: var(--ink);
+    border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 10px;
+    font: 12px/1.45 ui-monospace, Menlo, monospace;
+    user-select: text; -webkit-user-select: text;
+  }
+
+  /* ══════════ v3 ══════════ */
+  #game-screen .stage { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #game-screen .stage::before, #game-screen .stage::after { content: ''; flex: 1 1 0; min-height: 0; }
+  .stage.compact .buddy-wrap { display: none; }
+  .choice.long { font-size: 15.5px; font-weight: 800; text-align: left; padding: 13px 16px; line-height: 1.3; }
+  .passage {
+    text-align: left; font-size: 15.5px; line-height: 1.55; font-weight: 600;
+    max-height: 230px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: rgba(0,0,0,0.22); border-radius: 12px; padding: 12px 14px; cursor: pointer;
+  }
+  .passage-title { font-weight: 900; font-size: 16px; color: var(--gold); margin-bottom: 6px; }
+  .sentence { font-size: 19px; font-weight: 700; line-height: 1.45; text-align: center; cursor: pointer; }
+  .sentence b { color: var(--gold); }
+  .split-wrap { display: flex; align-items: center; gap: 10px; justify-content: center; }
+  .split-box {
+    min-width: 70px; min-height: 64px; padding: 8px; border-radius: 14px;
+    border: 3px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.06);
+    display: flex; flex-wrap: wrap; gap: 3px; align-items: center; justify-content: center;
+    max-width: 150px; font-size: 26px;
+  }
+  .split-box.q { border-style: dashed; border-color: var(--gold); color: var(--gold); font-size: 34px; font-weight: 900; }
+  .split-plus { font-size: 28px; font-weight: 900; color: var(--gold); }
+  .graph-title { font-size: 13px; font-weight: 900; color: var(--muted); margin-bottom: 4px; text-align: center; }
+  .cycle-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
+  .cycle-chip {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 7px 8px; border-radius: 12px; background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.15); font-size: 11px; font-weight: 800; min-width: 62px;
+  }
+  .cycle-chip span { font-size: 24px; line-height: 1.1; }
+  .cycle-chip.q { border-style: dashed; border-color: var(--gold); color: var(--gold); }
+  .cycle-arrow { color: var(--muted); font-weight: 900; }
+  .node-stars.tested { color: var(--sprout); font-size: 10.5px; font-weight: 900; letter-spacing: 0.3px; }
+
+  .map-cards { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .map-card {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 13px 14px; border-radius: 18px; cursor: pointer;
+    font-family: inherit; color: var(--ink); text-align: left;
+    background: linear-gradient(140deg, rgba(74,222,128,0.2), rgba(74,168,255,0.14));
+    border: 2px solid rgba(74,222,128,0.45);
+  }
+  .map-card.speed { background: linear-gradient(140deg, rgba(255,217,61,0.22), rgba(255,107,74,0.14)); border-color: rgba(255,217,61,0.5); }
+  .map-card:active { transform: scale(0.98); }
+  .mc-icon { font-size: 28px; }
+  .mc-body { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .mc-body b { font-size: 15px; font-weight: 900; }
+  .mc-body small { font-size: 11.5px; color: var(--muted); font-weight: 700; }
+  .mc-go { font-size: 24px; font-weight: 900; color: var(--gold); }
+
+  #place-screen, #speed-screen { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .place-inner { margin: auto 0; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; }
+  .place-critters { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .place-critters svg { width: 58px; height: 58px; }
+  #speed-stage { justify-content: center; }
+  .speed-best { font-size: 13px; font-weight: 900; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.4px; }
+  .speed-q { font-size: 64px; font-weight: 900; letter-spacing: -1px; margin-bottom: 26px; }
+  #speed-choices .choice { font-size: 30px; padding: 22px 10px; }
+  #speed-result { justify-content: center; align-items: center; text-align: center; }
+  .slow-facts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .slow-facts span { padding: 5px 11px; border-radius: 999px; background: rgba(255,107,74,0.2); border: 2px solid rgba(255,107,74,0.45); font-weight: 900; font-size: 14px; }
+  #voice-btn { flex: 1; }
 </style>
 </head>
 <body>
@@ -598,7 +794,7 @@
       <div class="pc-body">
         <div class="pc-name">Sprout Scouts</div>
         <div class="pc-grade">Kindergarten</div>
-        <div class="pc-desc">Counting, adding, letters &amp; first words</div>
+        <div class="pc-desc">Counting to 100, shapes, letter sounds &amp; first reading</div>
         <div class="pc-prog"><i id="prog-k"></i></div>
         <div class="pc-progtxt" id="progtxt-k">Not started</div>
       </div>
@@ -607,8 +803,8 @@
       <svg id="pc-g3" viewBox="0 0 100 100"></svg>
       <div class="pc-body">
         <div class="pc-name">Storm Chasers</div>
-        <div class="pc-grade">Third Grade</div>
-        <div class="pc-desc">Times tables, division, fractions &amp; word problems</div>
+        <div class="pc-grade">Grade 3</div>
+        <div class="pc-desc">Times tables, fractions, time, reading &amp; science</div>
         <div class="pc-prog"><i id="prog-g3"></i></div>
         <div class="pc-progtxt" id="progtxt-g3">Not started</div>
       </div>
@@ -624,7 +820,7 @@
     </div>
     <div style="display:flex; gap:8px; margin-bottom:10px; flex-shrink:0;">
       <button class="btn-ghost" style="flex:1" onclick="openDex()">📖 Critter Dex</button>
-      <button class="btn-ghost" style="flex:1" onclick="askReset()">↺ Reset</button>
+      <button class="btn-ghost hold-btn" style="flex:1" id="grown-btn"><i class="hold-fill"></i><span class="hold-label">👪 Grown-ups (hold)</span></button></div><div style="display:flex; gap:8px; margin-bottom:10px; flex-shrink:0;"><button class="btn-ghost" id="voice-btn" onclick="toggleVoice()">🔊 Read aloud</button>
     </div>
     <div class="map-scroll">
       <div class="map-inner" id="map-inner">
@@ -654,6 +850,7 @@
         <div class="q-visual" id="q-visual"></div>
       </div>
       <div class="choices" id="choices"></div>
+      <button class="btn-ghost" id="place-skip" style="display:none;margin-top:12px;flex-shrink:0" onclick="placeSkip()">🤷 I don't know this one yet</button>
     </div>
   </div>
 
@@ -687,6 +884,16 @@
       <div class="stat-line"><span>Correct</span><b id="done-correct">8 / 8</b></div>
       <div class="stat-line"><span>Coins earned</span><b id="done-coins">🪙 80</b></div>
     </div>
+
+    <div class="reward-box" style="padding:12px 12px">
+      <div class="rb-label">How was that level?</div>
+      <div class="fb-row">
+        <button class="fb-btn" data-r="love" onclick="giveFeedback(this)"><span>😍</span>Loved it</button>
+        <button class="fb-btn" data-r="easy" onclick="giveFeedback(this)"><span>😎</span>Too easy</button>
+        <button class="fb-btn" data-r="hard" onclick="giveFeedback(this)"><span>😣</span>Too hard</button>
+        <button class="fb-btn" data-r="boring" onclick="giveFeedback(this)"><span>😴</span>Boring</button>
+      </div>
+    </div>
     <button class="btn btn-primary" onclick="afterLevel()">Continue →</button>
   </div>
 
@@ -698,6 +905,83 @@
       <div class="coin-pill" id="dex-count">0/0</div>
     </div>
     <div class="dex-grid" id="dex-grid"></div>
+  </div>
+
+  <!-- ══════════ LEARN ══════════ -->
+  <div id="learn-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="quitLevel()">←</button>
+      <h2 id="learn-title">Learn</h2>
+      <button class="skip-btn" id="learn-skip" onclick="beginPractice()">Skip ›</button>
+      <div class="beat-pill learn">📘 LEARN</div>
+    </div>
+    <div class="stage">
+      <div class="buddy-wrap"><svg id="learn-buddy" viewBox="0 0 100 100"></svg></div>
+      <div class="lesson-card">
+        <div class="lesson-text" id="learn-text"></div>
+        <div class="q-visual lesson-visual" id="learn-visual"></div>
+        <div class="slide-dots" id="learn-dots"></div>
+      </div>
+      <div class="lesson-actions">
+        <button class="btn btn-ghost" onclick="replaySlide()">🔊 Again</button>
+        <button class="btn btn-primary" id="learn-next" onclick="nextSlide()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ REAL WORLD ══════════ -->
+  <div id="world-screen" class="screen">
+    <div class="topbar">
+      <div style="width:42px"></div>
+      <h2>In real life</h2>
+      <div class="beat-pill world">🌍 REAL WORLD</div>
+    </div>
+    <div class="stage">
+      <div class="rw-icon" id="rw-icon">🛒</div>
+      <div class="lesson-card">
+        <div class="rw-title" id="rw-title"></div>
+        <div class="lesson-text" id="rw-text" style="font-size:17px"></div>
+        <div class="tryit" id="rw-try"></div>
+      </div>
+      <div class="lesson-actions">
+        <button class="btn btn-ghost" onclick="replayWorld()">🔊 Again</button>
+        <button class="btn btn-primary" onclick="finishLevel()">Collect reward →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ GROWN-UPS ══════════ -->
+  <div id="grown-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="buildMap(); show('map-screen')">←</button>
+      <h2 id="gp-title">Grown-ups</h2>
+    </div>
+    <div class="gp-scroll" id="gp-body"></div>
+  </div>
+
+  <!-- ══════════ PLACEMENT RESULT ══════════ -->
+  <div id="place-screen" class="screen">
+    <div class="place-inner">
+      <div class="rw-icon">🧭</div>
+      <h2 class="done-title">Starting spots found!</h2>
+      <div id="place-body" style="width:100%;max-width:340px"></div>
+      <button class="btn btn-primary" onclick="afterPlacement()">Go to the map →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ SPEED ROUND ══════════ -->
+  <div id="speed-screen" class="screen">
+    <div class="game-hud">
+      <button class="icon-btn" onclick="endSpeed(true)">←</button>
+      <div class="goal-track"><div class="goal-fill" id="speed-fill" style="width:100%"></div><div class="goal-label" id="speed-label">60s left</div></div>
+      <div class="coin-pill">⚡ <span id="speed-score">0</span></div>
+    </div>
+    <div class="stage" id="speed-stage">
+      <div class="speed-best" id="speed-best">Best: 0</div>
+      <div class="speed-q" id="speed-q">7 × 8</div>
+      <div class="choices" id="speed-choices"></div>
+    </div>
+    <div class="stage" id="speed-result" style="display:none"></div>
   </div>
 
   <!-- ══════════ RESET MODAL ══════════ -->
@@ -1475,8 +1759,7 @@ function buildQuestion(level) {
 
 /* ───────── VISUAL RENDERERS ───────── */
 
-function renderVisual(v) {
-  const box = document.getElementById('q-visual');
+function renderVisualBase(v, box) {
   box.innerHTML = '';
   if (!v) return;
 
@@ -1621,7 +1904,7 @@ function fractionBar(num, den, width) {
 const SAVE_KEY = 'critterQuest_v1';
 
 function freshPath() {
-  return { unlocked: 1, stars: {}, coins: 0, critters: [], skills: {} };
+  return { unlocked: 1, stars: {}, coins: 0, critters: [], skills: {}, miscon: {}, feedback: [], placed: {}, facts: {}, speedBest: 0, speedLog: [] };
 }
 function freshSave() {
   return { current: null, k: freshPath(), g3: freshPath() };
@@ -1639,6 +1922,11 @@ function loadSave() {
       if (typeof p[id].coins !== 'number') p[id].coins = 0;
       if (!Array.isArray(p[id].critters)) p[id].critters = [];
       if (!p[id].skills) p[id].skills = {};
+      if (!p[id].miscon) p[id].miscon = {};
+      if (!Array.isArray(p[id].feedback)) p[id].feedback = [];
+      if (!p[id].placed) p[id].placed = {};
+      if (!p[id].facts) p[id].facts = {};
+      if (!Array.isArray(p[id].speedLog)) p[id].speedLog = [];
     });
     return p;
   } catch (e) { return freshSave(); }
@@ -1694,48 +1982,6 @@ function choosePath(id) {
 }
 
 /* ───────── LEVEL MAP ───────── */
-function buildMap() {
-  const path = PATHS[pathId];
-  const inner = document.getElementById('map-inner');
-  document.getElementById('map-coins').textContent = P.coins;
-  inner.innerHTML = '<div class="map-line"></div>';
-
-  path.levels.forEach((lv, i) => {
-    const row = document.createElement('div');
-    row.className = 'node-row ' + (i % 2 === 0 ? 'left' : 'right') + (lv.boss ? ' boss-row' : '');
-
-    const stars = P.stars[lv.n] || 0;
-    const isDone = stars > 0;
-    const isOpen = lv.n <= P.unlocked;
-    const isCurrent = lv.n === P.unlocked && !isDone;
-
-    const node = document.createElement('button');
-    node.className = 'node' + (!isOpen ? ' locked' : '') + (isDone ? ' done' : '') + (isCurrent ? ' current' : '');
-
-    const starTxt = isDone
-      ? '⭐'.repeat(stars) + '·'.repeat(3 - stars)
-      : (isOpen ? '' : '');
-
-    node.innerHTML = `
-      <div class="node-badge">${isOpen ? lv.icon : '🔒'}</div>
-      <div class="node-body">
-        <div class="node-title">${lv.n}. ${lv.title}</div>
-        <div class="node-goal">${isOpen ? 'Goal: ' + lv.goal + ' correct' : 'Locked'}</div>
-        ${starTxt ? `<div class="node-stars">${starTxt}</div>` : ''}
-      </div>`;
-
-    if (isOpen) node.onclick = () => startLevel(lv);
-    row.appendChild(node);
-    inner.appendChild(row);
-  });
-
-  // keep the current level in view
-  setTimeout(() => {
-    const cur = inner.querySelector('.node.current');
-    if (cur) cur.scrollIntoView({ block:'center', behavior:'smooth' });
-  }, 60);
-}
-
 function refreshPickerProgress() {
   ['k','g3'].forEach(id => {
     const done = Object.keys(save[id].stars || {}).length;
@@ -1757,16 +2003,6 @@ const CHEERS_G = ['Nailed it!','Sharp!','Correct!','Great work!','Locked in!','B
 const NUDGE_K  = ['Try again!','Almost! Look closely.','Give it another go!'];
 const NUDGE_G  = ['Not quite — try again.','Close! One more look.','Try another.'];
 
-function startLevel(lv) {
-  run = { level: lv, got: 0, asked: 0, firstTry: 0, coins: 0,
-          q: null, locked: false, clean: true, sinceSport: 0 };
-  paintCritter(document.getElementById('buddy'), buddyFor());
-  document.getElementById('run-coins').textContent = '0';
-  updateGoal();
-  show('game-screen');
-  nextQuestion();
-}
-
 function buddyFor() {
   // Your most-recently-earned critter tags along as the buddy
   if (P.critters.length) return P.critters[P.critters.length - 1];
@@ -1780,102 +2016,8 @@ function updateGoal() {
   document.getElementById('goal-label').textContent = `${run.got} / ${lv.goal}`;
 }
 
-function nextQuestion() {
-  if (run.got >= run.level.goal) { finishLevel(); return; }
-
-  run.q = buildQuestion(run.level);
-  run.locked = false;
-  run.thisOneClean = true;
-  const q = run.q;
-
-  document.getElementById('q-prompt').textContent = q.prompt;
-
-  const big = document.getElementById('q-big');
-  big.textContent = q.big || '';
-  big.className = 'q-big' + (q.bigSmall ? ' small' : '') + (q.story ? ' words' : '');
-  big.style.display = q.big ? '' : 'none';
-
-  // Story problems put the text in the prompt, so shrink the equation
-  if (q.story) { big.className = 'q-big small'; }
-
-  renderVisual(q.visual);
-
-  const cw = document.getElementById('choices');
-  cw.innerHTML = '';
-  cw.style.gridTemplateColumns = q.twoUp ? '1fr 1fr' : '1fr 1fr';
-  const list = q.forceChoices || q.choices;
-  list.forEach(c => {
-    const b = document.createElement('button');
-    b.className = 'choice' + (q.textBtns ? ' txt' : '');
-    b.textContent = c;
-    b.onclick = () => answer(b, c);
-    cw.appendChild(b);
-  });
-
-  const line = pathId === 'k'
-    ? pick(['Your turn!','You can do it!','Take your time.','What do you think?'])
-    : pick(['Your move.','Go for it.','Think it through.','Show me.']);
-  document.getElementById('buddy-say').textContent = line;
-
-  if (q.speakFirst) setTimeout(() => say(q.speakFirst, { rate: 0.7 }), 260);
-}
-
-function answer(btn, choice) {
-  if (run.locked) return;
-  const q = run.q;
-  const correct = String(choice) === String(q.answer);
-
-  if (!correct) {
-    run.thisOneClean = false;
-    run.clean = false;
-    btn.classList.add('wrong');
-    document.getElementById('buddy-say').textContent =
-      pick(pathId === 'k' ? NUDGE_K : NUDGE_G);
-    say(pathId === 'k' ? 'Try again!' : 'Not quite.');
-    setTimeout(() => {
-      btn.classList.remove('wrong');
-      btn.disabled = true;
-      btn.style.opacity = '0.35';
-    }, 420);
-    return;
-  }
-
-  // ── correct
-  run.locked = true;
-  btn.classList.add('right');
-  run.got++;
-  run.asked++;
-  if (run.thisOneClean) run.firstTry++;
-
-  const gain = run.thisOneClean ? 10 : 5;
-  run.coins += gain;
-  document.getElementById('run-coins').textContent = run.coins;
-
-  // per-skill stats (quietly banked for future insight)
-  const key = q.table ? `${run.level.skill}:${q.table}` : run.level.skill;
-  if (!P.skills[key]) P.skills[key] = { att: 0, cor: 0 };
-  P.skills[key].att++;
-  if (run.thisOneClean) P.skills[key].cor++;
-
-  document.getElementById('buddy-say').textContent =
-    pick(pathId === 'k' ? CHEERS_K : CHEERS_G);
-  const bud = document.getElementById('buddy');
-  bud.classList.remove('cheer'); void bud.offsetWidth; bud.classList.add('cheer');
-
-  say(q.say);
-  updateGoal();
-
-  run.sinceSport++;
-
-  setTimeout(() => {
-    if (run.got >= run.level.goal) { finishLevel(); return; }
-    // Sports bonus every 4th correct answer
-    if (run.sinceSport >= 4) { run.sinceSport = 0; startSport(); return; }
-    nextQuestion();
-  }, 850);
-}
-
 function quitLevel() {
+  if (run.mode === 'place') { finishPlacement(); return; }
   persist();
   buildMap();
   show('map-screen');
@@ -1989,72 +2131,6 @@ function sportTap() {
 
 /* ───────── LEVEL COMPLETE ───────── */
 
-function finishLevel() {
-  const lv = run.level;
-  const acc = run.asked ? run.firstTry / run.asked : 0;
-  const stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : 1;
-
-  // bank progress
-  const prev = P.stars[lv.n] || 0;
-  P.stars[lv.n] = Math.max(prev, stars);
-  P.coins += run.coins;
-  if (lv.n >= P.unlocked && lv.n < PATHS[pathId].levels.length) {
-    P.unlocked = lv.n + 1;
-  } else if (lv.n === PATHS[pathId].levels.length) {
-    P.unlocked = lv.n; // final level: stays
-  }
-
-  // critter reward (only the first time through)
-  let newCritter = null;
-  if (lv.reward && !P.critters.includes(lv.reward)) {
-    P.critters.push(lv.reward);
-    newCritter = lv.reward;
-  }
-  persist();
-
-  // ── paint the screen
-  document.getElementById('done-title').textContent = lv.boss ? 'PATH COMPLETE!' : 'Level Clear!';
-
-  const sr = document.getElementById('star-row');
-  sr.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const s = document.createElement('span');
-    s.textContent = i < stars ? '⭐' : '☆';
-    s.style.animationDelay = (i * 0.16) + 's';
-    s.style.opacity = i < stars ? '1' : '0.25';
-    sr.appendChild(s);
-  }
-
-  const box = document.getElementById('reward-box');
-  if (newCritter) {
-    const c = CRITTERS[newCritter];
-    box.style.display = '';
-    document.getElementById('rb-label').textContent =
-      c.stage >= 3 ? '✨ Legendary Critter!' : c.stage === 2 ? '✨ Evolved Critter!' : 'New Critter!';
-    const svg = document.getElementById('hatch-svg');
-    svg.innerHTML = critterSVG(c);
-    svg.classList.remove('pop'); void svg.offsetWidth; svg.classList.add('pop');
-    document.getElementById('hatch-name').textContent = c.name;
-    const chip = document.getElementById('hatch-type');
-    chip.textContent = TYPES[c.type].name;
-    chip.style.background = TYPES[c.type].c1;
-  } else {
-    box.style.display = 'none';
-  }
-
-  document.getElementById('done-correct').textContent = `${run.firstTry} / ${run.asked} first try`;
-  document.getElementById('done-coins').textContent = `🪙 ${run.coins}`;
-
-  show('done-screen');
-  confetti(stars >= 3 ? 40 : 24);
-  setTimeout(() => confetti(16), 380);
-
-  const msg = newCritter
-    ? `Level complete! You found ${CRITTERS[newCritter].name}!`
-    : (lv.boss ? 'You finished the whole path! Amazing!' : 'Level complete! Nice work!');
-  say(msg);
-}
-
 function afterLevel() {
   buildMap();
   refreshPickerProgress();
@@ -2127,6 +2203,2945 @@ function doReset() {
   closeModal();
   buildMap();
   refreshPickerProgress();
+  show('map-screen');
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   v2 — WORLDS, QUEST LOOP, DIAGNOSIS, FEEDBACK
+   ═══════════════════════════════════════════════════════════ */
+
+const PALETTE = ['#FF6B4A','#4AA8FF','#4ADE80','#FFD93D','#C4B5FD','#FF8FAB','#7DD3FC','#FFB86B'];
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function art(w) { return /^[aeiou]/i.test(w) ? 'an ' + w : 'a ' + w; }
+
+/* ───────── NEW CRITTERS ───────── */
+Object.assign(CRITTERS, {
+  emberkit:  { name:'Emberkit',  type:'ember',   stage:1, body:'round', top:'flametuft', eyes:'wide',   tail:'flame', belly:1, cheeks:1 },
+  blazekit:  { name:'Blazekit',  type:'ember',   stage:2, body:'egg',   top:'flametuft', eyes:'big',    tail:'flame', belly:1, cheeks:1 },
+  bubbloo:   { name:'Bubbloo',   type:'splash',  stage:1, body:'round', top:'antenna',   eyes:'big',    tail:'puff',  belly:1, cheeks:1 },
+  geodash:   { name:'Geodash',   type:'boulder', stage:1, body:'chunk', top:'crest',     eyes:'wide',   tail:'curl',  belly:1 },
+  glintine:  { name:'Glintine',  type:'frost',   stage:2, body:'egg',   top:'crest',     eyes:'fierce', tail:'fin',   belly:1 },
+  thornling: { name:'Thornling', type:'sprout',  stage:1, body:'drop',  top:'horns',     eyes:'big',    tail:'leaf',  belly:1, cheeks:1 },
+  tickwing:  { name:'Tickwing',  type:'gust',    stage:1, body:'round', top:'antenna',   eyes:'big',    tail:'puff',  belly:1, cheeks:1, wings:1 }
+});
+
+/* ───────── WORLDS + NEW LEVELS ───────── */
+PATHS.k.grade  = 'Pre-K & Kindergarten';
+PATHS.g3.grade = 'Grades 2–3';
+
+PATHS.k.worlds = [
+  { id:1, name:'Seaside Shores', icon:'🌊', sub:'Numbers & letters' },
+  { id:2, name:'Wonder Woods',   icon:'🌲', sub:'Shapes, patterns, reading & nature' }
+];
+PATHS.g3.worlds = [
+  { id:1, name:'Storm Peaks',    icon:'⛰️', sub:'Multiply, divide, fractions' },
+  { id:2, name:'Clockwork City', icon:'⚙️', sub:'Place value, time, money, science' }
+];
+
+PATHS.k.levels.forEach(l => { if (!l.w) l.w = 1; });
+PATHS.g3.levels.forEach(l => { if (!l.w) l.w = 1; });
+
+PATHS.k.levels.push(
+  { n:16, w:2, title:'Shape Glade',     icon:'🔺', skill:'shapes',   arg:0, goal:8,  reward:'emberkit'  },
+  { n:17, w:2, title:'Pattern Path',    icon:'🔁', skill:'patterns', arg:0, goal:8,  reward:'breezle'   },
+  { n:18, w:2, title:'Blend Bridge',    icon:'🌉', skill:'blend',    arg:0, goal:8,  reward:'bubbloo'   },
+  { n:19, w:2, title:'Teen Treehouse',  icon:'🏠', skill:'teens',    arg:0, goal:8,  reward:'cragbud'   },
+  { n:20, w:2, title:'Tens Trail',      icon:'🔟', skill:'skip10',   arg:0, goal:8,  reward:null        },
+  { n:21, w:2, title:'Tall Timber',     icon:'🌲', skill:'size',     arg:0, goal:8,  reward:'glacilo'   },
+  { n:22, w:2, title:'Habitat Hollow',  icon:'🦉', skill:'habitats', arg:0, goal:8,  reward:'blazekit'  },
+  { n:23, w:2, title:'Living Log',      icon:'🌱', skill:'living',   arg:0, goal:8,  reward:null        },
+  { n:24, w:2, title:'Wonder Crown',    icon:'👑', skill:'mixK2',    arg:0, goal:12, reward:'sunmoth', boss:1 }
+);
+
+PATHS.g3.levels.push(
+  { n:16, w:2, title:'Place Value Plaza', icon:'🏛️', skill:'placevalue', arg:0, goal:10, reward:'geodash'   },
+  { n:17, w:2, title:'Even-Odd Alley',    icon:'🎲', skill:'evenodd',    arg:0, goal:8,  reward:'glintine'  },
+  { n:18, w:2, title:'Money Market',      icon:'🪙', skill:'money',      arg:0, goal:10, reward:'thornling' },
+  { n:19, w:2, title:'Clock Tower',       icon:'🕰️', skill:'time',       arg:0, goal:10, reward:'tickwing'  },
+  { n:20, w:2, title:'Regroup Row',       icon:'➕', skill:'addsub2',    arg:0, goal:10, reward:null        },
+  { n:21, w:2, title:'Perimeter Park',    icon:'📐', skill:'perimeter',  arg:0, goal:8,  reward:'maelstrom' },
+  { n:22, w:2, title:'Matter Mill',       icon:'🧊', skill:'matter',     arg:0, goal:8,  reward:'nocturnyx' },
+  { n:23, w:2, title:'Machine Works',     icon:'⚙️', skill:'machines',   arg:0, goal:8,  reward:'aurorix'   },
+  { n:24, w:2, title:'Gearheart Summit',  icon:'👑', skill:'mixG3b',     arg:0, goal:14, reward:'infernyx', boss:1 }
+);
+
+/* ───────── SMART DISTRACTORS ─────────
+   Wrong answers are chosen from real mistakes, each tagged,
+   so a wrong tap tells us *what* went wrong, not just that it did. */
+function smartChoices(answer, cands, opts) {
+  opts = opts || {};
+  const isNum = typeof answer === 'number';
+  const min = opts.min !== undefined ? opts.min : 0;
+  const max = opts.max !== undefined ? opts.max : 999;
+  const step = opts.step || 1, spread = opts.spread || 4;
+  const seen = new Set([String(answer)]);
+  const out = [], tags = {};
+  const add = (v, tag) => {
+    if (out.length >= 3) return;
+    if (isNum && (typeof v !== 'number' || !Number.isInteger(v) || v < min || v > max)) return;
+    const k = String(v);
+    if (seen.has(k)) return;
+    seen.add(k); out.push(v); tags[k] = tag;
+  };
+  shuffle(cands).forEach(c => add(c.v, c.tag));
+  if (isNum) {
+    let guard = 0;
+    while (out.length < 3 && guard++ < 80) add(answer + step * rnd(1, spread) * (Math.random() < 0.5 ? -1 : 1), 'guess');
+    let bump = 1;
+    while (out.length < 3 && bump < 500) { add(answer + step * bump, 'guess'); add(answer - step * bump, 'guess'); bump++; }
+  } else if (opts.pool) {
+    shuffle(opts.pool).forEach(v => add(v, 'guess'));
+  }
+  return { choices: shuffle([answer].concat(out)), tags };
+}
+function withTags(q, answer, cands, opts) {
+  const r = smartChoices(answer, cands, opts);
+  q.choices = r.choices; q.tags = r.tags;
+  return q;
+}
+
+/* ───────── UPGRADE EXISTING GENERATORS ───────── */
+const BASE = Object.assign({}, GEN);
+
+GEN.count = function (max) {
+  const q = BASE.count(max), n = q.visual.count;
+  withTags(q, n, [{ v:n+1, tag:'count_extra' }, { v:n-1, tag:'count_miss' }, { v:n+2, tag:'count_extra' }], { min:1, max:max+3, spread:3 });
+  q.hint = 'Touch each one and count out loud. The last number you say is the answer!';
+  return q;
+};
+GEN.add = function (max) {
+  const q = BASE.add(max), a = q.visual.a, b = q.visual.b, s = a + b;
+  withTags(q, s, [
+    { v:s+1, tag:'count_extra' }, { v:s-1, tag:'count_miss' },
+    { v:Math.abs(a-b), tag:'subtracted' }, { v:Math.max(a,b), tag:'one_group' }
+  ], { min:0, max:max+4, spread:3 });
+  q.hint = `Start at ${a} and count up ${b} more.`;
+  return q;
+};
+GEN.sub = function (max) {
+  const q = BASE.sub(max), t = q.visual.total, g = q.visual.gone, d = t - g;
+  withTags(q, d, [
+    { v:t+g, tag:'added_not_sub' }, { v:g, tag:'took_away_amount' },
+    { v:d+1, tag:'count_extra' }, { v:d-1, tag:'count_miss' }, { v:t, tag:'nothing_removed' }
+  ], { min:0, max:max+10, spread:3 });
+  q.hint = `Start with ${t}. The faded ones are gone. Count only the bright ones.`;
+  return q;
+};
+GEN.doubles = function (max) {
+  const q = BASE.doubles(max), a = q.visual.a, d = a * 2;
+  withTags(q, d, [
+    { v:a, tag:'not_doubled' }, { v:a+1, tag:'added_one' },
+    { v:d+1, tag:'count_extra' }, { v:d-1, tag:'count_miss' }
+  ], { min:1, max:max*2+4, spread:3 });
+  q.hint = `${a} and ${a} more. Count both groups!`;
+  return q;
+};
+GEN.bonds = function () {
+  const q = BASE.bonds(), a = q.visual.filled, m = 10 - a;
+  withTags(q, m, [
+    { v:a, tag:'repeated_number' }, { v:m+1, tag:'off_by_one' },
+    { v:m-1, tag:'off_by_one' }, { v:10, tag:'wrote_ten' }
+  ], { min:0, max:10, spread:2 });
+  q.hint = 'Count the empty spots with a question mark.';
+  return q;
+};
+GEN.mult = function (tables) {
+  const q = BASE.mult(tables), a = q.visual.rows, b = q.visual.cols, p = a * b;
+  const cands = [
+    { v:a+b, tag:'added_not_mult' },
+    { v:p+b, tag:'extra_group' }, { v:p-b, tag:'missing_group' },
+    { v:p+a, tag:'extra_group' }, { v:p-a, tag:'missing_group' }
+  ];
+  const rev = Number(String(p).split('').reverse().join(''));
+  if (p >= 10 && rev !== p) cands.push({ v:rev, tag:'swapped_digits' });
+  withTags(q, p, cands, { min:1, max:110, spread:6 });
+  q.hint = `${a} × ${b} means ${a} groups of ${b}. Count by ${b}s, ${a} times.`;
+  return q;
+};
+GEN.missing = function () {
+  const q = BASE.missing();
+  const m = q.big.match(/\? × (\d+) = (\d+)/) || q.big.match(/(\d+) × \? = (\d+)/);
+  const known = +m[1], prod = +m[2], ans = q.answer;
+  withTags(q, ans, [
+    { v:prod-known, tag:'subtracted' }, { v:known, tag:'repeated_number' },
+    { v:ans+1, tag:'neighbor_fact' }, { v:ans-1, tag:'neighbor_fact' }
+  ], { min:1, max:100, spread:3 });
+  q.hint = `How many ${known}s make ${prod}? Count by ${known}s until you reach it.`;
+  return q;
+};
+GEN.div = function (level) {
+  const q = BASE.div(level), d = q.visual.rows, qq = q.visual.cols, t = d * qq;
+  withTags(q, qq, [
+    { v:t-d, tag:'subtracted' }, { v:d, tag:'divisor' },
+    { v:qq+1, tag:'neighbor_fact' }, { v:qq-1, tag:'neighbor_fact' }
+  ], { min:1, max:100, spread:3 });
+  q.hint = `How many in each of ${d} equal groups? Think: ${d} × ? = ${t}.`;
+  return q;
+};
+GEN.area = function () {
+  const q = BASE.area(), h = q.visual.rows, w = q.visual.cols, a = w * h;
+  withTags(q, a, [
+    { v:2*(w+h), tag:'perimeter_not_area' }, { v:w+h, tag:'added_sides' },
+    { v:a+w, tag:'row_miscount' }, { v:a-w, tag:'row_miscount' }
+  ], { min:1, max:100, spread:5 });
+  q.hint = 'Count the squares in one row, then count by that number for each row.';
+  return q;
+};
+GEN.rounding = function () {
+  const q = BASE.rounding(), n = +q.big;
+  const hundred = q.prompt.indexOf('HUNDRED') >= 0;
+  const lo = hundred ? Math.floor(n / 100) * 100 : Math.floor(n / 10) * 10;
+  q.visual = { kind:'html', html: numberLineSVG(lo, lo + (hundred ? 100 : 10), n, hundred ? 10 : 1) };
+  q.hint = hundred ? 'Look at the tens digit. 5 or more rounds up; 4 or less rounds down.'
+                   : 'Look at the ones digit. 5 or more rounds up; 4 or less rounds down.';
+  return q;
+};
+
+const HINTS = {
+  compare:    q => 'Count each group. The bigger number is more!',
+  letterstart:q => `Say it slowly: ${q.speakFirst}. What is the very first sound?`,
+  casematch:  q => 'Big and little letters are partners. Say the big one, then find the little one that goes with it.',
+  sightword:  q => 'Listen again!',
+  sightword2: q => 'Listen again!',
+  rhyme:      q => `Say each word, then say ${q.big}. Which ends with the same sound?`,
+  fracname:   q => 'Bottom number = how many equal parts in all. Top number = how many are shaded.',
+  fraccomp:   q => 'The pieces are the same size, so more shaded pieces means bigger.',
+  word1:      q => 'Find the numbers first. Equal groups → multiply. Sharing equally → divide.',
+  word2:      q => 'Do it in two steps. Solve the first part, then use that answer for the second.'
+};
+Object.keys(HINTS).forEach(k => {
+  const base = BASE[k];
+  GEN[k] = function (arg) {
+    const q = base(arg);
+    q.hint = HINTS[k](q);
+    if (k === 'sightword' || k === 'sightword2') q.hintSpeak = q.answer;
+    return q;
+  };
+});
+
+/* ───────── NEW CONTENT BANKS ───────── */
+const SHAPE_INFO = {
+  circle:    'A circle is round with no corners at all.',
+  square:    'A square has 4 sides that are all the same length.',
+  triangle:  'A triangle has 3 sides and 3 corners.',
+  rectangle: 'A rectangle has 4 sides: 2 long ones and 2 short ones.',
+  star:      'A star has 5 pointy tips.',
+  heart:     'A heart has two bumps on top and a point at the bottom.',
+  oval:      'An oval is like a stretched-out circle.',
+  diamond:   'A diamond looks like a square standing on its corner.'
+};
+const PATTERN_SETS = [
+  ['🔴','🔵','🟡','🟢'], ['🐟','🐢','🦀','🐙'], ['⭐','🌙','☀️','☁️'],
+  ['🍎','🍌','🍇','🍓'], ['🐶','🐱','🐰','🐻']
+];
+const CVC = [
+  { w:'cat', e:'🐱' }, { w:'dog', e:'🐶' }, { w:'sun', e:'☀️' }, { w:'pig', e:'🐷' },
+  { w:'bus', e:'🚌' }, { w:'hat', e:'🎩' }, { w:'bed', e:'🛏️' }, { w:'fox', e:'🦊' },
+  { w:'bat', e:'🦇' }, { w:'map', e:'🗺️' }, { w:'bug', e:'🐛' }, { w:'hen', e:'🐔' },
+  { w:'van', e:'🚐' }, { w:'box', e:'📦' }, { w:'web', e:'🕸️' }, { w:'net', e:'🥅' },
+  { w:'jet', e:'🛩️' }, { w:'mug', e:'☕' }
+];
+const HOMES = {
+  ocean:  { e:'🌊', w:'Ocean',  sp:'the ocean' },
+  desert: { e:'🏜️', w:'Desert', sp:'the desert' },
+  ice:    { e:'🧊', w:'Icy land', sp:'icy, snowy places' },
+  forest: { e:'🌲', w:'Forest', sp:'the forest' },
+  jungle: { e:'🌴', w:'Jungle', sp:'the jungle' },
+  farm:   { e:'🚜', w:'Farm',   sp:'a farm' }
+};
+const ANIMALS = [
+  { e:'🐟', n:'fish',       h:'ocean',  why:'Fish breathe underwater.' },
+  { e:'🐙', n:'octopus',    h:'ocean',  why:'An octopus lives in salty sea water.' },
+  { e:'🐋', n:'whale',      h:'ocean',  why:'Whales need lots of deep water to swim.' },
+  { e:'🐪', n:'camel',      h:'desert', why:'Camels can go days without water in the hot, dry sand.' },
+  { e:'🦎', n:'lizard',     h:'desert', why:'Lizards love hot sun and warm sand.' },
+  { e:'🐧', n:'penguin',    h:'ice',    why:'Penguins have thick feathers to stay warm in the cold.' },
+  { e:'🐻‍❄️', n:'polar bear', h:'ice',  why:'Polar bears have thick white fur for snow and ice.' },
+  { e:'🦉', n:'owl',        h:'forest', why:'Owls sleep in tall trees.' },
+  { e:'🦌', n:'deer',       h:'forest', why:'Deer hide among the trees.' },
+  { e:'🐿️', n:'squirrel',   h:'forest', why:'Squirrels gather nuts from trees.' },
+  { e:'🐒', n:'monkey',     h:'jungle', why:'Monkeys swing on vines in warm, rainy places.' },
+  { e:'🦜', n:'parrot',     h:'jungle', why:'Parrots eat fruit in warm, green treetops.' },
+  { e:'🐅', n:'tiger',      h:'jungle', why:'Tigers hide in thick, leafy plants.' },
+  { e:'🐄', n:'cow',        h:'farm',   why:'Cows eat grass in fields and give us milk.' },
+  { e:'🐑', n:'sheep',      h:'farm',   why:'Sheep graze in fields and grow wool.' }
+];
+const THINGS = [
+  { e:'🌻', n:'sunflower', a:1 }, { e:'🐶', n:'dog', a:1 },  { e:'🌳', n:'tree', a:1 },
+  { e:'🐛', n:'caterpillar', a:1 }, { e:'🍄', n:'mushroom', a:1 }, { e:'🐦', n:'bird', a:1 },
+  { e:'🐠', n:'fish', a:1 }, { e:'🌵', n:'cactus', a:1 },
+  { e:'🪨', n:'rock', a:0 }, { e:'🚗', n:'car', a:0 }, { e:'🧸', n:'teddy bear', a:0 },
+  { e:'⚽', n:'ball', a:0 }, { e:'🤖', n:'robot', a:0 }, { e:'🧱', n:'brick', a:0 },
+  { e:'✏️', n:'pencil', a:0 }, { e:'👟', n:'shoe', a:0 }
+];
+const COINS = [25, 10, 5, 1];
+const COIN_NAME = { 25:'quarter', 10:'dime', 5:'nickel', 1:'penny' };
+const MATTER = [
+  { e:'🧊', n:'an ice cube', s:'Solid' }, { e:'🪨', n:'a rock', s:'Solid' },
+  { e:'✏️', n:'a pencil', s:'Solid' },    { e:'🪑', n:'a chair', s:'Solid' },
+  { e:'🍎', n:'an apple', s:'Solid' },    { e:'💧', n:'water', s:'Liquid' },
+  { e:'🥛', n:'milk', s:'Liquid' },       { e:'🧃', n:'juice', s:'Liquid' },
+  { e:'🍯', n:'honey', s:'Liquid' },      { e:'♨️', n:'steam from a boiling pot', s:'Gas' },
+  { e:'🎈', n:'the air inside a balloon', s:'Gas' }, { e:'💨', n:'wind', s:'Gas' }
+];
+const MATTER_FACT = {
+  Solid:  'Solids keep their own shape.',
+  Liquid: 'Liquids flow and take the shape of their container.',
+  Gas:    'Gases spread out to fill any space.'
+};
+const MACHINE_NAMES = { lever:'Lever', wheel:'Wheel and axle', pulley:'Pulley', ramp:'Inclined plane', wedge:'Wedge', screw:'Screw' };
+const MACHINE_FACT = {
+  lever:  'A lever is a bar that tips on a point to lift or pry.',
+  wheel:  'A wheel and axle is a wheel that turns on a rod.',
+  pulley: 'A pulley is a wheel and rope that lifts things up.',
+  ramp:   'An inclined plane is a slanted surface, like a ramp.',
+  wedge:  'A wedge is thin and sharp on one end to split things apart.',
+  screw:  'A screw is a ramp wrapped around a pole. You twist it.'
+};
+const MACHINE_ITEMS = [
+  { e:'🛝', d:'A playground slide', m:'ramp' },
+  { e:'♿', d:'A wheelchair ramp', m:'ramp' },
+  { e:'🪓', d:'An axe splitting wood', m:'wedge' },
+  { e:'🔪', d:'A knife blade', m:'wedge' },
+  { e:'🚲', d:'Bicycle wheels', m:'wheel' },
+  { e:'🚪', d:'A doorknob you turn', m:'wheel' },
+  { e:'🚩', d:'A rope raising a flag up a pole', m:'pulley' },
+  { e:'🏗️', d:'A crane lifting heavy beams', m:'pulley' },
+  { e:'🔩', d:'A bolt that twists into place', m:'screw' },
+  { e:'🫙', d:'A jar lid you twist on', m:'screw' },
+  { e:'🔨', d:'A hammer claw pulling out a nail', m:'lever' },
+  { e:'🧒', d:'A seesaw with a friend on each end', m:'lever' }
+];
+
+/* ───────── NEW GENERATORS ───────── */
+Object.assign(GEN, {
+
+  /* — Wonder Woods (K) — */
+  shapes() {
+    const names = Object.keys(SHAPE_INFO);
+    const target = pick(names);
+    const others = shuffle(names.filter(n => n !== target)).slice(0, 3);
+    const cols = shuffle(PALETTE), colorOf = {};
+    [target].concat(others).forEach((n, i) => colorOf[n] = cols[i]);
+    return {
+      prompt: `🔊 Find the ${target}!`, big: '',
+      choices: shuffle([target].concat(others)), answer: target,
+      renderChoice: c => shapeSVG(c, 66, colorOf[c]),
+      speakFirst: `Find the ${target}!`,
+      say: `Yes! That's ${art(target)}. ${SHAPE_INFO[target]}`,
+      hint: SHAPE_INFO[target]
+    };
+  },
+
+  patterns() {
+    const set = shuffle(pick(PATTERN_SETS));
+    const type = pick(['AB','AAB','ABB','ABC','AB','ABC']);
+    const unit = type.split('').map(ch => set['ABC'.indexOf(ch)]);
+    const total = unit.length * 2 + rnd(0, unit.length - 1);
+    const shown = [];
+    for (let i = 0; i < total; i++) shown.push(unit[i % unit.length]);
+    const ans = unit[total % unit.length];
+    return {
+      prompt: 'What comes next in the pattern?', big: '',
+      visual: { kind:'pattern', items: shown },
+      choices: shuffle(set.slice(0, 4)), answer: ans,
+      renderChoice: c => `<span style="font-size:40px;line-height:1">${c}</span>`,
+      speakFirst: 'What comes next?',
+      say: 'Great pattern spotting!',
+      hint: 'Say the pattern out loud from the start. What comes after the last one?'
+    };
+  },
+
+  teens() {
+    const n = rnd(11, 19), ones = n - 10;
+    const cands = [
+      { v:n+1, tag:'count_extra' }, { v:n-1, tag:'count_miss' }, { v:ones, tag:'ones_only' }
+    ];
+    if (ones !== 1) cands.push({ v:Number(String(ones) + '1'), tag:'teen_reversal' });
+    const r = smartChoices(n, cands, { min:1, max:99, spread:2 });
+    return {
+      prompt: 'How many dots in all?', big: `10 + ${ones}`, bigSmall: true,
+      visual: { kind:'tenframes', count:n },
+      choices: r.choices, tags: r.tags, answer: n,
+      say: `10 and ${ones} more makes ${n}!`,
+      hint: 'The full ten frame is 10. Keep counting: 11, 12, 13…'
+    };
+  },
+
+  blend() {
+    const item = pick(CVC);
+    const others = shuffle(CVC.filter(x => x.w !== item.w)).slice(0, 3);
+    const sounds = item.w.toUpperCase().split('').map(l => LETTER_SOUNDS[l]).join('... ');
+    const emo = {};
+    [item].concat(others).forEach(x => emo[x.w] = x.e);
+    return {
+      prompt: '🔊 Blend the sounds. Which picture is it?',
+      big: item.w.split('').join(' · '), bigSmall: true,
+      choices: shuffle([item.w].concat(others.map(o => o.w))), answer: item.w,
+      renderChoice: c => `<span style="font-size:46px;line-height:1">${emo[c]}</span>`,
+      speakFirst: sounds,
+      say: `${sounds}... ${item.w}!`,
+      hint: 'Say the sounds faster and faster until they smoosh into a word.',
+      hintSpeak: sounds
+    };
+  },
+
+  skip10() {
+    const start = pick([10, 20, 30, 40, 50]);
+    const seq = [start, start + 10, start + 20, start + 30];
+    const ans = start + 40, last = seq[3];
+    const r = smartChoices(ans, [
+      { v:last + 1, tag:'counted_by_ones' }, { v:ans + 10, tag:'skipped_a_ten' },
+      { v:last, tag:'repeated_number' }, { v:ans + 1, tag:'counted_by_ones' }
+    ], { min:0, max:150, step:10 });
+    return {
+      prompt: 'Count by tens. What comes next?',
+      big: seq.join(', ') + ', ?', bigSmall: true,
+      choices: r.choices, tags: r.tags, answer: ans,
+      say: `${seq.join(', ')}, ${ans}!`,
+      hint: 'Each jump adds one more ten. Say them out loud!'
+    };
+  },
+
+  size() {
+    let a = rnd(2, 8), b = rnd(2, 8);
+    while (Math.abs(a - b) < 2) b = rnd(2, 8);
+    const taller = Math.random() < 0.55;
+    const ans = taller ? (a > b ? 'A' : 'B') : (a < b ? 'A' : 'B');
+    const colA = pick(PALETTE), colB = pick(PALETTE.filter(c => c !== colA));
+    const word = taller ? 'taller' : 'shorter';
+    return {
+      prompt: `🔊 Which tower is ${word.toUpperCase()}?`, big: '',
+      forceChoices: ['A','B'], choices: ['A','B'], answer: ans,
+      renderChoice: c => towerSVG(c === 'A' ? a : b, c === 'A' ? colA : colB),
+      speakFirst: `Which tower is ${word}?`,
+      say: taller ? 'Yes! That tower reaches higher.' : 'Yes! That tower is lower.',
+      hint: taller ? 'Taller reaches up higher. Look at the tops!' : 'Shorter stays lower. Look at the tops!'
+    };
+  },
+
+  habitats() {
+    const an = pick(ANIMALS);
+    const others = shuffle(Object.keys(HOMES).filter(k => k !== an.h)).slice(0, 3);
+    return {
+      prompt: `🔊 Where does the ${an.n} live?`, big: an.e,
+      choices: shuffle([an.h].concat(others)), answer: an.h,
+      renderChoice: c => `<span style="font-size:34px;line-height:1">${HOMES[c].e}</span><span class="pic-label">${HOMES[c].w}</span>`,
+      speakFirst: `Where does the ${an.n} live?`,
+      say: `The ${an.n} lives in ${HOMES[an.h].sp}! ${an.why}`,
+      hint: an.why
+    };
+  },
+
+  living() {
+    const t = pick(THINGS), ans = t.a ? 'alive' : 'notalive';
+    return {
+      prompt: `🔊 Is the ${t.n} alive?`, big: t.e,
+      forceChoices: ['alive','notalive'], choices: ['alive','notalive'], answer: ans,
+      renderChoice: c => c === 'alive'
+        ? '<span style="font-size:30px">🌱</span><span class="pic-label">Alive</span>'
+        : '<span style="font-size:30px">🪨</span><span class="pic-label">Not alive</span>',
+      speakFirst: `Is the ${t.n} alive?`,
+      say: t.a ? `Yes! ${cap(art(t.n))} is alive. It grows and needs food and water.`
+               : `Right! ${cap(art(t.n))} is not alive. It doesn't grow or eat.`,
+      hint: 'Living things grow, eat or drink, and make babies or seeds.'
+    };
+  },
+
+  mixK2() {
+    return GEN[pick(['shapes','patterns','teens','blend','size','habitats','living','skip10'])](0);
+  },
+
+  /* — Clockwork City (grades 2–3) — */
+  placevalue() {
+    if (Math.random() < 0.5) {
+      let n, ds;
+      do { n = rnd(102, 987); ds = String(n).split(''); }
+      while (new Set(ds).size < 3 || ds.indexOf('0') >= 0);
+      const pos = rnd(0, 2), digit = Number(ds[pos]);
+      const place = [100, 10, 1][pos], ans = digit * place;
+      const placeName = ['hundreds','tens','ones'][pos];
+      const cands = [{ v:digit, tag:'digit_not_value' }];
+      [100, 10, 1].filter(p => p !== place).forEach(p => cands.push({ v:digit * p, tag:'wrong_place' }));
+      const r = smartChoices(ans, cands, { min:1, max:999, step:10 });
+      return {
+        prompt: `What is the VALUE of the ${digit} in ${n}?`, big: '',
+        visual: { kind:'digits', n:n, pos:pos },
+        choices: r.choices, tags: r.tags, answer: ans,
+        say: `The ${digit} is in the ${placeName} place, so it's worth ${ans}.`,
+        hint: 'The hundreds place counts 100s, the tens place counts 10s, the ones place counts 1s.'
+      };
+    }
+    const h = rnd(1, 4), t = rnd(0, 9), o = rnd(0, 9), n = h * 100 + t * 10 + o;
+    const r = smartChoices(n, [
+      { v:h + t + o, tag:'added_digits' }, { v:o * 100 + t * 10 + h, tag:'swapped_places' },
+      { v:n + 10, tag:'miscounted_tens' }, { v:n - 10, tag:'miscounted_tens' },
+      { v:n + 100, tag:'miscounted_hundreds' }
+    ], { min:1, max:999, step:10 });
+    return {
+      prompt: `${h} hundreds, ${t} tens and ${o} ones. What number is it?`, big: '',
+      visual: { kind:'blocks', h:h, t:t, o:o },
+      choices: r.choices, tags: r.tags, answer: n,
+      say: `${h * 100} plus ${t * 10} plus ${o} is ${n}!`,
+      hint: 'Big squares are 100s, sticks are 10s, little cubes are 1s.'
+    };
+  },
+
+  evenodd() {
+    const n = rnd(3, 40), ans = n % 2 === 0 ? 'Even' : 'Odd';
+    return {
+      prompt: 'Is this number even or odd?', big: String(n),
+      visual: n <= 24 ? { kind:'pairs', n:n } : null,
+      forceChoices: ['Even','Odd'], choices: ['Even','Odd'], answer: ans, textBtns: true,
+      say: `${n} is ${ans.toLowerCase()}! ${n % 2 === 0 ? 'Every dot has a partner.' : 'One is left without a partner.'}`,
+      hint: 'Even numbers end in 0, 2, 4, 6 or 8. Or pair up the dots: is one left over?'
+    };
+  },
+
+  time() {
+    const h = rnd(1, 12), m = pick([0,5,10,15,20,25,30,35,40,45,50,55]);
+    const fmt = (hh, mm) => `${hh}:${String(mm).padStart(2, '0')}`;
+    const ans = fmt(h, m);
+    const cands = [
+      { v:fmt(m === 0 ? 12 : m / 5, (h * 5) % 60), tag:'swapped_hands' },
+      { v:fmt(h, (m + 5) % 60), tag:'off_by_five' },
+      { v:fmt(h, (m + 55) % 60), tag:'off_by_five' }
+    ];
+    if (m >= 30) cands.push({ v:fmt(h % 12 + 1, m), tag:'read_next_hour' });
+    if (m >= 10) cands.push({ v:fmt(h, m / 5), tag:'counted_by_ones' });
+    const pool = [];
+    for (let i = 0; i < 6; i++) pool.push(fmt(rnd(1, 12), pick([0,15,30,45])));
+    const r = smartChoices(ans, cands, { pool:pool });
+    return {
+      prompt: 'What time does the clock show?', big: '',
+      visual: { kind:'clock', h:h, m:m },
+      choices: r.choices, tags: r.tags, answer: ans, textBtns: true,
+      say: `It's ${speakTime(h, m)}.`,
+      hint: 'Short hand = hour. Long hand = minutes: count by 5s for each number it passes.'
+    };
+  },
+
+  money() {
+    let coins, total;
+    do {
+      const k = rnd(2, 6); coins = [];
+      for (let i = 0; i < k; i++) coins.push(pick(COINS));
+      total = coins.reduce((s, c) => s + c, 0);
+    } while (total > 99);
+    coins.sort((a, b) => b - a);
+    const swapped = coins.reduce((s, c) => s + (c === 10 ? 5 : c === 5 ? 10 : c), 0);
+    const r = smartChoices(total, [
+      { v:coins.length, tag:'counted_coins' }, { v:swapped, tag:'dime_nickel_mixup' },
+      { v:total + 5, tag:'miscounted' }, { v:total - 5, tag:'miscounted' },
+      { v:total + 1, tag:'miscounted' }, { v:total - 1, tag:'miscounted' }
+    ], { min:1, max:120 });
+    return {
+      prompt: 'How much money is this?', big: '',
+      visual: { kind:'coins', coins:coins },
+      choices: r.choices, tags: r.tags, answer: total,
+      renderChoice: c => `<span style="font-size:25px;font-weight:900">${c}¢</span>`,
+      say: `That's ${total} cents!`,
+      hint: 'Quarter 25¢, dime 10¢, nickel 5¢, penny 1¢. Start with the biggest coins and count on.'
+    };
+  },
+
+  addsub2() {
+    if (Math.random() < 0.5) {
+      let a, b;
+      do { a = rnd(15, 69); b = rnd(12, Math.max(12, 89 - a)); }
+      while (a + b > 99 || ((a % 10) + (b % 10) < 10 && Math.random() < 0.8));
+      const s = a + b;
+      const cands = [
+        { v:s - 10, tag:'forgot_to_carry' }, { v:s + 10, tag:'extra_ten' },
+        { v:s + 1, tag:'miscounted' }, { v:s - 1, tag:'miscounted' }
+      ];
+      if ((a % 10) + (b % 10) >= 10) {
+        cands.push({ v:Number(`${Math.floor(a/10) + Math.floor(b/10)}${(a%10) + (b%10)}`), tag:'wrote_both_sums' });
+      }
+      const r = smartChoices(s, cands, { min:1, max:999 });
+      return {
+        prompt: 'Add! (Ones first.)', big: '',
+        visual: { kind:'colmath', a:a, b:b, op:'+' },
+        choices: r.choices, tags: r.tags, answer: s,
+        say: `${a} plus ${b} is ${s}!`,
+        hint: 'Add the ones first. 10 or more? Carry a ten over to the tens.'
+      };
+    }
+    let a, b;
+    do { a = rnd(31, 95); b = rnd(12, a - 5); }
+    while ((a % 10) >= (b % 10) && Math.random() < 0.8);
+    const d = a - b;
+    const cands = [
+      { v:a + b, tag:'added_not_sub' }, { v:d + 1, tag:'miscounted' }, { v:d - 1, tag:'miscounted' }
+    ];
+    if ((a % 10) < (b % 10)) {
+      cands.push({ v:(Math.floor(a/10) - Math.floor(b/10)) * 10 + ((b % 10) - (a % 10)), tag:'smaller_from_bigger' });
+      cands.push({ v:d + 10, tag:'forgot_to_reduce_ten' });
+    }
+    const r = smartChoices(d, cands, { min:0, max:200 });
+    return {
+      prompt: 'Subtract! (Ones first.)', big: '',
+      visual: { kind:'colmath', a:a, b:b, op:'−' },
+      choices: r.choices, tags: r.tags, answer: d,
+      say: `${a} minus ${b} is ${d}!`,
+      hint: 'Not enough ones on top? Borrow a ten: the ones get 10 more, the tens get 1 less.'
+    };
+  },
+
+  perimeter() {
+    const w = rnd(3, 12), h = rnd(2, 9), p = 2 * (w + h);
+    const r = smartChoices(p, [
+      { v:w * h, tag:'area_not_perimeter' }, { v:w + h, tag:'added_two_sides' },
+      { v:2 * w + h, tag:'missed_a_side' }, { v:p + 2, tag:'miscounted' }
+    ], { min:1, max:120, step:2 });
+    return {
+      prompt: 'What is the PERIMETER — the distance all the way around?', big: '',
+      visual: { kind:'rect', w:w, h:h },
+      choices: r.choices, tags: r.tags, answer: p,
+      renderChoice: c => `<span style="font-size:25px;font-weight:900">${c} ft</span>`,
+      say: `${w} plus ${h} plus ${w} plus ${h} is ${p} feet!`,
+      hint: 'Walk around the rectangle and add all 4 sides.'
+    };
+  },
+
+  matter() {
+    const it = pick(MATTER);
+    return {
+      prompt: `Is ${it.n} a solid, a liquid or a gas?`, big: it.e,
+      forceChoices: ['Solid','Liquid','Gas'], choices: ['Solid','Liquid','Gas'],
+      answer: it.s, textBtns: true,
+      say: `${cap(it.n)} is ${art(it.s.toLowerCase())}. ${MATTER_FACT[it.s]}`,
+      hint: 'Solids keep their shape. Liquids pour. Gases spread out to fill space.'
+    };
+  },
+
+  machines() {
+    const it = pick(MACHINE_ITEMS);
+    const others = shuffle(Object.keys(MACHINE_NAMES).filter(k => k !== it.m)).slice(0, 3);
+    const name = MACHINE_NAMES[it.m];
+    return {
+      prompt: `${it.d}. Which simple machine is it?`, big: it.e,
+      choices: shuffle([name].concat(others.map(k => MACHINE_NAMES[k]))), answer: name,
+      textBtns: true,
+      say: `That's ${art(name.toLowerCase())}! ${MACHINE_FACT[it.m]}`,
+      hint: 'What does it do? Tip (lever), roll (wheel and axle), lift with a rope (pulley), slide up (inclined plane), split (wedge), or twist (screw)?'
+    };
+  },
+
+  mixG3b() {
+    return GEN[pick(['placevalue','evenodd','money','time','addsub2','perimeter','matter','machines'])](0);
+  }
+});
+
+// Tag every question with the skill it actually tests (so boss levels diagnose too)
+Object.keys(GEN).forEach(k => {
+  const f = GEN[k];
+  GEN[k] = function (arg) { const q = f(arg); if (!q.skill) q.skill = k; return q; };
+});
+
+function speakTime(h, m) {
+  if (m === 0) return `${h} o'clock`;
+  if (m < 10) return `${h} oh ${m}`;
+  return `${h} ${m}`;
+}
+
+/* ───────── DRAWING HELPERS ───────── */
+const SVG_FONT = 'font-family="-apple-system,system-ui,sans-serif"';
+
+function shapeSVG(name, size, color) {
+  size = size || 64; color = color || '#FFD93D';
+  let body = '';
+  if (name === 'circle')    body = '<circle cx="50" cy="50" r="38"/>';
+  if (name === 'square')    body = '<rect x="14" y="14" width="72" height="72" rx="5"/>';
+  if (name === 'rectangle') body = '<rect x="5" y="27" width="90" height="46" rx="5"/>';
+  if (name === 'triangle')  body = '<polygon points="50,10 91,86 9,86" stroke-linejoin="round"/>';
+  if (name === 'oval')      body = '<ellipse cx="50" cy="50" rx="44" ry="27"/>';
+  if (name === 'diamond')   body = '<polygon points="50,6 90,50 50,94 10,50" stroke-linejoin="round"/>';
+  if (name === 'heart')     body = '<path d="M50 86 C18 64 6 44 14 30 C22 16 42 16 50 32 C58 16 78 16 86 30 C94 44 82 64 50 86 Z"/>';
+  if (name === 'star') {
+    const pts = [];
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 ? 17 : 42, a = -Math.PI / 2 + i * Math.PI / 5;
+      pts.push((50 + r * Math.cos(a)).toFixed(1) + ',' + (53 + r * Math.sin(a)).toFixed(1));
+    }
+    body = `<polygon points="${pts.join(' ')}" stroke-linejoin="round"/>`;
+  }
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}"><g fill="${color}" stroke="rgba(255,255,255,0.85)" stroke-width="4">${body}</g></svg>`;
+}
+
+function towerSVG(n, col) {
+  const bh = 11, H = 8 * (bh + 2) + 8;
+  let s = '';
+  for (let i = 0; i < n; i++) {
+    const y = H - 6 - (i + 1) * (bh + 2);
+    s += `<rect x="12" y="${y}" width="36" height="${bh}" rx="2" fill="${col}" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>`;
+  }
+  return `<svg viewBox="0 0 60 ${H}" width="60" height="${H}">${s}<rect x="2" y="${H - 5}" width="56" height="3" rx="1.5" fill="rgba(255,255,255,0.45)"/></svg>`;
+}
+
+function clockSVG(h, m, size) {
+  size = size || 170;
+  const R = Math.PI / 180;
+  let s = `<svg viewBox="0 0 200 200" width="${size}" height="${size}"><circle cx="100" cy="100" r="92" fill="#F0F4FF" stroke="#FFD93D" stroke-width="7"/>`;
+  for (let i = 0; i < 60; i++) {
+    const a = i * 6 * R, r1 = i % 5 ? 84 : 77;
+    s += `<line x1="${(100 + r1 * Math.sin(a)).toFixed(1)}" y1="${(100 - r1 * Math.cos(a)).toFixed(1)}" x2="${(100 + 88 * Math.sin(a)).toFixed(1)}" y2="${(100 - 88 * Math.cos(a)).toFixed(1)}" stroke="#17203F" stroke-width="${i % 5 ? 1.4 : 3.4}"/>`;
+  }
+  for (let n = 1; n <= 12; n++) {
+    const a = n * 30 * R;
+    s += `<text x="${(100 + 63 * Math.sin(a)).toFixed(1)}" y="${(100 - 63 * Math.cos(a) + 7).toFixed(1)}" text-anchor="middle" font-size="20" font-weight="800" fill="#17203F" ${SVG_FONT}>${n}</text>`;
+  }
+  const ha = ((h % 12) + m / 60) * 30 * R, ma = m * 6 * R;
+  s += `<line x1="100" y1="100" x2="${(100 + 42 * Math.sin(ha)).toFixed(1)}" y2="${(100 - 42 * Math.cos(ha)).toFixed(1)}" stroke="#E03E1A" stroke-width="9" stroke-linecap="round"/>`;
+  s += `<line x1="100" y1="100" x2="${(100 + 71 * Math.sin(ma)).toFixed(1)}" y2="${(100 - 71 * Math.cos(ma)).toFixed(1)}" stroke="#1565C0" stroke-width="5" stroke-linecap="round"/>`;
+  s += '<circle cx="100" cy="100" r="7" fill="#17203F"/></svg>';
+  return s;
+}
+
+const COIN_LOOK = {
+  25: { r:27, a:'#EEF2F8', b:'#98A3B6' },
+  10: { r:19, a:'#EEF2F8', b:'#98A3B6' },
+  5:  { r:23, a:'#E3E7EE', b:'#8A94A6' },
+  1:  { r:21, a:'#F5BC86', b:'#B0652B' }
+};
+function coinSVG(v, showValue) {
+  const L = COIN_LOOK[v], d = L.r * 2 + 4, c = d / 2;
+  const label = showValue ? `${v}¢` : COIN_NAME[v];
+  const fs = showValue ? (v === 10 ? 12 : 14) : (v === 10 ? 7.5 : 9);
+  return `<svg width="${d}" height="${d}" viewBox="0 0 ${d} ${d}"><defs><radialGradient id="cg${v}" cx="35%" cy="30%"><stop offset="0%" stop-color="${L.a}"/><stop offset="100%" stop-color="${L.b}"/></radialGradient></defs><circle cx="${c}" cy="${c}" r="${L.r}" fill="url(#cg${v})" stroke="rgba(255,255,255,0.65)" stroke-width="2"/><circle cx="${c}" cy="${c}" r="${L.r - 4}" fill="none" stroke="rgba(0,0,0,0.12)" stroke-width="1"/><text x="${c}" y="${c + fs / 2.8}" text-anchor="middle" font-size="${fs}" font-weight="900" fill="#17203F" ${SVG_FONT}>${label}</text></svg>`;
+}
+
+function hundredSVG() {
+  let s = '<svg width="46" height="46" viewBox="0 0 46 46"><rect x="1" y="1" width="44" height="44" fill="#4AA8FF" stroke="#BFE4FF" stroke-width="1.5"/>';
+  for (let i = 1; i < 10; i++) {
+    const p = (1 + i * 4.4).toFixed(1);
+    s += `<line x1="${p}" y1="1" x2="${p}" y2="45" stroke="#BFE4FF" stroke-width="0.6"/><line x1="1" y1="${p}" x2="45" y2="${p}" stroke="#BFE4FF" stroke-width="0.6"/>`;
+  }
+  return s + '</svg>';
+}
+function tenSVG() {
+  let s = '<svg width="8" height="46" viewBox="0 0 8 46"><rect x="1" y="1" width="6" height="44" fill="#4ADE80" stroke="#C6F7D8" stroke-width="1"/>';
+  for (let i = 1; i < 10; i++) { const p = (1 + i * 4.4).toFixed(1); s += `<line x1="1" y1="${p}" x2="7" y2="${p}" stroke="#C6F7D8" stroke-width="0.6"/>`; }
+  return s + '</svg>';
+}
+function oneSVG() {
+  return '<svg width="8" height="8" viewBox="0 0 8 8"><rect x="1" y="1" width="6" height="6" fill="#FFD93D" stroke="#FFF3B8" stroke-width="1"/></svg>';
+}
+
+function numberLineSVG(lo, hi, val, step) {
+  step = step || 1;
+  const W = 290, x0 = 22, x1 = 268;
+  const X = n => (x0 + (n - lo) / (hi - lo) * (x1 - x0)).toFixed(1);
+  let s = `<svg width="${W}" height="72" viewBox="0 0 ${W} 72"><line x1="${x0}" y1="38" x2="${x1}" y2="38" stroke="#9AA5CC" stroke-width="3"/>`;
+  for (let n = lo; n <= hi; n += step) {
+    const end = (n === lo || n === hi), mid = (n === lo + (hi - lo) / 2);
+    s += `<line x1="${X(n)}" y1="${end ? 27 : mid ? 29 : 33}" x2="${X(n)}" y2="${end ? 49 : mid ? 47 : 43}" stroke="${mid ? '#C4B5FD' : '#9AA5CC'}" stroke-width="${end ? 3 : mid ? 2.5 : 1.5}"/>`;
+    if (end) s += `<text x="${X(n)}" y="67" text-anchor="middle" font-size="15" font-weight="900" fill="#F0F4FF" ${SVG_FONT}>${n}</text>`;
+  }
+  s += `<circle cx="${X(val)}" cy="38" r="8" fill="#FFD93D"/><text x="${X(val)}" y="18" text-anchor="middle" font-size="16" font-weight="900" fill="#FFD93D" ${SVG_FONT}>${val}</text></svg>`;
+  return s;
+}
+
+function colMathHTML(a, b, op, showAns, carry) {
+  const A = String(a).padStart(2, ' ').split(''), B = String(b).padStart(2, ' ').split('');
+  const ans = op === '+' ? a + b : a - b;
+  const S = String(ans).padStart(3, ' ').split('');
+  let h = '<table class="col-math">';
+  if (carry) h += `<tr class="carry"><td></td><td></td><td>${carry}</td><td></td></tr>`;
+  h += `<tr><td></td><td></td><td>${A[0]}</td><td>${A[1]}</td></tr>`;
+  h += `<tr><td></td><td>${op}</td><td>${B[0]}</td><td>${B[1]}</td></tr>`;
+  h += showAns
+    ? `<tr class="ans"><td></td><td>${S[0].trim()}</td><td>${S[1]}</td><td>${S[2]}</td></tr>`
+    : '<tr class="ans"><td></td><td></td><td>?</td><td>?</td></tr>';
+  return h + '</table>';
+}
+
+/* ───────── EXTRA VISUAL KINDS ───────── */
+const EXTRA_VIS = {
+  html(v, box) { box.innerHTML = v.html; },
+
+  pattern(v, box) {
+    const w = document.createElement('div');
+    w.className = 'pattern-row';
+    v.items.forEach((e, i) => {
+      const s = document.createElement('span');
+      s.textContent = e; s.style.animationDelay = (i * 0.07) + 's';
+      w.appendChild(s);
+    });
+    if (!v.noQ) { const q = document.createElement('span'); q.className = 'pat-q'; q.textContent = '?'; w.appendChild(q); }
+    box.appendChild(w);
+  },
+
+  tenframes(v, box) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;justify-content:center';
+    let left = v.count;
+    while (left > 0) {
+      const f = document.createElement('div');
+      f.className = 'tenframe';
+      for (let i = 0; i < 10; i++) {
+        const c = document.createElement('div');
+        c.className = 'tf-cell' + (i < left ? ' filled' : '');
+        f.appendChild(c);
+      }
+      wrap.appendChild(f);
+      left -= 10;
+    }
+    box.appendChild(wrap);
+  },
+
+  clock(v, box) { box.innerHTML = clockSVG(v.h, v.m, v.size || 170); },
+
+  coins(v, box) {
+    box.innerHTML = '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;max-width:320px">'
+      + v.coins.map(c => coinSVG(c, v.labels)).join('') + '</div>';
+  },
+
+  blocks(v, box) {
+    let h = '<div style="display:flex;gap:14px;align-items:flex-end;justify-content:center;flex-wrap:wrap">';
+    if (v.h) h += '<div style="display:flex;gap:4px">' + Array(v.h).fill(hundredSVG()).join('') + '</div>';
+    if (v.t) h += '<div style="display:flex;gap:3px">' + Array(v.t).fill(tenSVG()).join('') + '</div>';
+    if (v.o) h += '<div style="display:grid;grid-template-columns:repeat(3,8px);gap:3px">' + Array(v.o).fill(oneSVG()).join('') + '</div>';
+    box.innerHTML = h + '</div>';
+  },
+
+  digits(v, box) {
+    const ds = String(v.n).split(''), labels = ['hundreds','tens','ones'];
+    box.innerHTML = '<div class="pv-row">' + ds.map((d, i) =>
+      `<div class="pv-cell${i === v.pos ? ' hl' : ''}"><span class="pv-d">${d}</span><span class="pv-l">${labels[i]}</span></div>`
+    ).join('') + '</div>';
+  },
+
+  pairs(v, box) {
+    const cols = Math.ceil(v.n / 2), W = cols * 22 + 8;
+    let s = '';
+    for (let i = 0; i < v.n; i++) {
+      const c = Math.floor(i / 2), r = i % 2, lone = (v.n % 2 === 1 && i === v.n - 1);
+      s += `<circle cx="${14 + c * 22}" cy="${14 + r * 24}" r="8" fill="${lone ? '#FF6B4A' : '#FFD93D'}"/>`;
+    }
+    box.innerHTML = `<svg width="${W}" height="52" viewBox="0 0 ${W} 52">${s}</svg>`;
+  },
+
+  rect(v, box) {
+    const sc = Math.min(190 / v.w, 105 / v.h, 26), W = v.w * sc, H = v.h * sc;
+    const px = 46, py = 28, SW = W + px * 2, SH = H + py * 2;
+    const t = (x, y, a, txt) => `<text x="${x}" y="${y}" text-anchor="${a}" font-size="14" font-weight="800" fill="#F0F4FF" ${SVG_FONT}>${txt}</text>`;
+    box.innerHTML = `<svg width="${SW}" height="${SH}" viewBox="0 0 ${SW} ${SH}">
+      <rect x="${px}" y="${py}" width="${W}" height="${H}" fill="rgba(74,222,128,0.18)" stroke="#4ADE80" stroke-width="3"/>
+      ${t(px + W / 2, py - 9, 'middle', v.w + ' ft')}${t(px + W / 2, py + H + 20, 'middle', v.w + ' ft')}
+      ${t(px - 8, py + H / 2 + 5, 'end', v.h + ' ft')}${t(px + W + 8, py + H / 2 + 5, 'start', v.h + ' ft')}</svg>`;
+  },
+
+  colmath(v, box) { box.innerHTML = colMathHTML(v.a, v.b, v.op, false); }
+};
+
+/* ───────── LESSONS: Learn slides + Real World ─────────
+   Every skill teaches (slides), then practice, then shows where it's used. */
+const row = (items, size) => `<div style="display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:${size || 44}px;line-height:1">${items.join('')}</div>`;
+const lbl = (top, bottom) => `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">${top}<span class="pic-label">${bottom}</span></div>`;
+
+const LESSONS = {
+  /* ── K: Seaside Shores ── */
+  count: {
+    slides: [
+      { text: 'Counting means giving each critter one number. Touch each one as you say it!', visual:{ kind:'icons', count:4, icon:'🐞' } },
+      { text: 'The last number you say tells how many. 1, 2, 3, 4 — four ladybugs!', visual:{ kind:'icons', count:4, icon:'🐞' } }
+    ],
+    rw: { icon:'🍽️', title:'Setting the table', text:'Counting tells us how many plates, cups and forks everyone needs.', tryIt:'Count the forks when you help set the table tonight.' }
+  },
+  compare: {
+    slides: [
+      { text: 'MORE means a bigger number. Count both groups, then pick the bigger one.', visual:{ kind:'twogroups', a:3, b:5, icon:'🐠' } },
+      { text: '3 fish or 5 fish? 5 is more!', visual:{ kind:'twogroups', a:3, b:5, icon:'🐠' } }
+    ],
+    rw: { icon:'🍪', title:'Sharing snacks', text:'Counting helps us see who has more, so we can share fairly.', tryIt:'Make two piles of socks. Which pile has more?' }
+  },
+  add: {
+    slides: [
+      { text: 'Adding means putting groups together.', visual:{ kind:'twogroups', a:2, b:3, icon:'🍎', op:'+' } },
+      { text: '2 apples and 3 more apples. Count them all: 5 apples!', visual:{ kind:'twogroups', a:2, b:3, icon:'🍎', op:'+' } }
+    ],
+    rw: { icon:'🧺', title:'Picking apples', text:'2 apples in your basket, 3 more from the tree. Now you have 5!', tryIt:'Hold 2 toy cars in one hand and 1 in the other. How many all together?' }
+  },
+  sub: {
+    slides: [
+      { text: 'Taking away means some leave. The faded ones are gone.', visual:{ kind:'takeaway', total:5, gone:2, icon:'🎈' } },
+      { text: '5 balloons, 2 float away. Count the ones left: 3!', visual:{ kind:'takeaway', total:5, gone:2, icon:'🎈' } }
+    ],
+    rw: { icon:'🍇', title:'Snack time', text:'When you eat some grapes, fewer are left on your plate. That is taking away.', tryIt:'Put 6 grapes on a plate. Eat 2. How many are left?' }
+  },
+  doubles: {
+    slides: [
+      { text: 'A double is a number plus the SAME number.', visual:{ kind:'twogroups', a:3, b:3, icon:'🧦', op:'+' } },
+      { text: '3 plus 3 makes 6. Doubles are easy to remember!', visual:{ kind:'twogroups', a:3, b:3, icon:'🧦', op:'+' } }
+    ],
+    rw: { icon:'🖐️', title:'Doubles on your body', text:'2 hands with 5 fingers each. 5 plus 5 makes 10!', tryIt:'Count your fingers. Then count your toes. Doubles!' }
+  },
+  bonds: {
+    slides: [
+      { text: 'A ten frame has 10 spots. It helps us see how many make 10.', visual:{ kind:'tenframe', filled:6 } },
+      { text: '6 spots are full and 4 are empty. 6 plus 4 makes 10!', visual:{ kind:'tenframe', filled:6 } }
+    ],
+    rw: { icon:'🎳', title:'Bowling', text:'There are 10 pins. Knock down 7, and 3 are still standing.', tryIt:'Hold up 10 fingers. Put some down. How many are still up?' }
+  },
+  letterstart: {
+    slides: [
+      { text: 'Every word starts with a sound. Say ball slowly: buh… all. It starts with B!', say:'Every word starts with a sound. Say ball slowly. buh... all. It starts with buh. B!',
+        visual:{ kind:'html', html: row(['🏀', '<span style="font-weight:900;color:#FFD93D">B</span>'], 56) } }
+    ],
+    rw: { icon:'🪧', title:'Reading signs', text:'Letters help us read names, signs and labels. Your name starts with a letter too!', tryIt:'Find something at home that starts with the same sound as your name.' }
+  },
+  casematch: {
+    slides: [
+      { text: 'Every letter has a BIG one and a little one. They make the same sound.',
+        visual:{ kind:'html', html: row(['A a', 'B b', 'G g'].map(p => `<span style="font-weight:900">${p}</span>`), 38) } }
+    ],
+    rw: { icon:'📖', title:'Reading books', text:'Big letters start names and sentences. Little letters fill in the rest.', tryIt:'Find a big letter and its little partner in a book.' }
+  },
+  sightword: {
+    slides: [
+      { text: 'Some words show up everywhere, so we learn them by sight. No sounding out needed!',
+        visual:{ kind:'html', html: row(['the','and','I'].map(w => `<span style="font-weight:900;color:#C4B5FD">${w}</span>`), 36) } }
+    ],
+    rw: { icon:'📚', title:'Story time', text:'Words like "the" and "and" are in almost every book. Knowing them makes reading faster!', tryIt:'At story time, point to every "the" you can find.' }
+  },
+  rhyme: {
+    slides: [
+      { text: 'Rhyming words sound the same at the end. Cat, hat, bat!',
+        visual:{ kind:'html', html: row(['🐱','🎩','🦇'], 48) } }
+    ],
+    rw: { icon:'🎵', title:'Songs and poems', text:'Songs use rhymes to be catchy and easy to remember.', tryIt:'Make up a silly rhyme: I saw a cat wearing a ___!' }
+  },
+
+  /* ── K: Wonder Woods ── */
+  shapes: {
+    slides: [
+      { text: 'Shapes are everywhere! A triangle has 3 sides. A square has 4 equal sides.',
+        visual:{ kind:'html', html: row([lbl(shapeSVG('triangle', 76, '#4ADE80'), 'triangle'), lbl(shapeSVG('square', 76, '#4AA8FF'), 'square')]) } },
+      { text: 'A circle is round with no corners. A rectangle has 2 long sides and 2 short sides.',
+        visual:{ kind:'html', html: row([lbl(shapeSVG('circle', 76, '#FF6B4A'), 'circle'), lbl(shapeSVG('rectangle', 76, '#FFD93D'), 'rectangle')]) } }
+    ],
+    rw: { icon:'🏠', title:'Shape hunt', text:'Windows are rectangles, wheels are circles and pizza slices are triangles!', tryIt:'Find 3 circles in your kitchen.' }
+  },
+  patterns: {
+    slides: [
+      { text: 'A pattern repeats, over and over. Red, blue, red, blue…', visual:{ kind:'pattern', items:['🔴','🔵','🔴','🔵','🔴','🔵'], noQ:true } },
+      { text: 'So what comes after red? Blue!', visual:{ kind:'pattern', items:['🔴','🔵','🔴','🔵','🔴'] } }
+    ],
+    rw: { icon:'🥁', title:'Patterns in music', text:'Songs repeat beats. Stripes on shirts and beads on necklaces repeat too.', tryIt:'Clap a pattern: clap, clap, stomp. Can someone copy it?' }
+  },
+  blend: {
+    slides: [
+      { text: 'Letters make sounds. Say the sounds fast and they make a word!', say:'Letters make sounds. Say the sounds fast and they make a word! kuh... aah... tuh... cat!',
+        visual:{ kind:'html', html: `<div style="font-size:36px;font-weight:900;letter-spacing:4px;color:#FFD93D">c · a · t</div><div style="font-size:60px;margin-top:6px">🐱</div>` } }
+    ],
+    rw: { icon:'🔎', title:'Reading new words', text:'Readers figure out new words one sound at a time, then blend them together.', tryIt:'Say sounds slowly, like s… u… n, and let someone guess the word.' }
+  },
+  teens: {
+    slides: [
+      { text: 'Teen numbers are 10 and some more. A full ten frame is 10.', visual:{ kind:'tenframes', count:13 } },
+      { text: '10 and 3 more makes 13!', visual:{ kind:'tenframes', count:13 } }
+    ],
+    rw: { icon:'🎂', title:'Big birthdays', text:'A 13th birthday cake could have 10 candles in one row and 3 more.', tryIt:'Count 10 fingers, then keep going on your toes: 11, 12, 13!' }
+  },
+  skip10: {
+    slides: [
+      { text: 'Counting by tens is super fast: 10, 20, 30, 40, 50!',
+        visual:{ kind:'tenframes', count:30 } }
+    ],
+    rw: { icon:'🖐️', title:'Fingers in tens', text:'Each person has 10 fingers. Two people? 20 fingers! Three people? 30!', tryIt:'Count your family\'s fingers by tens.' }
+  },
+  size: {
+    slides: [
+      { text: 'TALLER means it reaches up higher. SHORTER means it stays lower.',
+        visual:{ kind:'html', html: row([lbl(towerSVG(7, '#4AA8FF'), 'taller'), lbl(towerSVG(3, '#FF6B4A'), 'shorter')]) } }
+    ],
+    rw: { icon:'📏', title:'Growing up', text:'Doctors measure how tall you are to see how much you have grown!', tryIt:'Line up 3 stuffed animals from shortest to tallest.' }
+  },
+  habitats: {
+    slides: [
+      { text: 'A habitat is where an animal lives. It has the food, water and shelter the animal needs.', say:'A habitat is where an animal lives. Fish live in the ocean. Camels live in the desert.',
+        visual:{ kind:'html', html: row([lbl('🐟', 'fish'), '<span style="font-size:26px">→</span>', lbl('🌊', 'ocean')], 46) } },
+      { text: 'Camels live in the hot, dry desert. They can go days without water!',
+        visual:{ kind:'html', html: row([lbl('🐪', 'camel'), '<span style="font-size:26px">→</span>', lbl('🏜️', 'desert')], 46) } }
+    ],
+    rw: { icon:'🦆', title:'Nature walks', text:'Birds in trees, ducks on ponds, worms in the dirt. Every animal has a home.', tryIt:'Next time you are outside, find an animal and name its home.' }
+  },
+  living: {
+    slides: [
+      { text: 'Living things grow, need food and water, and make more of themselves.',
+        visual:{ kind:'html', html: row(['🌻','🐶','🌳'], 46) } },
+      { text: 'A robot can move, but it does not grow or eat. So it is NOT alive!',
+        visual:{ kind:'html', html: row(['🤖','🪨','🚗'], 46) } }
+    ],
+    rw: { icon:'🪴', title:'Caring for living things', text:'Plants and pets need water and food to stay healthy.', tryIt:'Water a plant today and watch it for a week.' }
+  },
+
+  /* ── Grades 2–3: Storm Peaks ── */
+  mult: {
+    slides: [
+      { text: 'Multiplying is adding equal groups. 3 × 4 means 3 groups of 4.', say:'Multiplying is adding equal groups. 3 times 4 means 3 groups of 4.', visual:{ kind:'array', rows:3, cols:4 } },
+      { text: 'Count by 4s three times: 4, 8, 12. So 3 × 4 = 12.', say:'Count by fours three times. 4, 8, 12. So 3 times 4 is 12.', visual:{ kind:'array', rows:3, cols:4 } }
+    ],
+    rw: { icon:'🥚', title:'Egg cartons', text:'A carton holds 2 rows of 6. That\'s 2 × 6 = 12 eggs, no counting one by one.', tryIt:'Find something in rows at home (a muffin tin, window panes) and multiply.' }
+  },
+  area: {
+    slides: [
+      { text: 'AREA is how many squares cover a shape.', visual:{ kind:'grid', rows:3, cols:4 } },
+      { text: 'Rows times columns: 3 rows × 4 columns = 12 squares.', say:'Rows times columns. 3 rows times 4 columns is 12 squares.', visual:{ kind:'grid', rows:3, cols:4 } }
+    ],
+    rw: { icon:'🧱', title:'Tiling a floor', text:'Builders use area to know how many tiles to buy for a room.', tryIt:'Count floor tiles in one row, count the rows, and multiply.' }
+  },
+  missing: {
+    slides: [
+      { text: 'A missing factor is a mystery number. ? × 4 = 20 asks: how many 4s make 20?', say:'A missing factor is a mystery number. Something times 4 equals 20 asks: how many fours make 20?', visual:{ kind:'array', rows:5, cols:4 } },
+      { text: 'Count by 4s until you reach 20: 4, 8, 12, 16, 20. That\'s 5 fours!', visual:{ kind:'array', rows:5, cols:4 } }
+    ],
+    rw: { icon:'🍪', title:'Baking', text:'Need 24 cookies and each tray holds 6? ? × 6 = 24, so you need 4 trays.', tryIt:'Ask a grown-up a missing-number riddle, then solve theirs.' }
+  },
+  div: {
+    slides: [
+      { text: 'Dividing means sharing equally. 12 ÷ 3 means share 12 into 3 equal groups.', say:'Dividing means sharing equally. 12 divided by 3 means share 12 into 3 equal groups.', visual:{ kind:'array', rows:3, cols:4 } },
+      { text: 'Each group gets 4. Division undoes multiplication: 3 × 4 = 12, so 12 ÷ 3 = 4.', say:'Each group gets 4. Division undoes multiplication. 3 times 4 is 12, so 12 divided by 3 is 4.', visual:{ kind:'array', rows:3, cols:4 } }
+    ],
+    rw: { icon:'🍕', title:'Sharing pizza', text:'8 slices for 4 people? 8 ÷ 4 = 2 slices each. Fair and square.', tryIt:'Split a snack evenly among your family.' }
+  },
+  fracname: {
+    slides: [
+      { text: 'A fraction is part of a whole. The BOTTOM number says how many equal parts.', visual:{ kind:'fraction', num:1, den:4 } },
+      { text: 'The TOP number says how many parts we have. 3 of 4 parts shaded is 3/4.', say:'The top number says how many parts we have. 3 of 4 parts shaded is three fourths.', visual:{ kind:'fraction', num:3, den:4 } }
+    ],
+    rw: { icon:'🍫', title:'Chocolate bar', text:'Break a bar into 4 equal pieces and eat 1. You ate 1/4 of it!', tryIt:'Cut a sandwich into equal parts. Name the fraction you eat.' }
+  },
+  fraccomp: {
+    slides: [
+      { text: 'When the pieces are the same size, MORE pieces means a bigger fraction.', visual:{ kind:'fraccompare', n1:2, n2:3, den:5 } }
+    ],
+    rw: { icon:'🥧', title:'Pie slices', text:'3/8 of a pie is more than 2/8. Same slice size, more slices.', tryIt:'Fold two papers into 4 parts. Shade different amounts and compare.' }
+  },
+  rounding: {
+    slides: [
+      { text: 'Rounding finds the closest ten. 47 is closer to 50 than to 40.', visual:{ kind:'html', html: numberLineSVG(40, 50, 47, 1) } },
+      { text: 'Look at the ones digit: 5 or more rounds UP, 4 or less rounds DOWN.', visual:{ kind:'html', html: numberLineSVG(40, 50, 43, 1) } }
+    ],
+    rw: { icon:'🛒', title:'Shopping', text:'A $38 toy is about $40. Rounding helps you guess totals fast.', tryIt:'At the store, round prices to the nearest ten.' }
+  },
+  word1: {
+    slides: [
+      { text: 'Word problems are stories with math inside. First, find the numbers and what is being asked.', visual:{ kind:'html', html: row(['📜','🔍'], 52) } },
+      { text: 'Equal groups → multiply. Sharing equally → divide. Getting more or losing some → add or subtract.', say:'Equal groups? Multiply. Sharing equally? Divide. Getting more or losing some? Add or subtract.' }
+    ],
+    rw: { icon:'🎉', title:'Planning a party', text:'6 friends, 3 cupcakes each? That\'s a word problem: 6 × 3 = 18 cupcakes to bake.', tryIt:'Make up a word problem about your day and ask a grown-up to solve it.' }
+  },
+  word2: {
+    slides: [
+      { text: 'Two-step problems need two moves. Solve the first part, then use that answer for the second.', visual:{ kind:'html', html: row(['1️⃣','➡️','2️⃣'], 46) } }
+    ],
+    rw: { icon:'💰', title:'Saving up', text:'Save $5 a week for 4 weeks, then spend $6. How much is left? Step 1: 4 × 5. Step 2: subtract 6.', tryIt:'Figure out how many weeks of saving it would take to buy something you want.' }
+  },
+
+  /* ── Grades 2–3: Clockwork City ── */
+  placevalue: {
+    slides: [
+      { text: 'Where a digit sits tells its value. 347 is 3 hundreds, 4 tens and 7 ones.', visual:{ kind:'blocks', h:3, t:4, o:7 } },
+      { text: 'So 347 = 300 + 40 + 7.', say:'So 347 is 300 plus 40 plus 7.', visual:{ kind:'digits', n:347, pos:-1 } }
+    ],
+    rw: { icon:'💵', title:'Money', text:'$347 could be 3 hundred-dollar bills, 4 tens and 7 ones.', tryIt:'Write your house number. Break it into hundreds, tens and ones.' }
+  },
+  evenodd: {
+    slides: [
+      { text: 'EVEN numbers split into pairs with none left over.', visual:{ kind:'pairs', n:8 } },
+      { text: 'ODD numbers always have one left out. Even numbers end in 0, 2, 4, 6 or 8.', visual:{ kind:'pairs', n:7 } }
+    ],
+    rw: { icon:'⚽', title:'Picking teams', text:'With an even number of kids, two teams come out equal!', tryIt:'Count the people at dinner. Even or odd?' }
+  },
+  money: {
+    slides: [
+      { text: 'Quarter 25¢, dime 10¢, nickel 5¢, penny 1¢. The dime is smallest but worth more than a nickel!', say:'A quarter is 25 cents. A dime is 10 cents. A nickel is 5 cents. A penny is 1 cent. The dime is the smallest, but it is worth more than a nickel!',
+        visual:{ kind:'coins', coins:[25, 10, 5, 1], labels:true } },
+      { text: 'Start with the biggest coins, then count on: 25, 35, 40, 41.', say:'Start with the biggest coins, then count on. 25, 35, 40, 41 cents.',
+        visual:{ kind:'coins', coins:[25, 10, 5, 1] } }
+    ],
+    rw: { icon:'🍋', title:'Lemonade stand', text:'Selling lemonade means counting coins and making change fast.', tryIt:'Empty a coin jar and count the coins by value.' }
+  },
+  time: {
+    slides: [
+      { text: 'The SHORT hand points to the hour. The LONG hand points to the minutes.', visual:{ kind:'clock', h:3, m:0 } },
+      { text: 'Count by 5s for each number the long hand passes. At the 4, it\'s 20 minutes: 3:20.', say:'Count by fives for each number the long hand passes. At the 4, it is 20 minutes. 3 20.', visual:{ kind:'clock', h:3, m:20 } }
+    ],
+    rw: { icon:'🚌', title:'Catching the bus', text:'Reading a clock tells you when to leave so you\'re never late.', tryIt:'Tell a grown-up the time on a real clock three times today.' }
+  },
+  addsub2: {
+    slides: [
+      { text: 'Add the ONES first. 47 + 38: 7 + 8 = 15. Write the 5 and carry 1 ten.', say:'Add the ones first. 47 plus 38. 7 plus 8 is 15. Write the 5 and carry 1 ten.', visual:{ kind:'html', html: colMathHTML(47, 38, '+', false, '1') } },
+      { text: 'Then the TENS: 4 + 3 + the 1 you carried = 8. Answer: 85!', say:'Then the tens. 4 plus 3 plus the 1 you carried is 8. The answer is 85!', visual:{ kind:'html', html: colMathHTML(47, 38, '+', true, '1') } }
+    ],
+    rw: { icon:'🎮', title:'Game scores', text:'Adding up points from two rounds is two-digit addition.', tryIt:'Add your age to a grown-up\'s age.' }
+  },
+  perimeter: {
+    slides: [
+      { text: 'PERIMETER is the distance all the way around a shape.', visual:{ kind:'rect', w:5, h:3 } },
+      { text: 'Add all four sides: 5 + 3 + 5 + 3 = 16 feet.', say:'Add all four sides. 5 plus 3 plus 5 plus 3 is 16 feet.', visual:{ kind:'rect', w:5, h:3 } }
+    ],
+    rw: { icon:'🏡', title:'Building a fence', text:'To fence a garden, you need its perimeter to know how much fence to buy.', tryIt:'Measure around a table using hand spans.' }
+  },
+  matter: {
+    slides: [
+      { text: 'Everything is made of matter. It comes in 3 states: solid, liquid and gas.',
+        visual:{ kind:'html', html: row([lbl('🧊', 'solid'), lbl('💧', 'liquid'), lbl('♨️', 'gas')], 46) } },
+      { text: 'Solids keep their shape. Liquids flow into their container\'s shape. Gases spread out to fill space.' }
+    ],
+    rw: { icon:'🍳', title:'In the kitchen', text:'Ice melts into water (solid to liquid). Boiling water turns into steam (liquid to gas).', tryIt:'Put an ice cube on a plate. Time how long it takes to melt.' }
+  },
+  machines: {
+    slides: [
+      { text: 'Simple machines make work easier. There are six of them.',
+        visual:{ kind:'html', html: `<div class="mach-grid">${[['🔨','Lever'],['🚲','Wheel & axle'],['🚩','Pulley'],['🛝','Inclined plane'],['🪓','Wedge'],['🔩','Screw']].map(p => `<div><span>${p[0]}</span>${p[1]}</div>`).join('')}</div>` } },
+      { text: 'A seesaw is a lever. A slide is an inclined plane. A flagpole rope uses a pulley.' }
+    ],
+    rw: { icon:'🏗️', title:'Engineering', text:'Cranes, bikes and even zippers are built from simple machines working together.', tryIt:'Find 3 simple machines in your house.' }
+  }
+};
+LESSONS.sightword2 = LESSONS.sightword;
+
+/* ───────── LABELS (for the grown-ups report) ───────── */
+const SKILL_LABEL = {
+  count:'Counting', compare:'Comparing numbers', add:'Adding', sub:'Subtracting', doubles:'Doubles',
+  bonds:'Make 10', letterstart:'Beginning sounds', casematch:'Big & little letters',
+  sightword:'Sight words (set 1)', sightword2:'Sight words (set 2)', rhyme:'Rhyming',
+  shapes:'Shapes', patterns:'Patterns', teens:'Teen numbers', blend:'Blending sounds',
+  skip10:'Counting by 10s', size:'Taller / shorter', habitats:'Animal habitats', living:'Living vs. not living',
+  mult:'Multiplication', area:'Area', missing:'Missing factor', div:'Division', fracname:'Naming fractions',
+  fraccomp:'Comparing fractions', rounding:'Rounding', word1:'Word problems', word2:'Two-step word problems',
+  placevalue:'Place value', evenodd:'Even & odd', money:'Counting money', time:'Telling time',
+  addsub2:'2-digit add & subtract', perimeter:'Perimeter', matter:'States of matter', machines:'Simple machines'
+};
+const MISCON_LABEL = {
+  count_extra:'Counted one too many', count_miss:'Skipped one while counting',
+  subtracted:'Subtracted instead', one_group:'Counted only one group',
+  added_not_sub:'Added instead of subtracting', added_not_mult:'Added instead of multiplying',
+  took_away_amount:'Gave the amount taken away, not what was left', nothing_removed:'Forgot to take any away',
+  not_doubled:'Forgot to double', added_one:'Added 1 instead of doubling',
+  repeated_number:'Repeated a number from the problem', off_by_one:'Off by one', wrote_ten:'Answered 10 instead of the missing part',
+  extra_group:'Counted an extra group', missing_group:'Left out a group', neighbor_fact:'Mixed up with a neighboring fact',
+  swapped_digits:'Swapped the digits', divisor:'Answered with the number it was divided by',
+  perimeter_not_area:'Found perimeter instead of area', added_sides:'Added the sides instead of multiplying',
+  row_miscount:'Miscounted a row', ones_only:'Counted only the extra ones', teen_reversal:'Reversed the teen number (14 → 41)',
+  counted_by_ones:'Counted by ones instead of tens or fives', skipped_a_ten:'Skipped a ten',
+  digit_not_value:'Gave the digit, not its value', wrong_place:'Mixed up hundreds, tens and ones',
+  added_digits:'Added the digits together', swapped_places:'Swapped the hundreds and ones',
+  miscounted_tens:'Miscounted the tens', miscounted_hundreds:'Miscounted the hundreds',
+  swapped_hands:'Mixed up the hour and minute hands', read_next_hour:'Read the next hour too early',
+  off_by_five:'Off by 5 minutes', counted_coins:'Counted coins instead of their value',
+  dime_nickel_mixup:'Mixed up dimes and nickels (thinks bigger coin = more)', miscounted:'Miscounted',
+  forgot_to_carry:'Forgot to carry the ten', wrote_both_sums:'Wrote tens and ones sums side by side',
+  extra_ten:'Added an extra ten', smaller_from_bigger:'Subtracted the smaller digit from the bigger one (skipped borrowing)',
+  forgot_to_reduce_ten:'Borrowed but forgot to take the ten away', area_not_perimeter:'Found area instead of perimeter',
+  added_two_sides:'Added only two sides', missed_a_side:'Missed a side'
+};
+const FEEDBACK = { love:['😍','Loved it'], easy:['😎','Too easy'], hard:['😣','Too hard'], boring:['😴','Boring'] };
+
+function skillLabel(key) {
+  const [sk, t] = key.split(':');
+  const base = SKILL_LABEL[sk] || sk;
+  if (!t) return base;
+  if (sk === 'div') return `${base} ÷${t}`;
+  if (sk === 'area') return `${base} (${t} rows)`;
+  return `${base} ×${t}`;
+}
+
+/* ───────── VISUAL ROUTER ───────── */
+function renderVisual(v, boxEl) {
+  const box = boxEl || document.getElementById('q-visual');
+  if (v && EXTRA_VIS[v.kind]) { box.innerHTML = ''; EXTRA_VIS[v.kind](v, box); return; }
+  renderVisualBase(v, box);
+}
+
+/* ───────── QUEST LOOP: Learn → Apply → Real World → Reward ───────── */
+function startLevel(lv) {
+  run = { level: lv, got: 0, asked: 0, firstTry: 0, coins: 0, q: null,
+          locked: false, clean: true, sinceSport: 0, misses: 0, fbIndex: -1 };
+  P.last = lv.n; persist();
+  paintCritter(document.getElementById('buddy'), buddyFor());
+  document.getElementById('run-coins').textContent = '0';
+  updateGoal();
+  const L = LESSONS[lv.skill];
+  if (L && !lv.boss) showLearn(lv, L);
+  else beginPractice();
+}
+
+function beginPractice() {
+  show('game-screen');
+  nextQuestion();
+}
+
+function levelGoalReached() {
+  const L = LESSONS[run.level.skill];
+  if (L && L.rw && !run.level.boss) showRealWorld(L.rw);
+  else finishLevel();
+}
+
+let learnState = { slides: [], i: 0 };
+
+function showLearn(lv, L) {
+  learnState = { slides: L.slides, i: 0 };
+  document.getElementById('learn-title').textContent = lv.title;
+  paintCritter(document.getElementById('learn-buddy'), buddyFor());
+  document.getElementById('learn-skip').style.display = P.stars[lv.n] ? '' : 'none';
+  show('learn-screen');
+  renderSlide();
+}
+
+function renderSlide() {
+  const s = learnState.slides[learnState.i];
+  document.getElementById('learn-text').textContent = s.text;
+  renderVisual(s.visual || null, document.getElementById('learn-visual'));
+  const dots = document.getElementById('learn-dots');
+  dots.innerHTML = learnState.slides.length > 1
+    ? learnState.slides.map((_, i) => `<i class="${i === learnState.i ? 'on' : ''}"></i>`).join('') : '';
+  const last = learnState.i === learnState.slides.length - 1;
+  document.getElementById('learn-next').textContent = last ? "Let's practice! →" : 'Next →';
+  speakAuto(s.say || s.text, { rate: pathId === 'k' ? 0.85 : 0.95 });
+}
+function nextSlide() {
+  if (learnState.i < learnState.slides.length - 1) { learnState.i++; renderSlide(); }
+  else beginPractice();
+}
+function replaySlide() {
+  const s = learnState.slides[learnState.i];
+  say(s.say || s.text);
+}
+
+function showRealWorld(rw) {
+  document.getElementById('rw-icon').textContent = rw.icon;
+  document.getElementById('rw-title').textContent = rw.title;
+  document.getElementById('rw-text').textContent = rw.text;
+  document.getElementById('rw-try').innerHTML = '<b>Try it:</b> ' + rw.tryIt;
+  show('world-screen');
+  speakAuto(`${rw.title}. ${rw.text} Try it: ${rw.tryIt}`);
+}
+function replayWorld() {
+  const t = document.getElementById('rw-title').textContent + '. ' +
+            document.getElementById('rw-text').textContent + ' ' +
+            document.getElementById('rw-try').textContent;
+  say(t);
+}
+
+/* ───────── PRACTICE ───────── */
+function nextQuestion() {
+  if (run.got >= run.level.goal) { levelGoalReached(); return; }
+  run.q = buildQuestion(run.level);
+  run.locked = false;
+  run.thisOneClean = true;
+  run.misses = 0;
+  renderQuestion(run.q);
+}
+
+function answer(btn, choice) {
+  if (run.mode === 'place') { placeAnswer(btn, choice); return; }
+  if (run.locked || btn.disabled) return;
+  const q = run.q;
+  const sk = q.skill || run.level.skill;
+  const correct = String(choice) === String(q.answer);
+  const bs = document.getElementById('buddy-say');
+
+  if (!correct) {
+    run.thisOneClean = false;
+    run.clean = false;
+    run.misses++;
+
+    // Diagnose: which misconception did this wrong answer reveal?
+    const tag = q.tags && q.tags[String(choice)];
+    if (tag && tag !== 'guess') {
+      if (!P.miscon[sk]) P.miscon[sk] = {};
+      P.miscon[sk][tag] = (P.miscon[sk][tag] || 0) + 1;
+      persist();
+    }
+
+    btn.classList.add('wrong');
+    bs.classList.add('hint');
+    if (run.misses === 1 && q.hint) {
+      bs.textContent = '💡 ' + q.hint;
+      if (q.hintSpeak) say(q.hintSpeak, { rate: 0.7 }); else speakAuto(q.hint);
+    } else {
+      // Second miss: show how, and light up the right answer
+      bs.textContent = '👀 ' + q.say;
+      speakAuto(q.say);
+      const right = Array.from(document.querySelectorAll('#choices .choice'))
+        .find(b => b.dataset.v === String(q.answer));
+      if (right) right.classList.add('glow');
+    }
+    setTimeout(() => {
+      btn.classList.remove('wrong');
+      btn.disabled = true;
+      btn.style.opacity = '0.35';
+    }, 420);
+    return;
+  }
+
+  // ── correct
+  run.locked = true;
+  btn.classList.remove('glow');
+  btn.classList.add('right');
+  run.got++;
+  run.asked++;
+  if (run.thisOneClean) run.firstTry++;
+
+  const gain = run.thisOneClean ? 10 : 5;
+  run.coins += gain;
+  document.getElementById('run-coins').textContent = run.coins;
+
+  const key = q.table ? `${sk}:${q.table}` : sk;
+  if (!P.skills[key]) P.skills[key] = { att: 0, cor: 0 };
+  P.skills[key].att++;
+  if (run.thisOneClean) P.skills[key].cor++;
+
+  bs.classList.remove('hint');
+  bs.textContent = pick(pathId === 'k' ? CHEERS_K : CHEERS_G);
+  const bud = document.getElementById('buddy');
+  bud.classList.remove('cheer'); void bud.offsetWidth; bud.classList.add('cheer');
+
+  speakAuto(q.say);
+  updateGoal();
+  run.sinceSport++;
+
+  setTimeout(() => {
+    if (run.got >= run.level.goal) { levelGoalReached(); return; }
+    if (run.sinceSport >= 4) { run.sinceSport = 0; startSport(); return; }
+    nextQuestion();
+  }, q.say && q.say.length > 40 ? 1700 : 950);
+}
+
+/* ───────── LEVEL COMPLETE ───────── */
+function finishLevel() {
+  const lv = run.level;
+  const acc = run.asked ? run.firstTry / run.asked : 0;
+  const stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : 1;
+  run.acc = acc;
+  run.fbIndex = -1;
+
+  P.stars[lv.n] = Math.max(P.stars[lv.n] || 0, stars);
+  P.coins += run.coins;
+  let newCritter = null;
+  if (lv.reward && !P.critters.includes(lv.reward)) {
+    P.critters.push(lv.reward);
+    newCritter = lv.reward;
+  }
+  persist();
+
+  document.getElementById('done-title').textContent = lv.boss ? 'World Complete!' : 'Level Clear!';
+  const sr = document.getElementById('star-row');
+  sr.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement('span');
+    s.textContent = i < stars ? '⭐' : '☆';
+    s.style.animationDelay = (i * 0.16) + 's';
+    s.style.opacity = i < stars ? '1' : '0.25';
+    sr.appendChild(s);
+  }
+
+  const box = document.getElementById('reward-box');
+  if (newCritter) {
+    const c = CRITTERS[newCritter];
+    box.style.display = '';
+    document.getElementById('rb-label').textContent =
+      c.stage >= 3 ? '✨ Legendary Critter!' : c.stage === 2 ? '✨ Evolved Critter!' : 'New Critter!';
+    const svg = document.getElementById('hatch-svg');
+    svg.innerHTML = critterSVG(c);
+    svg.classList.remove('pop'); void svg.offsetWidth; svg.classList.add('pop');
+    document.getElementById('hatch-name').textContent = c.name;
+    const chip = document.getElementById('hatch-type');
+    chip.textContent = TYPES[c.type].name;
+    chip.style.background = TYPES[c.type].c1;
+  } else {
+    box.style.display = 'none';
+  }
+
+  document.getElementById('done-correct').textContent = `${run.firstTry} / ${run.asked} first try`;
+  document.getElementById('done-coins').textContent = `🪙 ${run.coins}`;
+  document.querySelectorAll('.fb-btn').forEach(b => b.classList.remove('on'));
+
+  show('done-screen');
+  document.getElementById('done-screen').scrollTop = 0;
+  confetti(stars >= 3 ? 40 : 24);
+  setTimeout(() => confetti(16), 380);
+
+  speakAuto(newCritter
+    ? `Level complete! You found ${CRITTERS[newCritter].name}! How was that level?`
+    : 'Level complete! Nice work! How was that level?');
+}
+
+function giveFeedback(btn) {
+  const r = btn.dataset.r;
+  if (!P.feedback) P.feedback = [];
+  const entry = { n: run.level.n, title: run.level.title, r: r,
+                  acc: Math.round((run.acc || 0) * 100), t: Date.now() };
+  if (run.fbIndex >= 0) P.feedback[run.fbIndex] = entry;
+  else { P.feedback.push(entry); run.fbIndex = P.feedback.length - 1; }
+  if (P.feedback.length > 200) { P.feedback = P.feedback.slice(-200); run.fbIndex = P.feedback.length - 1; }
+  persist();
+  document.querySelectorAll('.fb-btn').forEach(b => b.classList.toggle('on', b === btn));
+  speakAuto('Thanks for telling me!');
+}
+
+/* ───────── MAP (worlds, each unlocks on its own) ───────── */
+function isLevelOpen(lv) {
+  const same = PATHS[pathId].levels.filter(l => l.w === lv.w);
+  const idx = same.indexOf(lv);
+  return idx <= 0 || isCleared(same[idx - 1].n);
+}
+
+function buildMap() {
+  const path = PATHS[pathId];
+  const inner = document.getElementById('map-inner');
+  document.getElementById('map-coins').textContent = P.coins;
+  inner.innerHTML = '<div class="map-line"></div>';
+  renderMapCards(inner);
+  updateVoiceBtn();
+
+  path.worlds.forEach(W => {
+    const lvls = path.levels.filter(l => l.w === W.id);
+    const cleared = lvls.filter(l => isCleared(l.n)).length;
+    const head = document.createElement('div');
+    head.className = 'world-head';
+    head.innerHTML = `<div class="wh-icon">${W.icon}</div>
+      <div class="wh-body"><div class="wh-name">World ${W.id}: ${W.name}</div>
+      <div class="wh-sub">${W.sub} · ${cleared}/${lvls.length} cleared</div></div>`;
+    inner.appendChild(head);
+
+    let marked = false;
+    lvls.forEach((lv, i) => {
+      const row = document.createElement('div');
+      row.className = 'node-row ' + (i % 2 === 0 ? 'left' : 'right') + (lv.boss ? ' boss-row' : '');
+      const stars = P.stars[lv.n] || 0;
+      const isDone = isCleared(lv.n);
+      const isOpen = isLevelOpen(lv);
+      const isCurrent = isOpen && !isDone && !marked;
+      if (isCurrent) marked = true;
+
+      const node = document.createElement('button');
+      node.className = 'node' + (!isOpen ? ' locked' : '') + (isDone ? ' done' : '') + (isCurrent ? ' current' : '');
+      node.dataset.n = lv.n;
+      node.innerHTML = `
+        <div class="node-badge">${isOpen ? lv.icon : '🔒'}</div>
+        <div class="node-body">
+          <div class="node-title">${i + 1}. ${lv.title}</div>
+          <div class="node-goal">${isOpen ? 'Goal: ' + lv.goal + ' correct' : 'Locked'}</div>
+          ${stars ? `<div class="node-stars">${'⭐'.repeat(stars)}${'·'.repeat(3 - stars)}</div>` : isDone ? '<div class="node-stars tested">✓ Tested out</div>' : ''}
+        </div>`;
+      if (isOpen) node.onclick = () => startLevel(lv);
+      row.appendChild(node);
+      inner.appendChild(row);
+    });
+  });
+
+  setTimeout(() => {
+    const target = (P.last && inner.querySelector(`.node[data-n="${P.last}"]`)) || inner.querySelector('.node.current');
+    if (target) target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, 60);
+}
+
+/* ───────── GROWN-UPS: progress, struggles, feedback ───────── */
+function skillRows() {
+  return Object.keys(P.skills).map(k => {
+    const s = P.skills[k];
+    return { k: k, label: skillLabel(k), att: s.att, pct: Math.round(100 * s.cor / Math.max(1, s.att)) };
+  });
+}
+function misconRows() {
+  const rows = [];
+  Object.keys(P.miscon || {}).forEach(sk => Object.keys(P.miscon[sk]).forEach(t =>
+    rows.push({ sk: sk, t: t, n: P.miscon[sk][t] })));
+  return rows.sort((a, b) => b.n - a.n);
+}
+
+function openGrownups() {
+  const path = PATHS[pathId];
+  const cleared = path.levels.filter(l => isCleared(l.n)).length;
+  const stars = path.levels.reduce((s, l) => s + (P.stars[l.n] || 0), 0);
+  const roster = new Set(path.levels.filter(l => l.reward).map(l => l.reward)).size;
+  const rows = skillRows();
+  const weak = rows.filter(r => r.att >= 4 && r.pct < 75).sort((a, b) => a.pct - b.pct).slice(0, 8);
+  const strong = rows.filter(r => r.att >= 6 && r.pct >= 90).sort((a, b) => b.att - a.att).slice(0, 6);
+  const mis = misconRows().slice(0, 8);
+  const fb = (P.feedback || []).slice(-12).reverse();
+  const line = (l, r) => `<div class="gp-line"><span>${l}</span><b>${r}</b></div>`;
+  const empty = t => `<div class="gp-empty">${t}</div>`;
+
+  document.getElementById('gp-title').textContent = `Grown-ups · ${path.name}`;
+  document.getElementById('gp-body').innerHTML = `
+    <div class="gp-card"><h3>Overview</h3>
+      ${line('Levels cleared', `${cleared} / ${path.levels.length}`)}
+      ${line('Stars earned', `${stars} / ${path.levels.length * 3}`)}
+      ${line('Critters found', `${P.critters.length} / ${roster}`)}
+      ${line('Coins', P.coins)}
+    </div>
+    ${gradeCard()}${speedCard()}
+    <div class="gp-card"><h3>Needs practice</h3>
+      ${weak.length ? weak.map(r => line(r.label, `${r.pct}% · ${r.att} tries`)).join('')
+                    : empty('Nothing stands out yet. Skills show here after a few tries under 75% first-try accuracy.')}
+    </div>
+    <div class="gp-card"><h3>Common mistakes</h3>
+      ${mis.length ? mis.map(m => line(`${SKILL_LABEL[m.sk] || m.sk}: ${MISCON_LABEL[m.t] || m.t}`, `${m.n}×`)).join('')
+                   : empty('No patterns yet. Wrong answers are matched to likely mistakes and show up here.')}
+    </div>
+    <div class="gp-card"><h3>Going strong</h3>
+      ${strong.length ? strong.map(r => line(r.label, `${r.pct}%`)).join('') : empty('Keep playing!')}
+    </div>
+    <div class="gp-card"><h3>What they said</h3>
+      ${fb.length ? fb.map(f => line(`${FEEDBACK[f.r][0]} ${f.title}`, `${FEEDBACK[f.r][1]} · ${f.acc}%`)).join('')
+                  : empty('Reactions from the end of each level show up here.')}
+    </div>
+    <div class="gp-card"><h3>Send feedback to the builder</h3>
+      <div class="gp-empty" style="margin-bottom:10px">Copies a plain-text report you can paste into a message.</div>
+      <div class="gp-actions">
+        <button class="btn btn-primary" id="copy-btn" onclick="copyReport()">Copy report</button>
+        <button class="btn btn-danger" onclick="askReset()">Reset path</button>
+      </div>
+      <textarea class="report" id="report-box" style="display:none" readonly></textarea>
+    </div>`;
+  show('grown-screen');
+}
+
+function buildReport() {
+  const path = PATHS[pathId];
+  const d = new Date().toISOString().slice(0, 10);
+  const lines = [`Critter Quest report — ${path.name} (${path.grade}) — ${d}`];
+  const cleared = path.levels.filter(l => isCleared(l.n));
+  lines.push(`Levels cleared: ${cleared.length}/${path.levels.length}. Critters: ${P.critters.length}. Coins: ${P.coins}.`);
+  lines.push('', 'Levels:');
+  path.levels.forEach(l => {
+    const s = P.stars[l.n] || 0;
+    if (s) lines.push(`- W${l.w} ${l.title}: ${'★'.repeat(s)}${'☆'.repeat(3 - s)}`);
+    else if (isCleared(l.n)) lines.push(`- W${l.w} ${l.title}: tested out`);
+  });
+  gradeReportLines().forEach(x => lines.push(x));
+  lines.push('', 'Skill accuracy (first try):');
+  skillRows().sort((a, b) => a.pct - b.pct).forEach(r => lines.push(`- ${r.label}: ${r.pct}% (${r.att} tries)`));
+  lines.push('', 'Mistake patterns:');
+  const mis = misconRows();
+  if (!mis.length) lines.push('- none yet');
+  mis.forEach(m => lines.push(`- ${SKILL_LABEL[m.sk] || m.sk}: ${MISCON_LABEL[m.t] || m.t} (${m.n}x)`));
+  lines.push('', 'Level reactions:');
+  const fb = P.feedback || [];
+  if (!fb.length) lines.push('- none yet');
+  fb.slice(-40).forEach(f => lines.push(`- ${new Date(f.t).toISOString().slice(0, 10)} ${f.title}: ${FEEDBACK[f.r][1]} (${f.acc}% first try)`));
+  return lines.join('\n');
+}
+
+function copyReport() {
+  const text = buildReport();
+  const btn = document.getElementById('copy-btn');
+  const box = document.getElementById('report-box');
+  const fallback = () => {
+    box.style.display = 'block'; box.value = text;
+    box.focus(); box.select();
+    btn.textContent = 'Select & copy below';
+  };
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => { btn.textContent = 'Copied ✓'; }, fallback);
+    } else fallback();
+  } catch (e) { fallback(); }
+}
+
+/* Grown-ups button needs a long press so little hands don't wander in */
+function setupHold() {
+  const b = document.getElementById('grown-btn');
+  if (!b) return;
+  const fill = b.querySelector('.hold-fill');
+  let t0 = 0, raf = 0, active = false;
+  const stop = () => { active = false; cancelAnimationFrame(raf); fill.style.width = '0%'; };
+  const tick = () => {
+    if (!active) return;
+    const p = Math.min(1, (performance.now() - t0) / 1200);
+    fill.style.width = (p * 100) + '%';
+    if (p >= 1) { stop(); openGrownups(); }
+    else raf = requestAnimationFrame(tick);
+  };
+  b.addEventListener('pointerdown', e => { e.preventDefault(); active = true; t0 = performance.now(); raf = requestAnimationFrame(tick); });
+  ['pointerup','pointerleave','pointercancel'].forEach(ev => b.addEventListener(ev, stop));
+  b.addEventListener('contextmenu', e => e.preventDefault());
+}
+
+/* ═══════════════════════════════════════════════════════════
+   v3 — KINDERGARTEN (age 5) + GRADE 3 (age 8) RETARGET
+   ═══════════════════════════════════════════════════════════ */
+
+PATHS.k.grade  = 'Kindergarten';
+PATHS.g3.grade = 'Grade 3';
+
+Object.assign(CRITTERS, {
+  moonkit:   { name:'Moonkit',   type:'shade',   stage:1, body:'round', top:'ears',      eyes:'big',    tail:'curl',  belly:1, cheeks:1 },
+  frostbun:  { name:'Frostbun',  type:'frost',   stage:1, body:'egg',   top:'ears',      eyes:'wide',   tail:'puff',  belly:1, cheeks:1 },
+  cometail:  { name:'Cometail',  type:'spark',   stage:1, body:'drop',  top:'crest',     eyes:'big',    tail:'flame', belly:1, cheeks:1 },
+  mossgrum:  { name:'Mossgrum',  type:'sprout',  stage:2, body:'squat', top:'leafsprig', eyes:'sleepy', tail:'leaf',  belly:1 },
+  nebulon:   { name:'Nebulon',   type:'gust',    stage:2, body:'drop',  top:'antenna',   eyes:'wide',   tail:'puff',  belly:1, wings:1 },
+  sparkfin:  { name:'Sparkfin',  type:'splash',  stage:2, body:'egg',   top:'antenna',   eyes:'big',    tail:'fin',   belly:1, cheeks:1 },
+  celestix:  { name:'Celestix',  type:'shade',   stage:3, body:'chunk', top:'crown',     eyes:'big',    tail:'puff',  belly:1, wings:1 },
+  inkling:   { name:'Inkling',   type:'shade',   stage:1, body:'drop',  top:'antenna',   eyes:'wide',   tail:'curl',  belly:1 },
+  quillix:   { name:'Quillix',   type:'gust',    stage:1, body:'egg',   top:'crest',     eyes:'big',    tail:'leaf',  belly:1, cheeks:1 },
+  lumenox:   { name:'Lumenox',   type:'spark',   stage:2, body:'round', top:'crest',     eyes:'fierce', tail:'bolt',  belly:1, wings:1 },
+  tomeback:  { name:'Tomeback',  type:'boulder', stage:2, body:'squat', top:'shell',     eyes:'big',    tail:'curl',  belly:1 },
+  fablefin:  { name:'Fablefin',  type:'splash',  stage:2, body:'drop',  top:'crest',     eyes:'big',    tail:'fin',   belly:1, wings:1 },
+  lorewyrm:  { name:'Lorewyrm',  type:'ember',   stage:3, body:'chunk', top:'horns',     eyes:'fierce', tail:'flame', belly:1, wings:1 }
+});
+
+/* Kindergarten: longer levels for a 5-year-old, plus World 3 */
+PATHS.k.levels.forEach(l => { l.goal = l.boss ? 14 : Math.max(l.goal, 10); });
+PATHS.k.worlds[1].sub = 'Shapes, patterns, blending & nature';
+PATHS.k.worlds.push({ id:3, name:'Starlight Summit', icon:'✨', sub:'Count to 100, solid shapes & sounding out' });
+PATHS.k.levels.push(
+  { n:25, w:3, title:'Hundred Hill',      icon:'💯', skill:'count100',   arg:0, goal:10, reward:'moonkit'  },
+  { n:26, w:3, title:'Split Stones',      icon:'🪨', skill:'decompose',  arg:0, goal:10, reward:'frostbun' },
+  { n:27, w:3, title:'Solid Shapes',      icon:'🧊', skill:'shapes3d',   arg:0, goal:10, reward:'cometail' },
+  { n:28, w:3, title:'Echo Canyon',       icon:'🔚', skill:'endsound',   arg:0, goal:10, reward:null       },
+  { n:29, w:3, title:'Vowel Valley',      icon:'🅰️', skill:'shortvowel', arg:0, goal:10, reward:'mossgrum' },
+  { n:30, w:3, title:'Digraph Den',       icon:'🐚', skill:'digraphs',   arg:0, goal:10, reward:'nebulon'  },
+  { n:31, w:3, title:'Story Sums',        icon:'🐸', skill:'kword',      arg:0, goal:10, reward:null       },
+  { n:32, w:3, title:'Word Wall',         icon:'🧱', skill:'sightword3', arg:0, goal:10, reward:'sparkfin' },
+  { n:33, w:3, title:'Starlight Crown',   icon:'👑', skill:'mixK3',      arg:0, goal:14, reward:'celestix', boss:1 }
+);
+
+/* Grade 3: Clockwork City becomes true grade-3 work, plus a reading world */
+PATHS.g3.levels = PATHS.g3.levels.filter(l => l.w !== 2);
+PATHS.g3.worlds[0].sub = 'Multiplication, division, fractions, rounding';
+PATHS.g3.worlds[1].sub = 'Times tens, shapes, graphs, time, forces & life cycles';
+PATHS.g3.worlds.push({ id:3, name:'Library Lighthouse', icon:'📚', sub:'Reading: word parts, vocabulary & stories' });
+PATHS.g3.levels.push(
+  { n:16, w:2, title:'Tens Tower',        icon:'🏗️', skill:'tens10',     arg:0, goal:10, reward:'geodash'   },
+  { n:17, w:2, title:'Quad Quarter',      icon:'🔷', skill:'quads',      arg:0, goal:8,  reward:'glintine'  },
+  { n:18, w:2, title:'Graph Garage',      icon:'📊', skill:'graphs',     arg:0, goal:10, reward:'thornling' },
+  { n:19, w:2, title:'Clock Tower',       icon:'🕰️', skill:'time3',      arg:0, goal:10, reward:'tickwing'  },
+  { n:20, w:2, title:'Regroup Row',       icon:'➕', skill:'addsub3',    arg:0, goal:10, reward:null        },
+  { n:21, w:2, title:'Perimeter Park',    icon:'📐', skill:'perim3',     arg:0, goal:10, reward:'maelstrom' },
+  { n:22, w:2, title:'Force Foundry',     icon:'🧲', skill:'forces',     arg:0, goal:8,  reward:'nocturnyx' },
+  { n:23, w:2, title:'Life Cycle Lab',    icon:'🦋', skill:'lifecycles', arg:0, goal:8,  reward:'aurorix'   },
+  { n:24, w:2, title:'Gearheart Summit',  icon:'👑', skill:'mixG3c',     arg:0, goal:14, reward:'infernyx', boss:1 },
+
+  { n:25, w:3, title:'Prefix Port',       icon:'⚓', skill:'prefix',     arg:0, goal:8,  reward:'inkling'   },
+  { n:26, w:3, title:'Suffix Shoals',     icon:'🐚', skill:'suffix',     arg:0, goal:8,  reward:'quillix'   },
+  { n:27, w:3, title:'Clue Cove',         icon:'🔍', skill:'context',    arg:0, goal:8,  reward:'lumenox'   },
+  { n:28, w:3, title:'Sound-Alike Sands', icon:'👂', skill:'homophones', arg:0, goal:10, reward:null        },
+  { n:29, w:3, title:'Opposite Island',   icon:'🔄', skill:'synant',     arg:0, goal:10, reward:'tomeback'  },
+  { n:30, w:3, title:'Main Idea Marina',  icon:'📖', skill:'passage',    arg:0, goal:8,  reward:'fablefin'  },
+  { n:31, w:3, title:'Inference Inlet',   icon:'🕵️', skill:'infer',      arg:0, goal:8,  reward:null        },
+  { n:32, w:3, title:'Lighthouse Legend', icon:'👑', skill:'mixG3r',     arg:0, goal:12, reward:'lorewyrm', boss:1 }
+);
+PATHS.g3.levels.sort((a, b) => a.n - b.n);
+
+/* ───────── CONTENT: KINDERGARTEN WORLD 3 ───────── */
+const SOLIDS = {
+  cube:     'A cube has 6 flat square faces, like a dice.',
+  sphere:   'A sphere is round all over, like a ball.',
+  cone:     'A cone has a round bottom and a point on top.',
+  cylinder: 'A cylinder is round on both ends and straight on the sides, like a can.',
+  pyramid:  'A pyramid has a flat bottom and triangle sides that meet at a point.'
+};
+const SOLID_THINGS = [
+  { e:'🎲', n:'dice', s:'cube' },     { e:'🎁', n:'present', s:'cube' },   { e:'🧊', n:'ice cube', s:'cube' },
+  { e:'⚽', n:'soccer ball', s:'sphere' }, { e:'🏀', n:'basketball', s:'sphere' }, { e:'🌍', n:'globe', s:'sphere' },
+  { e:'🍦', n:'ice cream cone', s:'cone' }, { e:'🥳', n:'party hat', s:'cone' },
+  { e:'🥫', n:'soup can', s:'cylinder' }, { e:'🥁', n:'drum', s:'cylinder' }, { e:'🕯️', n:'candle', s:'cylinder' }
+];
+const END_WORDS = [
+  { w:'cat', e:'🐱' }, { w:'dog', e:'🐶' }, { w:'sun', e:'☀️' }, { w:'bus', e:'🚌' }, { w:'bed', e:'🛏️' },
+  { w:'fox', e:'🦊' }, { w:'hat', e:'🎩' }, { w:'pig', e:'🐷' }, { w:'web', e:'🕸️' }, { w:'map', e:'🗺️' },
+  { w:'hen', e:'🐔' }, { w:'bug', e:'🐛' }, { w:'bell', e:'🔔' }, { w:'drum', e:'🥁' }, { w:'leaf', e:'🍃' },
+  { w:'car', e:'🚗' }, { w:'star', e:'⭐' }, { w:'moon', e:'🌙' }, { w:'book', e:'📖' }, { w:'crab', e:'🦀' },
+  { w:'frog', e:'🐸' }, { w:'owl', e:'🦉' }
+];
+const VOWEL_WORDS = [
+  { w:'cat', e:'🐱' }, { w:'hat', e:'🎩' }, { w:'map', e:'🗺️' }, { w:'bat', e:'🦇' }, { w:'van', e:'🚐' },
+  { w:'bed', e:'🛏️' }, { w:'hen', e:'🐔' }, { w:'web', e:'🕸️' }, { w:'net', e:'🥅' }, { w:'jet', e:'🛩️' },
+  { w:'pig', e:'🐷' }, { w:'lip', e:'👄' }, { w:'dog', e:'🐶' }, { w:'fox', e:'🦊' }, { w:'box', e:'📦' },
+  { w:'sun', e:'☀️' }, { w:'bus', e:'🚌' }, { w:'bug', e:'🐛' }, { w:'mug', e:'☕' }, { w:'cup', e:'🥤' }
+];
+const VOWEL_SOUND = { a:'aah', e:'eh', i:'ih', o:'ah', u:'uh' };
+const DIGRAPH_WORDS = [
+  { w:'ship', e:'🚢', d:'sh' }, { w:'shoe', e:'👟', d:'sh' }, { w:'shell', e:'🐚', d:'sh' },
+  { w:'sheep', e:'🐑', d:'sh' }, { w:'shark', e:'🦈', d:'sh' }, { w:'shirt', e:'👕', d:'sh' },
+  { w:'chick', e:'🐥', d:'ch' }, { w:'cheese', e:'🧀', d:'ch' }, { w:'cherry', e:'🍒', d:'ch' },
+  { w:'chair', e:'🪑', d:'ch' }, { w:'chain', e:'⛓️', d:'ch' },
+  { w:'thumb', e:'👍', d:'th' }, { w:'three', e:'3️⃣', d:'th' }, { w:'thread', e:'🧵', d:'th' }, { w:'think', e:'🤔', d:'th' }
+];
+const DIGRAPH_SOUND = { sh:'shhh', ch:'chuh', th:'thh' };
+const SIGHT_3 = ['here','this','that','where','do','are','for','one','two','three','big','down',
+                 'jump','red','blue','yellow','who','of','all','be','but','not','out','did','get','has','him','his','her','ran'];
+const STORY_ADD = [
+  (a, b) => [`${a} frogs sit on a log. ${b} more hop on. How many frogs now?`, '🐸'],
+  (a, b) => [`${a} ducks swim in the pond. ${b} more waddle in. How many ducks now?`, '🦆'],
+  (a, b) => [`You have ${a} stickers. A friend gives you ${b} more. How many stickers now?`, '⭐'],
+  (a, b) => [`${a} cars are parked. ${b} more drive in. How many cars now?`, '🚗']
+];
+const STORY_SUB = [
+  (a, b) => [`${a} birds sit in a tree. ${b} fly away. How many are left?`, '🐦'],
+  (a, b) => [`There are ${a} cookies. You eat ${b}. How many are left?`, '🍪'],
+  (a, b) => [`${a} balloons are at a party. ${b} pop! How many are left?`, '🎈'],
+  (a, b) => [`${a} fish swim together. ${b} swim away. How many are left?`, '🐠']
+];
+
+/* ───────── CONTENT: GRADE 3 WORLD 2 ───────── */
+const QUAD_INFO = {
+  square:        'A square has 4 equal sides and 4 square corners.',
+  rectangle:     'A rectangle has 4 square corners. Opposite sides are equal.',
+  rhombus:       'A rhombus has 4 equal sides, like a tilted, squished square.',
+  trapezoid:     'A trapezoid has one pair of parallel sides, like a slanted table.',
+  parallelogram: 'A parallelogram has 2 pairs of parallel sides that lean over.',
+  triangle:      'A triangle has only 3 sides, so it is not a quadrilateral.',
+  pentagon:      'A pentagon has 5 sides, so it is not a quadrilateral.',
+  hexagon:       'A hexagon has 6 sides, so it is not a quadrilateral.'
+};
+// Special cases of a shape can't be wrong answers for it (a square IS a rectangle)
+const QUAD_ALSO = { rectangle:['square'], rhombus:['square'], parallelogram:['square','rectangle','rhombus'] };
+const GRAPH_SETS = [
+  { title:'Fruit picked by the class', unit:'pieces', cats:[['🍎','apples'],['🍌','bananas'],['🍇','grapes'],['🍓','strawberries']] },
+  { title:'Favorite pets in 3rd grade', unit:'votes', cats:[['🐶','dogs'],['🐱','cats'],['🐟','fish'],['🐰','bunnies']] },
+  { title:'Cans collected for the food drive', unit:'cans', cats:[['🔴','Room 1'],['🔵','Room 2'],['🟢','Room 3'],['🟡','Room 4']] }
+];
+const EVENTS = ['The movie', 'Soccer practice', 'The bus ride', 'Baking cookies', 'The swim lesson', 'The science show'];
+const FORCES = [
+  { q:'You kick a soccer ball. Is that a push or a pull?', a:'A push', x:['A pull'], h:'A push moves something away from you. A pull brings it closer.' },
+  { q:'You open a drawer toward you. Is that a push or a pull?', a:'A pull', x:['A push'], h:'A push moves something away from you. A pull brings it closer.' },
+  { q:'A magnet picks up a paper clip. Which force is that?', a:'Magnetism', x:['Gravity','Friction','Wind'], h:'Magnets pull on metal objects without touching them.' },
+  { q:'Why does a ball you toss up always fall back down?', a:'Gravity pulls it down', x:['Friction pushes it down','The wind pushes it','Magnets pull it'], h:'Gravity pulls everything toward the Earth.' },
+  { q:'Why is a box harder to slide on carpet than on ice?', a:'Carpet has more friction', x:['Ice has more gravity','Carpet is magnetic','Ice pushes the box'], h:'Friction is a rubbing force that slows things down. Rough surfaces have more.' },
+  { q:'Two teams pull a rope equally hard. What happens?', a:'The rope does not move', x:['The rope moves left','The rope moves right','The rope floats up'], h:'Equal forces in opposite directions are balanced, so nothing moves.' },
+  { q:'One tug-of-war team pulls much harder. What happens?', a:'The rope moves toward that team', x:['The rope stays still','The rope moves toward the weaker team','The rope breaks every time'], h:'Unbalanced forces make things move toward the stronger force.' },
+  { q:'Two magnets have their north ends facing. What happens?', a:'They push apart', x:['They pull together','Nothing happens','They melt'], h:'Same poles push apart. Opposite poles pull together.' },
+  { q:'A north end faces a south end of another magnet. What happens?', a:'They pull together', x:['They push apart','Nothing happens','They spin in circles'], h:'Same poles push apart. Opposite poles pull together.' },
+  { q:'Which object will a magnet pick up?', a:'An iron nail', x:['A plastic spoon','A wooden block','A rubber band'], h:'Magnets attract iron and steel, not plastic, wood or rubber.' },
+  { q:'A rolling ball slows down and stops on the grass. What stopped it?', a:'Friction', x:['Magnetism','A push','Gravity pulling it up'], h:'Friction is a rubbing force that slows things down.' },
+  { q:'A swing goes back and forth the same way each time. That is a…', a:'Pattern of motion', x:['Balanced force','Magnet','Stop'], h:'When motion repeats the same way, scientists can predict it. That is a pattern.' }
+];
+const CYCLES = [
+  { name:'butterfly', stages:[['Egg','🥚'],['Caterpillar','🐛'],['Chrysalis','🫘'],['Butterfly','🦋']] },
+  { name:'frog',      stages:[['Egg','🥚'],['Tadpole','〰️'],['Froglet','🐾'],['Frog','🐸']] },
+  { name:'chicken',   stages:[['Egg','🥚'],['Chick','🐣'],['Young chicken','🐥'],['Hen','🐔']] },
+  { name:'plant',     stages:[['Seed','🌰'],['Sprout','🌱'],['Young plant','🪴'],['Flowering plant','🌸']] },
+  { name:'person',    stages:[['Baby','👶'],['Child','🧒'],['Teenager','🧑'],['Adult','🧔']] }
+];
+
+/* ───────── CONTENT: GRADE 3 READING WORLD ───────── */
+const PREFIX_ITEMS = [
+  { w:'unhappy', m:'not happy', x:['very happy','happy again','happy before'] },
+  { w:'unkind', m:'not kind', x:['kind again','very kind','kind before'] },
+  { w:'unsafe', m:'not safe', x:['safe again','very safe','safe before'] },
+  { w:'unfair', m:'not fair', x:['fair again','fair before','too fair'] },
+  { w:'reread', m:'read again', x:['not read','read before','read wrongly'] },
+  { w:'rebuild', m:'build again', x:['not build','build wrongly','build before'] },
+  { w:'refill', m:'fill again', x:['not fill','fill too much','fill before'] },
+  { w:'preheat', m:'heat before', x:['heat again','not heat','heat too much'] },
+  { w:'preview', m:'see before', x:['see again','not see','see wrongly'] },
+  { w:'misspell', m:'spell wrongly', x:['spell again','spell before','not spell'] },
+  { w:'misplace', m:'put in the wrong place', x:['put back again','put away early','never put away'] },
+  { w:'dislike', m:'the opposite of like', x:['like again','like a lot','like before'] },
+  { w:'disagree', m:'not agree', x:['agree again','agree a lot','agree before'] },
+  { w:'overeat', m:'eat too much', x:['eat again','not eat','eat before'] },
+  { w:'oversleep', m:'sleep too long', x:['sleep again','not sleep','sleep before'] }
+];
+const PREFIX_GLOSS = { over:'too much', pre:'before', mis:'wrongly', dis:'not, or the opposite of', un:'not', re:'again' };
+const SUFFIX_ITEMS = [
+  { w:'careful', m:'full of care', x:['without care','a person who cares','care again'] },
+  { w:'careless', m:'without care', x:['full of care','care again','a person who cares'] },
+  { w:'helpful', m:'full of help', x:['without help','help again','a person who helps'] },
+  { w:'helpless', m:'without help', x:['full of help','a person who helps','help again'] },
+  { w:'fearless', m:'without fear', x:['full of fear','fear again','a person who fears'] },
+  { w:'joyful', m:'full of joy', x:['without joy','joy again','a person who has joy'] },
+  { w:'painless', m:'without pain', x:['full of pain','pain again','pain before'] },
+  { w:'thankful', m:'full of thanks', x:['without thanks','thanks again','a person who thanks'] },
+  { w:'teacher', m:'a person who teaches', x:['teaching again','without teaching','full of teaching'] },
+  { w:'painter', m:'a person who paints', x:['full of paint','painting again','without paint'] },
+  { w:'singer', m:'a person who sings', x:['singing again','without a song','full of songs'] },
+  { w:'quickly', m:'in a quick way', x:['not quick','a person who is quick','quick again'] },
+  { w:'quietly', m:'in a quiet way', x:['not quiet','full of noise','quiet again'] },
+  { w:'slowly', m:'in a slow way', x:['not slow','a slow person','slow again'] }
+];
+const SUFFIX_GLOSS = { less:'without', ful:'full of', ly:'in a ___ way', er:'a person who' };
+const CONTEXT_ITEMS = [
+  { s:'The puppy was so TIMID that it hid under the bed whenever guests came over.', w:'timid', a:'shy', x:['brave','hungry','loud'] },
+  { s:'After running the race, Maya was EXHAUSTED and fell asleep right away.', w:'exhausted', a:'very tired', x:['very excited','very hungry','very angry'] },
+  { s:'The desert is ARID. It almost never rains there.', w:'arid', a:'very dry', x:['very cold','very crowded','very pretty'] },
+  { s:'Please DISCARD your trash in the bin by the door.', w:'discard', a:'throw away', x:['keep','find','count'] },
+  { s:'The pumpkin was ENORMOUS. It barely fit in the back of the truck.', w:'enormous', a:'very big', x:['very small','very old','very orange'] },
+  { s:'Leo was FURIOUS when someone knocked over his tower on purpose.', w:'furious', a:'very angry', x:['very happy','very sleepy','very calm'] },
+  { s:'The soup was SCALDING, so we waited for it to cool down.', w:'scalding', a:'very hot', x:['very salty','very tasty','very cold'] },
+  { s:'The trail was so NARROW that we had to walk in a single line.', w:'narrow', a:'not wide', x:['muddy','long','steep'] },
+  { s:'Grandpa is a CAUTIOUS driver who always slows down near schools.', w:'cautious', a:'careful', x:['fast','funny','sleepy'] },
+  { s:'The stars were so BRILLIANT that they lit up the whole sky.', w:'brilliant', a:'very bright', x:['far away','very tiny','very cold'] },
+  { s:'We had to POSTPONE the picnic until next week because of the storm.', w:'postpone', a:'move to a later time', x:['eat quickly','move indoors','invite more people'] },
+  { s:'The CURIOUS kitten sniffed every box in the room.', w:'curious', a:'wanting to find out', x:['scared','sleepy','hungry'] }
+];
+const HOMOPHONES = [
+  { s:'The kids hung up ___ jackets.', a:'their', set:['their','there',"they're"], h:"their = belongs to them · there = a place · they're = they are" },
+  { s:"___ going to the park after lunch.", a:"They're", set:['Their','There',"They're"], h:"their = belongs to them · there = a place · they're = they are" },
+  { s:'Put the box over ___ by the door.', a:'there', set:['their','there',"they're"], h:"their = belongs to them · there = a place · they're = they are" },
+  { s:'I have ___ cookies left.', a:'two', set:['to','too','two'], h:'two = the number 2 · too = also or very · to = toward' },
+  { s:'Can I come ___?', a:'too', set:['to','too','two'], h:'two = the number 2 · too = also or very · to = toward' },
+  { s:'We walked ___ the store.', a:'to', set:['to','too','two'], h:'two = the number 2 · too = also or very · to = toward' },
+  { s:'Did you ___ the thunder last night?', a:'hear', set:['hear','here'], h:'You HEAR with your EAR. Here = this place.' },
+  { s:'Come over ___ and sit with me!', a:'here', set:['hear','here'], h:'You HEAR with your EAR. Here = this place.' },
+  { s:'The dog wagged ___ tail.', a:'its', set:['its',"it's"], h:"it's = it is · its = belongs to it" },
+  { s:"___ raining outside.", a:"It's", set:['Its',"It's"], h:"it's = it is · its = belongs to it" },
+  { s:'Which one is ___ backpack?', a:'your', set:['your',"you're"], h:"you're = you are · your = belongs to you" },
+  { s:"___ my best friend.", a:"You're", set:['Your',"You're"], h:"you're = you are · your = belongs to you" },
+  { s:'I ___ the answer!', a:'know', set:['know','no'], h:'know = understand · no = the opposite of yes' },
+  { s:'I ate ___ slices of pizza!', a:'eight', set:['eight','ate'], h:'eight = the number 8 · ate = had food' }
+];
+const WORD_PAIRS = [
+  { w:'big', s:'large', a:'small' },   { w:'happy', s:'glad', a:'sad' },    { w:'quick', s:'fast', a:'slow' },
+  { w:'begin', s:'start', a:'finish' },{ w:'shout', s:'yell', a:'whisper' },{ w:'gentle', s:'soft', a:'rough' },
+  { w:'brave', s:'bold', a:'afraid' }, { w:'easy', s:'simple', a:'difficult' }, { w:'old', s:'ancient', a:'new' },
+  { w:'quiet', s:'silent', a:'loud' }, { w:'smart', s:'clever', a:'foolish' }, { w:'neat', s:'tidy', a:'messy' },
+  { w:'tiny', s:'little', a:'huge' },  { w:'angry', s:'mad', a:'calm' },     { w:'wet', s:'damp', a:'dry' }
+];
+const PASSAGES = [
+  { title:'The Octopus', text:'An octopus has eight long arms covered in suckers. It uses its suckers to taste and grab food. When an octopus is scared, it can squirt dark ink and zoom away. Some octopuses can even change color to match the rocks around them. These tricks help the octopus stay safe in the ocean.',
+    main:{ q:'What is this passage MOSTLY about?', a:'An octopus has special tricks that help it survive', x:['Octopuses are the biggest sea animals','Rocks in the ocean change color','People use ink to write'] },
+    detail:{ q:'What does an octopus use to taste its food?', a:'Its suckers', x:['Its ink','Its eyes','Its color'] },
+    infer:{ q:'Why might an octopus change color near rocks?', a:'So animals that hunt it can\'t see it', x:['To look pretty for friends','Because the water is cold','To find more food to eat'] } },
+  { title:'Maple Syrup', text:'In early spring, farmers in New England tap maple trees. They drill a small hole and collect the sweet, watery sap in buckets. The sap is boiled for hours until most of the water steams away. It takes about 40 gallons of sap to make just one gallon of syrup. That is why real maple syrup costs more than pancake syrup from the store.',
+    main:{ q:'What is this passage MOSTLY about?', a:'How maple syrup is made', x:['Why trees lose their leaves','How to cook pancakes','What farmers do in winter'] },
+    detail:{ q:'What happens to the water when the sap boils?', a:'It steams away', x:['It turns to ice','It turns red','It stays in the syrup'] },
+    infer:{ q:'Why does real maple syrup cost so much?', a:'It takes a lot of sap and work to make a little syrup', x:['Farmers only work on weekends','Maple trees are very rare','The buckets are expensive'] } },
+  { title:'Busy Bees', text:'A honeybee hive can hold tens of thousands of bees, and each bee has a job. Worker bees gather nectar from flowers, guard the hive and care for young bees. The queen bee lays eggs, sometimes more than a thousand in one day. When a worker finds good flowers, it does a special "waggle dance" to show the others where to go.',
+    main:{ q:'What is this passage MOSTLY about?', a:'Bees in a hive each have a job', x:['Queens are the only important bees','Flowers grow best in spring','How to make honey at home'] },
+    detail:{ q:'How does a worker bee tell others where flowers are?', a:'It does a waggle dance', x:['It buzzes loudly','It draws a map','It brings back a flower'] },
+    infer:{ q:'Why does a hive need so many worker bees?', a:'There are lots of jobs to do', x:['Workers are lazy','The queen does all the work','Bees don\'t like to be alone'] } },
+  { title:"Mia's Lemonade Stand", text:'Mia set up a lemonade stand on a hot Saturday. By noon, she had sold only two cups. She looked at her sign. It said "LEMONADE 25¢" in tiny pencil letters. Mia grabbed a marker and made a new sign in big, bright letters. In the next hour, eleven people stopped to buy a cup.',
+    main:{ q:'What is this story MOSTLY about?', a:'Mia fixed her sign and sold more lemonade', x:['How to make lemonade','Why Saturdays are hot','Mia\'s favorite marker'] },
+    detail:{ q:'How many cups had Mia sold by noon?', a:'Two', x:['Eleven','Twenty-five','None'] },
+    infer:{ q:'Why did more people stop after Mia made a new sign?', a:'They could finally see and read it', x:['The lemonade got cheaper','It started raining','Mia started singing'] } },
+  { title:'Snowflakes', text:'Snowflakes form high in the clouds when tiny drops of water freeze onto specks of dust. As the ice crystal falls, more water freezes onto it and it grows. Almost every snowflake has six sides or six arms. The shape of each flake depends on how cold and wet the air is, so no two snowflakes grow in exactly the same way.',
+    main:{ q:'What is this passage MOSTLY about?', a:'How snowflakes form and get their shapes', x:['How to build a snowman','Why winter is cold','Where clouds come from'] },
+    detail:{ q:'How many sides or arms do most snowflakes have?', a:'Six', x:['Four','Five','Eight'] },
+    infer:{ q:'Why do snowflakes look different from each other?', a:'Each one falls through slightly different air', x:['People cut them into shapes','They are made of different kinds of water','They melt on the way down'] } },
+  { title:"Jackson's First Ride", text:'Jackson wanted to ride without training wheels. On his first try, he wobbled and tipped over. On his second try, he made it to the mailbox before stopping. His dad said, "Look ahead, not at your feet." Jackson tried again with his eyes on the end of the street. This time, he rode all the way to the corner.',
+    main:{ q:'What is this story MOSTLY about?', a:'Jackson kept practicing until he could ride', x:['Jackson\'s new mailbox','How bikes are built','Jackson\'s dad rides to work'] },
+    detail:{ q:'What advice did Jackson\'s dad give?', a:'Look ahead, not at your feet', x:['Pedal as fast as you can','Put the training wheels back','Ride on the grass'] },
+    infer:{ q:'How did Jackson most likely feel at the end?', a:'Proud', x:['Bored','Scared','Sleepy'] } },
+  { title:'Sloths', text:'Sloths live high in the rainforest trees of Central and South America. They move so slowly that tiny green plants called algae grow on their fur. The green color helps them blend in with the leaves. Sloths climb down from their tree only about once a week.',
+    main:{ q:'What is this passage MOSTLY about?', a:'Sloths live a slow life high in the trees', x:['Algae grows in the ocean','Rainforests get lots of rain','How to climb a tree'] },
+    detail:{ q:'What grows on a sloth\'s fur?', a:'Algae', x:['Leaves','Flowers','Mushrooms'] },
+    infer:{ q:'Why is blending in especially helpful for a sloth?', a:'It is too slow to run away from danger', x:['It likes to play hide-and-seek','It wants to look like a flower','It gets cold in the trees'] } },
+  { title:"Priya's Library Card", text:'Priya got her first library card on her eighth birthday. She could borrow ten books at a time for three weeks. The first week, she read all about sharks. The second week, she switched to mysteries. By the third week, the librarian was saving new books for Priya before they even reached the shelf.',
+    main:{ q:'What is this story MOSTLY about?', a:'Priya became a big reader after getting her library card', x:['Sharks are dangerous','How to plan a birthday','Librarians keep books on shelves'] },
+    detail:{ q:'How long can Priya keep her library books?', a:'Three weeks', x:['One week','Ten days','Eight weeks'] },
+    infer:{ q:'Why was the librarian saving books for Priya?', a:'The librarian knew Priya loved reading', x:['Priya was the librarian\'s boss','The books were broken','Priya forgot her card'] } }
+];
+
+/* ───────── NEW GENERATORS ───────── */
+const V3 = {
+  /* — Kindergarten: Starlight Summit — */
+  count100() {
+    const decade = Math.random() < 0.5;
+    let start = decade ? rnd(1, 9) * 10 - 3 : rnd(1, 96);
+    if (start < 1) start = 1;
+    const seq = [start, start + 1, start + 2], ans = start + 3;
+    const cands = [{ v:ans + 1, tag:'count_extra' }, { v:ans - 1, tag:'repeated_number' }, { v:ans + 10, tag:'skipped_a_ten' }];
+    if (ans % 10 === 0) cands.push({ v:ans - 10, tag:'decade_reset' }, { v:Number(String(ans / 10 - 1) + '10'), tag:'wrote_ten_after_nine' });
+    const r = smartChoices(ans, cands, { min:1, max:999 });
+    return {
+      prompt: '🔊 What number comes next?', big: seq.join(', ') + ', ?', bigSmall: true,
+      choices: r.choices, tags: r.tags, answer: ans,
+      speakFirst: seq.join(', ') + ', what comes next?',
+      say: `${seq.join(', ')}, ${ans}!`,
+      hint: 'Say them out loud and keep going. After a 9 comes the next ten!'
+    };
+  },
+
+  decompose() {
+    const n = rnd(4, 10), a = rnd(1, n - 1), b = n - a, icon = pick(CRIT_ICONS);
+    const r = smartChoices(b, [
+      { v:n, tag:'wrote_whole' }, { v:a, tag:'repeated_number' },
+      { v:b + 1, tag:'off_by_one' }, { v:b - 1, tag:'off_by_one' }
+    ], { min:0, max:10, spread:2 });
+    return {
+      prompt: `🔊 ${n} in all. ${a} are here. How many are hiding?`, big: `${n} = ${a} + ?`, bigSmall: true,
+      visual: { kind:'split', n:n, a:a, icon:icon },
+      choices: r.choices, tags: r.tags, answer: b,
+      speakFirst: `${n} in all. ${a} are here. How many are hiding?`,
+      say: `${a} and ${b} make ${n}!`,
+      hint: `Start at ${a} and count up to ${n}.`
+    };
+  },
+
+  shapes3d() {
+    const names = Object.keys(SOLIDS);
+    if (Math.random() < 0.5) {
+      const t = pick(SOLID_THINGS);
+      const others = shuffle(names.filter(n => n !== t.s)).slice(0, 3);
+      const cols = shuffle(PALETTE), colorOf = {};
+      [t.s].concat(others).forEach((n, i) => colorOf[n] = cols[i]);
+      return {
+        prompt: `🔊 What shape is the ${t.n}?`, big: t.e,
+        choices: shuffle([t.s].concat(others)), answer: t.s,
+        renderChoice: c => `${solidSVG(c, 58, colorOf[c])}<span class="pic-label">${c}</span>`,
+        speakFirst: `What shape is the ${t.n}?`,
+        say: `A ${t.n} is shaped like ${art(t.s)}! ${SOLIDS[t.s]}`,
+        hint: SOLIDS[t.s]
+      };
+    }
+    const target = pick(names);
+    const others = shuffle(names.filter(n => n !== target)).slice(0, 3);
+    const cols = shuffle(PALETTE), colorOf = {};
+    [target].concat(others).forEach((n, i) => colorOf[n] = cols[i]);
+    return {
+      prompt: `🔊 Find the ${target}!`, big: '',
+      choices: shuffle([target].concat(others)), answer: target,
+      renderChoice: c => solidSVG(c, 70, colorOf[c]),
+      speakFirst: `Find the ${target}!`,
+      say: `Yes! That's ${art(target)}. ${SOLIDS[target]}`,
+      hint: SOLIDS[target]
+    };
+  },
+
+  endsound() {
+    const it = pick(END_WORDS);
+    const L = it.w.slice(-1).toUpperCase();
+    const pool = 'BDFGKLMNPRSTX'.split('').filter(x => x !== L);
+    return {
+      prompt: '🔊 What sound does it END with?', big: it.e,
+      choices: shuffle([L].concat(shuffle(pool).slice(0, 3))), answer: L,
+      speakFirst: `${it.w}. What sound does ${it.w} end with?`,
+      say: `${it.w} ends with ${LETTER_SOUNDS[L]}. ${L}!`,
+      hint: `Say ${it.w} slowly and listen to the very last sound.`,
+      hintSpeak: it.w.split('').join('... ') + '... ' + it.w,
+      textBtns: true
+    };
+  },
+
+  shortvowel() {
+    const it = pick(VOWEL_WORDS);
+    const v = it.w[1];
+    const others = shuffle('aeiou'.split('').filter(x => x !== v)).slice(0, 3);
+    return {
+      prompt: '🔊 Which vowel is missing in the middle?', big: it.e,
+      visual: { kind:'html', html:`<div style="font-size:40px;font-weight:900;letter-spacing:10px">${it.w[0]}<span style="color:#FFD93D">_</span>${it.w[2]}</div>` },
+      choices: shuffle([v].concat(others)), answer: v, textBtns: true,
+      speakFirst: `${it.w}. Which vowel is in the middle of ${it.w}?`,
+      say: `${it.w} has ${VOWEL_SOUND[v]} in the middle. ${v}!`,
+      hint: 'Stretch the word out slowly and listen for the sound in the middle.',
+      hintSpeak: `${it.w}... ${it.w[0]}... ${VOWEL_SOUND[v]}... ${it.w[2]}`
+    };
+  },
+
+  digraphs() {
+    const it = pick(DIGRAPH_WORDS);
+    const single = it.w[0];
+    const choices = ['sh','ch','th', single];
+    return {
+      prompt: '🔊 Which sound does it start with?', big: it.e,
+      choices: shuffle(choices), answer: it.d, textBtns: true,
+      tags: { [single]:'single_letter_not_digraph' },
+      speakFirst: `${it.w}. What sound does ${it.w} start with?`,
+      say: `${it.w} starts with ${DIGRAPH_SOUND[it.d]}. ${it.d.split('').join(' ')}!`,
+      hint: 'Two letters can team up to make one new sound: sh, ch or th.',
+      hintSpeak: `${DIGRAPH_SOUND[it.d]}... ${it.w}`
+    };
+  },
+
+  kword() {
+    if (Math.random() < 0.5) {
+      const a = rnd(1, 6), b = rnd(1, 10 - a);
+      const [story, icon] = pick(STORY_ADD)(a, b);
+      const r = smartChoices(a + b, [{ v:Math.abs(a - b), tag:'subtracted' }, { v:a + b + 1, tag:'count_extra' }, { v:a + b - 1, tag:'count_miss' }], { min:0, max:12, spread:2 });
+      return { prompt: '🔊 ' + story, big: '', visual: { kind:'twogroups', a:a, b:b, icon:icon, op:'+' },
+        choices: r.choices, tags: r.tags, answer: a + b, speakFirst: story,
+        say: `${a} plus ${b} is ${a + b}!`, hint: 'More are coming, so we add them together!', story: true };
+    }
+    const a = rnd(3, 10), b = rnd(1, a - 1);
+    const [story, icon] = pick(STORY_SUB)(a, b);
+    const r = smartChoices(a - b, [{ v:a + b, tag:'added_not_sub' }, { v:b, tag:'took_away_amount' }, { v:a - b + 1, tag:'count_extra' }], { min:0, max:20, spread:2 });
+    return { prompt: '🔊 ' + story, big: '', visual: { kind:'takeaway', total:a, gone:b, icon:icon },
+      choices: r.choices, tags: r.tags, answer: a - b, speakFirst: story,
+      say: `${a} take away ${b} is ${a - b}!`, hint: 'Some go away, so we take away. Count the bright ones.', story: true };
+  },
+
+  sightword3() {
+    const w = pick(SIGHT_3);
+    return { prompt: '🔊 Tap the word you hear', big: '👂', choices: textChoices(w, SIGHT_3), answer: w,
+      say: `${w}!`, speakFirst: w, textBtns: true, hint: 'Listen again!', hintSpeak: w };
+  },
+
+  mixK3() {
+    return GEN[pick(['count100','decompose','shapes3d','endsound','shortvowel','digraphs','kword','sightword3'])](0);
+  },
+
+  /* — Grade 3: Clockwork City — */
+  tens10() {
+    const a = rnd(2, 9), b = rnd(2, 9), ans = a * b * 10;
+    const flip = Math.random() < 0.5;
+    const r = smartChoices(ans, [
+      { v:a * b, tag:'dropped_the_zero' }, { v:a * b * 100, tag:'extra_zero' },
+      { v:(a * b + a) * 10, tag:'neighbor_fact' }, { v:(a * b - a) * 10, tag:'neighbor_fact' }, { v:a + b * 10, tag:'added_not_mult' }
+    ], { min:1, max:9000, step:10 });
+    return {
+      prompt: 'Multiply by tens!', big: flip ? `${b * 10} × ${a}` : `${a} × ${b * 10}`,
+      choices: r.choices, tags: r.tags, answer: ans,
+      say: `${a} times ${b} is ${a * b}, so ${a} times ${b * 10} is ${ans}!`,
+      hint: `Solve ${a} × ${b} first. Then remember you have tens, not ones.`,
+      table: a
+    };
+  },
+
+  quads() {
+    const quads = ['square','rectangle','rhombus','trapezoid','parallelogram'];
+    const cols = shuffle(PALETTE), colorOf = {};
+    if (Math.random() < 0.4) {
+      const odd = pick(['triangle','pentagon','hexagon']);
+      const three = shuffle(quads).slice(0, 3);
+      [odd].concat(three).forEach((n, i) => colorOf[n] = cols[i]);
+      return {
+        prompt: 'Which shape is NOT a quadrilateral?', big: '',
+        choices: shuffle([odd].concat(three)), answer: odd,
+        renderChoice: c => polySVG(c, 70, colorOf[c]),
+        say: QUAD_INFO[odd], hint: 'A quadrilateral has exactly 4 sides. Count the sides of each shape.'
+      };
+    }
+    const target = pick(quads);
+    const banned = (QUAD_ALSO[target] || []).concat([target]);
+    const pool = quads.filter(q => banned.indexOf(q) < 0).concat(['kite','triangle']);
+    const others = shuffle(pool).slice(0, 3);
+    [target].concat(others).forEach((n, i) => colorOf[n] = cols[i]);
+    return {
+      prompt: `Which one is a ${target.toUpperCase()}?`, big: '',
+      choices: shuffle([target].concat(others)), answer: target,
+      renderChoice: c => polySVG(c, 70, colorOf[c]),
+      say: QUAD_INFO[target], hint: QUAD_INFO[target]
+    };
+  },
+
+  graphs() {
+    const set = pick(GRAPH_SETS), scale = pick([1, 2, 2, 5]);
+    const vals = [];
+    while (vals.length < 4) { const v = scale * rnd(1, 8); if (vals.indexOf(v) < 0) vals.push(v); }
+    const lab = i => `${set.cats[i][0]} ${set.cats[i][1]}`;
+    const type = pick(['more','more','total','most','least']);
+    const visual = { kind:'bars', title:set.title, cats:set.cats, vals:vals, scale:scale };
+    const scaleNote = scale > 1 ? ` (Each line on the graph = ${scale}.)` : '';
+    if (type === 'most' || type === 'least') {
+      const idx = vals.indexOf(type === 'most' ? Math.max.apply(null, vals) : Math.min.apply(null, vals));
+      return {
+        prompt: `Which had the ${type === 'most' ? 'MOST' : 'FEWEST'} ${set.unit}?`, big: '', visual: visual,
+        forceChoices: [0,1,2,3], choices: [0,1,2,3], answer: idx,
+        renderChoice: c => `<span style="font-size:28px;line-height:1">${set.cats[c][0]}</span><span class="pic-label">${set.cats[c][1]}</span>`,
+        say: `${cap(set.cats[idx][1])} had the ${type === 'most' ? 'most' : 'fewest'}: ${vals[idx]}.`,
+        hint: type === 'most' ? 'Find the tallest bar.' : 'Find the shortest bar.'
+      };
+    }
+    let i = rnd(0, 3), j = rnd(0, 3);
+    while (j === i) j = rnd(0, 3);
+    if (type === 'more' && vals[i] < vals[j]) { const t = i; i = j; j = t; }
+    const a = vals[i], b = vals[j];
+    const ans = type === 'more' ? a - b : a + b;
+    const cands = type === 'more'
+      ? [{ v:a + b, tag:'added_not_sub' }, { v:a, tag:'read_one_bar' }, { v:ans + scale, tag:'misread_scale' }, { v:ans - scale, tag:'misread_scale' }]
+      : [{ v:Math.abs(a - b), tag:'subtracted' }, { v:ans + scale, tag:'misread_scale' }, { v:ans - scale, tag:'misread_scale' }];
+    if (scale > 1 && ans % scale === 0) cands.push({ v:ans / scale, tag:'ignored_scale' });
+    const r = smartChoices(ans, cands, { min:1, max:200, step:scale });
+    return {
+      prompt: type === 'more'
+        ? `How many more ${set.cats[i][1]} than ${set.cats[j][1]}?${scaleNote}`
+        : `How many ${set.cats[i][1]} and ${set.cats[j][1]} altogether?${scaleNote}`,
+      big: '', visual: visual, choices: r.choices, tags: r.tags, answer: ans,
+      say: type === 'more' ? `${a} minus ${b} is ${ans} more.` : `${a} plus ${b} is ${ans}.`,
+      hint: `Read each bar carefully using the numbers on the side${scale > 1 ? ' — they count by ' + scale + 's' : ''}. Then ${type === 'more' ? 'subtract' : 'add'}.`
+    };
+  },
+
+  time3() {
+    const fmt = (hh, mm) => `${((hh - 1 + 120) % 12) + 1}:${String(mm).padStart(2, '0')}`;
+    if (Math.random() < 0.55) {
+      const h = rnd(1, 12), m = rnd(1, 59);
+      const cands = [
+        { v:fmt(h, (m + 1) % 60), tag:'off_by_one_minute' }, { v:fmt(h, (m + 59) % 60), tag:'off_by_one_minute' },
+        { v:fmt(h, (m + 5) % 60), tag:'off_by_five' }
+      ];
+      if (Math.floor(m / 5) !== m && Math.floor(m / 5) > 0) cands.push({ v:fmt(h, Math.floor(m / 5)), tag:'read_number_not_minutes' });
+      if (m >= 30) cands.push({ v:fmt(h + 1, m), tag:'read_next_hour' });
+      const pool = []; for (let i = 0; i < 6; i++) pool.push(fmt(rnd(1, 12), rnd(0, 59)));
+      const r = smartChoices(fmt(h, m), cands, { pool:pool });
+      return {
+        prompt: 'What time is it, to the minute?', big: '', visual: { kind:'clock', h:h, m:m },
+        choices: r.choices, tags: r.tags, answer: fmt(h, m), textBtns: true,
+        say: `It's ${speakTime(h, m)}.`,
+        hint: 'Count by 5s to the last number the long hand passed, then count the little marks one at a time.'
+      };
+    }
+    const h = rnd(1, 11), m = pick([0,5,10,15,20,25,30,35,40,45,50,55]);
+    const d = pick([15,20,25,30,35,40,45,50,55,65,75,90]);
+    const tot = h * 60 + m + d, eh = Math.floor(tot / 60), em = tot % 60;
+    const ans = fmt(eh, em), ev = pick(EVENTS);
+    const cands = [
+      { v:fmt(eh, (em + 5) % 60), tag:'off_by_five' }, { v:fmt(eh, (em + 55) % 60), tag:'off_by_five' },
+      { v:fmt(eh + 1, em), tag:'extra_hour' }
+    ];
+    if (m + d >= 60) {
+      cands.push({ v:fmt(h, em), tag:'forgot_new_hour' });
+      if (d < 60) cands.push({ v:`${h}:${m + d}`, tag:'didnt_regroup_hour' });
+    }
+    const pool = []; for (let i = 0; i < 6; i++) pool.push(fmt(rnd(1, 12), pick([0,15,30,45])));
+    const r = smartChoices(ans, cands, { pool:pool });
+    return {
+      prompt: `${ev} starts at ${fmt(h, m)} and lasts ${d} minutes. What time does it end?`, big: '',
+      visual: { kind:'clock', h:h, m:m, size:140 },
+      choices: r.choices, tags: r.tags, answer: ans, textBtns: true, story: true,
+      say: `It ends at ${speakTime(((eh - 1) % 12) + 1, em)}.`,
+      hint: 'Jump to the next full hour first, then add the minutes that are left. 60 minutes make 1 hour.'
+    };
+  },
+
+  addsub3() {
+    const d3 = n => [Math.floor(n / 100), Math.floor(n / 10) % 10, n % 10];
+    if (Math.random() < 0.5) {
+      let a, b;
+      do { a = rnd(105, 799); b = rnd(105, 999 - a > 105 ? 999 - a : 105); }
+      while (a + b > 999 || ((a % 10) + (b % 10) < 10 && (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10) < 10));
+      const s = a + b;
+      const r = smartChoices(s, [
+        { v:s - 10, tag:'forgot_to_carry' }, { v:s - 100, tag:'forgot_to_carry' },
+        { v:s + 10, tag:'extra_ten' }, { v:s + 1, tag:'miscounted' }, { v:s - 1, tag:'miscounted' }
+      ], { min:1, max:1100, step:10 });
+      return { prompt: 'Add! (Ones, then tens, then hundreds.)', big: '', visual: { kind:'colmath', a:a, b:b, op:'+' },
+        choices: r.choices, tags: r.tags, answer: s, say: `${a} plus ${b} is ${s}!`,
+        hint: 'Line up the places. When a column makes 10 or more, carry 1 to the next place.' };
+    }
+    let a, b;
+    const zeroTens = Math.random() < 0.3;
+    do {
+      a = zeroTens ? rnd(3, 9) * 100 + rnd(1, 9) : rnd(302, 989);
+      b = rnd(105, a - 40);
+    } while ((a % 10) >= (b % 10) && (Math.floor(a / 10) % 10) >= (Math.floor(b / 10) % 10));
+    const d = a - b, A = d3(a), B = d3(b);
+    const smaller = Math.abs(A[0] - B[0]) * 100 + Math.abs(A[1] - B[1]) * 10 + Math.abs(A[2] - B[2]);
+    const r = smartChoices(d, [
+      { v:smaller, tag:'smaller_from_bigger' }, { v:d + 10, tag:'forgot_to_reduce_ten' },
+      { v:d + 100, tag:'forgot_to_reduce_hundred' }, { v:a + b, tag:'added_not_sub' }, { v:d + 1, tag:'miscounted' }
+    ], { min:0, max:2000, step:10 });
+    return { prompt: 'Subtract! (Ones, then tens, then hundreds.)', big: '', visual: { kind:'colmath', a:a, b:b, op:'−' },
+      choices: r.choices, tags: r.tags, answer: d, say: `${a} minus ${b} is ${d}!`,
+      hint: zeroTens ? 'Zero tens? Borrow from the hundreds first, then from the tens.'
+                     : 'Not enough on top? Borrow 1 from the next place over.' };
+  },
+
+  perim3() {
+    const w = rnd(4, 12), h = rnd(2, Math.max(2, w - 1)), p = 2 * (w + h);
+    if (Math.random() < 0.5) {
+      const r = smartChoices(h, [
+        { v:p - w, tag:'subtracted_one_side' }, { v:2 * h, tag:'forgot_to_halve' },
+        { v:w + h, tag:'half_perimeter' }, { v:h + 1, tag:'miscounted' }, { v:w, tag:'repeated_number' }
+      ], { min:1, max:60 });
+      return {
+        prompt: `The perimeter is ${p} ft. The long sides are ${w} ft. How long is each short side?`, big: '',
+        visual: { kind:'rect', w:w, h:h, hideH:true },
+        choices: r.choices, tags: r.tags, answer: h, story: true,
+        renderChoice: c => `<span style="font-size:25px;font-weight:900">${c} ft</span>`,
+        say: `${p} minus ${w} minus ${w} is ${2 * h}. Split that between 2 short sides: ${h} feet each.`,
+        hint: 'Take away both long sides from the perimeter. What\'s left is shared by the 2 short sides.'
+      };
+    }
+    const r = smartChoices(p, [
+      { v:w * h, tag:'area_not_perimeter' }, { v:w + h, tag:'added_two_sides' },
+      { v:2 * w + h, tag:'missed_a_side' }, { v:p + 2, tag:'miscounted' }
+    ], { min:1, max:120, step:2 });
+    return {
+      prompt: 'What is the PERIMETER — the distance all the way around?', big: '',
+      visual: { kind:'rect', w:w, h:h }, choices: r.choices, tags: r.tags, answer: p,
+      renderChoice: c => `<span style="font-size:25px;font-weight:900">${c} ft</span>`,
+      say: `${w} plus ${h} plus ${w} plus ${h} is ${p} feet!`, hint: 'Walk around the rectangle and add all 4 sides.'
+    };
+  },
+
+  forces() {
+    const it = pick(FORCES);
+    const long = it.a.length > 12 || it.x.some(x => x.length > 12);
+    return { prompt: it.q, big: '🧲', choices: shuffle([it.a].concat(it.x)), answer: it.a,
+      textBtns: true, longChoices: long && it.x.length > 1, say: it.h, hint: it.h };
+  },
+
+  lifecycles() {
+    const cy = pick(CYCLES), idx = rnd(0, cy.stages.length - 1), ans = cy.stages[idx][0];
+    const cands = cy.stages.filter((_, i) => i !== idx).map(s => ({ v:s[0], tag:'wrong_order' }));
+    const pool = [];
+    CYCLES.filter(c => c !== cy).forEach(c => c.stages.forEach(s => pool.push(s[0])));
+    const r = smartChoices(ans, shuffle(cands).slice(0, 2), { pool:pool });
+    return {
+      prompt: `Fill in the missing stage of the ${cy.name}'s life cycle.`, big: '',
+      visual: { kind:'cycle', stages:cy.stages, missing:idx },
+      choices: r.choices, tags: r.tags, answer: ans, textBtns: true,
+      say: `The ${cy.name} goes: ${cy.stages.map(s => s[0].toLowerCase()).join(', then ')}.`,
+      hint: 'Life cycles go from newest and smallest to fully grown.'
+    };
+  },
+
+  mixG3c() {
+    return GEN[pick(['tens10','quads','graphs','time3','addsub3','perim3','forces','lifecycles'])](0);
+  },
+
+  /* — Grade 3: Library Lighthouse (reading) — */
+  prefix() {
+    const it = pick(PREFIX_ITEMS);
+    const p = Object.keys(PREFIX_GLOSS).find(k => it.w.indexOf(k) === 0);
+    const r = smartChoices(it.m, it.x.map(v => ({ v:v, tag:'misread_prefix' })), {});
+    return { prompt: `What does ${it.w.toUpperCase()} mean?`, big: `${p}-${it.w.slice(p.length)}`, bigSmall: true,
+      choices: r.choices, tags: r.tags, answer: it.m, textBtns: true, longChoices: true,
+      say: `${cap(it.w)} means ${it.m}. The prefix ${p} means ${PREFIX_GLOSS[p]}.`,
+      hint: `Cover the prefix "${p}-" and read the base word. Then add the prefix meaning to it.` };
+  },
+
+  suffix() {
+    const it = pick(SUFFIX_ITEMS);
+    const s = Object.keys(SUFFIX_GLOSS).find(k => it.w.slice(-k.length) === k);
+    const r = smartChoices(it.m, it.x.map(v => ({ v:v, tag:'misread_suffix' })), {});
+    return { prompt: `What does ${it.w.toUpperCase()} mean?`, big: `${it.w.slice(0, -s.length)}-${s}`, bigSmall: true,
+      choices: r.choices, tags: r.tags, answer: it.m, textBtns: true, longChoices: true,
+      say: `${cap(it.w)} means ${it.m}. The suffix ${s} means ${SUFFIX_GLOSS[s]}.`,
+      hint: `Find the ending "-${s}". It means "${SUFFIX_GLOSS[s]}".` };
+  },
+
+  context() {
+    const it = pick(CONTEXT_ITEMS);
+    return { prompt: `What does ${it.w.toUpperCase()} mean in this sentence?`, big: '',
+      visual: { kind:'sentence', text:it.s, word:it.w },
+      choices: shuffle([it.a].concat(it.x)), answer: it.a, textBtns: true, longChoices: true,
+      say: `${cap(it.w)} means ${it.a}.`,
+      hint: 'Read the whole sentence. Which meaning makes the rest of the sentence make sense?' };
+  },
+
+  homophones() {
+    const it = pick(HOMOPHONES);
+    return { prompt: 'Which word fits the sentence?', big: '',
+      visual: { kind:'sentence', text:it.s.replace('___', '_____'), word:'' },
+      forceChoices: it.set, choices: it.set, answer: it.a, textBtns: true,
+      say: it.s.replace('___', it.a), hint: it.h };
+  },
+
+  synant() {
+    const it = pick(WORD_PAIRS), same = Math.random() < 0.5;
+    const ans = same ? it.s : it.a;
+    const cands = [{ v:same ? it.a : it.s, tag:'synonym_antonym_mixup' }];
+    const pool = [];
+    WORD_PAIRS.filter(p => p !== it).forEach(p => pool.push(p.s, p.a));
+    const r = smartChoices(ans, cands, { pool:pool });
+    return { prompt: `Which word means the ${same ? 'SAME' : 'OPPOSITE'} as ${it.w.toUpperCase()}?`,
+      big: it.w, bigSmall: true, choices: r.choices, tags: r.tags, answer: ans, textBtns: true,
+      say: same ? `${cap(it.s)} means almost the same as ${it.w}.` : `${cap(it.a)} is the opposite of ${it.w}.`,
+      hint: same ? 'SAME = a word you could swap in without changing the meaning.' : 'OPPOSITE = the word that means the reverse.' };
+  },
+
+  passage() {
+    const P2 = pick(PASSAGES), kind = Math.random() < 0.5 ? 'main' : 'detail', Q = P2[kind];
+    return { prompt: Q.q, big: '', visual: { kind:'passage', title:P2.title, text:P2.text },
+      choices: shuffle([Q.a].concat(Q.x)), answer: Q.a, textBtns: true, longChoices: true,
+      tags: kind === 'main' ? {} : {}, say: `${Q.a}.`,
+      hint: kind === 'main' ? 'The main idea is what the WHOLE passage is mostly about, not just one sentence.'
+                            : 'Look back in the passage. The answer is right there in the words.' };
+  },
+
+  infer() {
+    const P2 = pick(PASSAGES), Q = P2.infer;
+    return { prompt: Q.q, big: '', visual: { kind:'passage', title:P2.title, text:P2.text },
+      choices: shuffle([Q.a].concat(Q.x)), answer: Q.a, textBtns: true, longChoices: true,
+      say: `${Q.a}.`, hint: 'It isn\'t written word for word. Use clues from the story plus what you already know.' };
+  },
+
+  mixG3r() {
+    return GEN[pick(['prefix','suffix','context','homophones','synant','passage','infer'])](0);
+  }
+};
+Object.keys(V3).forEach(k => {
+  const f = V3[k];
+  GEN[k] = function (arg) { const q = f(arg); if (!q.skill) q.skill = k; return q; };
+});
+
+/* ───────── DRAWINGS FOR NEW SKILLS ───────── */
+function solidSVG(name, size, color) {
+  size = size || 64; color = color || '#FFD93D';
+  const lite = 'rgba(255,255,255,0.35)', dark = 'rgba(0,0,0,0.22)', edge = 'stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linejoin="round"';
+  let s = '';
+  if (name === 'cube') {
+    s = `<polygon points="22,38 62,38 62,80 22,80" fill="${color}" ${edge}/>
+         <polygon points="22,38 38,22 78,22 62,38" fill="${color}" ${edge}/><polygon points="22,38 38,22 78,22 62,38" fill="${lite}"/>
+         <polygon points="62,38 78,22 78,64 62,80" fill="${color}" ${edge}/><polygon points="62,38 78,22 78,64 62,80" fill="${dark}"/>`;
+  } else if (name === 'sphere') {
+    const gid = 'sph' + Math.random().toString(36).slice(2, 7);
+    s = `<defs><radialGradient id="${gid}" cx="36%" cy="32%" r="70%"><stop offset="0%" stop-color="#fff" stop-opacity="0.75"/><stop offset="35%" stop-color="${color}"/><stop offset="100%" stop-color="${color}"/></radialGradient></defs>
+         <circle cx="50" cy="50" r="36" fill="${color}" ${edge}/><circle cx="50" cy="50" r="36" fill="url(#${gid})"/>
+         <path d="M50 14 A36 36 0 0 1 50 86 A28 36 0 0 0 50 14 Z" fill="${dark}"/>`;
+  } else if (name === 'cone') {
+    s = `<path d="M50 12 L82 76 A32 10 0 0 1 18 76 Z" fill="${color}" ${edge}/><path d="M50 12 L82 76 A32 10 0 0 1 50 86 Z" fill="${dark}"/>
+         <ellipse cx="50" cy="76" rx="32" ry="10" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-dasharray="4 3"/>`;
+  } else if (name === 'cylinder') {
+    s = `<path d="M22 26 V74 A28 10 0 0 0 78 74 V26 Z" fill="${color}" ${edge}/><path d="M60 30 V78 A28 10 0 0 0 78 74 V26 Z" fill="${dark}"/>
+         <ellipse cx="50" cy="26" rx="28" ry="10" fill="${color}" ${edge}/><ellipse cx="50" cy="26" rx="28" ry="10" fill="${lite}"/>`;
+  } else if (name === 'pyramid') {
+    s = `<polygon points="50,12 18,74 50,86" fill="${color}" ${edge}/><polygon points="50,12 50,86 84,70" fill="${color}" ${edge}/>
+         <polygon points="50,12 50,86 84,70" fill="${dark}"/>`;
+  }
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}">${s}</svg>`;
+}
+
+const POLY_POINTS = {
+  square:'22,22 78,22 78,78 22,78', rectangle:'8,30 92,30 92,70 8,70',
+  rhombus:'50,8 80,50 50,92 20,50', trapezoid:'30,26 70,26 92,76 8,76',
+  parallelogram:'32,28 94,28 68,74 6,74', kite:'50,8 78,40 50,92 22,40',
+  triangle:'50,12 90,84 10,84', pentagon:'50,8 90,38 75,88 25,88 10,38',
+  hexagon:'28,14 72,14 94,50 72,86 28,86 6,50'
+};
+function polySVG(name, size, color) {
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}"><polygon points="${POLY_POINTS[name]}" fill="${color}" stroke="rgba(255,255,255,0.85)" stroke-width="3.5" stroke-linejoin="round"/></svg>`;
+}
+
+function barGraphSVG(v) {
+  const W = 310, H = 200, L = 34, B = 40, T = 14, R = 8;
+  const top = v.scale * Math.max(4, Math.ceil(Math.max.apply(null, v.vals) / v.scale));
+  const y = n => T + (H - T - B) * (1 - n / top);
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+  for (let n = 0; n <= top; n += v.scale) {
+    s += `<line x1="${L}" y1="${y(n).toFixed(1)}" x2="${W - R}" y2="${y(n).toFixed(1)}" stroke="rgba(255,255,255,${n === 0 ? 0.5 : 0.12})" stroke-width="1"/>`;
+    s += `<text x="${L - 6}" y="${(y(n) + 4).toFixed(1)}" text-anchor="end" font-size="11" font-weight="800" fill="#9AA5CC" ${SVG_FONT}>${n}</text>`;
+  }
+  const slot = (W - L - R) / v.vals.length, bw = slot * 0.56;
+  const colors = ['#FF6B4A','#FFD93D','#C4B5FD','#4ADE80'];
+  v.vals.forEach((val, i) => {
+    const x = L + i * slot + (slot - bw) / 2;
+    s += `<rect x="${x.toFixed(1)}" y="${y(val).toFixed(1)}" width="${bw.toFixed(1)}" height="${(y(0) - y(val)).toFixed(1)}" rx="3" fill="${colors[i]}"/>`;
+    s += `<text x="${(x + bw / 2).toFixed(1)}" y="${H - 20}" text-anchor="middle" font-size="16" ${SVG_FONT}>${v.cats[i][0]}</text>`;
+    s += `<text x="${(x + bw / 2).toFixed(1)}" y="${H - 5}" text-anchor="middle" font-size="9.5" font-weight="800" fill="#9AA5CC" ${SVG_FONT}>${v.cats[i][1]}</text>`;
+  });
+  return s + '</svg>';
+}
+
+function colMathAny(a, b, op) {
+  const ans = op === '+' ? a + b : a - b;
+  const w = Math.max(String(a).length, String(b).length, String(ans).length);
+  const A = String(a).padStart(w, ' ').split(''), Bx = String(b).padStart(w, ' ').split('');
+  const cells = arr => arr.map(ch => `<td>${ch.trim()}</td>`).join('');
+  return `<table class="col-math"><tr><td></td>${cells(A)}</tr><tr><td>${op}</td>${cells(Bx)}</tr>` +
+         `<tr class="ans"><td></td>${Array(w).fill('<td>?</td>').join('')}</tr></table>`;
+}
+
+Object.assign(EXTRA_VIS, {
+  split(v, box) {
+    box.innerHTML = `<div class="split-wrap">
+      <div class="split-box">${Array(v.a).fill(`<span>${v.icon}</span>`).join('')}</div>
+      <div class="split-plus">+</div>
+      <div class="split-box q">?</div></div>`;
+  },
+  bars(v, box) {
+    box.innerHTML = `<div class="graph-title">${v.title}</div>` + barGraphSVG(v);
+  },
+  cycle(v, box) {
+    box.innerHTML = '<div class="cycle-row">' + v.stages.map((s, i) => i === v.missing
+      ? '<div class="cycle-chip q"><span>?</span>Missing</div>'
+      : `<div class="cycle-chip"><span>${s[1]}</span>${s[0]}</div>`).join('<div class="cycle-arrow">→</div>') + '</div>';
+  },
+  passage(v, box) {
+    box.innerHTML = `<div class="passage" onclick="say(this.innerText)"><div class="passage-title">${v.title}</div>${v.text}</div>`;
+  },
+  sentence(v, box) {
+    const t = v.word ? v.text.replace(v.word.toUpperCase(), `<b>${v.word.toUpperCase()}</b>`) : v.text;
+    box.innerHTML = `<div class="sentence" onclick="say(this.innerText)">${t}</div>`;
+  }
+});
+
+// colmath and rect visuals now handle 3-digit numbers and a hidden side
+const _colmath = EXTRA_VIS.colmath, _rect = EXTRA_VIS.rect;
+EXTRA_VIS.colmath = function (v, box) {
+  if (v.a >= 100 || v.b >= 100) box.innerHTML = colMathAny(v.a, v.b, v.op);
+  else _colmath(v, box);
+};
+EXTRA_VIS.rect = function (v, box) {
+  _rect(v, box);
+  if (v.hideH) box.innerHTML = box.innerHTML.replace(new RegExp(`>${v.h} ft<`, 'g'), '>? ft<');
+};
+
+/* ───────── LESSONS FOR NEW SKILLS ───────── */
+Object.assign(LESSONS, {
+  /* Kindergarten: Starlight Summit */
+  count100: {
+    slides: [
+      { text: 'Numbers go all the way to 100! Count on from any number: 27, 28, 29…' },
+      { text: 'After 29 comes 30. When the ones reach 9, jump to the next ten: 39, 40!',
+        visual:{ kind:'html', html:`<div style="font-size:34px;font-weight:900">38, 39, <span style="color:#FFD93D">40</span></div>` } }
+    ],
+    rw: { icon:'🏫', title:'The 100th day of school', text:'Many schools celebrate the 100th day with 100 of something: stickers, cereal pieces or steps!', tryIt:'Count 100 steps around your house or yard.' }
+  },
+  decompose: {
+    slides: [
+      { text: 'Numbers can be split into two parts. 5 can be 2 and 3.', visual:{ kind:'twogroups', a:2, b:3, icon:'🪨', op:'+' } },
+      { text: 'If you know one part, count up to find the other. 5 in all, 2 here, so 3 are hiding!', visual:{ kind:'split', a:2, icon:'🪨' } }
+    ],
+    rw: { icon:'🧤', title:'Hide and find', text:'If you had 7 toys and see 4, you know 3 are hiding somewhere.', tryIt:'Hide some of 6 pennies under a cup. Can someone guess how many are hiding?' }
+  },
+  shapes3d: {
+    slides: [
+      { text: 'Some shapes are flat. Others are solid, like things you can hold.',
+        visual:{ kind:'html', html: row([lbl(shapeSVG('square', 64, '#4AA8FF'), 'flat square'), lbl(solidSVG('cube', 70, '#4AA8FF'), 'solid cube')]) } },
+      { text: 'A sphere is round like a ball. A cylinder is like a can. A cone is like an ice cream cone.',
+        visual:{ kind:'html', html: row([lbl(solidSVG('sphere', 62, '#FF6B4A'), 'sphere'), lbl(solidSVG('cylinder', 62, '#4ADE80'), 'cylinder'), lbl(solidSVG('cone', 62, '#FFD93D'), 'cone')]) } }
+    ],
+    rw: { icon:'🛒', title:'Grocery store shapes', text:'Soup cans are cylinders, oranges are spheres and cereal boxes are like cubes.', tryIt:'Find a sphere, a cylinder and a cube in your kitchen.' }
+  },
+  endsound: {
+    slides: [
+      { text: 'Words have ending sounds too. Say dog slowly: d… o… g. It ends with guh!', say:'Words have ending sounds too. Say dog slowly. duh... ah... guh. It ends with guh!',
+        visual:{ kind:'html', html: row(['🐶', '<span style="font-weight:900">do<span style="color:#FFD93D">g</span></span>'], 50) } }
+    ],
+    rw: { icon:'✏️', title:'Spelling words', text:'Hearing the last sound helps you write the last letter of a word.', tryIt:'Say "cat," "bus" and "sun." What sound does each one end with?' }
+  },
+  shortvowel: {
+    slides: [
+      { text: 'A, E, I, O and U are vowels. In short words, the vowel sits in the middle.', say:'A, E, I, O and U are vowels. In short words, the vowel sits in the middle.',
+        visual:{ kind:'html', html:`<div style="font-size:40px;font-weight:900;letter-spacing:8px">c<span style="color:#FFD93D">a</span>t · p<span style="color:#FFD93D">i</span>g · s<span style="color:#FFD93D">u</span>n</div>` } },
+      { text: 'Listen for the middle sound: c-aah-t, p-ih-g, s-uh-n.', say:'Listen for the middle sound. kuh, aah, tuh. puh, ih, guh. sss, uh, nnn.' }
+    ],
+    rw: { icon:'📝', title:'Reading and writing', text:'Changing the vowel makes a new word: cat, cot, cut! Readers listen closely to the middle.', tryIt:'Change one sound: pig → pin → pan. How many words can you make?' }
+  },
+  digraphs: {
+    slides: [
+      { text: 'Some letters team up to make one new sound. S and H together say shhh!', say:'Some letters team up to make one new sound. S and H together say shhh!',
+        visual:{ kind:'html', html: row(['<span style="font-weight:900;color:#FFD93D">sh</span>','🚢','🐑'], 48) } },
+      { text: 'C and H say chuh, like chick. T and H say thh, like thumb.', say:'C and H say chuh, like chick. T and H say thh, like thumb.',
+        visual:{ kind:'html', html: row([lbl('🐥', 'ch'), lbl('👍', 'th')], 48) } }
+    ],
+    rw: { icon:'🦈', title:'Team letters everywhere', text:'Shark, cheese and three all start with a letter team.', tryIt:'Find something at home that starts with sh, ch or th.' }
+  },
+  kword: {
+    slides: [
+      { text: 'Some math is hiding inside stories! If more come, we add.', visual:{ kind:'twogroups', a:3, b:2, icon:'🐸', op:'+' } },
+      { text: 'If some go away, we take away.', visual:{ kind:'takeaway', total:5, gone:2, icon:'🐦' } }
+    ],
+    rw: { icon:'🍓', title:'Snack math', text:'"I have 4 strawberries and get 2 more" is a math story. So is "I ate 3."', tryIt:'At snack time, make up a math story about your food.' }
+  },
+
+  /* Grade 3: Clockwork City */
+  tens10: {
+    slides: [
+      { text: '3 × 40 is 3 groups of 4 tens. 3 × 4 = 12, so it is 12 tens: 120.', say:'3 times 40 is 3 groups of 4 tens. 3 times 4 is 12, so it is 12 tens, which is 120.' },
+      { text: 'Use the fact you know, then remember the tens: 6 × 70 → 6 × 7 = 42 → 420.', say:'Use the fact you know, then remember the tens. 6 times 70. 6 times 7 is 42, so the answer is 420.' }
+    ],
+    rw: { icon:'🎟️', title:'Buying tickets', text:'4 tickets at $30 each: 4 × 3 = 12, so $120.', tryIt:'If a video game costs $60, how much would 3 of them cost?' }
+  },
+  quads: {
+    slides: [
+      { text: 'A quadrilateral is any shape with 4 sides.', visual:{ kind:'html', html: row(['square','trapezoid','rhombus'].map(n => polySVG(n, 60, '#4AA8FF'))) } },
+      { text: 'Some are special: squares have 4 equal sides and square corners. A square is also a rectangle and a rhombus!',
+        visual:{ kind:'html', html: row([lbl(polySVG('square', 60, '#FFD93D'), 'square'), lbl(polySVG('rectangle', 60, '#4ADE80'), 'rectangle'), lbl(polySVG('rhombus', 60, '#FF6B4A'), 'rhombus')]) } }
+    ],
+    rw: { icon:'🪟', title:'Architecture', text:'Builders use rectangles for doors, trapezoids for roofs and rhombuses in tile patterns.', tryIt:'Find 3 different quadrilaterals around your house.' }
+  },
+  graphs: {
+    slides: [
+      { text: 'A bar graph shows amounts as bars. Taller bars mean more.', visual:{ kind:'bars', title:'Books read', cats:[['📘','Ana'],['📗','Ben'],['📕','Cam'],['📙','Dev']], vals:[6,4,8,2], scale:2 } },
+      { text: 'Check the numbers on the side! Here each line counts by 2. Ana read 6, Ben read 4, so Ana read 2 more.' }
+    ],
+    rw: { icon:'📰', title:'News and weather', text:'Graphs show things like how much it rained each month or who won an election.', tryIt:'Ask your family their favorite fruit and draw a bar graph.' }
+  },
+  time3: {
+    slides: [
+      { text: 'Count by 5s for each number the long hand passed. Then count the little marks one by one.', visual:{ kind:'clock', h:4, m:23 } },
+      { text: 'Here: 5, 10, 15, 20, then 21, 22, 23. It is 4:23.', say:'Here, 5, 10, 15, 20, then 21, 22, 23. It is 4 23.', visual:{ kind:'clock', h:4, m:23 } },
+      { text: 'Elapsed time is how much time passes. 2:40 plus 30 minutes: 20 minutes to 3:00, then 10 more is 3:10.', say:'Elapsed time is how much time passes. 2 40 plus 30 minutes. 20 minutes gets you to 3 o clock, then 10 more is 3 10.' }
+    ],
+    rw: { icon:'⏰', title:'Planning your day', text:'If practice starts at 4:15 and the drive takes 25 minutes, you need to leave by 3:50.', tryIt:'Time how long your bedtime routine takes, start to finish.' }
+  },
+  addsub3: {
+    slides: [
+      { text: 'Big numbers work the same way. Line up the places and start with the ones.', visual:{ kind:'html', html: colMathAny(348, 275, '+') } },
+      { text: '8 + 5 = 13 (write 3, carry 1). 4 + 7 + 1 = 12 (write 2, carry 1). 3 + 2 + 1 = 6. Answer: 623!', say:'8 plus 5 is 13. Write 3, carry 1. 4 plus 7 plus 1 is 12. Write 2, carry 1. 3 plus 2 plus 1 is 6. The answer is 623!' }
+    ],
+    rw: { icon:'✈️', title:'Travel miles', text:'Driving 348 miles one day and 275 the next is 623 miles in all.', tryIt:'Add up how many pages are in two of your favorite books.' }
+  },
+  perim3: {
+    slides: [
+      { text: 'Perimeter is the distance all the way around: add all 4 sides.', visual:{ kind:'rect', w:7, h:3 } },
+      { text: 'Missing a side? Perimeter 20, long sides 7 each: 20 − 7 − 7 = 6, split in 2 = 3 feet each.', say:'Missing a side? The perimeter is 20. The long sides are 7 each. 20 minus 7 minus 7 is 6. Split in 2, that is 3 feet each.', visual:{ kind:'rect', w:7, h:3, hideH:true } }
+    ],
+    rw: { icon:'🖼️', title:'Framing a picture', text:'Frame makers measure the perimeter to know how much wood to cut.', tryIt:'Measure around a book with a ruler and add the sides.' }
+  },
+  forces: {
+    slides: [
+      { text: 'A force is a push or a pull. Forces make things start, stop or change direction.', visual:{ kind:'html', html: row(['⚽','🧲','🪢'], 48) } },
+      { text: 'Balanced forces cancel out, so nothing moves. Unbalanced forces make things move.' },
+      { text: 'Magnets pull on iron without touching it. Same ends push apart; opposite ends pull together.' }
+    ],
+    rw: { icon:'🛹', title:'Skateboarding', text:'You push off the ground to go, and friction from the road slowly stops you.', tryIt:'Roll a ball on carpet and on a smooth floor. Which goes farther? Why?' }
+  },
+  lifecycles: {
+    slides: [
+      { text: 'Every living thing has a life cycle: it is born, grows up, and makes new life.', visual:{ kind:'cycle', stages:CYCLES[0].stages, missing:-1 } },
+      { text: 'A butterfly changes a lot: egg, caterpillar, chrysalis, then butterfly!' }
+    ],
+    rw: { icon:'🌱', title:'Gardening', text:'Gardeners plant seeds knowing they will sprout, grow, flower and make new seeds.', tryIt:'Plant a bean in a wet paper towel and watch its life cycle start.' }
+  },
+
+  /* Grade 3: Library Lighthouse */
+  prefix: {
+    slides: [
+      { text: 'A prefix goes at the START of a word and changes its meaning.', visual:{ kind:'html', html:`<div style="font-size:34px;font-weight:900"><span style="color:#FFD93D">un</span>happy = not happy</div>` } },
+      { text: 'un- = not · re- = again · pre- = before · mis- = wrongly · dis- = not · over- = too much', say:'un means not. re means again. pre means before. mis means wrongly. dis means not. over means too much.' }
+    ],
+    rw: { icon:'🎮', title:'Game buttons', text:'"Replay" means play again. "Undo" means reverse what you did. Prefixes are on buttons everywhere!', tryIt:'Find a word with re- or un- on a box, sign or screen today.' }
+  },
+  suffix: {
+    slides: [
+      { text: 'A suffix goes at the END of a word and changes its meaning.', visual:{ kind:'html', html:`<div style="font-size:30px;font-weight:900">care<span style="color:#FFD93D">ful</span> · care<span style="color:#FFD93D">less</span></div>` } },
+      { text: '-ful = full of · -less = without · -er = a person who · -ly = in a ___ way', say:'ful means full of. less means without. er means a person who. ly means in a certain way.' }
+    ],
+    rw: { icon:'👷', title:'Jobs', text:'Many jobs end in -er: teacher, baker, farmer, builder. It means "a person who."', tryIt:'Name 5 jobs that end in -er.' }
+  },
+  context: {
+    slides: [
+      { text: 'When you meet a hard word, look at the words around it. They are clues!' },
+      { text: '"The lake was so FRIGID that no one wanted to swim." No one swam, so frigid must mean very cold.', visual:{ kind:'sentence', text:'The lake was so FRIGID that no one wanted to swim.', word:'frigid' } }
+    ],
+    rw: { icon:'🕵️', title:'Word detective', text:'Good readers figure out new words without a dictionary by using the sentence around them.', tryIt:'When you find a new word in a book, guess its meaning first, then check.' }
+  },
+  homophones: {
+    slides: [
+      { text: 'Homophones sound the same but are spelled differently and mean different things.', visual:{ kind:'html', html: row(['<b>two</b>','<b>too</b>','<b>to</b>'], 34) } },
+      { text: "Their = belongs to them. There = a place. They're = they are.", say:"Their means it belongs to them. There means a place. They're means they are." }
+    ],
+    rw: { icon:'💬', title:'Texting and writing', text:'Spell-check won\'t catch "there" when you meant "their." You have to know!', tryIt:'Write one sentence using there, their and they\'re.' }
+  },
+  synant: {
+    slides: [
+      { text: 'Synonyms mean almost the SAME thing: big and large.', visual:{ kind:'html', html: row(['<b>big</b>','=','<b>large</b>'], 32) } },
+      { text: 'Antonyms are OPPOSITES: big and small.', visual:{ kind:'html', html: row(['<b>big</b>','↔','<b>small</b>'], 32) } }
+    ],
+    rw: { icon:'✍️', title:'Better writing', text:'Writers swap in synonyms so they don\'t repeat the same word over and over.', tryIt:'Find a better word for "good" in something you write today.' }
+  },
+  passage: {
+    slides: [
+      { text: 'The MAIN IDEA is what a passage is mostly about. Ask: what is the big point of the whole thing?' },
+      { text: 'DETAILS are the small facts that support the main idea. You can point to them in the text.' }
+    ],
+    rw: { icon:'📚', title:'Book reports', text:'When someone asks "What was your book about?" they want the main idea, not every detail.', tryIt:'Tell someone the main idea of the last book you read in one sentence.' }
+  },
+  infer: {
+    slides: [
+      { text: 'An inference is a smart guess using clues from the text plus what you already know.' },
+      { text: '"Sam put on his coat, grabbed an umbrella and frowned at the window." You can infer it is rainy and cold outside.' }
+    ],
+    rw: { icon:'🔎', title:'Reading people', text:'We make inferences all day: a friend with a big smile probably has good news.', tryIt:'Watch a show with the sound off for 1 minute. What can you infer?' }
+  }
+});
+LESSONS.sightword3 = LESSONS.sightword;
+
+// lesson-only visuals that need tolerant rendering
+const _split = EXTRA_VIS.split;
+EXTRA_VIS.split = function (v, box) { _split(Object.assign({ n:5 }, v), box); };
+const _cycle = EXTRA_VIS.cycle;
+EXTRA_VIS.cycle = function (v, box) { _cycle(v, box); };
+
+/* ───────── LABELS ───────── */
+Object.assign(SKILL_LABEL, {
+  count100:'Counting to 100', decompose:'Number partners', shapes3d:'Solid shapes', endsound:'Ending sounds',
+  shortvowel:'Short vowels', digraphs:'sh / ch / th', kword:'Story problems', sightword3:'Sight words (set 3)',
+  tens10:'Multiply by tens', quads:'Quadrilaterals', graphs:'Bar graphs', time3:'Time & elapsed time',
+  addsub3:'3-digit add & subtract', perim3:'Perimeter & missing sides', forces:'Forces & magnets',
+  lifecycles:'Life cycles', prefix:'Prefixes', suffix:'Suffixes', context:'Context clues',
+  homophones:'Homophones', synant:'Synonyms & antonyms', passage:'Main idea & details', infer:'Inference'
+});
+Object.assign(MISCON_LABEL, {
+  decade_reset:'Went back a ten after 9 (39 → 30)', wrote_ten_after_nine:'Wrote "10" after 9 (39 → 310)',
+  wrote_whole:'Gave the total instead of the hidden part', single_letter_not_digraph:'Heard one letter, not the letter team',
+  dropped_the_zero:'Forgot it was tens (dropped the zero)', extra_zero:'Added an extra zero',
+  read_one_bar:'Read only one bar', misread_scale:'Misread the graph scale', ignored_scale:'Counted lines, not values',
+  off_by_one_minute:'Off by one minute', read_number_not_minutes:'Read the number the hand points to, not the minutes',
+  forgot_new_hour:'Forgot to move to the next hour', didnt_regroup_hour:'Wrote more than 60 minutes (didn\'t make an hour)',
+  extra_hour:'Added an extra hour', forgot_to_reduce_hundred:'Borrowed but forgot to take the hundred away',
+  subtracted_one_side:'Subtracted only one side', forgot_to_halve:'Forgot to split between the two sides',
+  half_perimeter:'Used half the perimeter', wrong_order:'Mixed up the order of the stages',
+  misread_prefix:'Misread the prefix', misread_suffix:'Misread the suffix',
+  synonym_antonym_mixup:'Mixed up same and opposite'
+});
+
+/* ───────── GRADE-LEVEL CHECKLISTS (for grown-ups) ───────── */
+const CHECKLIST = {
+  k: [
+    ['Count to 100', ['count100','skip10']],
+    ['Add within 10', ['add','doubles']],
+    ['Subtract within 10', ['sub','kword']],
+    ['Make 10 & number partners', ['bonds','decompose']],
+    ['Teen numbers = 10 + ones', ['teens']],
+    ['Flat & solid shapes', ['shapes','shapes3d']],
+    ['Letter sounds: first, middle, last', ['letterstart','shortvowel','endsound']],
+    ['Blend sounds into words', ['blend','digraphs']],
+    ['Sight words', ['sightword','sightword2','sightword3']]
+  ],
+  g3: [
+    ['Multiplication facts', ['mult']],
+    ['Division facts', ['div','missing']],
+    ['Multiply by tens', ['tens10']],
+    ['Area & perimeter', ['area','perim3']],
+    ['Fractions', ['fracname','fraccomp']],
+    ['Round to 10 and 100', ['rounding']],
+    ['Add & subtract within 1,000', ['addsub3']],
+    ['Time to the minute & elapsed time', ['time3']],
+    ['Bar graphs', ['graphs']],
+    ['Word problems', ['word1','word2']],
+    ['Reading comprehension', ['passage','infer']],
+    ['Word parts & vocabulary', ['prefix','suffix','context','synant','homophones']]
+  ]
+};
+function checklistRows() {
+  return (CHECKLIST[pathId] || []).map(([name, skills]) => {
+    let att = 0, cor = 0;
+    Object.keys(P.skills).forEach(k => {
+      if (skills.indexOf(k.split(':')[0]) >= 0) { att += P.skills[k].att; cor += P.skills[k].cor; }
+    });
+    const pct = att ? Math.round(100 * cor / att) : 0;
+    const status = !att ? ['○', 'Not started'] : (att >= 10 && pct >= 85) ? ['✅', 'Solid'] : ['🟡', `Practicing · ${pct}%`];
+    return { name, att, pct, icon: status[0], label: status[1] };
+  });
+}
+
+/* ───────── READ-ALOUD SETTING ─────────
+   On by default for Kindergarten (pre-reader); off for Grade 3 (reads on his own).
+   Spoken questions, replay buttons and word prompts always speak. */
+function autoVoice() { return (P && P.voice !== undefined) ? P.voice : pathId === 'k'; }
+function speakAuto(t, o) { if (autoVoice()) say(t, o); }
+function toggleVoice() {
+  P.voice = !autoVoice(); persist(); updateVoiceBtn();
+  if (P.voice) say('Read aloud is on.');
+  else if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+function updateVoiceBtn() {
+  const b = document.getElementById('voice-btn');
+  if (b) b.textContent = autoVoice() ? '🔊 Read aloud: on' : '🔇 Read aloud: off';
+}
+function isCleared(n) { return (P.stars[n] || 0) > 0 || !!(P.placed && P.placed[n]); }
+
+/* ───────── QUESTION RENDERING (shared by levels + placement) ───────── */
+function renderQuestion(q) {
+  document.getElementById('q-prompt').textContent = q.prompt;
+  const big = document.getElementById('q-big');
+  big.textContent = q.big || '';
+  big.className = 'q-big' + ((q.bigSmall || q.story) ? ' small' : '');
+  big.style.display = q.big ? '' : 'none';
+  renderVisual(q.visual);
+
+  const compact = !!(q.longChoices || q.story || (q.visual && (q.visual.kind === 'passage' || q.visual.kind === 'bars')));
+  document.querySelector('#game-screen .stage').classList.toggle('compact', compact);
+
+  const cw = document.getElementById('choices');
+  cw.innerHTML = '';
+  const list = q.forceChoices || q.choices;
+  cw.style.gridTemplateColumns = q.longChoices ? '1fr' : list.length === 3 ? '1fr 1fr 1fr' : '1fr 1fr';
+  list.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'choice' + (q.textBtns ? ' txt' : '') + (q.renderChoice ? ' pic' : '') + (q.longChoices ? ' long' : '');
+    if (q.renderChoice) b.innerHTML = q.renderChoice(c); else b.textContent = c;
+    b.dataset.v = String(c);
+    b.onclick = () => answer(b, c);
+    cw.appendChild(b);
+  });
+
+  document.getElementById('place-skip').style.display = run.mode === 'place' ? '' : 'none';
+  const bs = document.getElementById('buddy-say');
+  bs.classList.remove('hint');
+  bs.textContent = run.mode === 'place' ? 'Just do your best!'
+    : pathId === 'k' ? pick(['Your turn!','You can do it!','Take your time.','What do you think?'])
+    : pick(['Your move.','Go for it.','Think it through.','Show me.']);
+
+  if (q.speakFirst) setTimeout(() => say(q.speakFirst, { rate: 0.7 }), 260);
+}
+
+/* ───────── MAP CARDS ───────── */
+function renderMapCards(inner) {
+  let h = '';
+  if (!P.placementDone) {
+    h += `<button class="map-card" onclick="startPlacement()"><span class="mc-icon">🧭</span>
+      <span class="mc-body"><b>Quick check</b><small>A few questions to find the right starting level</small></span><span class="mc-go">›</span></button>`;
+  }
+  if (pathId === 'g3') {
+    h += `<button class="map-card speed" onclick="startSpeed()"><span class="mc-icon">⚡</span>
+      <span class="mc-body"><b>Times-table speed round</b><small>60 seconds · your best: ${P.speedBest || 0}</small></span><span class="mc-go">›</span></button>`;
+  }
+  if (!h) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'map-cards';
+  wrap.innerHTML = h;
+  inner.appendChild(wrap);
+}
+
+/* ───────── PLACEMENT CHECK ─────────
+   Per world: levels in groups of 3, one question each. A group passes only if
+   all 3 are right on the first try; the first miss ends that world. Passed
+   levels count as cleared (and award their critters). */
+let place = null;
+
+function startPlacement() {
+  const path = PATHS[pathId];
+  const worlds = path.worlds.map(W => {
+    const lv = path.levels.filter(l => l.w === W.id && !l.boss);
+    const chunks = [];
+    for (let i = 0; i < lv.length; i += 3) chunks.push(lv.slice(i, i + 3));
+    return { W: W, chunks: chunks, ci: 0, passed: [], stopped: false };
+  });
+  place = { worlds: worlds, wi: 0, qi: 0, asked: 0 };
+  run = { mode:'place', level:null, q:null, locked:false, got:0, asked:0, firstTry:0, coins:0, misses:0 };
+  paintCritter(document.getElementById('buddy'), buddyFor());
+  document.getElementById('run-coins').textContent = '—';
+  show('game-screen');
+  speakAuto("Let's find your starting spot. Just do your best!");
+  placeNext();
+}
+
+function updatePlaceHud() {
+  const w = place.worlds[place.wi];
+  const frac = (place.wi + (w && w.chunks.length ? w.ci / w.chunks.length : 0)) / place.worlds.length;
+  document.getElementById('goal-fill').style.width = Math.round(Math.min(1, frac) * 100) + '%';
+  document.getElementById('goal-label').textContent = `Quick check · ${w ? w.W.name : 'done'}`;
+}
+
+function placeNext() {
+  let w = place.worlds[place.wi];
+  while (w && (w.stopped || w.ci >= w.chunks.length)) { place.wi++; place.qi = 0; w = place.worlds[place.wi]; }
+  if (!w) { finishPlacement(); return; }
+  run.level = w.chunks[w.ci][place.qi];
+  run.q = buildQuestion(run.level);
+  run.locked = false;
+  updatePlaceHud();
+  renderQuestion(run.q);
+}
+
+function placeSkip() { placeAnswer(null, null); }
+
+function placeAnswer(btn, choice) {
+  if (run.locked) return;
+  run.locked = true;
+  const q = run.q, sk = q.skill || run.level.skill;
+  const ok = !!btn && String(choice) === String(q.answer);
+  const key = q.table ? `${sk}:${q.table}` : sk;
+  if (!P.skills[key]) P.skills[key] = { att:0, cor:0 };
+  P.skills[key].att++;
+  if (ok) P.skills[key].cor++;
+  if (btn && !ok) {
+    const tag = q.tags && q.tags[String(choice)];
+    if (tag && tag !== 'guess') { if (!P.miscon[sk]) P.miscon[sk] = {}; P.miscon[sk][tag] = (P.miscon[sk][tag] || 0) + 1; }
+  }
+  place.asked++;
+  const w = place.worlds[place.wi];
+  if (ok) {
+    btn.classList.add('right');
+    place.qi++;
+    if (place.qi >= w.chunks[w.ci].length) { w.passed = w.passed.concat(w.chunks[w.ci]); w.ci++; place.qi = 0; }
+    setTimeout(placeNext, 600);
+  } else {
+    if (btn) btn.classList.add('wrong');
+    const right = Array.from(document.querySelectorAll('#choices .choice')).find(b => b.dataset.v === String(q.answer));
+    if (right) right.classList.add('glow');
+    w.stopped = true; place.qi = 0;
+    setTimeout(placeNext, 1300);
+  }
+}
+
+function finishPlacement() {
+  const path = PATHS[pathId], newly = [];
+  if (!P.placed) P.placed = {};
+  place.worlds.forEach(w => w.passed.forEach(lv => {
+    if (isCleared(lv.n)) return;
+    P.placed[lv.n] = true;
+    if (lv.reward && P.critters.indexOf(lv.reward) < 0) { P.critters.push(lv.reward); newly.push(lv.reward); }
+  }));
+  P.placementDone = Date.now();
+  run.mode = null;
+  persist();
+
+  const lines = path.worlds.map(W => {
+    const lvls = path.levels.filter(l => l.w === W.id);
+    const next = lvls.find(l => !isCleared(l.n));
+    const idx = next ? lvls.indexOf(next) + 1 : 0;
+    const where = !next ? 'All clear!' : next.boss ? 'Boss level unlocked!' : `Start at level ${idx}: ${next.title}`;
+    return `<div class="stat-line"><span>${W.icon} ${W.name}</span><b>${where}</b></div>`;
+  }).join('');
+  const crit = newly.length
+    ? `<div class="rb-label" style="margin-top:12px">Unlocked ${newly.length} critter${newly.length > 1 ? 's' : ''}!</div>
+       <div class="place-critters">${newly.map(id => `<svg viewBox="0 0 100 100">${critterSVG(CRITTERS[id])}</svg>`).join('')}</div>`
+    : '';
+  document.getElementById('place-body').innerHTML = `<div class="reward-box" style="text-align:left">${lines}${crit}</div>`;
+  show('place-screen');
+  confetti(newly.length ? 30 : 14);
+  speakAuto(newly.length ? `All done! You unlocked ${newly.length} critters!` : 'All done! Your starting spots are ready.');
+}
+
+function afterPlacement() {
+  buildMap(); refreshPickerProgress(); show('map-screen');
+}
+
+/* ───────── TIMES-TABLE SPEED ROUND ───────── */
+let speed = null;
+
+function factKey(a, b) { return `${Math.min(a, b)}x${Math.max(a, b)}`; }
+
+function pickFact() {
+  const items = [];
+  for (let a = 2; a <= 10; a++) for (let b = a; b <= 10; b++) {
+    const f = P.facts[factKey(a, b)];
+    let w = 1.5;
+    if (f) {
+      const acc = f.ok / f.n, avg = f.ok ? f.ms / f.ok : 6000;
+      w = 1 + (1 - acc) * 6 + Math.min(3, Math.max(0, (avg - 2500) / 1000));
+    }
+    if (a === 2 || a === 10 || b === 10) w *= 0.5;
+    if (speed && speed.lastKey === factKey(a, b)) w = 0;
+    items.push({ a: a, b: b, w: w });
+  }
+  let r = Math.random() * items.reduce((s, x) => s + x.w, 0);
+  for (const it of items) { r -= it.w; if (r <= 0) return Math.random() < 0.5 ? [it.a, it.b] : [it.b, it.a]; }
+  return [7, 8];
+}
+
+function startSpeed() {
+  if (!P.facts) P.facts = {};
+  speed = { t0: performance.now(), dur: 60000, score: 0, wrong: 0, raf: 0, done: false, lock: false, lastKey: '' };
+  document.getElementById('speed-stage').style.display = '';
+  document.getElementById('speed-result').style.display = 'none';
+  document.getElementById('speed-score').textContent = '0';
+  document.getElementById('speed-best').textContent = `Best: ${P.speedBest || 0}`;
+  show('speed-screen');
+  nextSpeed();
+  tickSpeed();
+}
+
+function nextSpeed() {
+  const [a, b] = pickFact(), p = a * b;
+  speed.q = { a: a, b: b, p: p };
+  speed.lastKey = factKey(a, b);
+  const r = smartChoices(p, [
+    { v:p + a, tag:'x' }, { v:p - a, tag:'x' }, { v:p + b, tag:'x' }, { v:p - b, tag:'x' }, { v:a + b, tag:'x' }
+  ], { min:1, max:110, spread:5 });
+  document.getElementById('speed-q').textContent = `${a} × ${b}`;
+  const cw = document.getElementById('speed-choices');
+  cw.innerHTML = '';
+  r.choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => speedAnswer(btn, c);
+    cw.appendChild(btn);
+  });
+  speed.qStart = performance.now();
+  speed.lock = false;
+}
+
+function speedAnswer(btn, c) {
+  if (!speed || speed.done || speed.lock) return;
+  speed.lock = true;
+  const ms = performance.now() - speed.qStart, k = factKey(speed.q.a, speed.q.b);
+  const f = P.facts[k] || (P.facts[k] = { n:0, ok:0, ms:0 });
+  f.n++;
+  if (c === speed.q.p) {
+    f.ok++; f.ms += ms; speed.score++;
+    btn.classList.add('right');
+    document.getElementById('speed-score').textContent = speed.score;
+    setTimeout(() => { if (!speed.done) nextSpeed(); }, 180);
+  } else {
+    speed.wrong++;
+    btn.classList.add('wrong');
+    const right = Array.from(document.querySelectorAll('#speed-choices .choice')).find(b => Number(b.textContent) === speed.q.p);
+    if (right) right.classList.add('glow');
+    setTimeout(() => { if (!speed.done) nextSpeed(); }, 900);
+  }
+}
+
+function tickSpeed() {
+  if (!speed || speed.done) return;
+  const left = Math.max(0, speed.dur - (performance.now() - speed.t0));
+  document.getElementById('speed-fill').style.width = (left / speed.dur * 100) + '%';
+  document.getElementById('speed-label').textContent = Math.ceil(left / 1000) + 's left';
+  if (left <= 0) { endSpeed(false); return; }
+  speed.raf = requestAnimationFrame(tickSpeed);
+}
+
+function slowFacts(n) {
+  return Object.keys(P.facts || {}).map(k => {
+    const f = P.facts[k], acc = f.ok / f.n, avg = f.ok ? f.ms / f.ok : 9000;
+    return { k: k, label: k.replace('x', ' × '), acc: acc, avg: avg, score: (1 - acc) * 10 + avg / 1000 };
+  }).filter(x => x.acc < 1 || x.avg > 3000).sort((a, b) => b.score - a.score).slice(0, n);
+}
+
+function endSpeed(quit) {
+  if (!speed) return;
+  cancelAnimationFrame(speed.raf);
+  const wasDone = speed.done;
+  speed.done = true;
+  if (wasDone) return;
+  if (quit && speed.score === 0) { persist(); buildMap(); show('map-screen'); return; }
+  const coins = speed.score * 2;
+  P.coins += coins;
+  const newBest = speed.score > (P.speedBest || 0);
+  if (newBest) P.speedBest = speed.score;
+  if (!P.speedLog) P.speedLog = [];
+  P.speedLog.push({ t: Date.now(), score: speed.score, wrong: speed.wrong });
+  if (P.speedLog.length > 100) P.speedLog = P.speedLog.slice(-100);
+  persist();
+
+  const slow = slowFacts(3);
+  document.getElementById('speed-stage').style.display = 'none';
+  const res = document.getElementById('speed-result');
+  res.style.display = '';
+  res.innerHTML = `
+    <div class="rw-icon">${newBest ? '🏆' : '⚡'}</div>
+    <h2 class="done-title">${newBest ? 'New best!' : 'Time!'}</h2>
+    <div class="reward-box" style="text-align:left">
+      <div class="stat-line"><span>Correct</span><b>${speed.score}</b></div>
+      <div class="stat-line"><span>Misses</span><b>${speed.wrong}</b></div>
+      <div class="stat-line"><span>Best ever</span><b>${P.speedBest}</b></div>
+      <div class="stat-line"><span>Coins earned</span><b>🪙 ${coins}</b></div>
+      ${slow.length ? `<div class="rb-label" style="margin-top:10px">Practice these facts</div>
+        <div class="slow-facts">${slow.map(s => `<span>${s.label}</span>`).join('')}</div>` : ''}
+    </div>
+    <div class="lesson-actions">
+      <button class="btn btn-ghost" onclick="buildMap(); show('map-screen')">Map</button>
+      <button class="btn btn-primary" onclick="startSpeed()">Go again ⚡</button>
+    </div>`;
+  if (newBest) confetti(36);
+  speakAuto(newBest ? `New best! ${speed.score} correct!` : `Time! ${speed.score} correct.`);
+}
+
+/* ───────── GROWN-UPS ADDITIONS ───────── */
+function gradeCard() {
+  const rows = checklistRows();
+  const solid = rows.filter(r => r.icon === '✅').length;
+  return `<div class="gp-card"><h3>${PATHS[pathId].grade} goals · ${solid}/${rows.length} solid</h3>
+    ${rows.map(r => `<div class="gp-line"><span>${r.icon} ${r.name}</span><b>${r.label}</b></div>`).join('')}
+    <div class="gp-empty" style="margin-top:8px">"Solid" means 10+ tries at 85%+ first-try accuracy.</div>
+    <div class="gp-actions" style="margin-top:10px"><button class="btn btn-neutral" onclick="startPlacement()">🧭 Run quick check again</button></div>
+  </div>`;
+}
+function speedCard() {
+  if (pathId !== 'g3') return '';
+  const log = P.speedLog || [];
+  const recent = log.slice(-5).map(l => l.score).join(' → ');
+  const slow = slowFacts(6);
+  return `<div class="gp-card"><h3>Times-table fluency</h3>
+    <div class="gp-line"><span>Best speed round</span><b>${P.speedBest || 0} in 60s</b></div>
+    <div class="gp-line"><span>Rounds played</span><b>${log.length}</b></div>
+    ${recent ? `<div class="gp-line"><span>Last rounds</span><b>${recent}</b></div>` : ''}
+    ${slow.length ? `<div class="gp-line"><span>Slowest or missed facts</span><b>${slow.map(s => s.label).join(', ')}</b></div>`
+                  : '<div class="gp-empty">Play a speed round to see which facts are slow.</div>'}
+    <div class="gp-empty" style="margin-top:6px">Grade-3 goal: know every fact up to 10 × 10 from memory.</div>
+  </div>`;
+}
+function gradeReportLines() {
+  const out = ['', `${PATHS[pathId].grade} goals:`];
+  checklistRows().forEach(r => out.push(`- ${r.name}: ${r.label}${r.att ? ` (${r.att} tries)` : ''}`));
+  if (pathId === 'g3') {
+    const nr = (P.speedLog || []).length;
+    out.push('', `Speed round best: ${P.speedBest || 0} in 60s (${nr} round${nr === 1 ? '' : 's'})`);
+    const slow = slowFacts(8);
+    if (slow.length) out.push('Slow/missed facts: ' + slow.map(s => `${s.label} (${Math.round(s.acc * 100)}%, ${(s.avg / 1000).toFixed(1)}s)`).join(', '));
+  }
+  const placed = Object.keys(P.placed || {}).length;
+  if (placed) out.push('', `Levels tested out by quick check: ${placed}`);
+  out.push(`Read aloud: ${autoVoice() ? 'on' : 'off'}`);
+  return out;
 }
 
 /* ───────── BOOT ───────── */
@@ -2135,6 +5150,8 @@ function doReset() {
   document.getElementById('logo-critter').innerHTML = critterSVG(CRITTERS.zaplet);
   document.getElementById('pc-k').innerHTML  = critterSVG(CRITTERS.pipling);
   document.getElementById('pc-g3').innerHTML = critterSVG(CRITTERS.cindercub);
+  setupHold();
+  document.getElementById('q-prompt').onclick = () => { if (run.q) say(run.q.speakFirst || run.q.prompt, { rate: 0.75 }); };
   refreshPickerProgress();
 
   if (save.current && PATHS[save.current]) {
