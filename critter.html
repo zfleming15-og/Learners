@@ -779,6 +779,132 @@
   .slow-facts { display: flex; flex-wrap: wrap; gap: 6px; }
   .slow-facts span { padding: 5px 11px; border-radius: 999px; background: rgba(255,107,74,0.2); border: 2px solid rgba(255,107,74,0.45); font-weight: 900; font-size: 14px; }
   #voice-btn { flex: 1; }
+
+  /* ══════════ v4: TEACH FIRST ══════════ */
+  .beats {
+    display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap;
+    margin: 0 0 8px; flex-shrink: 0;
+  }
+  .beats span {
+    font-size: 11px; font-weight: 900; letter-spacing: 0.2px; color: var(--muted);
+    padding: 4px 9px; border-radius: 999px; background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+  }
+  .beats span.on { color: #2A1A00; background: var(--gold); border-color: var(--gold); }
+  .beats span.done { color: var(--sprout); border-color: rgba(74,222,128,0.35); }
+  .beats i { color: rgba(255,255,255,0.25); font-style: normal; font-weight: 900; font-size: 12px; }
+
+  .plan-row { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .plan-row div { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 12px; font-weight: 800; color: var(--muted); }
+  .plan-row span { font-size: 30px; line-height: 1; }
+  .plan-row i { color: var(--gold); font-style: normal; font-weight: 900; }
+
+  .btn.ready { animation: readyPulse 1.2s ease-in-out infinite; }
+  @keyframes readyPulse { 50% { box-shadow: 0 5px 0 #A87C00, 0 0 0 8px rgba(255,217,61,0.22); } }
+
+  .q-card { position: relative; }
+  .q-speak {
+    position: absolute; top: 8px; right: 8px; width: 38px; height: 38px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08);
+    color: var(--ink); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .q-speak:active { transform: scale(0.92); }
+  .q-card .q-prompt { padding: 0 34px; }
+
+  /* teacher screen */
+  #teach-screen .stage { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #teach-screen .stage::before, #teach-screen .stage::after { content: ''; flex: 1 1 0; min-height: 0; }
+  .teach-row { display: flex; align-items: flex-end; gap: 8px; width: 100%; max-width: 380px; margin-bottom: 8px; min-height: 64px; flex-shrink: 0; }
+  .teach-row svg { width: 64px; height: 64px; flex-shrink: 0; }
+  .t-say {
+    flex: 1; background: var(--ink); color: var(--bg-deep);
+    padding: 10px 13px; border-radius: 16px 16px 16px 4px;
+    font-size: 15.5px; font-weight: 800; line-height: 1.35; min-height: 44px;
+  }
+  .t-say:empty { visibility: hidden; }
+  .t-say.pop { animation: sayPop 0.3s ease-out; }
+  @keyframes sayPop { from { transform: scale(0.94); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
+  #teach-screen .q-card { margin-bottom: 12px; flex-shrink: 0; }
+  #teach-screen .choices { margin-bottom: 14px; flex-shrink: 0; }
+  .choice.demo { pointer-events: none; }
+  .choice.looking { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(255,217,61,0.35), 0 4px 0 rgba(0,0,0,0.3); transform: scale(1.03); }
+  .choice.nope { opacity: 0.35; }
+  #teach-screen .lesson-actions { flex-shrink: 0; }
+
+  /* things lighting up during a demo */
+  [data-n] { position: relative; }
+  .critter-count span.lit, .pattern-row span.lit, .split-box span.lit { transform: scale(1.22); filter: drop-shadow(0 0 7px rgba(255,217,61,0.95)); transition: transform 0.2s; }
+  .critter-count span[data-n]::after, .pattern-row span[data-n]::after, .split-box span[data-n]::after, .tf-cell[data-n]::after, .dot[data-n]::after {
+    content: attr(data-n); position: absolute; left: 50%; top: -15px; transform: translateX(-50%);
+    background: var(--gold); color: #2A1A00; font: 900 11px/1 -apple-system, system-ui, sans-serif;
+    padding: 2px 5px; border-radius: 999px; white-space: nowrap; z-index: 2;
+  }
+  .dot[data-n]::after { top: auto; bottom: -3px; left: auto; right: -12px; transform: none; }
+  .dot.lit { background: radial-gradient(circle at 32% 30%, #FFFFFF, #FFD93D) !important; box-shadow: 0 0 9px rgba(255,217,61,0.9); }
+  .tf-cell.lit { background: rgba(74,222,128,0.35); border-color: var(--sprout); }
+  .tf-cell.filled.lit { box-shadow: 0 0 9px rgba(255,217,61,0.9); }
+  svg rect.lit { stroke: #FFFFFF; stroke-width: 3; filter: drop-shadow(0 0 5px rgba(255,217,61,0.9)); }
+  svg circle.lit { stroke: #FFFFFF; stroke-width: 3; }
+  svg text.lit { fill: #FFD93D; font-size: 17px; }
+  svg line.lit { stroke-width: 11; filter: drop-shadow(0 0 5px rgba(255,217,61,0.9)); }
+  svg.lit { filter: drop-shadow(0 0 7px rgba(255,217,61,0.95)); transform: scale(1.12); }
+  .pv-cell.lit { border-color: var(--gold); background: rgba(255,217,61,0.25); }
+  .bn { display: inline-block; transition: transform 0.2s; }
+  .bn.lit { color: var(--gold); transform: scale(1.18); }
+  .split-box.filling { border-style: solid; color: inherit; font-size: 26px; }
+  .col-math.demo td { transition: background 0.2s; border-radius: 6px; }
+  .col-math.demo td.lit { background: rgba(255,217,61,0.18); }
+  .col-math.demo tr.r-c td { font-size: 17px; color: var(--ember); height: 20px; }
+  .col-math.demo tr.r-a td { border-top: 3px solid var(--ink); color: var(--gold); height: 40px; }
+  .col-math.demo tr.r-a td:first-child { border-top: none; }
+  .col-math.demo s { color: var(--muted); text-decoration-color: var(--ember); text-decoration-thickness: 3px; }
+
+  /* wrong-answer explanation sheet */
+  #game-screen { overflow: hidden; }
+  .explain {
+    position: absolute; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 30;
+    background: linear-gradient(160deg, #2A3566, #1E2749); border: 2px solid rgba(255,217,61,0.55);
+    border-radius: 22px; padding: 16px; box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    transform: translateY(130%); transition: transform 0.3s cubic-bezier(0.3, 1.3, 0.5, 1);
+    max-width: 440px; margin: 0 auto;
+  }
+  .explain.open { transform: translateY(0); }
+  .ex-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .ex-head b { flex: 1; font-size: 19px; font-weight: 900; }
+  .ex-head span { font-size: 26px; }
+  .ex-hear { width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: var(--ink); font-size: 17px; cursor: pointer; }
+  .ex-why { font-size: 16px; font-weight: 700; line-height: 1.4; margin-bottom: 10px; }
+  .ex-tip { font-size: 14.5px; font-weight: 700; line-height: 1.4; padding: 10px 12px; border-radius: 12px; background: rgba(255,217,61,0.12); border: 2px dashed rgba(255,217,61,0.4); margin-bottom: 12px; }
+  .ex-tip b { color: var(--gold); }
+  .ex-actions { display: flex; gap: 10px; }
+  .ex-actions .btn-ghost { flex: 1; font-size: 14px; }
+  .ex-actions .btn-primary { flex: 1.3; padding: 13px 10px; font-size: 16px; }
+
+  /* second chance */
+  .redo-stars { font-size: 26px; letter-spacing: 2px; margin-bottom: 10px; }
+  .redo-stars span { color: var(--gold); font-weight: 900; margin: 0 4px; }
+  #redo-body p { margin: 0 0 8px; font-size: 15px; font-weight: 700; color: var(--muted); line-height: 1.45; }
+  #redo-body p b { color: var(--ink); }
+
+  .toast {
+    position: absolute; left: 50%; top: 38%; z-index: 60; pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.6); opacity: 0;
+    font-size: 30px; font-weight: 900; color: var(--gold); white-space: nowrap;
+    padding: 14px 26px; border-radius: 999px; background: rgba(10,14,39,0.94);
+    border: 3px solid var(--gold); box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  }
+  .toast.show { animation: toastIn 1.7s ease-out forwards; }
+  @keyframes toastIn {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+    18% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -60%) scale(1); }
+  }
+
+  /* sports scenes */
+  .sport-field { height: auto !important; aspect-ratio: 330 / 200; background: #0D1230 !important; }
+  .sport-field::after { display: none !important; content: none !important; }
+  .sport-field svg { width: 100%; height: 100%; display: block; }
 </style>
 </head>
 <body>
@@ -839,12 +965,14 @@
       </div>
       <div class="coin-pill">🪙 <span id="run-coins">0</span></div>
     </div>
+    <div class="beats"></div>
     <div class="stage">
       <div class="buddy-wrap">
         <svg id="buddy" viewBox="0 0 100 100"></svg>
       </div>
       <div class="buddy-say" id="buddy-say">Let's go!</div>
       <div class="q-card">
+        <button class="q-speak" onclick="speakQ()" aria-label="Read it to me">🔊</button>
         <p class="q-prompt" id="q-prompt">What is this?</p>
         <p class="q-big" id="q-big">3 + 4</p>
         <div class="q-visual" id="q-visual"></div>
@@ -852,15 +980,23 @@
       <div class="choices" id="choices"></div>
       <button class="btn-ghost" id="place-skip" style="display:none;margin-top:12px;flex-shrink:0" onclick="placeSkip()">🤷 I don't know this one yet</button>
     </div>
+    <div class="explain" id="explain">
+      <div class="ex-head"><span>🤔</span><b id="ex-title">Not quite!</b><button class="ex-hear" onclick="exHear()">🔊</button></div>
+      <div class="ex-why" id="ex-why"></div>
+      <div class="ex-tip" id="ex-tip"></div>
+      <div class="ex-actions">
+        <button class="btn btn-ghost" onclick="exShowMe()">👀 Show me how</button>
+        <button class="btn btn-primary" onclick="exRetry()">Try again</button>
+      </div>
+    </div>
+
   </div>
 
   <!-- ══════════ SPORTS BONUS ══════════ -->
   <div id="sport-screen" class="screen">
     <h2 class="sport-head" id="sport-head">🏀 Bonus Shot!</h2>
     <p class="sport-sub" id="sport-sub">Tap when the marker hits the green!</p>
-    <div class="sport-field bball" id="sport-field">
-      <div class="sport-ball" id="sport-ball">🏀</div>
-    </div>
+    <div class="sport-field" id="sport-field"><svg id="sport-svg" viewBox="0 0 330 200" preserveAspectRatio="xMidYMid meet"></svg></div>
     <div class="power-bar" id="power-bar">
       <div class="power-zone" id="power-zone"></div>
       <div class="power-zone bull" id="power-bull"></div>
@@ -915,6 +1051,7 @@
       <button class="skip-btn" id="learn-skip" onclick="beginPractice()">Skip ›</button>
       <div class="beat-pill learn">📘 LEARN</div>
     </div>
+    <div class="beats"></div>
     <div class="stage">
       <div class="buddy-wrap"><svg id="learn-buddy" viewBox="0 0 100 100"></svg></div>
       <div class="lesson-card">
@@ -984,7 +1121,44 @@
     <div class="stage" id="speed-result" style="display:none"></div>
   </div>
 
-  <!-- ══════════ RESET MODAL ══════════ -->
+<!-- ══════════ WATCH ME / SHOW ME ══════════ -->
+  <div id="teach-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="quitLevel()">←</button>
+      <h2 id="teach-title">Watch me!</h2>
+      <button class="skip-btn" id="teach-skip" onclick="beginPractice()">Skip ›</button>
+      <div class="beat-pill learn" id="teach-pill">👀 WATCH ME</div>
+    </div>
+    <div class="beats"></div>
+    <div class="stage">
+      <div class="teach-row"><svg id="t-buddy" viewBox="0 0 100 100"></svg><div class="t-say" id="t-say"></div></div>
+      <div class="q-card">
+        <p class="q-prompt" id="t-prompt"></p>
+        <p class="q-big" id="t-big"></p>
+        <div class="q-visual" id="t-visual"></div>
+      </div>
+      <div class="choices" id="t-choices"></div>
+      <div class="lesson-actions">
+        <button class="btn btn-ghost" onclick="teachAgain()">🔁 Again</button>
+        <button class="btn btn-primary" id="t-next" onclick="teachNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECOND CHANCE ══════════ -->
+  <div id="redo-screen" class="screen">
+    <div class="place-inner">
+      <div class="rw-icon">🔁</div>
+      <h2 class="done-title">Second chance!</h2>
+      <div class="reward-box" id="redo-body" style="max-width:340px"></div>
+      <div class="lesson-actions">
+        <button class="btn btn-ghost" onclick="skipRedo()">No thanks</button>
+        <button class="btn btn-primary" onclick="startRedo()">Try them ⭐</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- ══════════ RESET MODAL ══════════ -->
   <div class="backdrop" id="reset-modal">
     <div class="sheet">
       <h3>Start over?</h3>
@@ -996,6 +1170,7 @@
     </div>
   </div>
 
+  <div class="toast" id="toast"></div>
 </div>
 
 <script>
@@ -1953,17 +2128,6 @@ let run = {
 };
 
 /* ───────── SPEECH ───────── */
-function say(text, o) {
-  if (!('speechSynthesis' in window) || !text) return;
-  try {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate  = (o && o.rate)  || (pathId === 'k' ? 0.85 : 0.95);
-    u.pitch = (o && o.pitch) || 1.1;
-    u.volume = 1;
-    window.speechSynthesis.speak(u);
-  } catch (e) {}
-}
 
 /* ───────── NAV ───────── */
 function show(id) {
@@ -2009,69 +2173,14 @@ function buddyFor() {
   return PATHS[pathId].buddy;
 }
 
-function updateGoal() {
-  const lv = run.level;
-  const pct = Math.min(100, (run.got / lv.goal) * 100);
-  document.getElementById('goal-fill').style.width = pct + '%';
-  document.getElementById('goal-label').textContent = `${run.got} / ${lv.goal}`;
-}
 
-function quitLevel() {
-  if (run.mode === 'place') { finishPlacement(); return; }
-  persist();
-  buildMap();
-  show('map-screen');
-}
 
 /* ───────── SPORTS BONUS ───────── */
 
-const SPORTS = [
-  { id:'bball',    ball:'🏀', head:'🏀 Bonus Shot!',   sub:'Tap when the marker hits the green!',  win:'SWISH!',      big:'NOTHING BUT NET!' },
-  { id:'soccer',   ball:'⚽', head:'⚽ Penalty Kick!',  sub:'Time it right to score!',              win:'GOAL!',       big:'TOP CORNER!' },
-  { id:'baseball', ball:'⚾', head:'⚾ Batter Up!',     sub:'Swing when the marker is in the zone!', win:'BASE HIT!',   big:'HOME RUN!' }
-];
 
 let sportAnim = null;
 let sportState = { pos: 0, dir: 1, speed: 1.4, zone: [0,0], bull: [0,0], done: false, sport: null };
 
-function startSport() {
-  const sp = pick(SPORTS);
-  sportState.sport = sp;
-  sportState.done = false;
-  sportState.pos = 0;
-  sportState.dir = 1;
-  sportState.speed = 1.1 + Math.random() * 0.8;
-
-  document.getElementById('sport-head').textContent = sp.head;
-  document.getElementById('sport-sub').textContent = sp.sub;
-  document.getElementById('sport-field').className = 'sport-field ' + sp.id;
-  const ballEl = document.getElementById('sport-ball');
-  ballEl.textContent = sp.ball;
-  ballEl.classList.remove('launch');
-  document.getElementById('sport-result').textContent = '';
-  const btn = document.getElementById('sport-btn');
-  btn.textContent = sp.id === 'baseball' ? 'SWING!' : sp.id === 'soccer' ? 'KICK!' : 'SHOOT!';
-  btn.disabled = false;
-  btn.style.opacity = '1';
-
-  // green zone somewhere in the middle-ish, gold bullseye inside it
-  const zoneW = 26;
-  const zoneStart = rnd(18, 100 - 18 - zoneW);
-  sportState.zone = [zoneStart, zoneStart + zoneW];
-  const bullW = 8;
-  const bullStart = zoneStart + (zoneW - bullW) / 2;
-  sportState.bull = [bullStart, bullStart + bullW];
-
-  const z = document.getElementById('power-zone');
-  z.style.left = zoneStart + '%';
-  z.style.width = zoneW + '%';
-  const bl = document.getElementById('power-bull');
-  bl.style.left = bullStart + '%';
-  bl.style.width = bullW + '%';
-
-  show('sport-screen');
-  runSportAnim();
-}
 
 function runSportAnim() {
   cancelAnimationFrame(sportAnim);
@@ -2087,47 +2196,6 @@ function runSportAnim() {
   step();
 }
 
-function sportTap() {
-  if (sportState.done) return;
-  sportState.done = true;
-  cancelAnimationFrame(sportAnim);
-
-  const p = sportState.pos;
-  const sp = sportState.sport;
-  const inZone = p >= sportState.zone[0] && p <= sportState.zone[1];
-  const inBull = p >= sportState.bull[0] && p <= sportState.bull[1];
-
-  const res = document.getElementById('sport-result');
-  const btn = document.getElementById('sport-btn');
-  btn.disabled = true;
-  btn.style.opacity = '0.4';
-
-  let gain = 0;
-  if (inBull)      { gain = 25; res.textContent = '🌟 ' + sp.big;  res.style.color = '#FFD93D'; }
-  else if (inZone) { gain = 12; res.textContent = '✅ ' + sp.win;  res.style.color = '#4ADE80'; }
-  else             { gain = 2;  res.textContent = '😅 So close!';   res.style.color = '#9AA5CC'; }
-
-  if (inZone || inBull) {
-    document.getElementById('sport-ball').classList.add('launch');
-    confetti(inBull ? 26 : 14);
-    say(inBull ? sp.big : sp.win);
-  } else {
-    say('So close!');
-  }
-
-  run.coins += gain;
-  document.getElementById('run-coins').textContent = run.coins;
-
-  setTimeout(() => {
-    res.textContent = `+${gain} 🪙`;
-    res.style.color = '#FFD93D';
-  }, 900);
-
-  setTimeout(() => {
-    show('game-screen');
-    nextQuestion();
-  }, 1900);
-}
 
 /* ───────── LEVEL COMPLETE ───────── */
 
@@ -3359,218 +3427,17 @@ function renderVisual(v, boxEl) {
 }
 
 /* ───────── QUEST LOOP: Learn → Apply → Real World → Reward ───────── */
-function startLevel(lv) {
-  run = { level: lv, got: 0, asked: 0, firstTry: 0, coins: 0, q: null,
-          locked: false, clean: true, sinceSport: 0, misses: 0, fbIndex: -1 };
-  P.last = lv.n; persist();
-  paintCritter(document.getElementById('buddy'), buddyFor());
-  document.getElementById('run-coins').textContent = '0';
-  updateGoal();
-  const L = LESSONS[lv.skill];
-  if (L && !lv.boss) showLearn(lv, L);
-  else beginPractice();
-}
 
-function beginPractice() {
-  show('game-screen');
-  nextQuestion();
-}
 
-function levelGoalReached() {
-  const L = LESSONS[run.level.skill];
-  if (L && L.rw && !run.level.boss) showRealWorld(L.rw);
-  else finishLevel();
-}
 
-let learnState = { slides: [], i: 0 };
 
-function showLearn(lv, L) {
-  learnState = { slides: L.slides, i: 0 };
-  document.getElementById('learn-title').textContent = lv.title;
-  paintCritter(document.getElementById('learn-buddy'), buddyFor());
-  document.getElementById('learn-skip').style.display = P.stars[lv.n] ? '' : 'none';
-  show('learn-screen');
-  renderSlide();
-}
 
-function renderSlide() {
-  const s = learnState.slides[learnState.i];
-  document.getElementById('learn-text').textContent = s.text;
-  renderVisual(s.visual || null, document.getElementById('learn-visual'));
-  const dots = document.getElementById('learn-dots');
-  dots.innerHTML = learnState.slides.length > 1
-    ? learnState.slides.map((_, i) => `<i class="${i === learnState.i ? 'on' : ''}"></i>`).join('') : '';
-  const last = learnState.i === learnState.slides.length - 1;
-  document.getElementById('learn-next').textContent = last ? "Let's practice! →" : 'Next →';
-  speakAuto(s.say || s.text, { rate: pathId === 'k' ? 0.85 : 0.95 });
-}
-function nextSlide() {
-  if (learnState.i < learnState.slides.length - 1) { learnState.i++; renderSlide(); }
-  else beginPractice();
-}
-function replaySlide() {
-  const s = learnState.slides[learnState.i];
-  say(s.say || s.text);
-}
 
-function showRealWorld(rw) {
-  document.getElementById('rw-icon').textContent = rw.icon;
-  document.getElementById('rw-title').textContent = rw.title;
-  document.getElementById('rw-text').textContent = rw.text;
-  document.getElementById('rw-try').innerHTML = '<b>Try it:</b> ' + rw.tryIt;
-  show('world-screen');
-  speakAuto(`${rw.title}. ${rw.text} Try it: ${rw.tryIt}`);
-}
-function replayWorld() {
-  const t = document.getElementById('rw-title').textContent + '. ' +
-            document.getElementById('rw-text').textContent + ' ' +
-            document.getElementById('rw-try').textContent;
-  say(t);
-}
 
 /* ───────── PRACTICE ───────── */
-function nextQuestion() {
-  if (run.got >= run.level.goal) { levelGoalReached(); return; }
-  run.q = buildQuestion(run.level);
-  run.locked = false;
-  run.thisOneClean = true;
-  run.misses = 0;
-  renderQuestion(run.q);
-}
 
-function answer(btn, choice) {
-  if (run.mode === 'place') { placeAnswer(btn, choice); return; }
-  if (run.locked || btn.disabled) return;
-  const q = run.q;
-  const sk = q.skill || run.level.skill;
-  const correct = String(choice) === String(q.answer);
-  const bs = document.getElementById('buddy-say');
-
-  if (!correct) {
-    run.thisOneClean = false;
-    run.clean = false;
-    run.misses++;
-
-    // Diagnose: which misconception did this wrong answer reveal?
-    const tag = q.tags && q.tags[String(choice)];
-    if (tag && tag !== 'guess') {
-      if (!P.miscon[sk]) P.miscon[sk] = {};
-      P.miscon[sk][tag] = (P.miscon[sk][tag] || 0) + 1;
-      persist();
-    }
-
-    btn.classList.add('wrong');
-    bs.classList.add('hint');
-    if (run.misses === 1 && q.hint) {
-      bs.textContent = '💡 ' + q.hint;
-      if (q.hintSpeak) say(q.hintSpeak, { rate: 0.7 }); else speakAuto(q.hint);
-    } else {
-      // Second miss: show how, and light up the right answer
-      bs.textContent = '👀 ' + q.say;
-      speakAuto(q.say);
-      const right = Array.from(document.querySelectorAll('#choices .choice'))
-        .find(b => b.dataset.v === String(q.answer));
-      if (right) right.classList.add('glow');
-    }
-    setTimeout(() => {
-      btn.classList.remove('wrong');
-      btn.disabled = true;
-      btn.style.opacity = '0.35';
-    }, 420);
-    return;
-  }
-
-  // ── correct
-  run.locked = true;
-  btn.classList.remove('glow');
-  btn.classList.add('right');
-  run.got++;
-  run.asked++;
-  if (run.thisOneClean) run.firstTry++;
-
-  const gain = run.thisOneClean ? 10 : 5;
-  run.coins += gain;
-  document.getElementById('run-coins').textContent = run.coins;
-
-  const key = q.table ? `${sk}:${q.table}` : sk;
-  if (!P.skills[key]) P.skills[key] = { att: 0, cor: 0 };
-  P.skills[key].att++;
-  if (run.thisOneClean) P.skills[key].cor++;
-
-  bs.classList.remove('hint');
-  bs.textContent = pick(pathId === 'k' ? CHEERS_K : CHEERS_G);
-  const bud = document.getElementById('buddy');
-  bud.classList.remove('cheer'); void bud.offsetWidth; bud.classList.add('cheer');
-
-  speakAuto(q.say);
-  updateGoal();
-  run.sinceSport++;
-
-  setTimeout(() => {
-    if (run.got >= run.level.goal) { levelGoalReached(); return; }
-    if (run.sinceSport >= 4) { run.sinceSport = 0; startSport(); return; }
-    nextQuestion();
-  }, q.say && q.say.length > 40 ? 1700 : 950);
-}
 
 /* ───────── LEVEL COMPLETE ───────── */
-function finishLevel() {
-  const lv = run.level;
-  const acc = run.asked ? run.firstTry / run.asked : 0;
-  const stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : 1;
-  run.acc = acc;
-  run.fbIndex = -1;
-
-  P.stars[lv.n] = Math.max(P.stars[lv.n] || 0, stars);
-  P.coins += run.coins;
-  let newCritter = null;
-  if (lv.reward && !P.critters.includes(lv.reward)) {
-    P.critters.push(lv.reward);
-    newCritter = lv.reward;
-  }
-  persist();
-
-  document.getElementById('done-title').textContent = lv.boss ? 'World Complete!' : 'Level Clear!';
-  const sr = document.getElementById('star-row');
-  sr.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    const s = document.createElement('span');
-    s.textContent = i < stars ? '⭐' : '☆';
-    s.style.animationDelay = (i * 0.16) + 's';
-    s.style.opacity = i < stars ? '1' : '0.25';
-    sr.appendChild(s);
-  }
-
-  const box = document.getElementById('reward-box');
-  if (newCritter) {
-    const c = CRITTERS[newCritter];
-    box.style.display = '';
-    document.getElementById('rb-label').textContent =
-      c.stage >= 3 ? '✨ Legendary Critter!' : c.stage === 2 ? '✨ Evolved Critter!' : 'New Critter!';
-    const svg = document.getElementById('hatch-svg');
-    svg.innerHTML = critterSVG(c);
-    svg.classList.remove('pop'); void svg.offsetWidth; svg.classList.add('pop');
-    document.getElementById('hatch-name').textContent = c.name;
-    const chip = document.getElementById('hatch-type');
-    chip.textContent = TYPES[c.type].name;
-    chip.style.background = TYPES[c.type].c1;
-  } else {
-    box.style.display = 'none';
-  }
-
-  document.getElementById('done-correct').textContent = `${run.firstTry} / ${run.asked} first try`;
-  document.getElementById('done-coins').textContent = `🪙 ${run.coins}`;
-  document.querySelectorAll('.fb-btn').forEach(b => b.classList.remove('on'));
-
-  show('done-screen');
-  document.getElementById('done-screen').scrollTop = 0;
-  confetti(stars >= 3 ? 40 : 24);
-  setTimeout(() => confetti(16), 380);
-
-  speakAuto(newCritter
-    ? `Level complete! You found ${CRITTERS[newCritter].name}! How was that level?`
-    : 'Level complete! Nice work! How was that level?');
-}
 
 function giveFeedback(btn) {
   const r = btn.dataset.r;
@@ -4803,53 +4670,9 @@ function checklistRows() {
 /* ───────── READ-ALOUD SETTING ─────────
    On by default for Kindergarten (pre-reader); off for Grade 3 (reads on his own).
    Spoken questions, replay buttons and word prompts always speak. */
-function autoVoice() { return (P && P.voice !== undefined) ? P.voice : pathId === 'k'; }
-function speakAuto(t, o) { if (autoVoice()) say(t, o); }
-function toggleVoice() {
-  P.voice = !autoVoice(); persist(); updateVoiceBtn();
-  if (P.voice) say('Read aloud is on.');
-  else if (window.speechSynthesis) window.speechSynthesis.cancel();
-}
-function updateVoiceBtn() {
-  const b = document.getElementById('voice-btn');
-  if (b) b.textContent = autoVoice() ? '🔊 Read aloud: on' : '🔇 Read aloud: off';
-}
 function isCleared(n) { return (P.stars[n] || 0) > 0 || !!(P.placed && P.placed[n]); }
 
 /* ───────── QUESTION RENDERING (shared by levels + placement) ───────── */
-function renderQuestion(q) {
-  document.getElementById('q-prompt').textContent = q.prompt;
-  const big = document.getElementById('q-big');
-  big.textContent = q.big || '';
-  big.className = 'q-big' + ((q.bigSmall || q.story) ? ' small' : '');
-  big.style.display = q.big ? '' : 'none';
-  renderVisual(q.visual);
-
-  const compact = !!(q.longChoices || q.story || (q.visual && (q.visual.kind === 'passage' || q.visual.kind === 'bars')));
-  document.querySelector('#game-screen .stage').classList.toggle('compact', compact);
-
-  const cw = document.getElementById('choices');
-  cw.innerHTML = '';
-  const list = q.forceChoices || q.choices;
-  cw.style.gridTemplateColumns = q.longChoices ? '1fr' : list.length === 3 ? '1fr 1fr 1fr' : '1fr 1fr';
-  list.forEach(c => {
-    const b = document.createElement('button');
-    b.className = 'choice' + (q.textBtns ? ' txt' : '') + (q.renderChoice ? ' pic' : '') + (q.longChoices ? ' long' : '');
-    if (q.renderChoice) b.innerHTML = q.renderChoice(c); else b.textContent = c;
-    b.dataset.v = String(c);
-    b.onclick = () => answer(b, c);
-    cw.appendChild(b);
-  });
-
-  document.getElementById('place-skip').style.display = run.mode === 'place' ? '' : 'none';
-  const bs = document.getElementById('buddy-say');
-  bs.classList.remove('hint');
-  bs.textContent = run.mode === 'place' ? 'Just do your best!'
-    : pathId === 'k' ? pick(['Your turn!','You can do it!','Take your time.','What do you think?'])
-    : pick(['Your move.','Go for it.','Think it through.','Show me.']);
-
-  if (q.speakFirst) setTimeout(() => say(q.speakFirst, { rate: 0.7 }), 260);
-}
 
 /* ───────── MAP CARDS ───────── */
 function renderMapCards(inner) {
@@ -5144,6 +4967,1874 @@ function gradeReportLines() {
   return out;
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   v4 — TEACH FIRST
+   Learn → Watch me → Together → Your turn → Second chance → Real life
+   ═══════════════════════════════════════════════════════════ */
+
+/* ───────── SPEECH ─────────
+   Picks the best installed English voice, survives Safari's cancel/speak bug,
+   and can tell the caller when a line has finished (so lessons stay in sync). */
+let VOICE = null, speakTok = 0, speakU = null, speechUnlocked = false;
+
+function pickVoice() {
+  if (!('speechSynthesis' in window)) return;
+  const vs = window.speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
+  if (!vs.length) return;
+  const score = v => {
+    let s = 0;
+    if (/^en[-_]US/i.test(v.lang)) s += 5;
+    if (/premium/i.test(v.name)) s += 8;
+    else if (/enhanced|neural|natural/i.test(v.name)) s += 6;
+    if (/samantha|ava|allison|susan|zoe|nicky|aria|jenny|google us english/i.test(v.name)) s += 4;
+    if (/novelty|whisper|bad news|bells|boing|bubbles|cellos|zarvox|trinoids|jester|organ|superstar|wobble|albert|fred|junior|ralph|kathy|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley/i.test(v.name)) s -= 20;
+    if (v.localService) s += 1;
+    return s;
+  };
+  VOICE = vs.slice().sort((a, b) => score(b) - score(a))[0];
+}
+if ('speechSynthesis' in window) {
+  pickVoice();
+  try { window.speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {}
+}
+
+// iOS only allows speech after a tap; speak a silent line on the very first tap.
+function unlockSpeech() {
+  if (speechUnlocked || !('speechSynthesis' in window)) return;
+  speechUnlocked = true;
+  try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); } catch (e) {}
+}
+document.addEventListener('pointerdown', unlockSpeech, true);
+
+function estMs(text, rate) {
+  const w = String(text).split(/\s+/).filter(Boolean).length;
+  return Math.max(650, (w * 380 + 250) / (rate || 1));
+}
+
+/* say(text, opts, onDone): onDone fires when the line finishes. If a newer line
+   interrupts, onDone is skipped unless opts.always is set (lessons use always). */
+function say(text, o, onDone) {
+  o = o || {};
+  const tok = ++speakTok;
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    if (onDone && (tok === speakTok || o.always)) onDone();
+  };
+  text = String(text || '').replace(/[🔊👂💡👀✅🤝⭐🔁👆]/gu, '').replace(/\s+/g, ' ').trim();
+  const rate = o.rate || (pathId === 'k' ? 0.85 : 0.95);
+  if (!text) { setTimeout(finish, 0); return; }
+  if (!('speechSynthesis' in window)) { setTimeout(finish, estMs(text, rate)); return; }
+  const fallback = setTimeout(finish, estMs(text, rate) + 1600);
+  try {
+    const synth = window.speechSynthesis;
+    const go = () => {
+      if (tok !== speakTok) { clearTimeout(fallback); finish(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if (VOICE) u.voice = VOICE;
+      u.rate = rate; u.pitch = o.pitch || 1.06; u.volume = 1;
+      u.onend = () => { clearTimeout(fallback); setTimeout(finish, 110); };
+      u.onerror = () => { clearTimeout(fallback); setTimeout(finish, 110); };
+      speakU = u;                       // keep a reference: Safari drops onend if the utterance is garbage-collected
+      synth.speak(u);
+    };
+    if (synth.speaking || synth.pending) { synth.cancel(); setTimeout(go, 80); }
+    else go();
+  } catch (e) { clearTimeout(fallback); setTimeout(finish, estMs(text, rate)); }
+}
+function sayP(text, o) { return new Promise(res => say(text, Object.assign({ always: true }, o || {}), res)); }
+function hush() {
+  speakTok++;
+  try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+}
+
+/* Read-aloud setting. Lessons, demos and "together" problems ALWAYS narrate.
+   Practice questions are read aloud by default for Kindergarten, off for Grade 3. */
+function autoVoice() { return (P && P.voice !== undefined) ? P.voice : pathId === 'k'; }
+function speakAuto(t, o, cb) { if (autoVoice()) say(t, o, cb); else if (cb) setTimeout(cb, 0); }
+function toggleVoice() {
+  P.voice = !autoVoice(); persist(); updateVoiceBtn();
+  if (P.voice) say('Questions will be read aloud.');
+  else hush();
+}
+function updateVoiceBtn() {
+  const b = document.getElementById('voice-btn');
+  if (b) b.textContent = autoVoice() ? '🔊 Read questions aloud: on' : '🔇 Read questions aloud: off';
+}
+function rateQ() { return pathId === 'k' ? 0.82 : 0.92; }
+function rateL() { return pathId === 'k' ? 0.86 : 0.95; }
+
+/* Turning what's on screen into something a voice can say */
+function spokenMath(s) {
+  return String(s)
+    .replace(/×/g, ' times ').replace(/÷/g, ' divided by ').replace(/−/g, ' minus ')
+    .replace(/\+/g, ' plus ').replace(/=/g, ' equals ').replace(/\?/g, ' what ')
+    .replace(/·/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function cleanPrompt(p) { return String(p || '').replace(/^🔊\s*/, ''); }
+function mathBig(q) {
+  const b = String(q.big || '');
+  if (!b || !/\d/.test(b) || /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(b)) return '';
+  return spokenMath(b);
+}
+function normTxt(s) { return String(s).toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim(); }
+function qSpeech(q, full) {
+  const prompt = cleanPrompt(q.prompt);
+  const mb = mathBig(q);
+  const base = prompt + (mb ? (/[.!?]$/.test(prompt) ? ' ' : '. ') + mb : '');
+  if (!q.speakFirst) return base;
+  const sf = q.speakFirst;
+  if (!full) return sf;
+  if (normTxt(sf).indexOf(normTxt(prompt).slice(0, 14)) >= 0 || sf.length > 22) return sf;
+  return base + ' ... ' + sf;
+}
+function speakQ() {
+  const q = run && run.q;
+  if (q) say(qSpeech(q, true), { rate: rateQ() });
+}
+
+/* ───────── QUESTION PAINTING (game screen + teacher screen share it) ───────── */
+const GQ = { prompt:'q-prompt', big:'q-big', visual:'q-visual', choices:'choices' };
+const TQ = { prompt:'t-prompt', big:'t-big', visual:'t-visual', choices:'t-choices' };
+
+function paintQuestion(q, ids, onPick) {
+  document.getElementById(ids.prompt).textContent = cleanPrompt(q.prompt);
+  const big = document.getElementById(ids.big);
+  big.textContent = q.big || '';
+  big.className = 'q-big' + ((q.bigSmall || q.story) ? ' small' : '');
+  big.style.display = q.big ? '' : 'none';
+  renderVisual(q.visual || null, document.getElementById(ids.visual));
+
+  const cw = document.getElementById(ids.choices);
+  cw.innerHTML = '';
+  const list = q.forceChoices || q.choices;
+  cw.style.gridTemplateColumns = q.longChoices ? '1fr' : list.length === 3 ? '1fr 1fr 1fr' : '1fr 1fr';
+  list.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'choice' + (q.textBtns ? ' txt' : '') + (q.renderChoice ? ' pic' : '') + (q.longChoices ? ' long' : '');
+    if (q.renderChoice) b.innerHTML = q.renderChoice(c); else b.textContent = c;
+    b.dataset.v = String(c);
+    if (onPick) b.onclick = () => onPick(b, c);
+    else { b.classList.add('demo'); b.tabIndex = -1; }
+    cw.appendChild(b);
+  });
+}
+
+function renderQuestion(q) {
+  hideExplain();
+  paintQuestion(q, GQ, answer);
+
+  const compact = !!(q.longChoices || q.story || (q.visual && (q.visual.kind === 'passage' || q.visual.kind === 'bars')));
+  document.querySelector('#game-screen .stage').classList.toggle('compact', compact);
+  document.getElementById('place-skip').style.display = run.mode === 'place' ? '' : 'none';
+
+  const bs = document.getElementById('buddy-say');
+  bs.classList.remove('hint');
+  if (run.mode === 'place') bs.textContent = 'Just do your best!';
+  else if (run.mode === 'together') { bs.classList.add('hint'); bs.textContent = '🤝 Let\'s do it together! 💡 ' + (q.hint || ''); }
+  else if (run.mode === 'redo') bs.textContent = '🔁 This one is like one you missed. You\'ve got this!';
+  else bs.textContent = pathId === 'k'
+    ? pick(['Your turn!','You can do it!','Take your time.','What do you think?'])
+    : pick(['Your move.','Go for it.','Think it through.','Show me.']);
+
+  setBeats(run.mode === 'place' ? null : modeBeat());
+  if (!run.holdVoice) setTimeout(() => { if (run.q === q && !run.holdVoice) readQ(q); }, 300);
+}
+
+function readQ(q) {
+  if (run.mode === 'together') {
+    say(qSpeech(q, true), { rate: rateQ() }, () => {
+      if (run.q === q && !run.locked && q.hint) say('Here\'s a tip. ' + q.hint, { rate: rateQ() });
+    });
+  } else if (autoVoice()) say(qSpeech(q, true), { rate: rateQ() });
+  else if (q.speakFirst) say(q.speakFirst, { rate: 0.75 });
+}
+
+/* ───────── PROGRESS STRIP: Learn › Watch › Together › Your turn ───────── */
+const BEATS = [['learn','📘','Learn'], ['watch','👀','Watch'], ['together','🤝','Together'], ['practice','⭐','Your turn']];
+function modeBeat() {
+  if (!run || !run.level) return null;
+  if (run.level.boss) return 'boss';
+  if (run.mode === 'redo') return 'redo';
+  if (run.mode === 'together') return 'together';
+  return LESSONS[run.level.skill] ? 'practice' : 'boss';
+}
+function setBeats(active) {
+  document.querySelectorAll('.beats').forEach(el => {
+    if (!active) { el.style.display = 'none'; return; }
+    el.style.display = '';
+    if (active === 'boss') { el.innerHTML = '<span class="on">👑 Mix of everything in this world</span>'; return; }
+    if (active === 'redo') { el.innerHTML = '<span class="on">🔁 Second chance</span>'; return; }
+    const idx = BEATS.findIndex(b => b[0] === active);
+    el.innerHTML = BEATS.map((b, i) =>
+      `<span class="${i < idx ? 'done' : i === idx ? 'on' : ''}">${i < idx ? '✓' : b[1]} ${b[2]}</span>`).join('<i>›</i>');
+  });
+}
+
+function toast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
+}
+
+/* ───────── LEVEL FLOW ───────── */
+function startLevel(lv) {
+  stopDemo(); hush(); hideExplain();
+  run = { level: lv, got: 0, asked: 0, firstTry: 0, coins: 0, q: null, locked: false, clean: true,
+          sinceSport: 0, misses: 0, fbIndex: -1, mode: 'practice', missed: [], fixed: 0,
+          redoDone: false, redoQs: [], redoI: 0, together: 0, holdVoice: false };
+  P.last = lv.n; persist();
+  paintCritter(document.getElementById('buddy'), buddyFor());
+  document.getElementById('run-coins').textContent = '0';
+  const L = LESSONS[lv.skill];
+  if (L && !lv.boss) { showLearn(lv, L); return; }
+
+  // Boss levels: no lesson, a spoken intro, then the mix
+  run.mode = 'practice'; run.holdVoice = true;
+  show('game-screen');
+  nextQuestion();
+  toast(lv.boss ? '👑 Boss level!' : '⭐ Your turn!');
+  const intro = lv.boss
+    ? `Boss level! This one mixes everything from this world. Get ${lv.goal} right to beat it!`
+    : `Get ${lv.goal} right!`;
+  say(intro, { rate: rateL() }, () => { run.holdVoice = false; if (run.q && !run.locked) readQ(run.q); });
+}
+
+let learnState = { slides: [], i: 0 };
+
+function showLearn(lv, L) {
+  const goal = GOALS[lv.skill] || (SKILL_LABEL[lv.skill] || 'something new').toLowerCase();
+  const plan = '<div class="plan-row">' + [['📘','Learn'],['👀','Watch me'],['🤝','Together'],['⭐','Your turn']]
+    .map(p => `<div><span>${p[0]}</span>${p[1]}</div>`).join('<i>›</i>') + '</div>';
+  const intro = {
+    text: `Today: ${goal}.`,
+    say: `${lv.title}! Today you'll learn ${goal}. First I'll teach you. Then I'll show you one. Then we'll do some together, and then it's your turn!`,
+    visual: { kind: 'html', html: plan }
+  };
+  learnState = { slides: [intro].concat(L.slides), i: 0 };
+  document.getElementById('learn-title').textContent = lv.title;
+  paintCritter(document.getElementById('learn-buddy'), buddyFor());
+  document.getElementById('learn-skip').style.display = isCleared(lv.n) ? '' : 'none';
+  setBeats('learn');
+  show('learn-screen');
+  renderSlide();
+}
+
+function renderSlide() {
+  const i = learnState.i, s = learnState.slides[i];
+  document.getElementById('learn-text').textContent = s.text;
+  renderVisual(s.visual || null, document.getElementById('learn-visual'));
+  const dots = document.getElementById('learn-dots');
+  dots.innerHTML = learnState.slides.length > 1
+    ? learnState.slides.map((_, k) => `<i class="${k === i ? 'on' : ''}"></i>`).join('') : '';
+  const btn = document.getElementById('learn-next');
+  btn.textContent = i === learnState.slides.length - 1 ? 'Watch me →' : 'Next →';
+  btn.classList.remove('ready');
+  say(s.say || s.text, { rate: rateL() }, () => {
+    if (learnState.i === i && document.getElementById('learn-screen').classList.contains('active')) btn.classList.add('ready');
+  });
+}
+function nextSlide() {
+  if (learnState.i < learnState.slides.length - 1) { learnState.i++; renderSlide(); }
+  else startWatch();
+}
+function replaySlide() {
+  const s = learnState.slides[learnState.i];
+  say(s.say || s.text, { rate: rateL() });
+}
+
+/* ── Watch me: a narrated worked example built from this level's own question ── */
+let teach = { mode: null, q: null };
+
+function teachExample(level) {
+  const c = [];
+  for (let i = 0; i < 9; i++) c.push(buildQuestion(level));
+  if (c.every(q => typeof q.answer === 'number')) {
+    c.sort((a, b) => a.answer - b.answer);
+    return c[3];                      // a smallish, friendly example
+  }
+  return c[0];
+}
+
+function startWatch() {
+  hush();
+  teach.mode = 'watch';
+  teach.q = teachExample(run.level);
+  openTeach('Watch me!', 'Let\'s try one together →');
+  setBeats('watch');
+  playTeach();
+}
+
+function openTeach(title, nextLabel) {
+  document.getElementById('teach-title').textContent = title;
+  document.getElementById('t-next').textContent = nextLabel;
+  document.getElementById('teach-pill').textContent = teach.mode === 'fix' ? '👀 SHOW ME' : '👀 WATCH ME';
+  document.getElementById('teach-skip').style.display = teach.mode === 'watch' && isCleared(run.level.n) ? '' : 'none';
+  paintCritter(document.getElementById('t-buddy'), buddyFor());
+  document.getElementById('t-say').textContent = '';
+  show('teach-screen');
+}
+
+async function playTeach() {
+  const btn = document.getElementById('t-next');
+  btn.classList.remove('ready');
+  const done = await runDemo(teach.q);
+  if (done && document.getElementById('teach-screen').classList.contains('active')) btn.classList.add('ready');
+}
+function teachAgain() { hush(); playTeach(); }
+function teachNext() {
+  stopDemo(); hush();
+  if (teach.mode === 'fix') backFromFix();
+  else startTogether();
+}
+
+/* ── Together: two guided problems, tip shown up front, no score ── */
+function startTogether() {
+  run.mode = 'together'; run.together = 0; run.holdVoice = false;
+  show('game-screen');
+  nextQuestion();
+}
+
+function startYourTurn() {
+  run.mode = 'practice'; run.holdVoice = true;
+  show('game-screen');
+  nextQuestion();
+  toast('⭐ Your turn!');
+  const lv = run.level;
+  const prize = lv.reward && !P.critters.includes(lv.reward);
+  say(`Great teamwork! Now it's your turn. Get ${lv.goal} right${prize ? ' to win a new critter' : ''}!`,
+      { rate: rateL() }, () => { run.holdVoice = false; if (run.q && !run.locked) readQ(run.q); });
+}
+
+function beginPractice() {            // the "Skip" buttons on replays
+  stopDemo(); hush();
+  run.mode = 'practice'; run.holdVoice = false;
+  show('game-screen');
+  nextQuestion();
+}
+
+function updateGoal() {
+  const lv = run.level;
+  let pct, label;
+  if (run.mode === 'together') {
+    pct = run.together / 2 * 100;
+    label = `🤝 Together ${Math.min(run.together + 1, 2)} of 2`;
+  } else if (run.mode === 'redo') {
+    const n = run.redoQs.length || 1;
+    pct = run.redoI / n * 100;
+    label = `🔁 Second chance ${Math.min(run.redoI + 1, n)} of ${n}`;
+  } else {
+    pct = Math.min(100, run.got / lv.goal * 100);
+    label = `${run.got} / ${lv.goal}`;
+  }
+  document.getElementById('goal-fill').style.width = pct + '%';
+  document.getElementById('goal-label').textContent = label;
+}
+
+function nextQuestion() {
+  run.locked = false; run.thisOneClean = true; run.misses = 0;
+  if (run.mode === 'redo') {
+    if (run.redoI >= run.redoQs.length) { run.redoDone = true; levelGoalReached(); return; }
+    run.q = run.redoQs[run.redoI];
+  } else if (run.mode === 'together') {
+    run.q = buildQuestion(run.level);
+  } else {
+    if (run.got >= run.level.goal) { levelGoalReached(); return; }
+    run.q = buildQuestion(run.level);
+  }
+  updateGoal();
+  renderQuestion(run.q);
+}
+
+/* After a right answer: say the explanation, then move on when the voice is done */
+function sayThenGo(text, spoken, fn) {
+  const r = run, t0 = Date.now();
+  let fired = false;
+  const go = () => {
+    if (fired) return; fired = true;
+    setTimeout(() => { if (run === r && document.getElementById('game-screen').classList.contains('active')) fn(); },
+               Math.max(0, 900 - (Date.now() - t0)));
+  };
+  if (spoken) say(text, { rate: rateQ(), always: true }, go);
+  else setTimeout(go, text && text.length > 40 ? 1500 : 950);
+}
+
+function answer(btn, choice) {
+  if (run.mode === 'place') { placeAnswer(btn, choice); return; }
+  if (run.locked || btn.disabled) return;
+  const q = run.q, sk = q.skill || run.level.skill;
+  const correct = String(choice) === String(q.answer);
+  const bs = document.getElementById('buddy-say');
+
+  if (!correct) {
+    run.thisOneClean = false;
+    run.misses++;
+    if (run.mode === 'practice') run.clean = false;
+    const tag = q.tags && q.tags[String(choice)];
+    if (run.mode !== 'together' && tag && tag !== 'guess' && tag !== 'x') {
+      if (!P.miscon[sk]) P.miscon[sk] = {};
+      P.miscon[sk][tag] = (P.miscon[sk][tag] || 0) + 1;
+      persist();
+    }
+    btn.classList.add('wrong');
+    setTimeout(() => { btn.classList.remove('wrong'); btn.disabled = true; btn.style.opacity = '0.35'; }, 420);
+    if (run.misses >= 2) { run.locked = true; setTimeout(() => showMeFix(q), 500); }
+    else showExplain(q, choice, tag);
+    return;
+  }
+
+  // ── correct
+  run.locked = true;
+  hideExplain();
+  btn.classList.remove('glow');
+  btn.classList.add('right');
+  bs.classList.remove('hint');
+  const bud = document.getElementById('buddy');
+  bud.classList.remove('cheer'); void bud.offsetWidth; bud.classList.add('cheer');
+
+  if (run.mode === 'together') {
+    run.together++;
+    bs.textContent = pick(['We did it!', 'Teamwork!', 'You got it!', 'Nice!']);
+    updateGoal();
+    sayThenGo(q.say, true, () => { if (run.together >= 2) startYourTurn(); else nextQuestion(); });
+    return;
+  }
+
+  const key = q.table ? `${sk}:${q.table}` : sk;
+  if (!P.skills[key]) P.skills[key] = { att: 0, cor: 0 };
+  P.skills[key].att++;
+  if (run.thisOneClean) P.skills[key].cor++;
+
+  if (run.mode === 'redo') {
+    if (run.thisOneClean) { run.fixed++; run.coins += 5; bs.textContent = '🔧 Fixed it!'; }
+    else bs.textContent = 'You got it!';
+    document.getElementById('run-coins').textContent = run.coins;
+    run.redoI++;
+    updateGoal();
+    persist();
+    sayThenGo(q.say, autoVoice(), () => nextQuestion());
+    return;
+  }
+
+  // practice
+  run.got++; run.asked++;
+  if (run.thisOneClean) run.firstTry++;
+  else run.missed.push(q);
+  run.coins += run.thisOneClean ? 10 : 5;
+  document.getElementById('run-coins').textContent = run.coins;
+  bs.textContent = pick(pathId === 'k' ? CHEERS_K : CHEERS_G);
+  updateGoal();
+  run.sinceSport++;
+  persist();
+  sayThenGo(q.say, autoVoice(), () => {
+    if (run.got >= run.level.goal) { levelGoalReached(); return; }
+    if (run.sinceSport >= 4) { run.sinceSport = 0; startSport(); return; }
+    nextQuestion();
+  });
+}
+
+/* ───────── WRONG ANSWERS: explain why, then try again ───────── */
+function explainFor(q, choice, tag) {
+  let why = '';
+  const f = tag && MISCON_FIX[tag];
+  try { why = f ? (typeof f === 'function' ? f(q, choice) : f) : ''; } catch (e) { why = ''; }
+  if (!why) {
+    const named = !q.renderChoice && String(choice).length < 24;
+    why = pathId === 'k'
+      ? (named ? `${choice} isn't it. Let's look again.` : `That one isn't it. Let's look again.`)
+      : (named ? `${choice} isn't right.` : 'That one isn\'t right.');
+  }
+  return { why: why, tip: q.hint || '' };
+}
+
+function showExplain(q, choice, tag) {
+  const ex = explainFor(q, choice, tag);
+  document.getElementById('ex-title').textContent = run.mode === 'together'
+    ? 'Almost!' : pick(['Not quite!', 'So close!', 'Oops, not that one!']);
+  document.getElementById('ex-why').textContent = ex.why;
+  const tip = document.getElementById('ex-tip');
+  tip.innerHTML = ex.tip ? '<b>💡 Try this:</b> ' + ex.tip : '';
+  tip.style.display = ex.tip ? '' : 'none';
+  const el = document.getElementById('explain');
+  el.dataset.say = ex.why + (ex.tip ? ' Try this. ' + ex.tip : '');
+  el.classList.add('open');
+  const bs = document.getElementById('buddy-say');
+  bs.classList.add('hint');
+  bs.textContent = '🤔 Let\'s figure it out.';
+  if (pathId === 'k' || autoVoice() || run.mode === 'together') say(el.dataset.say, { rate: rateQ() });
+}
+function hideExplain() {
+  const el = document.getElementById('explain');
+  if (el) el.classList.remove('open');
+}
+function exHear() { say(document.getElementById('explain').dataset.say || '', { rate: rateQ() }); }
+function exRetry() {
+  hideExplain(); hush();
+  const bs = document.getElementById('buddy-say');
+  bs.classList.add('hint');
+  bs.textContent = run.q && run.q.hint ? '💡 ' + run.q.hint : 'Try again!';
+}
+function exShowMe() { hideExplain(); run.locked = true; showMeFix(run.q); }
+
+/* Second miss (or "Show me how"): walk through this exact question, then let them answer it */
+function showMeFix(q) {
+  hideExplain(); hush();
+  teach.mode = 'fix'; teach.q = q;
+  openTeach('Let me show you', 'Got it! →');
+  setBeats(null);
+  playTeach();
+}
+function backFromFix() {
+  show('game-screen');
+  setBeats(modeBeat());
+  run.locked = false;
+  const right = Array.from(document.querySelectorAll('#choices .choice')).find(b => b.dataset.v === String(run.q.answer));
+  if (right) { right.disabled = false; right.style.opacity = ''; right.classList.add('glow'); }
+  const bs = document.getElementById('buddy-say');
+  bs.classList.add('hint');
+  bs.textContent = '👆 Now you tap the right answer!';
+  say('Now you tap the right answer!', { rate: rateQ() });
+}
+
+/* ───────── SECOND CHANCE: redo questions like the ones missed ───────── */
+function starsFor(correct, asked) {
+  const acc = asked ? correct / asked : 0;
+  return acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : 1;
+}
+function starStr(n) { return '⭐'.repeat(n) + '☆'.repeat(3 - n); }
+
+// Make a fresh question that practices the same thing (same times table, same kind of problem)
+function similarTo(q) {
+  const gen = GEN[q.skill];
+  if (!gen) return q;
+  let best = null, bestScore = -1;
+  for (let i = 0; i < 30; i++) {
+    let c;
+    try { c = gen(q.genArg); } catch (e) { continue; }
+    let s = Math.random() * 0.5;
+    if (q.table && c.table === q.table) s += 3;
+    if (String(c.big) !== String(q.big) || String(c.answer) !== String(q.answer)) s += 2;
+    if (q.visual && c.visual && q.visual.kind === c.visual.kind) s += 1;
+    if (cleanPrompt(q.prompt).slice(0, 16) === cleanPrompt(c.prompt).slice(0, 16)) s += 1;
+    if (typeof q.answer === 'number' && typeof c.answer === 'number')
+      s += Math.max(0, 1.5 - Math.abs(c.answer - q.answer) / Math.max(4, q.answer * 0.3));
+    if (s > bestScore) { best = c; bestScore = s; }
+  }
+  return best || q;
+}
+
+function levelGoalReached() {
+  hush(); hideExplain();
+  if (run.mode === 'practice' && run.missed.length && !run.redoDone) { showRedoOffer(); return; }
+  const L = LESSONS[run.level.skill];
+  if (L && L.rw && !run.level.boss) showRealWorld(L.rw);
+  else finishLevel();
+}
+
+function showRedoOffer() {
+  const n = Math.min(5, run.missed.length);
+  const now = starsFor(run.firstTry, run.asked), best = starsFor(run.firstTry + n, run.asked);
+  document.getElementById('redo-body').innerHTML = `
+    <div class="redo-stars">${starStr(now)}${best > now ? ` <span>→</span> ${starStr(best)}` : ''}</div>
+    <p>You got <b>${run.firstTry} of ${run.asked}</b> right on the first try.</p>
+    <p>Try <b>${n}</b> question${n > 1 ? 's' : ''} like the one${n > 1 ? 's' : ''} you missed.
+       ${best > now ? 'Get them right to earn more stars!' : 'It helps lock in what you learned.'}</p>`;
+  show('redo-screen');
+  speakAuto(`Second chance! You got ${run.firstTry} of ${run.asked} right the first time. Want to try ${n} like the ones you missed?${best > now ? ' You can earn more stars!' : ''}`,
+            { rate: rateL() });
+}
+function startRedo() {
+  hush();
+  run.redoQs = run.missed.slice(-5).map(similarTo);
+  run.redoI = 0;
+  run.mode = 'redo';
+  show('game-screen');
+  toast('🔁 Second chance!');
+  nextQuestion();
+}
+function skipRedo() { hush(); run.redoDone = true; levelGoalReached(); }
+
+/* ───────── REAL LIFE ───────── */
+function showRealWorld(rw) {
+  document.getElementById('rw-icon').textContent = rw.icon;
+  document.getElementById('rw-title').textContent = rw.title;
+  document.getElementById('rw-text').textContent = rw.text;
+  document.getElementById('rw-try').innerHTML = '<b>Try it:</b> ' + rw.tryIt;
+  show('world-screen');
+  say(`${rw.title}. ${rw.text} Try it: ${rw.tryIt}`, { rate: rateL() });
+}
+function replayWorld() {
+  const t = document.getElementById('rw-title').textContent + '. ' +
+            document.getElementById('rw-text').textContent + ' ' +
+            document.getElementById('rw-try').textContent;
+  say(t, { rate: rateL() });
+}
+
+/* ───────── LEVEL COMPLETE ───────── */
+function finishLevel() {
+  hush();
+  const lv = run.level;
+  const stars = starsFor(run.firstTry + run.fixed, run.asked);
+  run.acc = run.asked ? (run.firstTry + run.fixed) / run.asked : 0;
+  run.fbIndex = -1;
+  run.mode = 'done';
+
+  P.stars[lv.n] = Math.max(P.stars[lv.n] || 0, stars);
+  P.coins += run.coins;
+  let newCritter = null;
+  if (lv.reward && !P.critters.includes(lv.reward)) { P.critters.push(lv.reward); newCritter = lv.reward; }
+  persist();
+
+  document.getElementById('done-title').textContent = lv.boss ? 'World Complete!' : 'Level Clear!';
+  const sr = document.getElementById('star-row');
+  sr.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement('span');
+    s.textContent = i < stars ? '⭐' : '☆';
+    s.style.animationDelay = (i * 0.16) + 's';
+    s.style.opacity = i < stars ? '1' : '0.25';
+    sr.appendChild(s);
+  }
+
+  const box = document.getElementById('reward-box');
+  if (newCritter) {
+    const c = CRITTERS[newCritter];
+    box.style.display = '';
+    document.getElementById('rb-label').textContent =
+      c.stage >= 3 ? '✨ Legendary Critter!' : c.stage === 2 ? '✨ Evolved Critter!' : 'New Critter!';
+    const svg = document.getElementById('hatch-svg');
+    svg.innerHTML = critterSVG(c);
+    svg.classList.remove('pop'); void svg.offsetWidth; svg.classList.add('pop');
+    document.getElementById('hatch-name').textContent = c.name;
+    const chip = document.getElementById('hatch-type');
+    chip.textContent = TYPES[c.type].name;
+    chip.style.background = TYPES[c.type].c1;
+  } else {
+    box.style.display = 'none';
+  }
+
+  document.getElementById('done-correct').textContent =
+    `${run.firstTry} / ${run.asked} first try` + (run.fixed ? ` · ${run.fixed} fixed` : '');
+  document.getElementById('done-coins').textContent = `🪙 ${run.coins}`;
+  document.querySelectorAll('.fb-btn').forEach(b => b.classList.remove('on'));
+
+  show('done-screen');
+  document.getElementById('done-screen').scrollTop = 0;
+  confetti(stars >= 3 ? 40 : 24);
+  setTimeout(() => confetti(16), 380);
+
+  speakAuto(newCritter
+    ? `Level complete! You found ${CRITTERS[newCritter].name}! How was that level? Tap a face.`
+    : 'Level complete! Nice work! How was that level? Tap a face.', { rate: rateL() });
+}
+
+function quitLevel() {
+  stopDemo(); hush(); hideExplain();
+  if (run.mode === 'place') { finishPlacement(); return; }
+  persist();
+  buildMap();
+  show('map-screen');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   v4 — WORKED EXAMPLES ("Watch me" / "Show me how")
+   Each demo takes a real generated question and solves it step by step,
+   with the picture changing in time with the voice.
+   ═══════════════════════════════════════════════════════════ */
+
+// Remember which generator + argument made each question, so "second chance"
+// can make a fresh one that practices the same thing.
+Object.keys(GEN).forEach(k => {
+  const f = GEN[k];
+  GEN[k] = function (arg) {
+    const q = f(arg);
+    if (q.genArg === undefined) q.genArg = arg;
+    if (!q.skill) q.skill = k;
+    return q;
+  };
+});
+
+class DemoStop {}
+let demoTok = 0;
+function stopDemo() { demoTok++; }
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const $$ = (root, sel) => root ? Array.from(root.querySelectorAll(sel)) : [];
+
+async function runDemo(q) {
+  const tok = ++demoTok;
+  const box = document.getElementById('t-visual');
+  paintQuestion(q, TQ, null);
+  document.getElementById('t-say').textContent = '';
+  const D = makeDemo(q, tok, box);
+  try {
+    await D.wait(450);
+    const fn = DEMOS[q.skill] || demoGeneric;
+    await fn(q, D);
+    if (!D.revealed) await D.reveal();
+    return true;
+  } catch (e) {
+    if (e instanceof DemoStop) return false;
+    console.error('demo error', q.skill, e);
+    try { D.mark(q.answer, 'right'); } catch (_) {}
+    return true;
+  }
+}
+
+function makeDemo(q, tok, box) {
+  const cap = document.getElementById('t-say');
+  const chk = () => { if (tok !== demoTok) throw new DemoStop(); };
+  const rate = rateL();
+  const choicesEl = () => document.getElementById('t-choices');
+  const D = {
+    q, box, revealed: false, chk,
+    async tell(text, spoken) {
+      chk();
+      cap.textContent = text;
+      cap.classList.remove('pop'); void cap.offsetWidth; cap.classList.add('pop');
+      await sayP(spoken || text, { rate });
+      chk(); await sleep(220); chk();
+    },
+    async note(spoken, r) { chk(); await sayP(spoken, { rate: r || rate }); chk(); },
+    async wait(ms) { chk(); await sleep(ms); chk(); },
+    lit(el, n) {
+      if (!el) return;
+      el.classList.add('lit'); el.classList.remove('dim');
+      if (n !== undefined && n !== null) el.setAttribute('data-n', n);
+    },
+    unlit(el) { if (el) { el.classList.remove('lit'); el.removeAttribute('data-n'); } },
+    clear() { $$(box, '.lit, .dim').forEach(e => { e.classList.remove('lit', 'dim'); e.removeAttribute('data-n'); }); },
+    async count(els, from, opt) {
+      opt = opt || {};
+      let n = from === undefined ? 1 : from;
+      const step = opt.step || 1;
+      for (const el of els) {
+        chk();
+        D.lit(el, n);
+        await sayP(String(n), { rate: opt.rate || 1.0 });
+        chk();
+        n += step;
+      }
+      await sleep(120);
+      return n - step;
+    },
+    choice(v) { return $$(choicesEl(), '.choice').find(b => b.dataset.v === String(v)); },
+    mark(v, cls) { const b = D.choice(v); if (b) b.classList.add(cls || 'looking'); return b; },
+    unmark(v, cls) { const b = D.choice(v); if (b) b.classList.remove(cls || 'looking'); },
+    async reveal(text) {
+      chk();
+      $$(choicesEl(), '.choice').forEach(b => b.classList.remove('looking'));
+      D.mark(q.answer, 'right');
+      D.revealed = true;
+      if (text !== false) await D.tell('✅ ' + (text || q.say), text || q.say);
+    },
+    setBig(html) {
+      const b = document.getElementById('t-big');
+      b.innerHTML = html; b.style.display = '';
+      return b;
+    }
+  };
+  return D;
+}
+
+/* ───────── generic: read it, give the strategy, show the answer ───────── */
+async function demoGeneric(q, D) {
+  const kind = q.visual && q.visual.kind;
+  await D.tell(cleanPrompt(q.prompt), qSpeech(q, true));
+  if (kind === 'passage') await D.tell('Let\'s read it together.', q.visual.title + '. ' + q.visual.text);
+  if (kind === 'sentence') await D.tell('Read the sentence.', q.visual.text.replace(/_+/g, 'blank'));
+  if (q.hint) await D.tell('💡 Here\'s the trick: ' + q.hint, 'Here\'s the trick. ' + q.hint);
+  await D.reveal();
+}
+
+/* look at each choice in turn, naming it, until we find the right one */
+async function demoWalk(q, D, rule, nameOf) {
+  if (rule) await D.tell(rule);
+  const list = q.forceChoices || q.choices;
+  for (const c of list) {
+    const ok = String(c) === String(q.answer);
+    const b = D.mark(c, 'looking');
+    await D.note(`${nameOf ? nameOf(c) : c}. ${ok ? 'Yes, that\'s it!' : 'No.'}`);
+    if (!ok && b) { b.classList.remove('looking'); b.classList.add('nope'); }
+  }
+  await D.reveal();
+}
+
+/* ───────── adding, taking away ───────── */
+async function demoAdd(q, D, double) {
+  const g = $$(D.box, '.critter-count');
+  const A = $$(g[0], 'span'), B = $$(g[1], 'span');
+  if (double) await D.tell(`A double is the same number twice: ${A.length} and ${B.length} more.`);
+  await D.tell(`Start with the first group. That's ${A.length}.`);
+  A.forEach(e => D.lit(e));
+  D.lit(A[A.length - 1], A.length);
+  await D.note(String(A.length));
+  await D.tell('Now keep counting with the second group. This is called counting on.');
+  const n = await D.count(B, A.length + 1);
+  await D.tell(`We landed on ${n}. So ${A.length} + ${B.length} = ${n}!`, `We landed on ${n}. So ${A.length} plus ${B.length} is ${n}!`);
+  await D.reveal(false);
+}
+
+async function demoSub(q, D) {
+  const spans = $$(D.box, '.critter-count span');
+  const total = spans.length, gone = q.visual.gone;
+  await D.wait(550);
+  spans.forEach(s => s.classList.remove('gone'));
+  await D.tell(`We start with ${total}.`);
+  await D.tell(`Now ${gone} ${pl(gone, 'goes', 'go')} away. Watch ${pl(gone, 'it', 'them')} leave.`);
+  let k = 1;
+  for (let i = total - 1; i >= total - gone; i--) {
+    D.chk();
+    spans[i].classList.add('gone');
+    await D.note(String(k++), 1.0);
+  }
+  await D.tell('Now count the ones that are left.');
+  const n = await D.count(spans.slice(0, total - gone), 1);
+  await D.tell(`${total} take away ${gone} leaves ${n}!`);
+  await D.reveal(false);
+}
+
+/* ───────── arrays: multiply, divide, missing factor, area ───────── */
+function arrayCells(D) {
+  const dots = $$(D.box, '.dot');
+  return dots.length ? dots : $$(D.box, 'rect');
+}
+const rowOf = (cells, cols, r) => cells.slice(r * cols, (r + 1) * cols);
+const colOf = (cells, cols, c) => cells.filter((_, i) => i % cols === c);
+
+function factTip(a, b) {
+  const has = n => a === n || b === n;
+  if (has(10)) return 'Times 10 shortcut: just put a zero on the end!';
+  if (has(9)) return 'Nines trick: the digits of the answer always add up to 9.';
+  if (has(5)) return 'Times 5 answers always end in 0 or 5.';
+  if (has(2)) return 'Times 2 is the same as a double!';
+  if (has(4)) return 'Times 4 is double, then double again.';
+  return '';
+}
+
+async function lightRows(D, cells, rows, cols) {
+  for (let r = 0; r < rows; r++) {
+    D.chk();
+    const row = rowOf(cells, cols, r);
+    row.forEach(c => D.lit(c));
+    D.lit(row[row.length - 1], (r + 1) * cols);
+    await D.note(String((r + 1) * cols), 1.0);
+  }
+}
+async function lightCols(D, cells, rows, cols) {
+  for (let c = 0; c < cols; c++) {
+    D.chk();
+    const col = colOf(cells, cols, c);
+    col.forEach(x => D.lit(x));
+    D.lit(col[col.length - 1], (c + 1) * rows);
+    await D.note(String((c + 1) * rows), 1.0);
+  }
+}
+
+/* ───────── column add / subtract with carrying and borrowing ───────── */
+const PLACES = ['ones', 'tens', 'hundreds', 'thousands'];
+
+async function demoColumn(q, D) {
+  const v = q.visual, a = v.a, b = v.b, op = v.op === '+' ? '+' : '−';
+  const ans = op === '+' ? a + b : a - b;
+  const W = Math.max(String(a).length, String(b).length, String(ans).length);
+  const digs = n => String(n).padStart(W, ' ').split('').reverse().map(ch => ch === ' ' ? null : +ch);
+  const A = digs(a), B = digs(b);
+  const row = (r, fill, first) => `<tr class="r-${r}"><td>${first || ''}</td>` +
+    Array.from({ length: W }, (_, k) => { const i = W - 1 - k; return `<td id="cd-${r}-${i}">${fill(i)}</td>`; }).join('') + '</tr>';
+  D.box.innerHTML = `<table class="col-math demo">${row('c', () => '')}${row('t', i => A[i] === null ? '' : A[i])}` +
+                    `${row('b', i => B[i] === null ? '' : B[i], op)}${row('a', () => '')}</table>`;
+  const cell = (r, i) => document.getElementById(`cd-${r}-${i}`);
+  const column = i => { D.clear(); ['c', 't', 'b', 'a'].forEach(r => D.lit(cell(r, i))); };
+
+  if (op === '+') {
+    await D.tell('Line up the places. Always start with the ones on the right.');
+    let carry = 0;
+    const len = Math.max(String(a).length, String(b).length);
+    for (let i = 0; i < len; i++) {
+      column(i);
+      const x = A[i] || 0, y = B[i] || 0, s = x + y + carry;
+      await D.tell(`${cap(PLACES[i])}: ${x} + ${y}${carry ? ' + 1 carried' : ''} = ${s}.`,
+                   `${cap(PLACES[i])}. ${x} plus ${y}${carry ? ', plus the 1 we carried,' : ''} is ${s}.`);
+      if (s >= 10) {
+        cell('a', i).textContent = s % 10;
+        cell('c', i + 1).textContent = '1';
+        carry = 1;
+        await D.tell(`That's 10 or more. Write the ${s % 10} and carry the 1 to the ${PLACES[i + 1]}.`);
+      } else {
+        cell('a', i).textContent = s;
+        carry = 0;
+        await D.tell(`Write the ${s}.`);
+      }
+    }
+    if (carry) {
+      D.clear(); cell('a', len).textContent = '1'; D.lit(cell('a', len));
+      await D.tell(`The carried 1 comes down to the ${PLACES[len]}.`);
+    }
+  } else {
+    await D.tell('Line up the places. Start with the ones. The top number has to be big enough to subtract from.');
+    const T = A.map(x => x || 0);
+    const orig = A.slice();
+    const len = String(a).length;
+    const showNew = k => {
+      const t = cell('t', k);
+      if (!t.querySelector('s')) t.innerHTML = `<s>${orig[k]}</s>`;
+      cell('c', k).textContent = T[k];
+    };
+    for (let i = 0; i < len; i++) {
+      column(i);
+      const y = B[i] || 0;
+      if (T[i] < y) {
+        await D.tell(`${cap(PLACES[i])}: ${T[i]} − ${y}? ${T[i]} is too small, so we borrow.`,
+                     `${cap(PLACES[i])}. ${T[i]} minus ${y}? ${T[i]} is too small, so we borrow.`);
+        let j = i + 1;
+        while (T[j] === 0) j++;
+        if (j > i + 1) await D.tell(`The ${PLACES[i + 1]} digit is 0, so first we borrow from the ${PLACES[j]}.`);
+        for (let k = j; k > i; k--) {
+          T[k] -= 1; T[k - 1] += 10;
+          showNew(k); showNew(k - 1);
+          D.lit(cell('c', k)); D.lit(cell('c', k - 1));
+          await D.tell(`The ${PLACES[k]} goes down to ${T[k]}, and the ${PLACES[k - 1]} gets 10 more: ${T[k - 1]}.`);
+        }
+      }
+      const dv = T[i] - y;
+      const lead = i === len - 1 && i > 0 && dv === 0;
+      if (!lead) cell('a', i).textContent = dv;
+      if (B[i] === null || B[i] === undefined) {
+        if (!lead) await D.tell(`Nothing to subtract in the ${PLACES[i]}. Bring down the ${dv}.`);
+      } else {
+        await D.tell(`${T[i]} − ${y} = ${dv}.${lead ? ' We don\'t write a 0 at the front.' : ''}`,
+                     `${T[i]} minus ${y} is ${dv}.${lead ? ' We don\'t write a zero at the front.' : ''}`);
+      }
+    }
+  }
+  D.clear();
+  await D.tell(`So ${a} ${op} ${b} = ${ans}!`, `So ${a} ${op === '+' ? 'plus' : 'minus'} ${b} is ${ans}.`);
+  await D.reveal(false);
+}
+
+/* ───────── clocks ───────── */
+function hands(D) {
+  const lines = $$(D.box, 'line');
+  return {
+    hour: lines.find(l => l.getAttribute('stroke') === '#E03E1A'),
+    min: lines.find(l => l.getAttribute('stroke') === '#1565C0')
+  };
+}
+async function demoClock(q, D) {
+  if (/starts at/.test(q.prompt)) return demoElapsed(q, D);
+  const v = q.visual, h = v.h, m = v.m, H = hands(D);
+  if (H.hour) H.hour.classList.add('lit');
+  await D.tell(m === 0
+    ? `The short red hand is the hour. It points right at ${h}.`
+    : `The short red hand is the hour. It's between ${h} and ${h % 12 + 1}, so the hour is still ${h}.`);
+  if (H.hour) H.hour.classList.remove('lit');
+  if (H.min) H.min.classList.add('lit');
+  if (m === 0) {
+    await D.tell('The long blue hand is on the 12. That means zero minutes: o\'clock!');
+  } else {
+    const fives = Math.floor(m / 5), extra = m % 5;
+    await D.tell('The long blue hand shows the minutes. Count by 5s for each number it passes.');
+    if (fives) await D.note(Array.from({ length: fives }, (_, i) => (i + 1) * 5).join(', '), 1.0);
+    if (extra) await D.tell(`Then count the little marks: ${Array.from({ length: extra }, (_, i) => fives * 5 + i + 1).join(', ')}.`);
+  }
+  await D.tell(`So it's ${h}:${String(m).padStart(2, '0')}!`, `So it's ${speakTime(h, m)}.`);
+  await D.reveal(false);
+}
+async function demoElapsed(q, D) {
+  const mm = q.prompt.match(/starts at (\d+):(\d+) and lasts (\d+)/);
+  let h = +mm[1], m = +mm[2], left = +mm[3];
+  const hr = x => ((x - 1) % 12) + 1;
+  const f = (x, mi) => `${hr(x)}:${String(mi).padStart(2, '0')}`;
+  await D.tell(`Start at ${f(h, m)}. Add ${left} minutes.`, `Start at ${speakTime(h, m)}. We add ${left} minutes.`);
+  if (m + left < 60) {
+    await D.tell(`${m} + ${left} = ${m + left} minutes. That's less than 60, so the hour stays ${h}.`,
+                 `${m} plus ${left} is ${m + left} minutes. That's less than 60, so the hour stays ${h}.`);
+    m += left;
+  } else {
+    if (m > 0) {
+      const to = 60 - m;
+      await D.tell(`First, jump to the next hour: ${to} minutes gets us to ${f(h + 1, 0)}.`,
+                   `First, jump to the next hour. ${to} minutes gets us to ${hr(h + 1)} o'clock.`);
+      left -= to; h += 1; m = 0;
+      if (left) await D.tell(`We used ${to} minutes, so ${left} are left.`);
+    }
+    while (left >= 60) {
+      await D.tell(`60 minutes is a whole hour: ${f(h + 1, 0)}.`, `60 minutes is a whole hour. ${hr(h + 1)} o'clock.`);
+      left -= 60; h += 1;
+    }
+    if (left > 0) {
+      await D.tell(`Then ${left} more minutes: ${f(h, left)}.`, `Then ${left} more minutes. ${speakTime(hr(h), left)}.`);
+      m = left;
+    }
+  }
+  await D.tell(`It ends at ${f(h, m)}!`, `It ends at ${speakTime(hr(h), m)}!`);
+  await D.reveal(false);
+}
+
+/* ───────── word problems ───────── */
+function wordSteps(eq) {
+  const e = eq.replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/');
+  const sym = o => o === '-' ? '−' : o === '*' ? '×' : o === '/' ? '÷' : '+';
+  const ap = (x, o, y) => o === '+' ? x + y : o === '-' ? x - y : o === '*' ? x * y : x / y;
+  let m;
+  if ((m = e.match(/^\((\d+) ([-+*\/]) (\d+)\) ([-+*\/]) (\d+)$/)) || (m = e.match(/^(\d+) ([-+*\/]) (\d+) ([-+*\/]) (\d+)$/))) {
+    const s1 = ap(+m[1], m[2], +m[3]);
+    return [`${m[1]} ${sym(m[2])} ${m[3]} = ${s1}`, `${s1} ${sym(m[4])} ${m[5]} = ${ap(s1, m[4], +m[5])}`];
+  }
+  if ((m = e.match(/^(\d+) ([-+*\/]) (\d+)$/))) return [`${m[1]} ${sym(m[2])} ${m[3]} = ${ap(+m[1], m[2], +m[3])}`];
+  return [];
+}
+async function demoWord(q, D) {
+  await D.tell('First, read the story carefully.', q.prompt);
+  const steps = wordSteps(q.big);
+  if (steps.length === 2) {
+    await D.tell('This story has two steps. Solve the first part, then use that answer.');
+    await D.tell('Step 1: ' + steps[0], 'Step 1. ' + spokenMath(steps[0]));
+    await D.tell('Step 2: ' + steps[1], 'Step 2. ' + spokenMath(steps[1]));
+  } else if (steps.length === 1) {
+    await D.tell(/÷/.test(q.big) ? 'It\'s sharing into equal groups, so we DIVIDE.' : 'It\'s equal groups, so we MULTIPLY.');
+    await D.tell(steps[0], spokenMath(steps[0]));
+  } else if (q.hint) {
+    await D.tell('💡 ' + q.hint, q.hint);
+  }
+  await D.reveal();
+}
+
+async function demoPerim(q, D) {
+  const v = q.visual, w = v.w, h = v.h, p = 2 * (w + h);
+  const texts = $$(D.box, 'text');                 // top, bottom, left, right
+  if (v.hideH) {
+    await D.tell(`The perimeter is ${p} feet. The two long sides are ${w} feet each.`);
+    D.lit(texts[0]); D.lit(texts[1]);
+    await D.tell(`Take away both long sides: ${p} − ${w} − ${w} = ${p - 2 * w}.`,
+                 `Take away both long sides. ${p} minus ${w} minus ${w} is ${p - 2 * w}.`);
+    D.clear(); D.lit(texts[2]); D.lit(texts[3]);
+    await D.tell(`The two short sides share ${p - 2 * w}. Half of ${p - 2 * w} is ${h}.`);
+    texts[2].textContent = h + ' ft'; texts[3].textContent = h + ' ft';
+    await D.tell(`So each short side is ${h} feet!`);
+  } else {
+    await D.tell('Perimeter means walking all the way around the edge. Add every side.');
+    const order = [texts[0], texts[3], texts[1], texts[2]], sides = [w, h, w, h];
+    let tot = 0;
+    for (let i = 0; i < 4; i++) {
+      tot += sides[i];
+      D.lit(order[i]);
+      await D.note(i === 0 ? String(sides[i]) : `plus ${sides[i]} is ${tot}`, 1.0);
+    }
+    await D.tell(`All the way around is ${p} feet!`);
+  }
+  await D.reveal(false);
+}
+
+/* ───────── the demo for each skill ───────── */
+const DEMOS = {
+
+  /* Kindergarten */
+  count: async (q, D) => {
+    const items = $$(D.box, '.critter-count span');
+    await D.tell('Let\'s count them. Touch each one and say one number.');
+    const n = await D.count(items, 1);
+    await D.tell(`The last number we said is ${n}. So there are ${n}!`);
+    await D.reveal(false);
+  },
+
+  compare: async (q, D) => {
+    const g = $$(D.box, '.critter-count');
+    const A = $$(g[0], 'span'), B = $$(g[1], 'span');
+    await D.tell('Let\'s count each group.');
+    await D.count(A, 1);
+    await D.tell(`This group has ${A.length}.`);
+    D.clear();
+    await D.count(B, 1);
+    await D.tell(`This group has ${B.length}.`);
+    const hi = Math.max(A.length, B.length), lo = Math.min(A.length, B.length);
+    await D.tell(`${hi} is more than ${lo}, because ${hi} comes later when we count.`);
+    await D.reveal(false);
+  },
+
+  add: (q, D) => demoAdd(q, D, false),
+  doubles: (q, D) => demoAdd(q, D, true),
+  sub: (q, D) => demoSub(q, D),
+
+  bonds: async (q, D) => {
+    const cells = $$(D.box, '.tf-cell'), a = q.visual.filled;
+    await D.tell('A ten frame has 10 spots in all.');
+    cells.slice(0, a).forEach(c => D.lit(c));
+    await D.tell(`${a} spots are full. To make 10, count the empty spots.`);
+    D.clear();
+    const empties = cells.slice(a);
+    empties.forEach(c => { c.textContent = ''; });
+    const n = await D.count(empties, 1);
+    await D.tell(`${n} empty ${pl(n, 'spot', 'spots')}. So ${a} and ${n} make 10!`);
+    await D.reveal(false);
+  },
+
+  letterstart: async (q, D) => {
+    const word = q.speakFirst, L = q.answer, snd = LETTER_SOUNDS[L];
+    const capEl = D.box.querySelector('div');
+    await D.tell(`Say it slowly: ${word}.`, `Say it slowly. ${word}.`);
+    if (capEl) capEl.innerHTML = `<span class="lit">${word[0]}</span>${word.slice(1)}`;
+    await D.tell(`Listen to the very first sound: ${snd}.`, `Listen to the very first sound. ${snd}.`);
+    await D.tell(`${snd} is the sound the letter ${L} makes!`);
+    await D.reveal(false);
+  },
+
+  casematch: async (q, D) => {
+    const L = q.big, l = q.answer, snd = LETTER_SOUNDS[L];
+    await D.tell(`This is big ${L}.`);
+    D.mark(l, 'looking');
+    await D.tell(`Its little partner is ${l}. They look different, but they both say ${snd}.`,
+                 `Its little partner looks like this. They look different, but they both say ${snd}.`);
+    await D.reveal(false);
+  },
+
+  rhyme: async (q, D) => {
+    const W = q.big.toLowerCase();
+    const end = W.replace(/^[^aeiou]+/, '');
+    await D.tell('Rhyming words end with the same sound.');
+    await D.tell(`${q.big} ends with "-${end}".`, `Listen to the end of ${W}.`);
+    for (const c of q.choices) {
+      const ok = c === q.answer;
+      const b = D.mark(c, 'looking');
+      await D.note(`${W}... ${c.toLowerCase()}. ${ok ? 'Yes! They rhyme.' : 'No.'}`);
+      if (!ok && b) { b.classList.remove('looking'); b.classList.add('nope'); }
+    }
+    await D.reveal(false);
+  },
+
+  shapes: (q, D) => demoWalk(q, D, `We're looking for the ${q.answer}. ${SHAPE_INFO[q.answer]}`, c => `This is ${art(c)}`),
+
+  patterns: async (q, D) => {
+    const items = $$(D.box, '.pattern-row span:not(.pat-q)'), vals = q.visual.items;
+    let p = 1;
+    while (p < vals.length && !vals.every((v, i) => v === vals[i % p])) p++;
+    await D.tell('A pattern repeats the same part again and again.');
+    for (let i = 0; i < p; i++) D.lit(items[i], i + 1);
+    await D.tell(`This part repeats. It has ${p} things in it.`);
+    for (let i = p; i < items.length; i++) { D.chk(); D.lit(items[i], (i % p) + 1); await D.wait(420); }
+    await D.tell('The pattern keeps going the same way, so after the last one comes…');
+    const qq = D.box.querySelector('.pat-q');
+    if (qq) { qq.textContent = q.answer; qq.classList.add('lit'); }
+    await D.reveal(false);
+  },
+
+  blend: async (q, D) => {
+    const w = q.answer, letters = w.split('');
+    const sounds = letters.map(l => LETTER_SOUNDS[l.toUpperCase()]);
+    const big = D.setBig(letters.map(l => `<span class="bn">${l}</span>`).join(' · '));
+    const els = $$(big, '.bn');
+    await D.tell('Say each sound, one at a time.');
+    for (let i = 0; i < letters.length; i++) { D.lit(els[i]); await D.note(sounds[i], 0.8); }
+    await D.tell('Now say them faster…', sounds.join('. ') + '.');
+    await D.tell('…and faster, until they make a word:', sounds.join(' ') + '...');
+    await D.tell(`${w}!`, `${w}!`);
+    await D.reveal(false);
+  },
+
+  teens: async (q, D) => {
+    const frames = $$(D.box, '.tenframe');
+    const first = $$(frames[0], '.tf-cell');
+    first.forEach(c => D.lit(c));
+    D.lit(first[9], 10);
+    await D.tell('This ten frame is full. A full ten frame is 10!');
+    const n = await D.count($$(frames[1], '.tf-cell.filled'), 11);
+    await D.tell(`10 and ${n - 10} more makes ${n}!`);
+    await D.reveal(false);
+  },
+
+  skip10: async (q, D) => {
+    const nums = q.big.replace(', ?', '').split(', ').map(Number);
+    const big = D.setBig(nums.map(n => `<span class="bn">${n}</span>`).join(', ') + ', <span class="bn">?</span>');
+    const els = $$(big, '.bn');
+    await D.tell('Counting by tens: each jump adds one more ten.');
+    for (let i = 0; i < nums.length; i++) { D.lit(els[i]); await D.note(String(nums[i]), 1.0); }
+    els[els.length - 1].textContent = q.answer;
+    D.lit(els[els.length - 1]);
+    await D.tell(`One more ten after ${nums[nums.length - 1]} is ${q.answer}!`);
+    await D.reveal(false);
+  },
+
+  size: (q, D) => demoWalk(q, D,
+    /TALLER/.test(q.prompt) ? 'Taller means it reaches up higher. Look at the tops.' : 'Shorter means it stays lower. Look at the tops.',
+    c => c === 'A' ? 'This tower' : 'This tower'),
+
+  count100: async (q, D) => {
+    const nums = q.big.replace(', ?', '').split(', ').map(Number);
+    const big = D.setBig(nums.map(n => `<span class="bn">${n}</span>`).join(', ') + ', <span class="bn">?</span>');
+    const els = $$(big, '.bn');
+    await D.tell('Keep counting on from the last number.');
+    for (let i = 0; i < nums.length; i++) { D.lit(els[i]); await D.note(String(nums[i]), 1.0); }
+    if (q.answer % 10 === 0) await D.tell(`When the ones get to 9, the next ten starts. After ${q.answer - 1} comes ${q.answer}!`);
+    else await D.tell(`Just one more: after ${q.answer - 1} comes ${q.answer}!`);
+    els[els.length - 1].textContent = q.answer;
+    D.lit(els[els.length - 1]);
+    await D.reveal(false);
+  },
+
+  decompose: async (q, D) => {
+    const v = q.visual, b = v.n - v.a;
+    await D.tell(`There are ${v.n} in all. We can see ${v.a}.`);
+    await D.count($$(D.box, '.split-box:not(.q) span'), 1);
+    await D.tell(`Now count up from ${v.a} to ${v.n}. Every number we say is one that's hiding.`);
+    const qb = D.box.querySelector('.split-box.q');
+    qb.textContent = '';
+    qb.classList.add('filling');
+    for (let k = v.a + 1; k <= v.n; k++) {
+      D.chk();
+      const s = document.createElement('span');
+      s.textContent = v.icon; s.className = 'lit'; s.setAttribute('data-n', k);
+      qb.appendChild(s);
+      await D.note(String(k), 1.0);
+    }
+    await D.tell(`We counted ${b} more. So ${b} ${pl(b, 'is', 'are')} hiding! ${v.a} and ${b} make ${v.n}.`);
+    await D.reveal(false);
+  },
+
+  shapes3d: (q, D) => /What shape is/.test(q.prompt)
+    ? demoWalk(q, D, `Look at the ${q.speakFirst.replace(/^What shape is the |\?$/g, '')}. Which solid shape is it like?`, c => `Is it ${art(c)}?`)
+    : demoWalk(q, D, `We're looking for the ${q.answer}. ${SOLIDS[q.answer]}`, c => `This is ${art(c)}`),
+
+  endsound: async (q, D) => {
+    const w = q.speakFirst.split('.')[0], L = q.answer, snd = LETTER_SOUNDS[L];
+    await D.tell(`Say it slowly: ${w}.`, `Say it slowly. ${w.split('').map(l => LETTER_SOUNDS[l.toUpperCase()] || l).join('... ')}.`);
+    await D.tell(`The very last sound is ${snd}.`, `Listen to the very last sound. ${snd}.`);
+    await D.tell(`${snd} is the letter ${L}!`);
+    await D.reveal(false);
+  },
+
+  shortvowel: async (q, D) => {
+    const w = q.speakFirst.split('.')[0], v = q.answer;
+    await D.tell(`Stretch it out: ${w}.`,
+      `Stretch it out. ${LETTER_SOUNDS[w[0].toUpperCase()]}... ${VOWEL_SOUND[v]}... ${LETTER_SOUNDS[w[2].toUpperCase()]}.`);
+    await D.tell(`The middle sound is ${VOWEL_SOUND[v]}. That's the letter ${v.toUpperCase()}!`);
+    const t = D.box.querySelector('div');
+    if (t) t.innerHTML = `${w[0]}<span style="color:#FFD93D">${v}</span>${w[2]}`;
+    await D.reveal(false);
+  },
+
+  digraphs: async (q, D) => {
+    const w = q.speakFirst.split('.')[0], d = q.answer;
+    await D.tell(`Listen to how it starts: ${w}.`, `Listen to how it starts. ${DIGRAPH_SOUND[d]}... ${w}.`);
+    await D.tell(`${d[0].toUpperCase()} and ${d[1].toUpperCase()} team up to make one sound: ${DIGRAPH_SOUND[d]}.`);
+    await D.reveal(false);
+  },
+
+  kword: async (q, D) => {
+    await D.tell('Listen to the story.', q.speakFirst);
+    if (q.visual.kind === 'twogroups') {
+      await D.tell('More are coming, so we ADD.');
+      await demoAdd(q, D, false);
+    } else {
+      await D.tell('Some go away, so we TAKE AWAY.');
+      await demoSub(q, D);
+    }
+  },
+
+  /* Grade 3 */
+  mult: async (q, D) => {
+    const v = q.visual, a = v.rows, b = v.cols, cells = arrayCells(D);
+    await D.tell(`${a} × ${b} means ${a} rows of ${b}.`, `${a} times ${b} means ${a} rows of ${b}.`);
+    await D.tell(`Let's count by ${b}s, one row at a time.`);
+    await lightRows(D, cells, a, b);
+    await D.tell(`${a} rows of ${b} makes ${a * b}. So ${a} × ${b} = ${a * b}!`,
+                 `${a} rows of ${b} makes ${a * b}. So ${a} times ${b} is ${a * b}!`);
+    const tip = factTip(a, b);
+    if (tip) await D.tell('💡 ' + tip, tip);
+    await D.reveal(false);
+  },
+
+  area: async (q, D) => {
+    const v = q.visual, h = v.rows, w = v.cols, cells = $$(D.box, 'rect');
+    await D.tell('Area is how many squares cover the shape.');
+    await D.tell(`There are ${h} rows with ${w} squares in each. Count by ${w}s.`);
+    await lightRows(D, cells, h, w);
+    await D.tell(`${h} × ${w} = ${h * w}. The area is ${h * w} squares!`, `${h} times ${w} is ${h * w}. The area is ${h * w} squares!`);
+    await D.reveal(false);
+  },
+
+  missing: async (q, D) => {
+    const v = q.visual, a = v.rows, b = v.cols, p = a * b, cells = arrayCells(D);
+    if (/^\?/.test(q.big)) {
+      await D.tell(`? × ${b} = ${p} asks: how many ${b}s make ${p}?`, `Something times ${b} equals ${p}. That asks: how many ${b}s make ${p}?`);
+      await D.tell(`Count by ${b}s until we reach ${p}.`);
+      await lightRows(D, cells, a, b);
+      await D.tell(`That's ${a} jumps of ${b}. So the missing number is ${a}!`);
+    } else {
+      await D.tell(`${a} × ? = ${p} asks: ${a} times what makes ${p}?`, `${a} times something equals ${p}. How many ${a}s make ${p}?`);
+      await D.tell(`Count by ${a}s until we reach ${p}.`);
+      await lightCols(D, cells, a, b);
+      await D.tell(`That's ${b} jumps of ${a}. So the missing number is ${b}!`);
+    }
+    await D.reveal(false);
+  },
+
+  div: async (q, D) => {
+    const v = q.visual, d = v.rows, per = v.cols, t = d * per, cells = arrayCells(D);
+    await D.tell(`${t} ÷ ${d} means share ${t} into ${d} equal groups.`, `${t} divided by ${d} means share ${t} into ${d} equal groups.`);
+    await D.tell('Each row is one group. Deal them out: one to each group, again and again.');
+    await lightCols(D, cells, d, per);
+    await D.tell(`All ${t} are shared out. Each group got ${per}. So ${t} ÷ ${d} = ${per}!`,
+                 `All ${t} are shared out. Each group got ${per}. So ${t} divided by ${d} is ${per}!`);
+    await D.tell(`Check it: ${d} × ${per} = ${t}. Division undoes multiplication!`,
+                 `Check it. ${d} times ${per} is ${t}. Division undoes multiplication!`);
+    await D.reveal(false);
+  },
+
+  tens10: async (q, D) => {
+    const f = q.big.split(' × ').map(Number);
+    const tens = f[0] % 10 === 0 ? f[0] : f[1], one = tens === f[0] ? f[1] : f[0], t = tens / 10;
+    await D.tell(`${tens} is ${t} tens.`);
+    await D.tell(`Do the small fact first: ${one} × ${t} = ${one * t}.`, `Do the small fact first. ${one} times ${t} is ${one * t}.`);
+    await D.tell(`So ${one} × ${tens} is ${one * t} tens. That's ${one * t * 10}!`, `So ${one} times ${tens} is ${one * t} tens. That's ${one * t * 10}!`);
+    await D.tell('💡 Shortcut: do the small fact, then put a zero on the end.', 'Shortcut. Do the small fact, then put a zero on the end.');
+    await D.reveal(false);
+  },
+
+  fracname: async (q, D) => {
+    const v = q.visual, rects = $$(D.box, 'rect');
+    await D.tell('The BOTTOM number tells how many equal parts there are in all.');
+    await D.count(rects, 1);
+    D.clear();
+    await D.tell('The TOP number tells how many parts are shaded.');
+    await D.count(rects.slice(0, v.num), 1);
+    await D.tell(`${v.num} shaded out of ${v.den} parts is ${v.num}/${v.den}!`, `${v.num} shaded out of ${v.den} parts. That's ${v.num} over ${v.den}.`);
+    await D.reveal(false);
+  },
+
+  fraccomp: async (q, D) => {
+    const v = q.visual, svgs = $$(D.box, 'svg');
+    await D.tell(`Both bars are cut into ${v.den} same-size pieces.`);
+    await D.tell('Count the shaded pieces in the top bar.');
+    await D.count($$(svgs[0], 'rect').slice(0, v.n1), 1);
+    await D.tell('Now the bottom bar.');
+    await D.count($$(svgs[1], 'rect').slice(0, v.n2), 1);
+    const hi = Math.max(v.n1, v.n2), lo = Math.min(v.n1, v.n2);
+    await D.tell(`Same-size pieces, and ${hi} is more than ${lo}. So ${hi}/${v.den} is bigger!`,
+                 `The pieces are the same size, and ${hi} is more than ${lo}. So ${hi} over ${v.den} is bigger!`);
+    await D.reveal(false);
+  },
+
+  rounding: async (q, D) => {
+    const n = +q.big, hundred = /HUNDRED/.test(q.prompt), step = hundred ? 100 : 10;
+    const lo = Math.floor(n / step) * step, hi = lo + step, mid = lo + step / 2;
+    const digit = hundred ? Math.floor(n / 10) % 10 : n % 10;
+    await D.tell(`${n} is between ${lo} and ${hi}.`);
+    await D.tell(`Halfway between them is ${mid}.`);
+    await D.tell(`Look at the ${hundred ? 'tens' : 'ones'} digit: ${digit}. ${digit >= 5 ? '5 or more rounds UP.' : '4 or less rounds DOWN.'}`);
+    await D.tell(`So ${n} rounds to ${q.answer}!`);
+    await D.reveal(false);
+  },
+
+  word1: demoWord,
+  word2: demoWord,
+
+  placevalue: async (q, D) => {
+    const v = q.visual;
+    if (v.kind === 'digits') {
+      const cells = $$(D.box, '.pv-cell'), d = String(v.n)[v.pos], place = ['hundreds', 'tens', 'ones'][v.pos];
+      D.lit(cells[v.pos]);
+      await D.tell(`The ${d} is in the ${place} place.`);
+      await D.tell(`So it's worth ${d} ${place}: ${q.answer}!`);
+    } else {
+      await D.tell(`${v.h} hundreds is ${v.h * 100}. ${v.t} tens is ${v.t * 10}. ${v.o} ones is ${v.o}.`);
+      await D.tell(`Put them together: ${q.answer}!`);
+    }
+    await D.reveal(false);
+  },
+
+  evenodd: async (q, D) => {
+    const n = +q.big, dots = $$(D.box, 'circle');
+    if (dots.length) {
+      await D.tell('Let\'s pair them up, two at a time.');
+      for (let i = 0; i + 1 < dots.length; i += 2) { D.lit(dots[i]); D.lit(dots[i + 1]); await D.note(String(i / 2 + 1), 1.0); }
+      await D.tell(n % 2 ? 'One is left over with no partner, so it\'s ODD.' : 'Everyone has a partner, so it\'s EVEN.');
+    }
+    await D.tell(`Shortcut: look at the last digit. ${n % 10} is ${n % 2 ? 'odd' : 'even'}.`);
+    await D.reveal(false);
+  },
+
+  money: async (q, D) => {
+    const coins = q.visual.coins, els = $$(D.box, 'svg');
+    await D.tell('Start with the biggest coins, then count on.');
+    let tot = 0;
+    for (let i = 0; i < coins.length; i++) { tot += coins[i]; D.lit(els[i]); await D.note(`${COIN_NAME[coins[i]]}, ${tot}`, 1.0); }
+    await D.tell(`That's ${tot} cents!`);
+    await D.reveal(false);
+  },
+
+  time: demoClock,
+  time3: demoClock,
+  addsub2: demoColumn,
+  addsub3: demoColumn,
+  perimeter: demoPerim,
+  perim3: demoPerim,
+
+  quads: (q, D) => /NOT a quadrilateral/.test(q.prompt)
+    ? demoWalk(q, D, 'A quadrilateral has exactly 4 sides. Let\'s count the sides of each one.',
+        c => `This one has ${({ triangle: 3, pentagon: 5, hexagon: 6 })[c] || 4} sides`)
+    : demoWalk(q, D, QUAD_INFO[q.answer], c => `This is ${art(c)}`),
+
+  graphs: async (q, D) => {
+    const v = q.visual, bars = $$(D.box, 'rect'), name = i => v.cats[i][1];
+    await D.tell(`First, check the numbers on the side. They count by ${v.scale}${v.scale > 1 ? 's' : ''}.`);
+    if (/MOST|FEWEST/.test(q.prompt)) {
+      for (let i = 0; i < 4; i++) { D.lit(bars[i]); await D.note(`${name(i)}, ${v.vals[i]}`, 1.0); D.unlit(bars[i]); }
+      await D.tell(/MOST/.test(q.prompt) ? 'The tallest bar has the most.' : 'The shortest bar has the fewest.');
+    } else {
+      const idx = v.cats.map((c, i) => ({ i, pos: q.prompt.indexOf(c[1]) })).filter(o => o.pos >= 0)
+        .sort((a, b) => a.pos - b.pos).map(o => o.i);
+      const [i, j] = idx;
+      D.lit(bars[i]);
+      await D.tell(`${cap(name(i))}: the bar reaches ${v.vals[i]}.`);
+      D.lit(bars[j]);
+      await D.tell(`${cap(name(j))}: the bar reaches ${v.vals[j]}.`);
+      if (/more/.test(q.prompt)) await D.tell(`"How many more" means subtract: ${v.vals[i]} − ${v.vals[j]} = ${q.answer}.`,
+                                              `How many more means subtract. ${v.vals[i]} minus ${v.vals[j]} is ${q.answer}.`);
+      else await D.tell(`"Altogether" means add: ${v.vals[i]} + ${v.vals[j]} = ${q.answer}.`,
+                        `Altogether means add. ${v.vals[i]} plus ${v.vals[j]} is ${q.answer}.`);
+    }
+    await D.reveal(false);
+  }
+};
+
+async function demoSight(q, D) {
+  const w = q.answer;
+  await D.tell(`Listen: ${w}.`, w);
+  await D.tell(`${w} is spelled ${w.split('').join(' - ')}.`, `${w} is spelled ${w.split('').join(', ')}.`);
+  await D.tell('Snap words are ones we learn by sight. Look at its shape, then find it.');
+  await D.reveal(`Here it is: ${w}!`);
+}
+DEMOS.sightword = DEMOS.sightword2 = DEMOS.sightword3 = demoSight;
+
+/* ───────── "Today you'll learn…" for the intro of every level ───────── */
+const GOALS = {
+  count: 'how to count a group of critters', compare: 'how to tell which group has more',
+  add: 'how to add two groups together', sub: 'how to take away', doubles: 'doubles: adding a number to itself',
+  bonds: 'which numbers make 10', letterstart: 'the first sound in a word', casematch: 'big letters and their little partners',
+  sightword: 'words you can read in a snap', sightword2: 'more words you can read in a snap',
+  sightword3: 'even more snap words', rhyme: 'words that rhyme', shapes: 'the names of shapes',
+  patterns: 'how patterns repeat', blend: 'how to blend sounds into words', teens: 'teen numbers',
+  skip10: 'how to count by tens', size: 'taller and shorter', habitats: 'where animals live',
+  living: 'what is alive and what is not', count100: 'how to count all the way to 100',
+  decompose: 'how to split a number into two parts', shapes3d: 'solid shapes like cubes and spheres',
+  endsound: 'the last sound in a word', shortvowel: 'the vowel sound in the middle of a word',
+  digraphs: 'letter teams: sh, ch and th', kword: 'how to solve math stories',
+  mult: 'multiplication as equal groups', area: 'how to find the area of a rectangle',
+  missing: 'how to find a missing number in multiplication', div: 'division as sharing equally',
+  fracname: 'how to name fractions', fraccomp: 'how to compare fractions',
+  rounding: 'rounding to the nearest ten and hundred', word1: 'how to solve word problems',
+  word2: 'two-step word problems', tens10: 'multiplying by tens', quads: 'four-sided shapes',
+  graphs: 'how to read bar graphs', time3: 'telling time to the minute, and how much time passes',
+  addsub3: 'adding and subtracting big numbers', perim3: 'perimeter, and finding a missing side',
+  forces: 'pushes, pulls, friction and magnets', lifecycles: 'how living things grow and change',
+  prefix: 'prefixes: word beginnings that change the meaning', suffix: 'suffixes: word endings that change the meaning',
+  context: 'using clues to figure out new words', homophones: 'words that sound the same but mean different things',
+  synant: 'words that mean the same and words that mean the opposite', passage: 'finding the main idea and details',
+  infer: 'reading between the lines', placevalue: 'place value', evenodd: 'even and odd numbers',
+  money: 'counting coins', time: 'telling time', addsub2: 'adding and subtracting 2-digit numbers',
+  perimeter: 'perimeter', matter: 'solids, liquids and gases', machines: 'simple machines'
+};
+
+/* ───────── WHY IT'S WRONG: one kid-sized explanation per mistake type ───────── */
+function pl(n, one, many) { return n === 1 ? one : many; }
+function nums(s) { return (String(s || '').match(/\d+/g) || []).map(Number); }
+
+const MISCON_FIX = {
+  count_extra: 'Looks like one got counted twice. Touch each one only once, and say one number for each.',
+  count_miss: 'Looks like one got skipped. Go slowly and touch every single one.',
+  one_group: 'You counted just one group. Add BOTH groups together.',
+  subtracted: q => ['missing', 'div'].includes(q.skill)
+    ? 'You subtracted. This one is about equal groups: how many groups make the total?'
+    : q.skill === 'graphs' ? 'You subtracted, but "altogether" means ADD them.'
+    : 'You took away, but this one puts things together. Adding makes MORE.',
+  added_not_sub: 'You added, but this one takes some away. Taking away leaves FEWER.',
+  added_not_mult: q => { const n = nums(q.big); return n.length >= 2
+    ? `You added. But × means equal groups: ${n[0]} × ${n[1]} is ${n[0]} groups of ${n[1]}, which is a lot more than ${n[0]} + ${n[1]}.`
+    : 'You added. But × means equal groups, not adding.'; },
+  took_away_amount: 'That\'s how many went away. The question asks how many are LEFT.',
+  nothing_removed: 'That\'s how many we started with. Some went away, so there are fewer now.',
+  not_doubled: 'That\'s just one group. A double is TWO groups of the same number.',
+  added_one: 'Doubles means adding the same number again, not just 1 more.',
+  repeated_number: 'That number is already in the problem. We\'re looking for the part that\'s missing.',
+  off_by_one: 'Just one away! Count again slowly.',
+  wrote_ten: 'That\'s the whole 10. We need the part that fills the empty spots.',
+  extra_group: 'That\'s one group too many. Count the groups carefully.',
+  missing_group: 'That\'s one group too few. Count the groups carefully.',
+  neighbor_fact: 'That\'s the answer to a fact right next door. Check which two numbers you\'re multiplying.',
+  swapped_digits: 'The digits got flipped around. Check which digit comes first.',
+  divisor: 'That\'s the number we divided by. The answer is how many are in EACH group.',
+  perimeter_not_area: 'You added the sides — that\'s the perimeter. Area counts all the squares inside: rows × columns.',
+  added_sides: 'Adding two sides gives too small a number. Area counts every square inside: rows × columns.',
+  row_miscount: 'A row got miscounted. Count one row, then count by that number for each row.',
+  ones_only: 'You counted only the extra ones. Don\'t forget the full ten frame — that\'s 10!',
+  teen_reversal: 'Teen numbers are tricky! 1 ten and 4 ones is written 14, with the 1 first.',
+  counted_by_ones: q => /time/.test(q.skill)
+    ? 'The long hand counts by 5s for each number it passes, not by 1s.'
+    : 'Each jump here adds a whole TEN, not just one.',
+  skipped_a_ten: 'You jumped too far. Each jump is only one ten.',
+  digit_not_value: 'That\'s the digit, but where it sits changes its value. A 4 in the tens place is worth 40.',
+  wrong_place: 'Check which place the digit is in: hundreds, tens or ones.',
+  added_digits: 'You added the digits together. Instead, each digit sits in its own place: hundreds, tens and ones.',
+  swapped_places: 'The hundreds and ones got swapped. Hundreds go first, on the left.',
+  miscounted_tens: 'Check the tens: count the sticks again.',
+  miscounted_hundreds: 'Check the hundreds: count the big squares again.',
+  swapped_hands: 'The hands got mixed up. The SHORT hand is the hour. The LONG hand is the minutes.',
+  read_next_hour: 'The short hand hasn\'t reached the next number yet. Use the hour it just passed.',
+  off_by_five: 'Off by 5 minutes. Count by 5s carefully for each number the long hand passes.',
+  counted_coins: 'You counted how many coins there are. But coins are worth different amounts — add up their values.',
+  dime_nickel_mixup: 'Careful: the dime is smaller but worth MORE. A dime is 10¢ and a nickel is 5¢.',
+  miscounted: 'Close, but a little off. Go step by step and check each one.',
+  forgot_to_carry: 'You forgot to carry. When a column adds up to 10 or more, carry the 1 to the next place.',
+  wrote_both_sums: 'You wrote the ones total and the tens total side by side. When the ones make 10 or more, carry the ten.',
+  extra_ten: 'That\'s 10 too many. Only carry when a column adds up to 10 or more.',
+  smaller_from_bigger: 'You subtracted the smaller digit from the bigger one. When the top digit is smaller, BORROW a ten instead.',
+  forgot_to_reduce_ten: 'When you borrow a ten, the tens digit goes down by 1. Cross it out and make it one smaller.',
+  forgot_to_reduce_hundred: 'When you borrow from the hundreds, that hundreds digit goes down by 1.',
+  area_not_perimeter: 'You multiplied — that finds the area inside. Perimeter is the distance around the edge: add all 4 sides.',
+  added_two_sides: 'You added only two sides. Perimeter goes all the way around, so add all FOUR sides.',
+  missed_a_side: 'You missed a side. A rectangle has 4 sides — add every one.',
+  decade_reset: 'After 9 comes the next ten! 39 goes to 40, not back to 30.',
+  wrote_ten_after_nine: 'After 39 comes 40 — the tens go up by one, and the ones start over at 0.',
+  wrote_whole: 'That\'s how many there are in all. The question asks how many are HIDING.',
+  single_letter_not_digraph: 'Listen again: two letters team up here to make one new sound.',
+  dropped_the_zero: 'You found the small fact, but one number is TENS. Put a zero on the end.',
+  extra_zero: 'Too many zeros! Only one number is tens, so add just one zero.',
+  read_one_bar: 'You read just one bar. This question compares TWO bars.',
+  misread_scale: q => `Read the bar again using the numbers on the side — they count by ${q.visual && q.visual.scale || 1}s.`,
+  ignored_scale: q => `You counted the lines. But each line is worth ${q.visual && q.visual.scale || 1}, not 1.`,
+  off_by_one_minute: 'Off by one minute. Count the little marks one at a time.',
+  read_number_not_minutes: 'The long hand points at a number, but each number means 5 minutes. Count by 5s.',
+  forgot_new_hour: 'The minutes went past 60, so the hour moves up by one.',
+  didnt_regroup_hour: 'Minutes only go up to 59. Once you pass 60 minutes, that\'s a new hour.',
+  extra_hour: 'That\'s one hour too many. Count the hour jumps carefully.',
+  subtracted_one_side: 'You took away only one long side. There are TWO long sides to take away.',
+  forgot_to_halve: 'What\'s left is shared by TWO short sides, so split it in half.',
+  half_perimeter: 'That\'s only halfway around. Take away BOTH long sides first, then split what\'s left.',
+  wrong_order: 'That stage happens at a different time. Life cycles go in order from newest to fully grown.',
+  misread_prefix: 'Look at the beginning of the word. The prefix changes what the word means.',
+  misread_suffix: 'Look at the ending of the word. The suffix changes what the word means.',
+  synonym_antonym_mixup: 'That\'s the opposite of what we need. SAME means almost alike; OPPOSITE means the reverse.'
+};
+
+/* ═══════════════════════════════════════════════════════════
+   v4 — SPORTS BONUS SCENES
+   Drawn as SVG with an animated result: swish / goal / home run.
+   ═══════════════════════════════════════════════════════════ */
+
+const SPORTS = [
+  { id:'bball',    head:'🏀 Bonus Shot!',   sub:'Tap SHOOT when the marker is in the green. Gold = swish!',
+    btn:'SHOOT!', win:'SWISH!', big:'NOTHING BUT NET!', miss:'Off the rim!' },
+  { id:'soccer',   head:'⚽ Penalty Kick!', sub:'Tap KICK when the marker is in the green. Gold = top corner!',
+    btn:'KICK!',  win:'GOAL!',  big:'TOP CORNER!',      miss:'Saved!' },
+  { id:'baseball', head:'⚾ Batter Up!',    sub:'Tap SWING when the marker is in the green. Gold = home run!',
+    btn:'SWING!', win:'BASE HIT!', big:'HOME RUN!',     miss:'Strike!' }
+];
+
+function anim(ms, fn, ease) {
+  ease = ease || (t => t);
+  return new Promise(res => {
+    const t0 = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - t0) / ms);
+      fn(ease(t));
+      if (t < 1) requestAnimationFrame(step); else res();
+    };
+    requestAnimationFrame(step);
+  });
+}
+const easeOut = t => 1 - (1 - t) * (1 - t);
+const easeIn = t => t * t;
+const easeInOut = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+function qbez(p0, p1, p2, t) {
+  const u = 1 - t;
+  return [u * u * p0[0] + 2 * u * t * p1[0] + t * t * p2[0], u * u * p0[1] + 2 * u * t * p1[1] + t * t * p2[1]];
+}
+function placeSvg(el, x, y, s, r) {
+  if (el) el.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(s || 1).toFixed(3)}) rotate(${(r || 0).toFixed(1)})`);
+}
+
+/* tiny sound effects (Web Audio), no files needed */
+let AC = null;
+function sfx(kind) {
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const tone = (f, t0, dur, type, vol) => {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = type || 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, AC.currentTime + t0);
+      g.gain.exponentialRampToValueAtTime(vol || 0.18, AC.currentTime + t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + t0 + dur);
+      o.connect(g); g.connect(AC.destination);
+      o.start(AC.currentTime + t0); o.stop(AC.currentTime + t0 + dur + 0.05);
+    };
+    if (kind === 'hit')  { tone(180, 0, 0.12, 'square', 0.12); }
+    if (kind === 'win')  { tone(523, 0, 0.14); tone(659, 0.12, 0.14); tone(784, 0.24, 0.26); }
+    if (kind === 'big')  { tone(523, 0, 0.12); tone(659, 0.1, 0.12); tone(784, 0.2, 0.12); tone(1047, 0.3, 0.35); }
+    if (kind === 'miss') { tone(330, 0, 0.18, 'triangle'); tone(247, 0.16, 0.3, 'triangle'); }
+  } catch (e) {}
+}
+
+/* ───────── SCENES ───────── */
+function sceneBball() {
+  let net = '';
+  const tops = [], bots = [];
+  for (let i = 0; i <= 6; i++) { tops.push([141 + i * 8, 76]); bots.push([151 + i * 4.67, 104]); }
+  for (let i = 0; i <= 6; i++) net += `<line x1="${tops[i][0]}" y1="76" x2="${bots[i][0].toFixed(1)}" y2="104"/>`;
+  for (let i = 0; i < 6; i++) {
+    net += `<line x1="${tops[i][0]}" y1="76" x2="${bots[i + 1][0].toFixed(1)}" y2="104"/>`;
+    net += `<line x1="${tops[i + 1][0]}" y1="76" x2="${bots[i][0].toFixed(1)}" y2="104"/>`;
+  }
+  let planks = '';
+  for (let x = 0; x <= 330; x += 33) planks += `<line x1="${x}" y1="118" x2="${x}" y2="200" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>`;
+  return `
+  <defs>
+    <linearGradient id="spWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D99A5B"/><stop offset="1" stop-color="#B7743A"/></linearGradient>
+    <linearGradient id="spWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#23305E"/><stop offset="1" stop-color="#34437C"/></linearGradient>
+    <radialGradient id="spBall" cx="35%" cy="30%"><stop offset="0" stop-color="#FFA764"/><stop offset="1" stop-color="#D2561C"/></radialGradient>
+  </defs>
+  <rect width="330" height="120" fill="url(#spWall)"/>
+  <rect y="118" width="330" height="82" fill="url(#spWood)"/>
+  ${planks}
+  <path d="M112 200 L136 132 L194 132 L218 200 Z" fill="rgba(224,62,26,0.35)" stroke="#fff" stroke-width="2.5"/>
+  <path d="M136 132 A29 12 0 0 0 194 132" fill="none" stroke="#fff" stroke-width="2.5"/>
+  <rect x="160" y="0" width="10" height="14" fill="#8B93A8"/>
+  <rect x="108" y="12" width="114" height="62" rx="5" fill="rgba(255,255,255,0.95)" stroke="#C7CDD9" stroke-width="3"/>
+  <rect x="144" y="36" width="42" height="28" fill="none" stroke="#E03E1A" stroke-width="3.5"/>
+  <rect x="158" y="68" width="14" height="9" rx="2" fill="#8B93A8"/>
+  <ellipse cx="165" cy="76" rx="24" ry="5" fill="none" stroke="#B8420F" stroke-width="3" opacity="0.8"/>
+  <g id="sp-ball">
+    <circle r="13" fill="url(#spBall)"/>
+    <path d="M-13 0 H13 M0 -13 V13 M-9 -9 Q0 0 -9 9 M9 -9 Q0 0 9 9" stroke="#5A2308" stroke-width="1.4" fill="none"/>
+  </g>
+  <g id="sp-net" stroke="#FFFFFF" stroke-width="1.4" opacity="0.92" style="transform-origin:165px 76px">${net}</g>
+  <path d="M141 76 A24 5 0 0 0 189 76" fill="none" stroke="#FF6B1A" stroke-width="4" stroke-linecap="round"/>`;
+}
+
+function sceneSoccer() {
+  let stripes = '';
+  for (let i = 0; i < 8; i++) stripes += `<rect x="0" y="${i * 25}" width="330" height="25" fill="${i % 2 ? '#2F8F4E' : '#34A058'}"/>`;
+  let net = '';
+  for (let x = 82; x < 250; x += 12) net += `<line x1="${x}" y1="28" x2="${x}" y2="108"/>`;
+  for (let y = 36; y < 110; y += 10) net += `<line x1="76" y1="${y}" x2="254" y2="${y}"/>`;
+  return `
+  <defs><radialGradient id="spSoc" cx="35%" cy="30%"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D6DBE6"/></radialGradient></defs>
+  ${stripes}
+  <rect x="0" y="108" width="330" height="3" fill="#fff" opacity="0.9"/>
+  <path d="M40 111 V150 H290 V111" fill="none" stroke="#fff" stroke-width="2.5" opacity="0.85"/>
+  <circle cx="165" cy="170" r="2.5" fill="#fff"/>
+  <rect x="76" y="26" width="178" height="84" fill="rgba(255,255,255,0.06)"/>
+  <g id="sp-net" stroke="rgba(255,255,255,0.55)" stroke-width="1">${net}</g>
+  <rect x="70" y="20" width="7" height="92" rx="2" fill="#fff"/>
+  <rect x="253" y="20" width="7" height="92" rx="2" fill="#fff"/>
+  <rect x="70" y="20" width="190" height="7" rx="2" fill="#fff"/>
+  <g id="sp-keeper">
+    <rect x="-7" y="10" width="5" height="16" rx="2" fill="#1B2A55"/><rect x="2" y="10" width="5" height="16" rx="2" fill="#1B2A55"/>
+    <rect x="-11" y="-8" width="22" height="22" rx="6" fill="#FFD93D"/>
+    <text x="0" y="8" text-anchor="middle" font-size="11" font-weight="900" fill="#1B2A55" ${SVG_FONT}>1</text>
+    <rect x="-27" y="-6" width="18" height="6" rx="3" fill="#FFD93D" transform="rotate(-25 -10 -3)"/>
+    <rect x="9" y="-6" width="18" height="6" rx="3" fill="#FFD93D" transform="rotate(25 10 -3)"/>
+    <circle cx="-26" cy="-13" r="5" fill="#4ADE80"/><circle cx="26" cy="-13" r="5" fill="#4ADE80"/>
+    <circle cx="0" cy="-16" r="8" fill="#E8B48A"/>
+  </g>
+  <g id="sp-ball">
+    <circle r="11" fill="url(#spSoc)" stroke="#9AA5B8" stroke-width="0.8"/>
+    <polygon points="0,-4.5 4.3,-1.4 2.7,3.6 -2.7,3.6 -4.3,-1.4" fill="#17203F"/>
+    <path d="M0 -4.5 V-10 M4.3 -1.4 L9.5 -3 M2.7 3.6 L6 8.5 M-2.7 3.6 L-6 8.5 M-4.3 -1.4 L-9.5 -3" stroke="#17203F" stroke-width="1.2"/>
+  </g>`;
+}
+
+function sceneBaseball() {
+  return `
+  <defs>
+    <linearGradient id="spSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6FB7F5"/><stop offset="1" stop-color="#A9D6FA"/></linearGradient>
+    <radialGradient id="spGrass" cx="50%" cy="100%" r="90%"><stop offset="0" stop-color="#46A85C"/><stop offset="1" stop-color="#2E7D43"/></radialGradient>
+  </defs>
+  <rect width="330" height="40" fill="url(#spSky)"/>
+  <rect y="38" width="330" height="162" fill="url(#spGrass)"/>
+  <path d="M0 44 Q165 22 330 44 L330 52 Q165 30 0 52 Z" fill="#1F5F35"/>
+  <path d="M0 44 Q165 22 330 44" stroke="#FFD93D" stroke-width="2.5" fill="none"/>
+  <polygon points="165,196 262,126 165,64 68,126" fill="#C98E57"/>
+  <polygon points="165,178 235,126 165,82 95,126" fill="#3E9C55"/>
+  <circle cx="165" cy="126" r="11" fill="#D6A06A"/><rect x="160" y="124" width="10" height="3" fill="#fff"/>
+  <rect x="256" y="120" width="10" height="10" fill="#fff" transform="rotate(45 261 125)"/>
+  <rect x="160" y="59" width="10" height="10" fill="#fff" transform="rotate(45 165 64)"/>
+  <rect x="64" y="120" width="10" height="10" fill="#fff" transform="rotate(45 69 125)"/>
+  <polygon points="157,186 173,186 173,192 165,197 157,192" fill="#fff"/>
+  <g transform="translate(165 112)">
+    <circle cy="-8" r="4.5" fill="#E8B48A"/><rect x="-5" y="-4" width="10" height="11" rx="3" fill="#E03E1A"/>
+    <rect x="-4" y="7" width="3" height="7" fill="#fff"/><rect x="1" y="7" width="3" height="7" fill="#fff"/>
+  </g>
+  <g id="sp-batter" transform="translate(132 176)">
+    <rect x="-9" y="6" width="7" height="18" rx="3" fill="#EEF2F8"/><rect x="2" y="6" width="7" height="18" rx="3" fill="#EEF2F8"/>
+    <rect x="-11" y="-16" width="22" height="24" rx="7" fill="#1565C0"/>
+    <text x="0" y="1" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" ${SVG_FONT}>8</text>
+    <circle cy="-24" r="9" fill="#E8B48A"/>
+    <path d="M-10 -25 A10 10 0 0 1 10 -25 L13 -23 L-10 -23 Z" fill="#E03E1A"/>
+  </g>
+  <g id="sp-bat" transform="translate(141 166) rotate(-125)">
+    <rect x="-2" y="-3" width="50" height="6" rx="3" fill="#C8914B" stroke="#8A5A26" stroke-width="1"/>
+    <rect x="32" y="-4.5" width="18" height="9" rx="4.5" fill="#D9A560"/>
+    <circle r="4" fill="#E8B48A"/>
+  </g>
+  <g id="sp-ball">
+    <circle r="5" fill="#fff" stroke="#C9CED9" stroke-width="0.6"/>
+    <path d="M-3 -3.5 Q-1 0 -3 3.5 M3 -3.5 Q1 0 3 3.5" stroke="#E03E1A" stroke-width="0.9" fill="none"/>
+  </g>`;
+}
+
+function resetSportPieces(id) {
+  const ball = document.getElementById('sp-ball');
+  if (id === 'bball') placeSvg(ball, 205, 176, 1, 0);
+  if (id === 'soccer') { placeSvg(ball, 165, 170, 1, 0); placeSvg(document.getElementById('sp-keeper'), 165, 84, 1, 0); }
+  if (id === 'baseball') placeSvg(ball, 165, 106, 1, 0);
+  const net = document.getElementById('sp-net');
+  if (net) net.style.transform = '';
+}
+
+/* ───────── ROUND ───────── */
+function startSport() {
+  const sp = pick(SPORTS);
+  sportState.round = (sportState.round || 0) + 1;
+  sportState.sport = sp;
+  sportState.done = false;
+  sportState.pos = 0;
+  sportState.dir = 1;
+  sportState.speed = pathId === 'k' ? 0.8 + Math.random() * 0.5 : 1.1 + Math.random() * 0.8;
+
+  document.getElementById('sport-head').textContent = sp.head;
+  document.getElementById('sport-sub').textContent = sp.sub;
+  const svg = document.getElementById('sport-svg');
+  svg.innerHTML = sp.id === 'bball' ? sceneBball() : sp.id === 'soccer' ? sceneSoccer() : sceneBaseball();
+  resetSportPieces(sp.id);
+  document.getElementById('sport-result').textContent = '';
+  const btn = document.getElementById('sport-btn');
+  btn.textContent = sp.btn;
+  btn.disabled = false;
+  btn.style.opacity = '1';
+
+  // green zone somewhere mid-bar, gold bullseye in the middle of it (wider for Kindergarten)
+  const zoneW = pathId === 'k' ? 32 : 26, bullW = pathId === 'k' ? 10 : 8;
+  const zoneStart = rnd(16, 100 - 16 - zoneW);
+  sportState.zone = [zoneStart, zoneStart + zoneW];
+  const bullStart = zoneStart + (zoneW - bullW) / 2;
+  sportState.bull = [bullStart, bullStart + bullW];
+  const z = document.getElementById('power-zone');
+  z.style.left = zoneStart + '%'; z.style.width = zoneW + '%';
+  const bl = document.getElementById('power-bull');
+  bl.style.left = bullStart + '%'; bl.style.width = bullW + '%';
+
+  show('sport-screen');
+  runSportAnim();
+  speakAuto(`${sp.head.replace(/^\S+\s/, '')} ${sp.sub}`, { rate: rateQ() });
+}
+
+async function playBball(result) {
+  const ball = document.getElementById('sp-ball'), net = document.getElementById('sp-net');
+  const start = [205, 176];
+  if (result === 'miss') {
+    await anim(620, t => { const p = qbez(start, [200, -20], [186, 70], t); placeSvg(ball, p[0], p[1], 1 - 0.28 * t, t * 400); }, easeInOut);
+    sfx('hit');
+    await anim(520, t => { const p = qbez([186, 70], [232, 40], [262, 170], t); placeSvg(ball, p[0], p[1], 0.72 + 0.2 * t, 400 + t * 300); }, easeIn);
+    return;
+  }
+  await anim(640, t => { const p = qbez(start, [190, -30], [165, 70], t); placeSvg(ball, p[0], p[1], 1 - 0.3 * t, t * 420); }, easeInOut);
+  await anim(300, t => {
+    placeSvg(ball, 165, 70 + 42 * t, 0.7, 420 + t * 90);
+    net.style.transform = `scaleY(${1 + 0.35 * Math.sin(t * Math.PI)}) scaleX(${1 - 0.12 * Math.sin(t * Math.PI)})`;
+  });
+  net.style.transform = '';
+  await anim(360, t => placeSvg(ball, 165, 112 + 58 * easeIn(t), 0.7 + 0.2 * t, 510 + t * 120));
+}
+
+async function playSoccer(result) {
+  const ball = document.getElementById('sp-ball'), keeper = document.getElementById('sp-keeper'), net = document.getElementById('sp-net');
+  const side = Math.random() < 0.5 ? -1 : 1;
+  const target = result === 'big' ? [165 + side * 72, 38] : result === 'win' ? [165 + side * 62, 94] : null;
+  if (target) {
+    await Promise.all([
+      anim(560, t => { const p = qbez([165, 170], [165 + side * 40, 60], target, t); placeSvg(ball, p[0], p[1], 1 - 0.35 * t, t * 600); }, easeOut),
+      anim(560, t => placeSvg(keeper, 165 - side * 46 * t, 84 + 10 * t, 1, -side * 70 * t), easeOut)
+    ]);
+    await anim(260, t => { net.style.transform = `translate(${side * 3 * Math.sin(t * Math.PI)}px, ${-4 * Math.sin(t * Math.PI)}px)`; });
+    net.style.transform = '';
+    return;
+  }
+  if (Math.random() < 0.5) {                      // wide
+    await anim(620, t => { const p = qbez([165, 170], [165 + side * 90, 80], [165 + side * 190, 10], t); placeSvg(ball, p[0], p[1], 1 - 0.4 * t, t * 700); }, easeOut);
+  } else {                                        // saved
+    const save = [165 + side * 44, 70];
+    await Promise.all([
+      anim(520, t => { const p = qbez([165, 170], [165 + side * 20, 110], save, t); placeSvg(ball, p[0], p[1], 1 - 0.3 * t, t * 500); }, easeOut),
+      anim(520, t => placeSvg(keeper, 165 + side * 40 * t, 84 - 6 * t, 1, side * 60 * t), easeOut)
+    ]);
+    await anim(420, t => { const p = qbez(save, [save[0] + side * 30, 60], [save[0] + side * 50, 118], t); placeSvg(ball, p[0], p[1], 0.7, 500 + t * 200); }, easeIn);
+  }
+}
+
+async function playBaseball(result) {
+  const ball = document.getElementById('sp-ball'), bat = document.getElementById('sp-bat');
+  const swing = (from, to, ms) => anim(ms, t => bat.setAttribute('transform', `translate(141 166) rotate(${(from + (to - from) * t).toFixed(1)})`), easeOut);
+  // the pitch
+  await anim(result === 'miss' ? 300 : 360, t => placeSvg(ball, 165 - 12 * t, 106 + 62 * t, 1 + 0.9 * t, t * 300), easeIn);
+  if (result === 'miss') {
+    await Promise.all([
+      swing(-125, 40, 200),
+      anim(260, t => placeSvg(ball, 153 + 10 * t, 168 + 30 * t, 1.9 + 0.3 * t, 300))
+    ]);
+    return;
+  }
+  await swing(-125, -10, 110);
+  sfx('hit');
+  const end = result === 'big' ? [70, -24] : [258, 72];
+  const ctrl = result === 'big' ? [120, -40] : [230, 60];
+  await Promise.all([
+    swing(-10, 40, 150),
+    anim(result === 'big' ? 900 : 650, t => { const p = qbez([153, 168], ctrl, end, t); placeSvg(ball, p[0], p[1], 1.9 - (result === 'big' ? 1.6 : 1.1) * t, 300 + t * 720); }, easeOut)
+  ]);
+  if (result === 'win') await anim(300, t => placeSvg(ball, 258 + 18 * t, 72 + 20 * Math.sin(t * Math.PI), 0.8, 1020 + t * 200));
+}
+
+async function sportTap() {
+  if (sportState.done) return;
+  sportState.done = true;
+  cancelAnimationFrame(sportAnim);
+
+  const p = sportState.pos, sp = sportState.sport, round = sportState.round;
+  const inZone = p >= sportState.zone[0] && p <= sportState.zone[1];
+  const inBull = p >= sportState.bull[0] && p <= sportState.bull[1];
+  const result = inBull ? 'big' : inZone ? 'win' : 'miss';
+
+  const res = document.getElementById('sport-result');
+  const btn = document.getElementById('sport-btn');
+  btn.disabled = true;
+  btn.style.opacity = '0.4';
+  res.textContent = '';
+
+  try {
+    if (sp.id === 'bball') await playBball(result);
+    else if (sp.id === 'soccer') await playSoccer(result);
+    else await playBaseball(result);
+  } catch (e) {}
+
+  const gain = result === 'big' ? 25 : result === 'win' ? 12 : 2;
+  if (result === 'big')      { res.textContent = '🌟 ' + sp.big; res.style.color = '#FFD93D'; sfx('big'); confetti(26); }
+  else if (result === 'win') { res.textContent = '✅ ' + sp.win; res.style.color = '#4ADE80'; sfx('win'); confetti(14); }
+  else                       { res.textContent = '😅 ' + sp.miss + ' So close!'; res.style.color = '#9AA5CC'; sfx('miss'); }
+  say(result === 'big' ? sp.big : result === 'win' ? sp.win : sp.miss + ' So close!');
+
+  run.coins += gain;
+  document.getElementById('run-coins').textContent = run.coins;
+  setTimeout(() => { if (sportState.round === round) { res.textContent = `+${gain} 🪙`; res.style.color = '#FFD93D'; } }, 1000);
+  setTimeout(() => {
+    if (sportState.round !== round || !document.getElementById('sport-screen').classList.contains('active')) return;
+    show('game-screen');
+    nextQuestion();
+  }, 2100);
+}
+
 /* ───────── BOOT ───────── */
 (function init() {
   // decorative critters on the picker screen
@@ -5151,7 +6842,7 @@ function gradeReportLines() {
   document.getElementById('pc-k').innerHTML  = critterSVG(CRITTERS.pipling);
   document.getElementById('pc-g3').innerHTML = critterSVG(CRITTERS.cindercub);
   setupHold();
-  document.getElementById('q-prompt').onclick = () => { if (run.q) say(run.q.speakFirst || run.q.prompt, { rate: 0.75 }); };
+  document.getElementById('q-prompt').onclick = speakQ;
   refreshPickerProgress();
 
   if (save.current && PATHS[save.current]) {
