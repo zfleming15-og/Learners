@@ -905,6 +905,107 @@
   .sport-field { height: auto !important; aspect-ratio: 330 / 200; background: #0D1230 !important; }
   .sport-field::after { display: none !important; content: none !important; }
   .sport-field svg { width: 100%; height: 100%; display: block; }
+
+  /* reading voice picker */
+  .vlist { display: flex; flex-direction: column; gap: 6px; }
+  .vrow { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 12px; border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: var(--ink); font: inherit; cursor: pointer; }
+  .vrow.on { border-color: var(--gold); background: rgba(255,217,61,0.1); }
+  .vdot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.35); flex-shrink: 0; }
+  .vrow.on .vdot { border-color: var(--gold); background: radial-gradient(circle, var(--gold) 45%, transparent 50%); }
+  .vname { flex: 1; font-weight: 800; font-size: 15px; display: flex; flex-direction: column; }
+  .vname small { font-size: 11px; color: var(--muted); font-weight: 700; }
+  .vq { font-style: normal; font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 999px; color: var(--muted); border: 1.5px solid rgba(255,255,255,0.15); }
+  .vq.good { color: #7DD3FC; border-color: rgba(125,211,252,0.4); }
+  .vq.best { color: #2A1A00; background: var(--gold); border-color: var(--gold); }
+  .vplay { color: var(--muted); font-size: 13px; }
+  .vmore { margin-top: 6px; background: none; border: none; color: #7DD3FC; font: inherit; font-weight: 800; font-size: 13px; cursor: pointer; padding: 4px 0; }
+  .vspeed { display: flex; align-items: center; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+  .vspeed span { font-weight: 800; font-size: 13px; color: var(--muted); margin-right: 4px; }
+  .vspeed button { flex: 1; padding: 8px 6px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: var(--ink); font: inherit; font-weight: 800; font-size: 13px; cursor: pointer; }
+  .vspeed button.on { border-color: var(--gold); color: var(--gold); }
+  .vtip { font-size: 13px; font-weight: 700; line-height: 1.45; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--muted); }
+  .vtip b { color: var(--ink); }
+  .vtip.warn { background: rgba(255,217,61,0.12); border: 2px dashed rgba(255,217,61,0.4); }
+
+  /* ══════════ v5: STARTER MEADOW, TRACING, PAIRS, MEMORY, EXPLORE ══════════ */
+  .choice.bigtxt { font-size: 40px; padding: 12px 8px; font-family: "Avenir Next", -apple-system, system-ui, sans-serif; }
+  .mini-count { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 128px; font-size: 18px; line-height: 1.1; }
+
+  #act-screen .stage { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .act-title { text-align: center; font-size: 13px; font-weight: 900; color: var(--muted); letter-spacing: 0.4px; margin: -4px 0 6px; flex-shrink: 0; }
+  .act-area { width: 100%; max-width: 448px; display: flex; flex-direction: column; align-items: center; margin-bottom: 12px; flex-shrink: 0; }
+  #act-screen .teach-row { margin-bottom: 10px; }
+  #act-btns { flex-shrink: 0; }
+  #act-btns:empty { display: none; }
+
+  .trace-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .trace-glyph { font-size: 40px; font-weight: 900; color: var(--gold); min-width: 46px; text-align: center; line-height: 1; }
+  .trace-step { font-size: 13px; font-weight: 900; padding: 6px 12px; border-radius: 999px; background: rgba(74,222,128,0.16); border: 2px solid rgba(74,222,128,0.45); }
+  .trace-box {
+    position: relative; border-radius: 20px; overflow: hidden; touch-action: none;
+    background: linear-gradient(180deg, #F7F9FF08, #FFFFFF03), #182149;
+    border: 2px solid rgba(255,255,255,0.14); box-shadow: inset 0 2px 12px rgba(0,0,0,0.35);
+  }
+  .trace-box canvas { position: absolute; left: 0; top: 0; touch-action: none; -webkit-user-select: none; user-select: none; }
+  .trace-box.nope { animation: nope 0.4s ease-out; }
+
+  .pair-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; width: 100%; max-width: 380px; }
+  .pair-tile, .mem-card {
+    aspect-ratio: 1; border-radius: 16px; border: 3px solid #B45309; cursor: pointer;
+    background: linear-gradient(135deg, #FFE066, #F5A800); color: #3A2200;
+    font: 900 38px/1 "Avenir Next", -apple-system, system-ui, sans-serif;
+    box-shadow: 0 4px 0 #8A5A00; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.15s, opacity 0.3s;
+  }
+  .pair-tile.low { background: linear-gradient(135deg, #C4B5FD, #7C5CD6); border-color: #4C2F9E; color: #fff; box-shadow: 0 4px 0 #3B2480; }
+  .pair-tile.sel { background: linear-gradient(135deg, #7DD3FC, #1D8FD6); border-color: #0B4F80; color: #fff; transform: scale(1.07); box-shadow: 0 0 0 5px rgba(125,211,252,0.35), 0 4px 0 #0B4F80; }
+  .pair-tile.done, .mem-card.done { background: linear-gradient(135deg, #86EFAC, #16A34A); border-color: #14532D; color: #fff; box-shadow: 0 4px 0 #14532D; pointer-events: none; animation: matchPop 0.5s ease-out forwards; }
+  .pair-tile.miss { background: linear-gradient(135deg, #FCA5A5, #DC2626); border-color: #7F1D1D; color: #fff; animation: nope 0.4s ease-out; }
+  @keyframes matchPop { 40% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 0.45; } }
+
+  .mem-card { background: linear-gradient(135deg, #4AA8FF, #1E40AF); border-color: #1E3A8A; box-shadow: 0 4px 0 #172A6B; color: #fff; }
+  .mem-card .mem-face { display: none; }
+  .mem-card .mem-back { color: rgba(255,255,255,0.6); font-size: 30px; }
+  .mem-card.up { background: linear-gradient(135deg, #FFE066, #F5A800); border-color: #B45309; box-shadow: 0 4px 0 #8A5A00; color: #3A2200; animation: flipIn 0.3s ease-out; }
+  .mem-card.up .mem-face { display: block; }
+  .mem-card.up .mem-back { display: none; }
+  .mem-card .mem-face.low { color: #5B21B6; }
+  .mem-card.done .mem-face, .mem-card.done .mem-face.low { color: #fff; }
+  @keyframes flipIn { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
+
+  #explore-screen { padding-bottom: 0; }
+  .ex-tabs { display: flex; gap: 7px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; margin-bottom: 10px; flex-shrink: 0; }
+  .ex-tab { flex-shrink: 0; font: 800 13px inherit; font-family: inherit; color: var(--muted); padding: 9px 13px; border-radius: 999px; cursor: pointer;
+            background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.14); }
+  .ex-tab.on { background: var(--gold); color: #2A1A00; border-color: var(--gold); }
+  .ex-banner {
+    min-height: 118px; flex-shrink: 0; margin-bottom: 10px; padding: 12px; border-radius: 20px;
+    background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.13);
+    display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+    font-size: 15px; font-weight: 800; color: var(--muted); text-align: center;
+  }
+  .exb-big { font-size: 54px; font-weight: 900; color: var(--ink); letter-spacing: 2px; }
+  .exb-pic { font-size: 54px; }
+  .exb-word { font-size: 22px; font-weight: 900; color: var(--gold); }
+  .exb-vis { display: flex; }
+  .ex-grid { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-content: start;
+             padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+  .ex-grid.words, .ex-grid.snap { grid-template-columns: repeat(3, 1fr); }
+  .ex-tile {
+    aspect-ratio: 1; border-radius: 14px; border: 2px solid rgba(255,255,255,0.18); cursor: pointer;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--c, #4AA8FF) 70%, #fff 0%), color-mix(in srgb, var(--c, #4AA8FF) 70%, #000 30%));
+    color: #fff; font: 900 28px/1 "Avenir Next", -apple-system, system-ui, sans-serif; text-shadow: 0 2px 3px rgba(0,0,0,0.35);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  }
+  .ex-tile small { font-size: 17px; opacity: 0.9; }
+  .ex-tile:active { transform: scale(0.94); }
+  .ex-tile.word { aspect-ratio: 1.1; font-size: 19px; }
+  .ex-tile.word span { font-size: 32px; text-shadow: none; }
+  .ex-tile.snap { aspect-ratio: 1.8; font-size: 20px; background: linear-gradient(160deg, #A78BFA, #6D28D9); }
+  .ex-grid.write .ex-tile { background: rgba(255,255,255,0.08); color: var(--ink); text-shadow: none; }
+  .ex-tile.did { border-color: var(--sprout); background: rgba(74,222,128,0.16) !important; }
+  .map-card.explore { background: linear-gradient(140deg, rgba(196,181,253,0.24), rgba(255,143,171,0.14)); border-color: rgba(196,181,253,0.5); }
 </style>
 </head>
 <body>
@@ -920,7 +1021,7 @@
       <div class="pc-body">
         <div class="pc-name">Sprout Scouts</div>
         <div class="pc-grade">Kindergarten</div>
-        <div class="pc-desc">Counting to 100, shapes, letter sounds &amp; first reading</div>
+        <div class="pc-desc">Letters, writing, counting, shapes &amp; first reading</div>
         <div class="pc-prog"><i id="prog-k"></i></div>
         <div class="pc-progtxt" id="progtxt-k">Not started</div>
       </div>
@@ -1156,6 +1257,34 @@
         <button class="btn btn-primary" onclick="startRedo()">Try them ⭐</button>
       </div>
     </div>
+  </div>
+
+  <!-- ══════════ ACTIVITIES: tracing, letter pairs, memory ══════════ -->
+  <div id="act-screen" class="screen">
+    <div class="game-hud">
+      <button class="icon-btn" onclick="quitActivity()">←</button>
+      <div class="goal-track"><div class="goal-fill" id="act-fill"></div><div class="goal-label" id="act-label"></div></div>
+      <div class="coin-pill">🪙 <span id="act-coins">0</span></div>
+    </div>
+    <div class="beats"></div>
+    <div class="act-title" id="act-title"></div>
+    <div class="stage">
+      <div class="teach-row"><svg id="act-buddy" viewBox="0 0 100 100"></svg><div class="t-say" id="act-say"></div></div>
+      <div class="act-area" id="act-area"></div>
+      <div class="lesson-actions" id="act-btns"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ EXPLORE (free play) ══════════ -->
+  <div id="explore-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="closeExplore()">←</button>
+      <h2>Explore</h2>
+      <div class="beat-pill world">🎈 FREE PLAY</div>
+    </div>
+    <div class="ex-tabs" id="ex-tabs"></div>
+    <div class="ex-banner" id="ex-banner">Tap anything to hear it!</div>
+    <div class="ex-grid" id="ex-grid"></div>
   </div>
 
     <!-- ══════════ RESET MODAL ══════════ -->
@@ -3456,7 +3585,7 @@ function giveFeedback(btn) {
 function isLevelOpen(lv) {
   const same = PATHS[pathId].levels.filter(l => l.w === lv.w);
   const idx = same.indexOf(lv);
-  return idx <= 0 || isCleared(same[idx - 1].n);
+  return idx <= 0 || isCleared(lv.n) || isCleared(same[idx - 1].n);
 }
 
 function buildMap() {
@@ -3473,7 +3602,7 @@ function buildMap() {
     const head = document.createElement('div');
     head.className = 'world-head';
     head.innerHTML = `<div class="wh-icon">${W.icon}</div>
-      <div class="wh-body"><div class="wh-name">World ${W.id}: ${W.name}</div>
+      <div class="wh-body"><div class="wh-name">World ${path.worlds.indexOf(W) + 1}: ${W.name}</div>
       <div class="wh-sub">${W.sub} · ${cleared}/${lvls.length} cleared</div></div>`;
     inner.appendChild(head);
 
@@ -3494,7 +3623,7 @@ function buildMap() {
         <div class="node-badge">${isOpen ? lv.icon : '🔒'}</div>
         <div class="node-body">
           <div class="node-title">${i + 1}. ${lv.title}</div>
-          <div class="node-goal">${isOpen ? 'Goal: ' + lv.goal + ' correct' : 'Locked'}</div>
+          <div class="node-goal">${isOpen ? (lv.goalText || 'Goal: ' + lv.goal + ' correct') : 'Locked'}</div>
           ${stars ? `<div class="node-stars">${'⭐'.repeat(stars)}${'·'.repeat(3 - stars)}</div>` : isDone ? '<div class="node-stars tested">✓ Tested out</div>' : ''}
         </div>`;
       if (isOpen) node.onclick = () => startLevel(lv);
@@ -4681,6 +4810,10 @@ function renderMapCards(inner) {
     h += `<button class="map-card" onclick="startPlacement()"><span class="mc-icon">🧭</span>
       <span class="mc-body"><b>Quick check</b><small>A few questions to find the right starting level</small></span><span class="mc-go">›</span></button>`;
   }
+  if (pathId === 'k') {
+    h += `<button class="map-card explore" onclick="openExplore('abc')"><span class="mc-icon">🎈</span>
+      <span class="mc-body"><b>Explore</b><small>Tap letters, numbers &amp; words to hear them · free writing</small></span><span class="mc-go">›</span></button>`;
+  }
   if (pathId === 'g3') {
     h += `<button class="map-card speed" onclick="startSpeed()"><span class="mc-icon">⚡</span>
       <span class="mc-body"><b>Times-table speed round</b><small>60 seconds · your best: ${P.speedBest || 0}</small></span><span class="mc-go">›</span></button>`;
@@ -4701,7 +4834,7 @@ let place = null;
 function startPlacement() {
   const path = PATHS[pathId];
   const worlds = path.worlds.map(W => {
-    const lv = path.levels.filter(l => l.w === W.id && !l.boss);
+    const lv = path.levels.filter(l => l.w === W.id && !l.boss && !l.activity);
     const chunks = [];
     for (let i = 0; i < lv.length; i += 3) chunks.push(lv.slice(i, i + 3));
     return { W: W, chunks: chunks, ci: 0, passed: [], stopped: false };
@@ -4978,22 +5111,40 @@ function gradeReportLines() {
    and can tell the caller when a line has finished (so lessons stay in sync). */
 let VOICE = null, speakTok = 0, speakU = null, speechUnlocked = false;
 
-function pickVoice() {
-  if (!('speechSynthesis' in window)) return;
-  const vs = window.speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
-  if (!vs.length) return;
-  const score = v => {
-    let s = 0;
-    if (/^en[-_]US/i.test(v.lang)) s += 5;
-    if (/premium/i.test(v.name)) s += 8;
-    else if (/enhanced|neural|natural/i.test(v.name)) s += 6;
-    if (/samantha|ava|allison|susan|zoe|nicky|aria|jenny|google us english/i.test(v.name)) s += 4;
-    if (/novelty|whisper|bad news|bells|boing|bubbles|cellos|zarvox|trinoids|jester|organ|superstar|wobble|albert|fred|junior|ralph|kathy|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley/i.test(v.name)) s -= 20;
-    if (v.localService) s += 1;
-    return s;
-  };
-  VOICE = vs.slice().sort((a, b) => score(b) - score(a))[0];
+/* Voice choice. Best: a natural-sounding US woman's voice ("teacher voice").
+   iPads ship with compact voices; the free Premium/Enhanced downloads sound far more human. */
+const VOICE_KEY = 'critterQuest_voice';
+let VOICE_PREF = (() => { try { return JSON.parse(localStorage.getItem(VOICE_KEY)) || {}; } catch (e) { return {}; } })();
+function saveVoicePref() { try { localStorage.setItem(VOICE_KEY, JSON.stringify(VOICE_PREF)); } catch (e) {} }
+function voiceQuality(v) {
+  if (/premium/i.test(v.name)) return 3;
+  if (/enhanced|neural|natural|online|wavenet|studio/i.test(v.name)) return 2;
+  if (/google/i.test(v.name)) return 2;
+  return 1;
 }
+function voiceScore(v) {
+  let s = voiceQuality(v) * 10;
+  if (/^en[-_]US/i.test(v.lang)) s += 4; else if (/^en[-_](GB|AU|IE|CA|NZ)/i.test(v.lang)) s += 1;
+  const n = v.name.toLowerCase();
+  const women = { ava: 7, zoe: 7, allison: 6, susan: 6, samantha: 5, joelle: 5, noelle: 5, nicky: 4, aria: 6, jenny: 6, michelle: 5, ana: 3,
+                  'google us english': 5, kate: 3, serena: 3, karen: 3, tessa: 2, moira: 2, catherine: 3, emma: 4, libby: 3, sonia: 3, natasha: 3 };
+  for (const k in women) if (n.includes(k)) { s += women[k]; break; }
+  if (/\b(alex|tom|aaron|arthur|daniel|oliver|rishi|evan|nathan|gordon|lee|guy|davis|christopher|eric|roger|brian|ryan|andrew|steffan|thomas|william|james|jacob|male)\b/.test(n)) s -= 15;
+  if (/novelty|whisper|bad news|good news|bells|boing|bubbles|cellos|zarvox|trinoids|jester|organ|superstar|wobble|albert|fred|junior|ralph|kathy|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley|hysterical|deranged/.test(n)) s -= 40;
+  if (v.localService) s += 1;
+  return s;
+}
+function englishVoices() {
+  if (!('speechSynthesis' in window)) return [];
+  return window.speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)).sort((a, b) => voiceScore(b) - voiceScore(a));
+}
+function pickVoice() {
+  const vs = englishVoices();
+  if (!vs.length) return;
+  VOICE = (VOICE_PREF.name && vs.find(v => v.name === VOICE_PREF.name)) || vs[0];
+}
+function voiceSpeed() { return VOICE_PREF.speed || 1; }
+function voicePitch() { return VOICE && voiceQuality(VOICE) >= 2 ? 1 : 1.05; }
 if ('speechSynthesis' in window) {
   pickVoice();
   try { window.speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {}
@@ -5034,7 +5185,7 @@ function say(text, o, onDone) {
       if (tok !== speakTok) { clearTimeout(fallback); finish(); return; }
       const u = new SpeechSynthesisUtterance(text);
       if (VOICE) u.voice = VOICE;
-      u.rate = rate; u.pitch = o.pitch || 1.06; u.volume = 1;
+      u.rate = Math.min(1.3, rate * voiceSpeed()); u.pitch = o.pitch || voicePitch(); u.volume = 1;
       u.onend = () => { clearTimeout(fallback); setTimeout(finish, 110); };
       u.onerror = () => { clearTimeout(fallback); setTimeout(finish, 110); };
       speakU = u;                       // keep a reference: Safari drops onend if the utterance is garbage-collected
@@ -5115,6 +5266,7 @@ function paintQuestion(q, ids, onPick) {
     const b = document.createElement('button');
     b.className = 'choice' + (q.textBtns ? ' txt' : '') + (q.renderChoice ? ' pic' : '') + (q.longChoices ? ' long' : '');
     if (q.renderChoice) b.innerHTML = q.renderChoice(c); else b.textContent = c;
+    if (q.bigChoices) b.classList.add('bigtxt');
     b.dataset.v = String(c);
     if (onPick) b.onclick = () => onPick(b, c);
     else { b.classList.add('demo'); b.tabIndex = -1; }
@@ -5146,7 +5298,7 @@ function renderQuestion(q) {
 function readQ(q) {
   if (run.mode === 'together') {
     say(qSpeech(q, true), { rate: rateQ() }, () => {
-      if (run.q === q && !run.locked && q.hint) say('Here\'s a tip. ' + q.hint, { rate: rateQ() });
+      if (run.q === q && !run.locked && q.hint) say('Here\'s a tip. ' + q.hint + (q.hintSpeak ? ' ' + q.hintSpeak : ''), { rate: rateQ() });
     });
   } else if (autoVoice()) say(qSpeech(q, true), { rate: rateQ() });
   else if (q.speakFirst) say(q.speakFirst, { rate: 0.75 });
@@ -5167,8 +5319,9 @@ function setBeats(active) {
     el.style.display = '';
     if (active === 'boss') { el.innerHTML = '<span class="on">👑 Mix of everything in this world</span>'; return; }
     if (active === 'redo') { el.innerHTML = '<span class="on">🔁 Second chance</span>'; return; }
-    const idx = BEATS.findIndex(b => b[0] === active);
-    el.innerHTML = BEATS.map((b, i) =>
+    const list = run && run.level && run.level.activity ? BEATS.filter(b => b[0] === 'learn' || b[0] === 'practice') : BEATS;
+    const idx = list.findIndex(b => b[0] === active);
+    el.innerHTML = list.map((b, i) =>
       `<span class="${i < idx ? 'done' : i === idx ? 'on' : ''}">${i < idx ? '✓' : b[1]} ${b[2]}</span>`).join('<i>›</i>');
   });
 }
@@ -5190,6 +5343,7 @@ function startLevel(lv) {
   document.getElementById('run-coins').textContent = '0';
   const L = LESSONS[lv.skill];
   if (L && !lv.boss) { showLearn(lv, L); return; }
+  if (lv.activity) { startActivity(lv); return; }
 
   // Boss levels: no lesson, a spoken intro, then the mix
   run.mode = 'practice'; run.holdVoice = true;
@@ -5206,11 +5360,13 @@ let learnState = { slides: [], i: 0 };
 
 function showLearn(lv, L) {
   const goal = GOALS[lv.skill] || (SKILL_LABEL[lv.skill] || 'something new').toLowerCase();
-  const plan = '<div class="plan-row">' + [['📘','Learn'],['👀','Watch me'],['🤝','Together'],['⭐','Your turn']]
+  const isAct = !!lv.activity;
+  const plan = '<div class="plan-row">' + (isAct ? [['📘','Learn'],['⭐','Your turn']] : [['📘','Learn'],['👀','Watch me'],['🤝','Together'],['⭐','Your turn']])
     .map(p => `<div><span>${p[0]}</span>${p[1]}</div>`).join('<i>›</i>') + '</div>';
   const intro = {
     text: `Today: ${goal}.`,
-    say: `${lv.title}! Today you'll learn ${goal}. First I'll teach you. Then I'll show you one. Then we'll do some together, and then it's your turn!`,
+    say: isAct ? `${lv.title}! Today you'll learn ${goal}. First I'll teach you, and then it's your turn!`
+               : `${lv.title}! Today you'll learn ${goal}. First I'll teach you. Then I'll show you one. Then we'll do some together, and then it's your turn!`,
     visual: { kind: 'html', html: plan }
   };
   learnState = { slides: [intro].concat(L.slides), i: 0 };
@@ -5230,7 +5386,7 @@ function renderSlide() {
   dots.innerHTML = learnState.slides.length > 1
     ? learnState.slides.map((_, k) => `<i class="${k === i ? 'on' : ''}"></i>`).join('') : '';
   const btn = document.getElementById('learn-next');
-  btn.textContent = i === learnState.slides.length - 1 ? 'Watch me →' : 'Next →';
+  btn.textContent = i === learnState.slides.length - 1 ? (run.level && run.level.activity ? 'Let\'s go →' : 'Watch me →') : 'Next →';
   btn.classList.remove('ready');
   say(s.say || s.text, { rate: rateL() }, () => {
     if (learnState.i === i && document.getElementById('learn-screen').classList.contains('active')) btn.classList.add('ready');
@@ -5238,6 +5394,7 @@ function renderSlide() {
 }
 function nextSlide() {
   if (learnState.i < learnState.slides.length - 1) { learnState.i++; renderSlide(); }
+  else if (run.level.activity) startActivity(run.level);
   else startWatch();
 }
 function replaySlide() {
@@ -5310,6 +5467,7 @@ function startYourTurn() {
 
 function beginPractice() {            // the "Skip" buttons on replays
   stopDemo(); hush();
+  if (run.level && run.level.activity) { startActivity(run.level); return; }
   run.mode = 'practice'; run.holdVoice = false;
   show('game-screen');
   nextQuestion();
@@ -5631,12 +5789,897 @@ function finishLevel() {
 }
 
 function quitLevel() {
-  stopDemo(); hush(); hideExplain();
+  stopDemo(); stopActivity(); hush(); hideExplain();
   if (run.mode === 'place') { finishPlacement(); return; }
   persist();
   buildMap();
   show('map-screen');
 }
+
+/* ═══════════════════════════════════════════════════════════
+   v5 — STARTER MEADOW (Kindergarten basics), TRACING, PAIRS, MEMORY, EXPLORE
+   ═══════════════════════════════════════════════════════════ */
+
+/* ───────── FIX: answer buttons line up with the groups they belong to ───────── */
+(function () {
+  const cmp = GEN.compare;
+  GEN.compare = function (max) {
+    const q = cmp(max), a = q.visual.a, b = q.visual.b;
+    q.forceChoices = [a, b];              // left button = left group, right button = right group
+    q.choices = [a, b];
+    q.tags = { [Math.min(a, b)]: 'picked_fewer' };
+    q.hint = 'Count each group. The group with the bigger number has MORE.';
+    return q;
+  };
+  const fc = GEN.fraccomp;
+  GEN.fraccomp = function (arg) {
+    const q = fc(arg), v = q.visual;
+    q.choices = [`${v.n1}/${v.den}`, `${v.n2}/${v.den}`];   // left = top bar, right = bottom bar
+    return q;
+  };
+})();
+
+/* ───────── CONTENT ───────── */
+const AZ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const LOOKALIKE = {
+  B: ['D', 'P', 'R'], C: ['G', 'O'], D: ['B', 'O'], E: ['F'], F: ['E', 'P'], G: ['C', 'Q'], I: ['L', 'T'],
+  K: ['X'], L: ['I'], M: ['N', 'W'], N: ['M', 'Z'], O: ['Q', 'C'], P: ['R', 'B'], Q: ['O', 'G'], R: ['P', 'B'],
+  U: ['V'], V: ['U', 'Y'], W: ['M', 'V'], X: ['K', 'Y'],
+  b: ['d', 'p', 'q'], d: ['b', 'q', 'p'], p: ['q', 'b', 'd'], q: ['p', 'd', 'b'], n: ['u', 'm', 'h'], u: ['n'],
+  m: ['n', 'w'], w: ['m'], i: ['l', 'j'], l: ['i'], h: ['n'], f: ['t'], t: ['f']
+};
+const BDPQ = {
+  b: { w: 'ball', e: '⚽', tip: 'b is a bat, then a ball: the tall line comes first, then the ball on the right.' },
+  d: { w: 'dog', e: '🐶', tip: 'd starts like c: make the round part first, then the tall line on the right.' },
+  p: { w: 'pig', e: '🐷', tip: 'p pulls down BELOW the line first, then goes back up and around to the right.' },
+  q: { w: 'queen', e: '👑', tip: 'q makes the round part first, then drops a line down BELOW the line.' }
+};
+// a picture word for every letter (X uses "fox", where X is at the end)
+const ABC_WORD = {};
+START_WORDS.forEach(s => { if (!ABC_WORD[s.l] && s.w[0].toUpperCase() === s.l) ABC_WORD[s.l] = { e: s.e, w: s.w }; });
+ABC_WORD.X = { e: '🦊', w: 'fox', end: true };
+
+/* ───────── NEW QUESTION TYPES ───────── */
+Object.assign(GEN, {
+  letternames() {
+    const lower = Math.random() < 0.4;
+    const L = pick(AZ), ch = lower ? L.toLowerCase() : L;
+    const look = LOOKALIKE[ch] || [];
+    const pool = (lower ? AZ.map(x => x.toLowerCase()) : AZ).filter(x => x !== ch);
+    const wrong = [];
+    shuffle(look).forEach(x => { if (wrong.length < 2) wrong.push(x); });
+    shuffle(pool).forEach(x => { if (wrong.length < 3 && wrong.indexOf(x) < 0) wrong.push(x); });
+    const tags = {};
+    look.forEach(x => { tags[x] = 'lookalike_letter'; });
+    return {
+      prompt: lower ? '🔊 Tap the LITTLE letter you hear' : '🔊 Tap the letter you hear',
+      big: '👂', choices: shuffle([ch].concat(wrong)), answer: ch, tags, textBtns: true, bigChoices: true,
+      speakFirst: `${lower ? 'Little' : 'The letter'} ${L}.`,
+      say: `That's ${lower ? 'little ' : ''}${L}! ${L} says ${LETTER_SOUNDS[L]}.`,
+      hint: lower ? 'Tap 🔊 to hear it again. Little letters can look different from big ones!' : 'Tap 🔊 to hear it again, then look for that shape.', hintSpeak: `${lower ? 'Little' : 'The letter'} ${L}.`
+    };
+  },
+
+  abcorder() {
+    const lower = Math.random() < 0.3;
+    const i = rnd(0, 22);
+    const f = x => lower ? x.toLowerCase() : x;
+    const seq = AZ.slice(i, i + 3), ans = AZ[i + 3];
+    const cands = [{ v: f(AZ[i + 2]), tag: 'repeated_letter' }];
+    if (AZ[i + 4]) cands.push({ v: f(AZ[i + 4]), tag: 'skipped_letter' });
+    if (i > 0) cands.push({ v: f(AZ[i - 1]), tag: 'went_backward' });
+    const r = smartChoices(f(ans), cands, { pool: AZ.map(f) });
+    return {
+      prompt: '🔊 Which letter comes next?', big: seq.map(f).join(' ') + ' ?', bigSmall: false,
+      choices: r.choices, tags: r.tags, answer: f(ans), textBtns: true, bigChoices: true,
+      speakFirst: `${seq.join(', ')}... what comes next?`,
+      say: `${seq.join(', ')}, ${ans}!`,
+      hint: 'Sing the ABC song. When you get to these letters, what do you sing next?'
+    };
+  },
+
+  bdpq() {
+    const set = ['b', 'd', 'p', 'q'], L = pick(set), info = BDPQ[L];
+    const tags = {};
+    set.forEach(x => { if (x !== L) tags[x] = 'lookalike_letter'; });
+    return {
+      prompt: '🔊 Tap the letter you hear', big: info.e, choices: shuffle(set.slice()), answer: L, tags,
+      textBtns: true, bigChoices: true,
+      speakFirst: `Little ${L.toUpperCase()}, like in ${info.w}.`,
+      say: `That's ${L}, like in ${info.w}!`, hint: info.tip
+    };
+  },
+
+  numid() {
+    const n = rnd(0, 20);
+    const cands = [{ v: n + 1, tag: 'off_by_one' }, { v: n - 1, tag: 'off_by_one' }];
+    if (n === 6) cands.push({ v: 9, tag: 'lookalike_number' });
+    if (n === 9) cands.push({ v: 6, tag: 'lookalike_number' });
+    if (n > 10 && n < 20) cands.push({ v: n % 10, tag: 'teen_digit' });
+    if (n > 0 && n < 10) cands.push({ v: n + 10, tag: 'teen_digit' });
+    if (n === 12) cands.push({ v: 21, tag: 'teen_reversal' });
+    const r = smartChoices(n, cands, { min: 0, max: 21, spread: 3 });
+    return {
+      prompt: '🔊 Tap the number you hear', big: '👂', choices: r.choices, tags: r.tags, answer: n, bigChoices: true,
+      speakFirst: `The number ${n}.`, say: `That's ${n}!`,
+      hint: n >= 10 && n < 20 ? 'Teen numbers start with a 1.' : 'Tap 🔊 to hear it again, then find that number.', hintSpeak: `The number ${n}.`
+    };
+  },
+
+  nummatch() {
+    const n = rnd(1, 10), icon = pick(CRIT_ICONS);
+    const r = smartChoices(n, [
+      { v: n + 1, tag: 'wrong_group' }, { v: n - 1, tag: 'wrong_group' }, { v: n + 2, tag: 'wrong_group' }
+    ], { min: 1, max: 12, spread: 3 });
+    return {
+      prompt: '🔊 Which group has this many?', big: String(n), choices: r.choices, tags: r.tags, answer: n,
+      renderChoice: c => `<div class="mini-count">${Array(c).fill(`<span>${icon}</span>`).join('')}</div>`,
+      speakFirst: `Which group has ${n}?`, say: `Yes! That group has ${n}.`,
+      hint: 'Count each group. Find the one that matches the number.'
+    };
+  },
+
+  mixK0() {
+    return GEN[pick(['letternames', 'abcorder', 'bdpq', 'numid', 'nummatch', 'casematch'])](0);
+  }
+});
+
+/* ───────── STARTER MEADOW: a new first world for Kindergarten ───────── */
+Object.assign(CRITTERS, {
+  alphabug:  { name:'Alphabug',  type:'spark',  stage:1, body:'round', top:'antenna',   eyes:'big',  tail:'bolt',  belly:1, cheeks:1 },
+  pairabbit: { name:'Pairabbit', type:'frost',  stage:1, body:'egg',   top:'ears',      eyes:'big',  tail:'puff',  belly:1, cheeks:1 },
+  digiloo:   { name:'Digiloo',   type:'splash', stage:1, body:'drop',  top:'shell',     eyes:'wide', tail:'fin',   belly:1, cheeks:1 },
+  penpip:    { name:'Penpip',    type:'ember',  stage:1, body:'round', top:'flametuft', eyes:'big',  tail:'flame', belly:1, cheeks:1 },
+  quillbit:  { name:'Quillbit',  type:'gust',   stage:1, body:'egg',   top:'crest',     eyes:'wide', tail:'leaf',  belly:1, cheeks:1 },
+  memowl:    { name:'Memowl',    type:'shade',  stage:2, body:'round', top:'ears',      eyes:'wide', tail:'curl',  belly:1, wings:1 },
+  alphalord: { name:'Alphalord', type:'spark',  stage:3, body:'chunk', top:'crown',     eyes:'big',  tail:'bolt',  belly:1, wings:1 }
+});
+
+PATHS.k.worlds.unshift({ id: 0, name: 'Starter Meadow', icon: '🌼', sub: 'Letter names, ABC order, numbers & writing' });
+PATHS.k.levels.push(
+  { n:34, w:0, title:'Letter Names',     icon:'🔠', skill:'letternames', arg:0, goal:10, reward:'alphabug'  },
+  { n:35, w:0, title:'ABC Order',        icon:'🎶', skill:'abcorder',    arg:0, goal:10, reward:null        },
+  { n:36, w:0, title:'Letter Pairs',     icon:'🔡', skill:'casepairs',   arg:0, goal:12, reward:'pairabbit', activity:'pairs',  goalText:'Match 12 letter pairs' },
+  { n:37, w:0, title:'Tricky Twins',     icon:'🪞', skill:'bdpq',        arg:0, goal:10, reward:null        },
+  { n:38, w:0, title:'Number Spotting',  icon:'🔢', skill:'numid',       arg:0, goal:10, reward:'digiloo'   },
+  { n:39, w:0, title:'Number Match',     icon:'🧮', skill:'nummatch',    arg:0, goal:10, reward:null        },
+  { n:40, w:0, title:'Number Writing',   icon:'✏️', skill:'tracedigits', arg:'digits', goal:5, reward:'penpip',   activity:'trace', goalText:'Write 5 numbers' },
+  { n:41, w:0, title:'Big Letter Writing', icon:'✍️', skill:'traceupper', arg:'upper', goal:6, reward:'quillbit', activity:'trace', goalText:'Write 6 capital letters' },
+  { n:42, w:0, title:'Little Letter Writing', icon:'📝', skill:'tracelower', arg:'lower', goal:6, reward:null,     activity:'trace', goalText:'Write 6 little letters' },
+  { n:43, w:0, title:'Memory Match',     icon:'🃏', skill:'memory',      arg:0, goal:6,  reward:'memowl',    activity:'memory', goalText:'Find 6 pairs' },
+  { n:44, w:0, title:'Starter Crown',    icon:'👑', skill:'mixK0',       arg:0, goal:12, reward:'alphalord', boss:1 }
+);
+
+/* ═══════════════════════════════════════════════════════════
+   LETTER & NUMBER SHAPES FOR TRACING
+   Units: top line y=0, dashed middle line y=50, baseline y=100, tail line y=150.
+   Each stroke is a list of line (L) and arc (A: centre, radii, start°, end°) pieces,
+   in the order and direction kids are taught to write them.
+   Angles: 0° = right, 90° = down. Going to smaller angles curves counter-clockwise.
+   ═══════════════════════════════════════════════════════════ */
+const Ln = (...p) => ({ L: p });
+const Ar = (cx, cy, rx, ry, a0, a1) => ({ A: [cx, cy, rx, ry, a0, a1] });
+const Dt = (x, y) => ({ dot: [x, y] });
+
+const GLYPHS = {
+  '0': { w: 60, s: [[Ar(30, 50, 26, 50, -90, -450)]] },
+  '1': { w: 36, s: [[Ln([18, 0], [18, 100])]] },
+  '2': { w: 60, s: [[Ar(30, 28, 24, 25, -170, 10), Ln([6, 100], [56, 100])]] },
+  '3': { w: 58, s: [[Ar(28, 25, 24, 24, -160, 90), Ar(28, 75, 26, 25, -90, 160)]] },
+  '4': { w: 62, s: [[Ln([38, 0], [6, 65], [58, 65])], [Ln([44, 20], [44, 100])]] },
+  '5': { w: 58, s: [[Ln([12, 0], [10, 44]), Ar(30, 69, 24, 29, -145, 150)], [Ln([12, 0], [50, 0])]] },
+  '6': { w: 58, s: [[Ln([46, 2], [14, 52]), Ar(31, 74, 21, 26, 180, -180)]] },
+  '7': { w: 58, s: [[Ln([6, 0], [54, 0], [22, 100])]] },
+  '8': { w: 58, s: [[Ar(29, 25, 20, 25, -30, -270), Ar(29, 75, 24, 25, -90, 210), Ln([46, 12])]] },
+  '9': { w: 58, s: [[Ar(28, 28, 22, 26, 0, -360), Ln([50, 100])]] },
+
+  A: { w: 70, s: [[Ln([35, 0], [5, 100])], [Ln([35, 0], [65, 100])], [Ln([16, 64], [54, 64])]] },
+  B: { w: 70, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [38, 0]), Ar(38, 25, 25, 25, -90, 90), Ln([10, 50])],
+                  [Ln([10, 50], [42, 50]), Ar(42, 75, 25, 25, -90, 90), Ln([10, 100])]] },
+  C: { w: 72, s: [[Ar(40, 50, 35, 50, -40, -320)]] },
+  D: { w: 70, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [25, 0]), Ar(25, 50, 42, 50, -90, 90), Ln([10, 100])]] },
+  E: { w: 62, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [55, 0])], [Ln([10, 50], [48, 50])], [Ln([10, 100], [55, 100])]] },
+  F: { w: 60, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [55, 0])], [Ln([10, 50], [48, 50])]] },
+  G: { w: 76, s: [[Ar(40, 50, 35, 50, -40, -360), Ln([50, 50])]] },
+  H: { w: 70, s: [[Ln([10, 0], [10, 100])], [Ln([60, 0], [60, 100])], [Ln([10, 50], [60, 50])]] },
+  I: { w: 40, s: [[Ln([20, 0], [20, 100])], [Ln([5, 0], [35, 0])], [Ln([5, 100], [35, 100])]] },
+  J: { w: 55, s: [[Ln([40, 0], [40, 72]), Ar(22, 72, 18, 28, 0, 180)]] },
+  K: { w: 64, s: [[Ln([10, 0], [10, 100])], [Ln([56, 0], [10, 58])], [Ln([26, 44], [60, 100])]] },
+  L: { w: 56, s: [[Ln([10, 0], [10, 100], [52, 100])]] },
+  M: { w: 80, s: [[Ln([8, 0], [8, 100])], [Ln([8, 0], [40, 70], [72, 0], [72, 100])]] },
+  N: { w: 70, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [60, 100], [60, 0])]] },
+  O: { w: 80, s: [[Ar(40, 50, 35, 50, -90, -450)]] },
+  P: { w: 64, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [35, 0]), Ar(35, 25, 25, 25, -90, 90), Ln([10, 50])]] },
+  Q: { w: 80, s: [[Ar(40, 50, 35, 50, -90, -450)], [Ln([46, 70], [76, 106])]] },
+  R: { w: 68, s: [[Ln([10, 0], [10, 100])], [Ln([10, 0], [35, 0]), Ar(35, 25, 25, 25, -90, 90), Ln([10, 50])], [Ln([32, 50], [62, 100])]] },
+  S: { w: 64, s: [[Ar(32, 25, 27, 25, -25, -270), Ar(32, 75, 28, 25, -90, 155)]] },
+  T: { w: 62, s: [[Ln([31, 0], [31, 100])], [Ln([4, 0], [58, 0])]] },
+  U: { w: 68, s: [[Ln([10, 0], [10, 65]), Ar(34, 65, 24, 35, 180, 0), Ln([58, 0])]] },
+  V: { w: 70, s: [[Ln([5, 0], [35, 100], [65, 0])]] },
+  W: { w: 90, s: [[Ln([5, 0], [25, 100], [45, 34], [65, 100], [85, 0])]] },
+  X: { w: 64, s: [[Ln([8, 0], [56, 100])], [Ln([56, 0], [8, 100])]] },
+  Y: { w: 64, s: [[Ln([8, 0], [32, 50])], [Ln([56, 0], [32, 50], [32, 100])]] },
+  Z: { w: 62, s: [[Ln([8, 0], [54, 0], [8, 100], [56, 100])]] },
+
+  a: { w: 56, s: [[Ar(27, 75, 22, 25, -30, -390), Ln([49, 50], [49, 100])]] },
+  b: { w: 56, s: [[Ln([10, 0], [10, 100])], [Ar(31, 75, 21, 25, 180, 540)]] },
+  c: { w: 50, s: [[Ar(28, 75, 22, 25, -40, -320)]] },
+  d: { w: 56, s: [[Ar(27, 75, 22, 25, -30, -390)], [Ln([49, 0], [49, 100])]] },
+  e: { w: 54, s: [[Ln([6, 75], [50, 75]), Ar(28, 75, 22, 25, 0, -315)]] },
+  f: { w: 46, s: [[Ar(32, 16, 13, 15, -30, -180), Ln([19, 100])], [Ln([6, 50], [36, 50])]] },
+  g: { w: 56, s: [[Ar(27, 75, 22, 25, -30, -390)], [Ln([49, 50], [49, 130]), Ar(30, 130, 19, 18, 0, 160)]] },
+  h: { w: 56, s: [[Ln([10, 0], [10, 100])], [Ar(30, 72, 20, 22, 180, 360), Ln([50, 100])]] },
+  i: { w: 26, s: [[Ln([13, 50], [13, 100])], [Dt(13, 30)]] },
+  j: { w: 38, s: [[Ln([26, 50], [26, 130]), Ar(13, 130, 13, 18, 0, 160)], [Dt(26, 30)]] },
+  k: { w: 50, s: [[Ln([10, 0], [10, 100])], [Ln([44, 50], [10, 80])], [Ln([22, 70], [46, 100])]] },
+  l: { w: 26, s: [[Ln([13, 0], [13, 100])]] },
+  m: { w: 80, s: [[Ln([8, 50], [8, 100])], [Ar(24, 70, 16, 20, 180, 360), Ln([40, 100])], [Ar(56, 70, 16, 20, 180, 360), Ln([72, 100])]] },
+  n: { w: 56, s: [[Ln([10, 50], [10, 100])], [Ar(30, 72, 20, 22, 180, 360), Ln([50, 100])]] },
+  o: { w: 54, s: [[Ar(27, 75, 22, 25, -90, -450)]] },
+  p: { w: 56, s: [[Ln([10, 50], [10, 148])], [Ar(31, 75, 21, 25, 180, 540)]] },
+  q: { w: 56, s: [[Ar(27, 75, 22, 25, -30, -390)], [Ln([49, 50], [49, 148])]] },
+  r: { w: 44, s: [[Ln([10, 50], [10, 100])], [Ar(28, 72, 18, 22, 180, 300)]] },
+  s: { w: 46, s: [[Ar(23, 62, 17, 12, -25, -270), Ar(23, 87, 18, 13, -90, 155)]] },
+  t: { w: 40, s: [[Ln([18, 10], [18, 100])], [Ln([4, 50], [34, 50])]] },
+  u: { w: 56, s: [[Ln([8, 50], [8, 78]), Ar(28, 78, 20, 22, 180, 0), Ln([48, 50], [48, 100])]] },
+  v: { w: 54, s: [[Ln([5, 50], [27, 100], [49, 50])]] },
+  w: { w: 76, s: [[Ln([4, 50], [20, 100], [38, 62], [56, 100], [72, 50])]] },
+  x: { w: 50, s: [[Ln([6, 50], [44, 100])], [Ln([44, 50], [6, 100])]] },
+  y: { w: 54, s: [[Ln([6, 50], [28, 100])], [Ln([50, 50], [16, 148])]] },
+  z: { w: 50, s: [[Ln([6, 50], [44, 50], [6, 100], [46, 100])]] }
+};
+
+// easiest shapes first (straight lines, then curves, then slants)
+const TRACE_ORDER = {
+  digits: '0123456789'.split(''),
+  upper: 'LFEHTIUCOQGSJDPBRAKMNVWXYZ'.split(''),
+  lower: 'ltiocadgqesfjkuyvwxzrnmhbp'.split('')
+};
+
+function glyphKind(ch) { return /[0-9]/.test(ch) ? 'digit' : ch === ch.toUpperCase() ? 'upper' : 'lower'; }
+function glyphSay(ch) {
+  const k = glyphKind(ch);
+  return k === 'digit' ? `the number ${ch}` : k === 'upper' ? `capital ${ch}` : `little ${ch.toUpperCase()}`;
+}
+function glyphLabel(ch) {
+  const k = glyphKind(ch);
+  return k === 'digit' ? `number ${ch}` : k === 'upper' ? `capital ${ch}` : `little ${ch}`;
+}
+
+function strokePts(stroke) {
+  const pts = [];
+  stroke.forEach(seg => {
+    if (seg.dot) { pts.push(seg.dot); return; }
+    if (seg.L) { seg.L.forEach(p => pts.push(p)); return; }
+    const [cx, cy, rx, ry, a0, a1] = seg.A;
+    const n = Math.max(8, Math.ceil(Math.abs(a1 - a0) / 4));
+    for (let i = 0; i <= n; i++) {
+      const a = (a0 + (a1 - a0) * i / n) * Math.PI / 180;
+      pts.push([cx + rx * Math.cos(a), cy + ry * Math.sin(a)]);
+    }
+  });
+  return pts;
+}
+function resample(pts, step) {
+  if (pts.length < 2) return pts.slice();
+  const out = [pts[0].slice()];
+  let carry = 0;
+  for (let i = 1; i < pts.length; i++) {
+    const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+    const d = Math.hypot(x1 - x0, y1 - y0);
+    if (!d) continue;
+    let t = step - carry;
+    while (t <= d) { out.push([x0 + (x1 - x0) * t / d, y0 + (y1 - y0) * t / d]); t += step; }
+    carry = d - (t - step);
+  }
+  const last = pts[pts.length - 1], tail = out[out.length - 1];
+  if (Math.hypot(last[0] - tail[0], last[1] - tail[1]) > step * 0.4) out.push(last.slice());
+  return out;
+}
+function dirWord(dx, dy) {
+  if (Math.abs(dy) > 2.2 * Math.abs(dx)) return dy > 0 ? 'pull down' : 'go up';
+  if (Math.abs(dx) > 2.2 * Math.abs(dy)) return 'slide across';
+  return dy > 0 ? 'slant down' : 'slant up';
+}
+function strokeWords(stroke) {
+  const words = [];
+  let last = null;
+  const push = w => { if (w !== words[words.length - 1]) words.push(w); };
+  stroke.forEach(seg => {
+    if (seg.dot) { push('add a dot'); return; }
+    if (seg.A) {
+      push('curve around');
+      const [cx, cy, rx, ry, , a1] = seg.A;
+      last = [cx + rx * Math.cos(a1 * Math.PI / 180), cy + ry * Math.sin(a1 * Math.PI / 180)];
+      return;
+    }
+    seg.L.forEach(p => { if (last) push(dirWord(p[0] - last[0], p[1] - last[1])); last = p; });
+  });
+  return words.slice(0, 3).join(', then ');
+}
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+function minDist(p, pts) { let m = 1e9; for (const q of pts) { const d = dist(p, q); if (d < m) m = d; } return m; }
+function nearestIdx(p, pts) { let m = 1e9, k = 0; pts.forEach((q, i) => { const d = dist(p, q); if (d < m) { m = d; k = i; } }); return k; }
+
+/* ═══════════════════════════════════════════════════════════
+   ACTIVITIES: trace, letter pairs, memory
+   ═══════════════════════════════════════════════════════════ */
+let act = null;
+function stopActivity() { if (act) { act.tok = (act.tok || 0) + 1; act.dead = true; } }
+
+function startActivity(lv) {
+  stopDemo(); hush();
+  run.mode = 'activity';
+  run.asked = 0; run.firstTry = 0; run.fixed = 0; run.redoDone = true;
+  paintCritter(document.getElementById('act-buddy'), buddyFor());
+  document.getElementById('act-coins').textContent = run.coins;
+  document.getElementById('act-title').textContent = lv.title;
+  setBeats('practice');
+  show('act-screen');
+  if (lv.activity === 'trace') startTrace(lv.arg, false);
+  else if (lv.activity === 'pairs') startPairs();
+  else if (lv.activity === 'memory') startMemory();
+}
+function actSay(text, spoken, cb, always) {
+  const el = document.getElementById('act-say');
+  el.textContent = text;
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  if (spoken !== false) say(spoken || text, { rate: rateL(), always: !!always }, cb);
+  else if (cb) setTimeout(cb, 0);
+}
+function actProgress(done, total, label) {
+  document.getElementById('act-fill').style.width = Math.min(100, done / total * 100) + '%';
+  document.getElementById('act-label').textContent = label;
+}
+function actCoins(n) {
+  run.coins += n;
+  document.getElementById('act-coins').textContent = run.coins;
+}
+function actSkill(ok) {
+  const key = run.level.skill;
+  if (!P.skills[key]) P.skills[key] = { att: 0, cor: 0 };
+  P.skills[key].att++;
+  if (ok) P.skills[key].cor++;
+}
+function actFinish() {
+  stopActivity(); hush();
+  persist();
+  levelGoalReached();
+}
+function quitActivity() {
+  const free = act && act.free;
+  stopActivity(); hush();
+  if (free) openExplore('write');
+  else quitLevel();
+}
+
+/* ───────── TRACING ───────── */
+function startTrace(set, freeChar) {
+  const free = !!freeChar;
+  let queue;
+  if (free) queue = [freeChar];
+  else {
+    const order = TRACE_ORDER[set], tr = P.traced || {};
+    queue = order.slice().sort((a, b) => ((tr[a] || 0) - (tr[b] || 0)) || (order.indexOf(a) - order.indexOf(b)))
+                 .slice(0, run.level.goal);
+  }
+  act = { kind: 'trace', set, free, queue, gi: 0, phase: 'trace', si: 0, fails: 0, glyphFails: 0, tok: 0, busy: false, ink: [] };
+  document.getElementById('act-area').innerHTML = `
+    <div class="trace-head"><span class="trace-glyph" id="tr-glyph"></span><span class="trace-step" id="tr-step"></span></div>
+    <div class="trace-box" id="tr-box"><canvas id="tr-bg"></canvas><canvas id="tr-ink"></canvas></div>`;
+  document.getElementById('act-btns').innerHTML = `
+    <button class="btn btn-ghost" onclick="traceWatch()">👀 Watch me</button>
+    <button class="btn btn-ghost" onclick="traceClear()">↺ Start over</button>`;
+  setupTraceInput();
+  traceGlyphStart();
+}
+
+function traceGlyphStart() {
+  const ch = act.queue[act.gi];
+  act.phase = 'trace'; act.si = 0; act.fails = 0; act.glyphFails = 0; act.ch = ch;
+  document.getElementById('tr-glyph').textContent = ch;
+  layoutTrace();
+  if (act.free) actProgress(0, 2, `✏️ ${glyphLabel(ch)}`);
+  else actProgress(act.gi, act.queue.length, `✏️ ${act.gi + 1} of ${act.queue.length}`);
+  traceStepLabel();
+  drawTraceBg();
+  const firstTime = !(P.traced && P.traced[ch]);
+  if (firstTime || act.gi === 0) {
+    actSay(`Let's write ${glyphLabel(ch)}. Watch me first!`, `Let's write ${glyphSay(ch)}. Watch me first!`,
+           () => traceWatch(undefined, true));
+  } else {
+    actSay(`Trace ${glyphLabel(ch)}. Start at the green dot.`, `Trace ${glyphSay(ch)}. Start at the green dot. ${act.geom.strokes[0].words}.`);
+  }
+}
+
+function traceStepLabel() {
+  document.getElementById('tr-step').textContent = act.phase === 'trace' ? '✏️ Trace it' : '🌟 Now write it yourself';
+}
+
+function layoutTrace() {
+  const box = document.getElementById('tr-box');
+  const ch = act.ch, lower = glyphKind(ch) === 'lower';
+  const W = Math.min(box.parentElement.clientWidth || 340, 448, Math.round((window.innerHeight - 300) / (lower ? 0.92 : 0.74)));
+  const H = Math.round(W * (lower ? 0.92 : 0.74));
+  box.style.width = W + 'px';
+  box.style.height = H + 'px';
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  ['tr-bg', 'tr-ink'].forEach(id => {
+    const c = document.getElementById(id);
+    c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+    c.style.width = W + 'px'; c.style.height = H + 'px';
+    c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  });
+  act.W = W; act.H = H;
+  act.geom = buildGeom(ch, W, H);
+}
+
+function buildGeom(ch, W, H) {
+  const g = GLYPHS[ch], lower = glyphKind(ch) === 'lower';
+  const top = -16, bot = lower ? 160 : 118;
+  const s = Math.min(H / (bot - top), W / (g.w + 44));
+  const ox = (W - g.w * s) / 2, oy = -top * s + (H - (bot - top) * s) / 2;
+  const toPx = ([x, y]) => [ox + x * s, oy + y * s];
+  const strokes = g.s.map(st => st[0].dot
+    ? { dot: true, pts: [toPx(st[0].dot)], words: 'add a dot' }
+    : { pts: resample(strokePts(st).map(toPx), 4), words: strokeWords(st) });
+  return { s, lower, strokes, lw: Math.max(13, s * 11), Y: y => oy + y * s };
+}
+
+function tracePath(x, pts, color, lw, dash) {
+  x.save();
+  x.strokeStyle = color; x.lineWidth = lw; x.lineCap = 'round'; x.lineJoin = 'round';
+  if (dash) x.setLineDash(dash);
+  x.beginPath();
+  pts.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1]));
+  x.stroke();
+  x.restore();
+}
+function traceDot(x, p, r, color) { x.save(); x.fillStyle = color; x.beginPath(); x.arc(p[0], p[1], r, 0, Math.PI * 2); x.fill(); x.restore(); }
+
+function drawTraceBg() {
+  const c = document.getElementById('tr-bg');
+  if (!c || !act || !act.geom) return;
+  const x = c.getContext('2d'), G = act.geom, W = act.W, H = act.H, lw = G.lw;
+  x.clearRect(0, 0, W, H);
+  // handwriting paper
+  const line = (y, color, width, dash) => {
+    x.save(); x.strokeStyle = color; x.lineWidth = width; if (dash) x.setLineDash(dash);
+    x.beginPath(); x.moveTo(8, G.Y(y)); x.lineTo(W - 8, G.Y(y)); x.stroke(); x.restore();
+  };
+  line(0, 'rgba(111,168,255,0.9)', 2.5);
+  line(50, 'rgba(154,165,204,0.8)', 2, [10, 9]);
+  line(100, 'rgba(255,107,107,0.95)', 3);
+  if (G.lower) line(150, 'rgba(111,168,255,0.55)', 2, [3, 7]);
+  const faint = act.phase === 'write';
+  // shape to follow
+  G.strokes.forEach((st, i) => {
+    if (i < act.si) return;
+    if (st.dot) traceDot(x, st.pts[0], lw * 0.55, faint ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.55)');
+    else if (faint) tracePath(x, st.pts, 'rgba(255,255,255,0.12)', lw);
+    else tracePath(x, st.pts, 'rgba(255,255,255,0.6)', lw * 0.62, [0.1, lw * 0.95]);
+  });
+  // strokes already done
+  G.strokes.slice(0, act.si).forEach(st => {
+    if (st.dot) traceDot(x, st.pts[0], lw * 0.55, '#FFD93D');
+    else tracePath(x, st.pts, '#FFD93D', lw);
+  });
+  // where to start and which way to go
+  const cur = G.strokes[act.si];
+  if (cur) {
+    if (!cur.dot) {
+      const every = faint ? 9999 : 58;
+      for (let d = 34; d < cur.pts.length * 4 - 20; d += every) {
+        const k = Math.round(d / 4), a = cur.pts[Math.max(0, k - 2)], b = cur.pts[Math.min(cur.pts.length - 1, k + 2)];
+        const ang = Math.atan2(b[1] - a[1], b[0] - a[0]), p = cur.pts[k];
+        x.save(); x.translate(p[0], p[1]); x.rotate(ang);
+        x.strokeStyle = '#4ADE80'; x.lineWidth = 3.5; x.lineCap = 'round'; x.lineJoin = 'round';
+        x.beginPath(); x.moveTo(-6, -7); x.lineTo(2, 0); x.lineTo(-6, 7); x.stroke(); x.restore();
+        if (faint) break;
+      }
+    }
+    const st = cur.pts[0];
+    traceDot(x, st, lw * 0.78, '#2FA862');
+    traceDot(x, st, lw * 0.6, '#4ADE80');
+    x.save(); x.fillStyle = '#06301A'; x.font = `900 ${Math.round(lw * 0.8)}px -apple-system, system-ui, sans-serif`;
+    x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(act.si + 1), st[0], st[1] + 1); x.restore();
+  }
+}
+
+function inkCtx() { return document.getElementById('tr-ink').getContext('2d'); }
+function clearInk() { const c = document.getElementById('tr-ink'); if (c) inkCtx().clearRect(0, 0, act.W, act.H); }
+
+function setupTraceInput() {
+  const c = document.getElementById('tr-ink');
+  let drawing = false;
+  const pt = e => { const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  c.addEventListener('pointerdown', e => {
+    if (!act || act.busy || act.kind !== 'trace') return;
+    e.preventDefault();
+    hush();
+    try { c.setPointerCapture(e.pointerId); } catch (_) {}
+    drawing = true;
+    act.ink = [pt(e)];
+    clearInk();
+    const x = inkCtx(), p = act.ink[0];
+    traceDot(x, p, act.geom.lw * 0.42, '#7DD3FC');
+  });
+  c.addEventListener('pointermove', e => {
+    if (!drawing) return;
+    e.preventDefault();
+    const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    const x = inkCtx();
+    x.strokeStyle = '#7DD3FC'; x.lineWidth = act.geom.lw * 0.85; x.lineCap = 'round'; x.lineJoin = 'round';
+    evs.forEach(ev => {
+      const p = pt(ev), q = act.ink[act.ink.length - 1];
+      act.ink.push(p);
+      x.beginPath(); x.moveTo(q[0], q[1]); x.lineTo(p[0], p[1]); x.stroke();
+    });
+  });
+  const end = e => {
+    if (!drawing) return;
+    drawing = false;
+    traceCheck();
+  };
+  c.addEventListener('pointerup', end);
+  c.addEventListener('pointercancel', end);
+}
+
+function judgeStroke(st, ink, tol) {
+  if (st.dot) return ink.some(p => dist(p, st.pts[0]) < tol * 1.7) ? '' : 'start';
+  if (ink.length < 3 || resample(ink, 3).length < 5) return 'short';
+  const exp = st.pts, n = exp.length, inkR = resample(ink, 3);
+  if (dist(inkR[0], exp[0]) > tol * 2.4) return 'start';
+  const span = dist(exp[0], exp[n - 1]);
+  if (span > tol && dist(inkR[0], exp[n - 1]) < dist(inkR[0], exp[0])) return 'direction';
+  // follow the ink along the stroke: each ink point may only move us a little way forward,
+  // so loops and retraces (6, 9, a, e) are fine, but going the wrong way never makes progress
+  const win = Math.max(4, Math.round(tol * 2.2 / 4));
+  let prog = 0, onPath = 0;
+  for (const p of inkR) {
+    let best = 1e9, bi = prog;
+    for (let i = Math.max(0, prog - 1); i <= Math.min(n - 1, prog + win); i++) { const d = dist(p, exp[i]); if (d < best) { best = d; bi = i; } }
+    if (best < tol * 1.3 && bi > prog) prog = bi;
+    if (minDist(p, exp) < tol * 1.5) onPath++;
+  }
+  const done = n <= 1 ? 1 : prog / (n - 1), acc = onPath / inkR.length;
+  if (done < 0.88 && !(done > 0.72 && minDist(exp[n - 1], inkR) < tol * 0.8)) {
+    let inkLen = 0; for (let i = 1; i < inkR.length; i++) inkLen += dist(inkR[i - 1], inkR[i]);
+    // plenty of ink right on the line but no progress = went the wrong way round
+    return (acc > 0.7 && inkLen > (n - 1) * 4 * 0.6 && done < 0.5) ? 'direction' : 'short';
+  }
+  if (acc < 0.6) return 'wobbly';
+  return '';
+}
+
+function traceCheck() {
+  const G = act.geom, st = G.strokes[act.si];
+  if (!st) return;
+  const why = judgeStroke(st, act.ink, G.lw * 1.5);
+  if (why) {
+    act.fails++; act.glyphFails++;
+    const msg = {
+      start: 'Start at the green dot!',
+      direction: 'Oops, go the other way. Follow the green arrows.',
+      short: 'Keep going! Trace the whole line.',
+      wobbly: 'Stay on the dotted line. You can do it!'
+    }[why];
+    const box = document.getElementById('tr-box');
+    box.classList.remove('nope'); void box.offsetWidth; box.classList.add('nope');
+    setTimeout(clearInk, 350);
+    if (act.fails >= 2 && !act.free) {
+      act.fails = 0;
+      actSay(msg + ' Watch me.', msg + ' Watch me.', () => traceWatch(act.si));
+    } else actSay(msg);
+    return;
+  }
+  // good stroke
+  act.fails = 0;
+  act.si++;
+  clearInk();
+  drawTraceBg();
+  if (act.si < G.strokes.length) {
+    const nx = G.strokes[act.si];
+    actSay(pick(['Nice!', 'Great line!', 'Yes!', 'Good job!']) + ` Now ${act.si + 1}: ${nx.words}.`,
+           `${pick(['Nice!', 'Great!', 'Yes!'])} Now ${act.si + 1}. ${nx.words}.`);
+    return;
+  }
+  // shape finished
+  if (act.phase === 'trace') {
+    act.phase = 'write'; act.si = 0;
+    traceStepLabel();
+    setTimeout(() => {
+      if (!act || act.dead || act.phase !== 'write' || act.si !== 0 || act.busy) return;
+      drawTraceBg();
+      actSay('Now write it on the lines by yourself! The guide is faint now.',
+             `Great tracing! Now write ${glyphSay(act.ch)} on the lines by yourself. Start at the green dot.`);
+    }, 700);
+    if (act.free) actProgress(1, 2, `✏️ ${glyphLabel(act.ch)}`);
+    return;
+  }
+  traceGlyphDone();
+}
+
+function traceGlyphDone() {
+  const ch = act.ch, clean = act.glyphFails === 0;
+  if (!P.traced) P.traced = {};
+  P.traced[ch] = (P.traced[ch] || 0) + 1;
+  confetti(18);
+  if (act.free) {
+    persist();
+    actProgress(2, 2, `✏️ ${glyphLabel(ch)} ✓`);
+    actSay(`Beautiful ${glyphLabel(ch)}!`, `Beautiful ${glyphSay(ch)}!`);
+    document.getElementById('act-btns').innerHTML = `
+      <button class="btn btn-ghost" onclick="openExplore('write')">Pick another</button>
+      <button class="btn btn-primary" onclick="startTrace(null, '${ch}')">Again ✏️</button>`;
+    return;
+  }
+  run.asked++;
+  if (clean) run.firstTry++;
+  actSkill(clean);
+  actCoins(clean ? 10 : 5);
+  persist();
+  act.gi++;
+  actProgress(act.gi, act.queue.length, `✏️ ${act.gi} of ${act.queue.length}`);
+  act.busy = true;
+  actSay(`${cap(glyphLabel(ch))}! ${pick(['Beautiful writing!', 'Great job!', 'You did it!'])}`,
+         `${cap(glyphSay(ch))}! ${pick(['Beautiful writing!', 'Great job!', 'You did it!'])}`, () => {
+    if (!act || act.dead || act.ch !== ch || act.gi === undefined) return;
+    setTimeout(() => {
+      if (!act || act.dead) return;
+      act.busy = false;
+      if (act.gi >= act.queue.length) actFinish();
+      else traceGlyphStart();
+    }, 500);
+  }, true);
+}
+
+function traceClear() {
+  if (!act || act.kind !== 'trace') return;
+  act.tok++; act.busy = false;
+  act.si = 0; act.fails = 0;
+  clearInk(); drawTraceBg();
+  actSay('Start over at the green dot.');
+}
+
+/* "Watch me": draw each stroke slowly with a pencil, saying what it does */
+async function traceWatch(single, thenTurn) {
+  if (!act || act.kind !== 'trace') return;
+  const tok = ++act.tok;
+  act.busy = true;
+  hush();
+  const G = act.geom, x = inkCtx(), lw = G.lw;
+  const list = single !== undefined ? [single] : G.strokes.map((_, i) => i);
+  clearInk();
+  const alive = () => act && tok === act.tok && !act.dead;
+  for (const i of list) {
+    if (!alive()) return;
+    const st = G.strokes[i];
+    // earlier strokes appear already drawn
+    if (single === undefined) G.strokes.slice(0, i).forEach(s0 => s0.dot ? traceDot(x, s0.pts[0], lw * 0.55, '#FFD93D') : tracePath(x, s0.pts, '#FFD93D', lw));
+    const speak = sayP(`${i + 1}. ${st.words}.`, { rate: rateL() });
+    document.getElementById('act-say').textContent = `${i + 1}: ${st.words}`;
+    if (st.dot) {
+      await sleep(350);
+      if (!alive()) return;
+      traceDot(x, st.pts[0], lw * 0.55, '#FFD93D');
+    } else {
+      const total = st.pts.length, ms = Math.max(700, total * 4 / 0.22);
+      await anim(ms, t => {
+        if (!alive()) return;
+        const k = Math.max(1, Math.round(t * (total - 1)));
+        x.clearRect(0, 0, act.W, act.H);
+        if (single === undefined) G.strokes.slice(0, i).forEach(s0 => s0.dot ? traceDot(x, s0.pts[0], lw * 0.55, '#FFD93D') : tracePath(x, s0.pts, '#FFD93D', lw));
+        tracePath(x, st.pts.slice(0, k + 1), '#FFD93D', lw);
+        const p = st.pts[k];
+        traceDot(x, p, lw * 0.5, '#FFFFFF');
+        traceDot(x, p, lw * 0.28, '#FF6B4A');
+      });
+    }
+    await speak;
+    await sleep(250);
+  }
+  if (!alive()) return;
+  await sleep(400);
+  if (!alive()) return;
+  clearInk();
+  act.busy = false;
+  drawTraceBg();
+  const first = act.geom.strokes[act.si];
+  actSay(`Your turn! Start at the green dot${first ? ': ' + first.words : ''}.`,
+         `Your turn! Start at the green dot. ${first ? first.words : ''}.`);
+}
+
+/* ───────── LETTER PAIRS (big letter ↔ little letter, face up) ───────── */
+function startPairs() {
+  act = { kind: 'pairs', boards: 2, board: 0, per: 6, matched: 0, mistakes: 0, sel: null, tok: 0, busy: false };
+  document.getElementById('act-btns').innerHTML = '';
+  pairsBoard();
+  actSay('Tap a BIG letter, then find its little partner!');
+}
+function pairsBoard() {
+  const letters = shuffle(AZ).slice(0, act.per);
+  act.left = act.per;
+  const tiles = shuffle(letters.map(L => ({ L, low: false })).concat(letters.map(L => ({ L, low: true }))));
+  document.getElementById('act-area').innerHTML = '<div class="pair-grid" id="pair-grid"></div>';
+  const grid = document.getElementById('pair-grid');
+  tiles.forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'pair-tile' + (t.low ? ' low' : '');
+    b.textContent = t.low ? t.L.toLowerCase() : t.L;
+    b.onclick = () => pairTap(b, t);
+    grid.appendChild(b);
+  });
+  actProgress(act.matched, act.boards * act.per, `🔡 ${act.matched} of ${act.boards * act.per} pairs`);
+}
+function pairTap(b, t) {
+  if (act.busy || b.classList.contains('done')) return;
+  if (!act.sel) {
+    act.sel = { b, t };
+    b.classList.add('sel');
+    say(t.low ? `Little ${t.L}.` : `${t.L}.`, { rate: 0.9 });
+    return;
+  }
+  if (act.sel.b === b) { b.classList.remove('sel'); act.sel = null; return; }
+  const a = act.sel;
+  act.sel = null;
+  if (a.t.L === t.L && a.t.low !== t.low) {
+    a.b.classList.remove('sel');
+    a.b.classList.add('done'); b.classList.add('done');
+    act.matched++; act.left--;
+    actCoins(5);
+    actSay(`${t.L} and ${t.L.toLowerCase()} match!`, `${t.L} and little ${t.L} match! ${t.L} says ${LETTER_SOUNDS[t.L]}.`);
+    actProgress(act.matched, act.boards * act.per, `🔡 ${act.matched} of ${act.boards * act.per} pairs`);
+    if (act.left === 0) {
+      act.busy = true;
+      confetti(20);
+      setTimeout(() => {
+        if (!act || act.dead) return;
+        act.board++;
+        act.busy = false;
+        if (act.board < act.boards) { pairsBoard(); actSay('Great! Here are some new letters.'); }
+        else pairsDone();
+      }, 1500);
+    }
+  } else {
+    act.mistakes++;
+    if (!P.miscon.casepairs) P.miscon.casepairs = {};
+    P.miscon.casepairs.case_mismatch = (P.miscon.casepairs.case_mismatch || 0) + 1;
+    [a.b, b].forEach(x => { x.classList.remove('sel'); x.classList.add('miss'); });
+    act.busy = true;
+    const want = a.t.low ? `big ${a.t.L}` : `little ${a.t.L.toLowerCase()}`;
+    actSay(`Not a match. We need ${want}.`, a.t.L === t.L ? 'That is the same kind. Find its partner.' : `Not a match. Look for ${a.t.low ? 'big' : 'little'} ${a.t.L}.`);
+    setTimeout(() => { [a.b, b].forEach(x => x.classList.remove('miss')); act.busy = false; }, 700);
+  }
+}
+function pairsDone() {
+  const total = act.boards * act.per;
+  run.asked = total;
+  run.firstTry = Math.max(0, total - act.mistakes);
+  for (let i = 0; i < total; i++) actSkill(i >= act.mistakes);
+  actFinish();
+}
+
+/* ───────── MEMORY MATCH (face-down cards) ───────── */
+function startMemory() {
+  const letters = shuffle(AZ).slice(0, 6);
+  act = { kind: 'memory', open: [], moves: 0, found: 0, busy: false, tok: 0 };
+  const cards = shuffle(letters.map(L => ({ L, low: false })).concat(letters.map(L => ({ L, low: true }))));
+  document.getElementById('act-btns').innerHTML = '';
+  document.getElementById('act-area').innerHTML = '<div class="pair-grid mem" id="mem-grid"></div>';
+  const grid = document.getElementById('mem-grid');
+  cards.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'mem-card';
+    b.innerHTML = `<span class="mem-back">?</span><span class="mem-face${c.low ? ' low' : ''}">${c.low ? c.L.toLowerCase() : c.L}</span>`;
+    b.onclick = () => memTap(b, c);
+    grid.appendChild(b);
+  });
+  actProgress(0, 6, '🃏 0 of 6 pairs');
+  actSay('Flip two cards. Find a big letter and its little partner!');
+}
+function memTap(b, c) {
+  if (act.busy || b.classList.contains('up')) return;
+  b.classList.add('up');
+  say(c.low ? `Little ${c.L}.` : `${c.L}.`, { rate: 0.9 });
+  act.open.push({ b, c });
+  if (act.open.length < 2) return;
+  act.moves++;
+  const [x, y] = act.open;
+  act.open = [];
+  if (x.c.L === y.c.L && x.c.low !== y.c.low) {
+    x.b.classList.add('done'); y.b.classList.add('done');
+    act.found++;
+    actCoins(5);
+    actProgress(act.found, 6, `🃏 ${act.found} of 6 pairs`);
+    actSay(`${x.c.L} and ${x.c.L.toLowerCase()}! A match!`, `A match! ${x.c.L} and little ${x.c.L}.`);
+    if (act.found === 6) {
+      act.busy = true;
+      confetti(24);
+      setTimeout(() => { if (act && !act.dead) memDone(); }, 1400);
+    }
+  } else {
+    act.busy = true;
+    actSay('Not a match. Remember where they are!', false);
+    setTimeout(() => { x.b.classList.remove('up'); y.b.classList.remove('up'); act.busy = false; }, 1100);
+  }
+}
+function memDone() {
+  const stars = act.moves <= 9 ? 3 : act.moves <= 13 ? 2 : 1;
+  run.asked = 10;
+  run.firstTry = stars === 3 ? 10 : stars === 2 ? 8 : 5;
+  actSkill(stars >= 2);
+  actFinish();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EXPLORE CORNER — free play, nothing scored (the old Letter Land boards)
+   ═══════════════════════════════════════════════════════════ */
+const EXPLORE_TABS = [['abc', '🔤 ABC'], ['num', '🔢 123'], ['words', '📖 Words'], ['snap', '👀 Snap words'], ['write', '✏️ Write']];
+let exploreTab = 'abc';
+
+function openExplore(tab) {
+  stopActivity(); hush();
+  exploreTab = tab || exploreTab;
+  document.getElementById('ex-tabs').innerHTML = EXPLORE_TABS.map(t =>
+    `<button class="ex-tab${t[0] === exploreTab ? ' on' : ''}" onclick="openExplore('${t[0]}')">${t[1]}</button>`).join('');
+  const banner = document.getElementById('ex-banner');
+  const grid = document.getElementById('ex-grid');
+  grid.className = 'ex-grid ' + exploreTab;
+  banner.innerHTML = exploreTab === 'write' ? 'Pick a letter or number to write!' : 'Tap anything to hear it!';
+  let h = '';
+  if (exploreTab === 'abc') h = AZ.map((L, i) => `<button class="ex-tile" style="--c:${PALETTE[i % PALETTE.length]}" onclick="exABC('${L}')">${L}<small>${L.toLowerCase()}</small></button>`).join('');
+  if (exploreTab === 'num') h = Array.from({ length: 21 }, (_, n) => `<button class="ex-tile" style="--c:${PALETTE[n % PALETTE.length]}" onclick="exNum(${n})">${n}</button>`).join('');
+  if (exploreTab === 'words') h = CVC.map((c, i) => `<button class="ex-tile word" style="--c:${PALETTE[i % PALETTE.length]}" onclick="exWord(${i})"><span>${c.e}</span>${c.w}</button>`).join('');
+  if (exploreTab === 'snap') h = Array.from(new Set(SIGHT_1.concat(SIGHT_2, SIGHT_3))).map(w => `<button class="ex-tile snap" onclick="exSnap('${w}')">${w}</button>`).join('');
+  if (exploreTab === 'write') h = TRACE_ORDER.digits.concat(AZ, AZ.map(x => x.toLowerCase())).map(ch =>
+    `<button class="ex-tile${P.traced && P.traced[ch] ? ' did' : ''}" onclick="exWrite('${ch}')">${ch}</button>`).join('');
+  grid.innerHTML = h;
+  grid.scrollTop = 0;
+  show('explore-screen');
+}
+function exABC(L) {
+  const w = ABC_WORD[L];
+  document.getElementById('ex-banner').innerHTML =
+    `<span class="exb-big">${L} ${L.toLowerCase()}</span><span class="exb-pic">${w.e}</span><span class="exb-word">${w.w}</span>`;
+  say(`${L}. ${L} says ${LETTER_SOUNDS[L]}. ${w.end ? `You can hear ${L} at the end of ${w.w}.` : `${L} is for ${w.w}.`}`, { rate: 0.85 });
+}
+function exNum(n) {
+  const b = document.getElementById('ex-banner');
+  b.innerHTML = `<span class="exb-big">${n}</span><div class="exb-vis" id="exb-vis"></div>`;
+  if (n > 0) EXTRA_VIS.tenframes({ count: n }, document.getElementById('exb-vis'));
+  say(n === 0 ? 'Zero. Zero means none at all.' : `${n}.`, { rate: 0.85 });
+}
+function exWord(i) {
+  const c = CVC[i], letters = c.w.split('');
+  document.getElementById('ex-banner').innerHTML =
+    `<span class="exb-pic">${c.e}</span><span class="exb-big" id="exb-word">${letters.map(l => `<span class="bn">${l}</span>`).join('')}</span>`;
+  const els = Array.from(document.querySelectorAll('#exb-word .bn'));
+  say(c.w, { rate: 0.8 }, () => {
+    let k = 0;
+    const next = () => {
+      els.forEach(e => e.classList.remove('lit'));
+      if (k >= letters.length) { say(c.w + '!', { rate: 0.8 }); return; }
+      els[k].classList.add('lit');
+      say(LETTER_SOUNDS[letters[k].toUpperCase()], { rate: 0.8 }, () => { k++; next(); });
+    };
+    next();
+  });
+}
+function exSnap(w) {
+  document.getElementById('ex-banner').innerHTML = `<span class="exb-big">${w}</span>`;
+  say(`${w}. ${w.split('').join(', ')}. ${w}.`, { rate: 0.85 });
+}
+function exWrite(ch) {
+  run = { level: { title: 'Write', skill: 'free', goal: 1 }, mode: 'free', coins: 0, missed: [], fixed: 0, redoQs: [], redoI: 0, asked: 0, firstTry: 0 };
+  paintCritter(document.getElementById('act-buddy'), buddyFor());
+  document.getElementById('act-coins').textContent = '—';
+  document.getElementById('act-title').textContent = 'Writing practice';
+  setBeats(null);
+  show('act-screen');
+  startTrace(null, ch);
+}
+function closeExplore() { hush(); buildMap(); show('map-screen'); }
 
 /* ═══════════════════════════════════════════════════════════
    v4 — WORKED EXAMPLES ("Watch me" / "Show me how")
@@ -6519,6 +7562,175 @@ const MISCON_FIX = {
 };
 
 /* ═══════════════════════════════════════════════════════════
+   v5 — lessons, demos, explanations & report rows for Starter Meadow
+   ═══════════════════════════════════════════════════════════ */
+
+// a letter drawn on handwriting lines, for lesson pictures
+function linesSVG(chars, opts) {
+  opts = opts || {};
+  const lower = chars.some(c => glyphKind(c) === 'lower');
+  const s = opts.s || 0.62, gap = 16;
+  const widths = chars.map(c => GLYPHS[c].w * s);
+  const W = Math.round(widths.reduce((a, b) => a + b, 0) + gap * (chars.length + 1));
+  const top = 12, H = Math.round(top + (lower ? 158 : 112) * s + 8);
+  const Y = y => top + y * s;
+  let out = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+  const line = (y, col, w, dash) => `<line x1="2" y1="${Y(y)}" x2="${W - 2}" y2="${Y(y)}" stroke="${col}" stroke-width="${w}"${dash ? ` stroke-dasharray="${dash}"` : ''}/>`;
+  out += line(0, 'rgba(111,168,255,0.9)', 2) + line(50, 'rgba(154,165,204,0.8)', 1.6, '6 5') + line(100, 'rgba(255,107,107,0.95)', 2.4);
+  if (lower) out += line(150, 'rgba(111,168,255,0.55)', 1.6, '2 5');
+  let x = gap;
+  chars.forEach((c, i) => {
+    GLYPHS[c].s.forEach((st, k) => {
+      if (st[0].dot) { const [dx, dy] = st[0].dot; out += `<circle cx="${x + dx * s}" cy="${Y(dy)}" r="4" fill="#FFD93D"/>`; return; }
+      const pts = strokePts(st).map(([px, py]) => `${(x + px * s).toFixed(1)},${Y(py).toFixed(1)}`).join(' ');
+      out += `<polyline points="${pts}" fill="none" stroke="#FFD93D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`;
+      if (opts.starts) {
+        const p = strokePts(st)[0];
+        out += `<circle cx="${x + p[0] * s}" cy="${Y(p[1])}" r="7" fill="#4ADE80"/><text x="${x + p[0] * s}" y="${Y(p[1]) + 4}" text-anchor="middle" font-size="10" font-weight="900" fill="#06301A" ${SVG_FONT}>${k + 1}</text>`;
+      }
+    });
+    x += widths[i] + gap;
+  });
+  return out + '</svg>';
+}
+const bigRow = (items, size) => `<div style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:${size || 44}px;font-weight:900;line-height:1.1">${items.map(t => `<span>${t}</span>`).join('')}</div>`;
+
+const TRACE_SLIDES = set => {
+  const sample = set === 'digits' ? ['1', '2', '3'] : set === 'upper' ? ['L', 'T', 'O'] : ['a', 'b', 'g'];
+  const out = [
+    { text: 'Letters and numbers live on lines, like a little house. The blue top line is the roof, the dashed line is the middle, and the red line is the floor.',
+      visual: { kind: 'html', html: linesSVG(sample) } }
+  ];
+  if (set === 'lower') out.push({ text: 'Tall little letters touch the roof. Short ones only reach the dashed middle. Some, like g, hang below the floor!',
+      visual: { kind: 'html', html: linesSVG(['l', 'o', 'g']) } });
+  out.push({ text: 'Start at the green dot. Follow the arrows, and go in order: 1, then 2.',
+             visual: { kind: 'html', html: linesSVG([set === 'digits' ? '4' : set === 'upper' ? 'T' : 't'], { starts: true, s: 0.9 }) } });
+  out.push({ text: 'First you trace over the dots. Then you write it again with only a faint guide. Use your finger or a pencil!' });
+  return out;
+};
+
+Object.assign(LESSONS, {
+  letternames: {
+    slides: [
+      { text: 'Every letter has a NAME. We use the names to talk about letters, like "B" or "M".', visual: { kind: 'html', html: bigRow(['A', 'B', 'C', 'D'], 46) } },
+      { text: 'Letters come in two sizes: BIG (called capital) and little. Both sizes have the same name.', visual: { kind: 'html', html: bigRow(['B b', 'M m', 'G g'], 40) } }
+    ],
+    rw: { icon: '📛', title: 'Spelling names', text: 'When we spell a name, we say the letter names: M, A, X spells Max.', tryIt: 'Say the letter names in your own name.' }
+  },
+  abcorder: {
+    slides: [
+      { text: 'The alphabet always goes in the same order, just like the ABC song.', visual: { kind: 'html', html: bigRow('ABCDEFG'.split(''), 34) } },
+      { text: 'To find which letter comes next, sing the song and listen for the next letter.', say: 'To find which letter comes next, sing the song and listen. A, B, C, D, E, F, G!' }
+    ],
+    rw: { icon: '📚', title: 'ABC order everywhere', text: 'Libraries, dictionaries and class lists all put things in ABC order.', tryIt: 'Line up 3 stuffed animals in ABC order by their names.' }
+  },
+  casepairs: {
+    slides: [
+      { text: 'Every big letter has a little partner. Some look the same, like S and s. Some look different, like A and a!', visual: { kind: 'html', html: bigRow(['S s', 'A a', 'R r'], 40) } },
+      { text: 'Tap a big letter, then tap its little partner. Match them all to win!' }
+    ],
+    rw: { icon: '📖', title: 'Reading books', text: 'Big letters start names and sentences. Little letters fill in the rest.', tryIt: 'Find a big letter and its little partner in a book.' }
+  },
+  bdpq: {
+    slides: [
+      { text: 'b, d, p and q are tricky twins. They\'re the same shape, just turned around!', visual: { kind: 'html', html: bigRow(['b', 'd', 'p', 'q'], 56) } },
+      { text: 'b is a bat, then a ball. d starts like c, then the tall line. p and q drop down below the line.', visual: { kind: 'html', html: linesSVG(['b', 'd', 'p', 'q']) } },
+      { text: 'A trick: make two fists with thumbs up. Your left hand makes b, your right hand makes d. Together they make a bed!', visual: { kind: 'html', html: bigRow(['👍', '🛏️', '👍'], 46) } }
+    ],
+    rw: { icon: '🛏️', title: 'The bed trick', text: 'In the word bed, the b and the d are the two ends of the bed.', tryIt: 'Make the bed with your hands: left thumb up is b, right thumb up is d.' }
+  },
+  numid: {
+    slides: [
+      { text: 'Numbers have names too. This one is 7, seven.', visual: { kind: 'html', html: bigRow(['7'], 70) } },
+      { text: 'Teen numbers start with a 1. In 14, the 1 means one full ten, and the 4 means 4 more.', visual: { kind: 'tenframes', count: 14 } }
+    ],
+    rw: { icon: '🚌', title: 'Numbers all around', text: 'Numbers are on clocks, buses, doors and birthday cakes.', tryIt: 'Find 5 numbers on things around your house.' }
+  },
+  nummatch: {
+    slides: [
+      { text: 'A number tells HOW MANY. The number 4 means 4 things.', visual: { kind: 'html', html: `<div style="display:flex;gap:14px;align-items:center;justify-content:center"><span style="font-size:58px;font-weight:900">4</span><span style="font-size:28px">=</span><span style="font-size:34px">🍎🍎🍎🍎</span></div>` } },
+      { text: 'Count each group, then find the one that matches the number.' }
+    ],
+    rw: { icon: '🎂', title: 'Birthday candles', text: 'A 5th birthday cake gets 5 candles, one for each year.', tryIt: 'Count out 6 spoons and put them next to a number 6.' }
+  },
+  tracedigits: { slides: TRACE_SLIDES('digits'),
+    rw: { icon: '🏆', title: 'Keeping score', text: 'Writing numbers lets you keep score in games and write your age and phone number.', tryIt: 'Write your age on a piece of paper.' } },
+  traceupper: { slides: TRACE_SLIDES('upper'),
+    rw: { icon: '💌', title: 'Writing notes', text: 'Capital letters start names, like the first letter of YOUR name.', tryIt: 'Write the first letter of your name on a card for someone.' } },
+  tracelower: { slides: TRACE_SLIDES('lower'),
+    rw: { icon: '🏷️', title: 'Labels and lists', text: 'Most letters we write are little letters: on lists, labels and notes.', tryIt: 'Help write a grocery list with a grown-up.' } },
+  memory: {
+    slides: [
+      { text: 'Memory Match! All the cards are face down.' },
+      { text: 'Flip two cards. If they are big and little partners, you keep them. If not, they flip back. Try to remember where they were!' }
+    ],
+    rw: { icon: '🧠', title: 'A strong memory', text: 'Remembering where things are helps you find your shoes, toys and books!', tryIt: 'Play memory with a grown-up using real cards.' }
+  }
+});
+
+Object.assign(GOALS, {
+  letternames: 'the names of the letters', abcorder: 'the ABC order', casepairs: 'matching big and little letters',
+  bdpq: 'the tricky letters b, d, p and q', numid: 'reading numbers from 0 to 20', nummatch: 'matching numbers to groups',
+  tracedigits: 'how to write numbers', traceupper: 'how to write capital letters', tracelower: 'how to write little letters',
+  memory: 'a memory game with big and little letters'
+});
+
+Object.assign(DEMOS, {
+  letternames: (q, D) => demoWalk(q, D, `Listen: ${q.speakFirst.replace(/\.$/, '')}. Let's look at each letter.`, c => `This is ${c === c.toLowerCase() ? 'little ' + c.toUpperCase() : c}`),
+  abcorder: async (q, D) => {
+    const ans = q.answer.toUpperCase(), i = AZ.indexOf(ans);
+    await D.tell('Sing the ABC song until you get to these letters.');
+    await D.tell(`${AZ.slice(0, i).join(', ')}…`, AZ.slice(0, i).join(', ') + '...');
+    await D.tell(`After ${AZ[i - 1]} comes ${ans}!`);
+    await D.reveal(false);
+  },
+  bdpq: (q, D) => demoWalk(q, D, BDPQ[q.answer].tip, c => `This is ${c.toUpperCase()}`),
+  numid: (q, D) => demoWalk(q, D, `Listen: ${q.answer}. Let's look at each number.`, c => `This is ${c}`),
+  nummatch: (q, D) => demoWalk(q, D, `The number is ${q.answer}. Let's count each group.`, c => `This group has ${c}`)
+});
+
+Object.assign(MISCON_FIX, {
+  picked_fewer: 'That group has FEWER. MORE means the group with the bigger number.',
+  lookalike_letter: 'Those two letters look alike! Look carefully at which way it faces and where the lines go.',
+  repeated_letter: 'That letter is already there. Which letter comes AFTER it?',
+  skipped_letter: 'Oops, that skips one! Sing the ABC song slowly.',
+  went_backward: 'That letter comes BEFORE. We want the one that comes next.',
+  lookalike_number: 'Those numbers look alike. A 6 has its circle at the bottom; a 9 has its circle at the top.',
+  teen_digit: 'Listen closely: teen numbers like 14 start with a 1.',
+  wrong_group: 'Count that group again. It doesn\'t match the number.'
+});
+Object.assign(MISCON_LABEL, {
+  picked_fewer: 'Picked the group with fewer', lookalike_letter: 'Mixed up look-alike letters (like b/d)',
+  repeated_letter: 'Repeated the last letter (ABC order)', skipped_letter: 'Skipped a letter (ABC order)',
+  went_backward: 'Went backward in ABC order', lookalike_number: 'Mixed up 6 and 9',
+  teen_digit: 'Mixed up teen numbers (14 vs 4)', wrong_group: 'Matched a number to the wrong group',
+  case_mismatch: 'Matched a big letter to the wrong little letter'
+});
+Object.assign(SKILL_LABEL, {
+  letternames: 'Letter names', abcorder: 'ABC order', casepairs: 'Big & little letter pairs', bdpq: 'b / d / p / q',
+  numid: 'Reading numbers 0–20', nummatch: 'Number ↔ how many', tracedigits: 'Writing numbers',
+  traceupper: 'Writing capital letters', tracelower: 'Writing little letters', memory: 'Memory match'
+});
+CHECKLIST.k.unshift(
+  ['Letter names & ABC order', ['letternames', 'abcorder', 'casematch', 'casepairs', 'bdpq']],
+  ['Read numbers 0–20', ['numid', 'nummatch']],
+  ['Write numbers & letters', ['tracedigits', 'traceupper', 'tracelower']]
+);
+
+// the grown-ups report also lists what they've written
+const _gradeReportLinesV4 = gradeReportLines;
+gradeReportLines = function () {
+  const out = _gradeReportLinesV4();
+  if (pathId === 'k') {
+    const tr = P.traced || {};
+    const d = TRACE_ORDER.digits.filter(c => tr[c]).length, u = AZ.filter(c => tr[c]).length,
+          l = AZ.map(c => c.toLowerCase()).filter(c => tr[c]).length;
+    out.push(`Written so far: ${d}/10 numbers, ${u}/26 capital letters, ${l}/26 little letters`);
+  }
+  return out;
+};
+
+/* ═══════════════════════════════════════════════════════════
    v4 — SPORTS BONUS SCENES
    Drawn as SVG with an animated result: swish / goal / home run.
    ═══════════════════════════════════════════════════════════ */
@@ -6833,6 +8045,64 @@ async function sportTap() {
     show('game-screen');
     nextQuestion();
   }, 2100);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   READING VOICE: pick the voice + speed in Grown-ups
+   ═══════════════════════════════════════════════════════════ */
+const VOICE_SAMPLE = "Hi! I'm your reading helper. Let's count together: one, two, three. Great job!";
+let voiceShowAll = false;
+function voiceTag(v) {
+  const q = voiceQuality(v);
+  return q === 3 ? '<em class="vq best">Premium</em>' : q === 2 ? '<em class="vq good">Enhanced</em>' : '<em class="vq">Basic</em>';
+}
+function voiceCard() {
+  const vs = englishVoices().filter(v => voiceScore(v) > -20);
+  const hasGood = vs.some(v => voiceQuality(v) >= 2);
+  const list = voiceShowAll ? vs : vs.slice(0, 6);
+  const cur = VOICE ? VOICE.name : '';
+  const sp = voiceSpeed();
+  const rows = list.map((v, i) => `
+      <button class="vrow${v.name === cur ? ' on' : ''}" onclick="chooseVoice(${vs.indexOf(v)})">
+        <span class="vdot"></span><span class="vname">${v.name.replace(/\s*\((Premium|Enhanced)\)/i, '')}<small>${v.lang}</small></span>${voiceTag(v)}<span class="vplay">▶</span>
+      </button>`).join('');
+  return `<div class="gp-card" id="voice-card"><h3>🗣️ Reading voice</h3>
+    ${vs.length ? `<div class="gp-empty" style="margin-bottom:8px">Tap a voice to hear it and use it. Best picks are at the top.</div>
+    <div class="vlist">${rows}</div>
+    ${vs.length > 6 ? `<button class="vmore" onclick="voiceShowAll=!voiceShowAll; refreshVoiceCard()">${voiceShowAll ? 'Show fewer' : `Show all ${vs.length} voices`}</button>` : ''}
+    <div class="vspeed"><span>Speed</span>
+      ${[[0.88, '🐢 Slower'], [1, 'Normal'], [1.1, '🐇 Faster']].map(([k, t]) => `<button class="${Math.abs(sp - k) < 0.01 ? 'on' : ''}" onclick="chooseSpeed(${k})">${t}</button>`).join('')}
+    </div>` : `<div class="gp-empty">This browser didn't list any voices yet. Close and reopen the app, then check here again.</div>`}
+    <div class="vtip${hasGood ? '' : ' warn'}">
+      <b>${hasGood ? 'Tip:' : 'Want a more natural voice?'}</b> On iPad, open <b>Settings › Accessibility › Spoken Content › Voices › English</b>,
+      tap <b>Ava (Premium)</b> or <b>Zoe (Premium)</b> and download it (free, Wi-Fi). Then fully close and reopen the game. It will pick the new voice automatically.
+    </div>
+  </div>`;
+}
+function refreshVoiceCard() {
+  const el = document.getElementById('voice-card');
+  if (el) el.outerHTML = voiceCard();
+}
+function chooseVoice(i) {
+  const v = englishVoices().filter(v => voiceScore(v) > -20)[i];
+  if (!v) return;
+  VOICE = v; VOICE_PREF.name = v.name; saveVoicePref();
+  refreshVoiceCard();
+  say(VOICE_SAMPLE, { rate: rateL() });
+}
+function chooseSpeed(k) {
+  VOICE_PREF.speed = k; saveVoicePref();
+  refreshVoiceCard();
+  say(VOICE_SAMPLE, { rate: rateL() });
+}
+const _openGrownups = openGrownups;
+openGrownups = function () {
+  _openGrownups.apply(this, arguments);
+  const body = document.getElementById('gp-body');
+  if (body && !document.getElementById('voice-card')) body.insertAdjacentHTML('afterbegin', voiceCard());
+};
+if ('speechSynthesis' in window) {
+  try { window.speechSynthesis.addEventListener('voiceschanged', () => { pickVoice(); refreshVoiceCard(); }); } catch (e) {}
 }
 
 /* ───────── BOOT ───────── */
