@@ -1006,6 +1006,228 @@
   .ex-grid.write .ex-tile { background: rgba(255,255,255,0.08); color: var(--ink); text-shadow: none; }
   .ex-tile.did { border-color: var(--sprout); background: rgba(74,222,128,0.16) !important; }
   .map-card.explore { background: linear-gradient(140deg, rgba(196,181,253,0.24), rgba(255,143,171,0.14)); border-color: rgba(196,181,253,0.5); }
+
+  /* ══════════ v6: BRAIN BREAKS ══════════ */
+  .brain-card {
+    display: flex; align-items: center; gap: 12px; width: 100%; max-width: 380px; margin: 4px auto 6px; padding: 14px 16px;
+    border-radius: 20px; border: 3px solid var(--gold); cursor: pointer; text-align: left; color: var(--ink); font: inherit;
+    background: linear-gradient(135deg, rgba(196,181,253,0.25), rgba(74,168,255,0.18)); animation: readyPulse 1.6s ease-in-out infinite;
+  }
+  .bc-icon { font-size: 40px; line-height: 1; }
+  .bc-body { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+  .bc-body small { font-size: 11px; font-weight: 900; letter-spacing: 0.6px; color: var(--gold); }
+  .bc-body b { font-size: 20px; font-weight: 900; }
+  .bc-body i { font-style: normal; font-size: 13px; font-weight: 700; color: var(--muted); }
+  .bc-go { font-weight: 900; font-size: 16px; color: #2A1A00; background: var(--gold); padding: 8px 12px; border-radius: 999px; }
+  .bc-other { display: block; margin: 0 auto 12px; background: none; border: none; color: #7DD3FC; font: inherit; font-weight: 800; font-size: 14px; cursor: pointer; padding: 6px; }
+  .map-card.brain { border-color: rgba(196,181,253,0.55); background: linear-gradient(135deg, rgba(196,181,253,0.18), rgba(74,168,255,0.1)); }
+
+  #brainpick-screen .bp-sub { text-align: center; font-size: 14px; font-weight: 800; color: var(--muted); margin: 0 0 12px; }
+  .bp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; overflow-y: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; }
+  .bp-tile { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 10px; border-radius: 20px; cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: var(--ink); font: inherit; text-align: center; }
+  .bp-tile:active { transform: scale(0.97); }
+  .bp-icon { font-size: 44px; line-height: 1.1; }
+  .bp-tile b { font-size: 17px; font-weight: 900; }
+  .bp-tile small { font-size: 12.5px; font-weight: 700; color: var(--muted); line-height: 1.3; }
+  .bp-tile em { font-style: normal; font-size: 11px; font-weight: 900; color: var(--sprout); }
+
+  #brain-screen .stage { justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  #brain-screen .teach-row { margin-bottom: 10px; }
+  .bg-area { width: 100%; max-width: 448px; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 12px; flex-shrink: 0; }
+  #bg-btns { flex-shrink: 0; flex-wrap: wrap; }
+  #bg-btns:empty { display: none; }
+  #bg-btns .btn { flex: 1 1 30%; min-width: 120px; }
+
+  /* maze */
+  .mz-q { position: relative; width: 100%; background: var(--card, rgba(255,255,255,0.06)); border: 2px solid rgba(255,217,61,0.5); border-radius: 18px; padding: 10px 44px 10px 14px; text-align: center; }
+  .mz-q.idle { border-color: rgba(255,255,255,0.12); }
+  .mz-q.idle .q-speak { display: none; }
+  .mz-q.pop { animation: sayPop 0.35s ease-out; }
+  .mz-q .q-prompt { margin: 0; font-size: 16px; padding: 0; }
+  .mz-q .q-big { margin: 4px 0 0; font-size: 34px; }
+  .mz-q .q-visual:empty { display: none; }
+  .mz-q .q-visual { margin-top: 6px; }
+  .mz-box { touch-action: none; -webkit-user-select: none; user-select: none; }
+  .mz-box svg { display: block; }
+  .mz-floor { fill: #1B2452; }
+  .mz-wall { stroke: #9CC2FF; stroke-width: 1.4; stroke-linecap: round; fill: none; }
+  .mz-trail { fill: none; stroke: rgba(255,217,61,0.55); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+  #mz-critter { transition: transform 0.12s linear; }
+  .mz-home { font-size: 7px; text-anchor: middle; }
+  .mz-ok { font-size: 6px; text-anchor: middle; fill: var(--sprout); font-weight: 900; }
+  .mz-gate circle { fill: var(--gold); animation: gateBob 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .mz-gate text { font-size: 5px; font-weight: 900; text-anchor: middle; fill: #2A1A00; font-family: system-ui, sans-serif; }
+  @keyframes gateBob { 50% { transform: scale(1.15); } }
+  .mz-label rect { fill: #FFFFFF; stroke: var(--gold); stroke-width: 0.8; }
+  .mz-label text { font-size: 4.6px; font-weight: 900; text-anchor: middle; fill: #1E2749; font-family: system-ui, sans-serif; }
+  .mz-label.hint rect { fill: #FFD93D; animation: gateBob 0.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .mz-label.nope rect { fill: #FF8F80; }
+  .mz-key { font-size: 14px; font-weight: 800; color: var(--muted); }
+
+  /* word search */
+  .ws-bank { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .ws-chip { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; font: inherit; cursor: pointer;
+    border: 2px solid var(--c); background: rgba(255,255,255,0.05); color: var(--ink); }
+  .ws-chip b { font-size: 17px; font-weight: 900; letter-spacing: 0.5px; }
+  .ws-e { font-size: 22px; line-height: 1; }
+  .ws-chip.found { background: var(--c); color: #1E2749; }
+  .ws-chip.found b { text-decoration: line-through; text-decoration-thickness: 2px; }
+  .ws-box { position: relative; touch-action: none; -webkit-user-select: none; user-select: none; border-radius: 16px; background: #F7F4EA; box-shadow: 0 6px 0 rgba(0,0,0,0.25); }
+  .ws-grid { position: absolute; inset: 0; display: grid; }
+  .ws-grid span { display: flex; align-items: center; justify-content: center; font-weight: 800; color: #1E2749;
+    font-family: "Avenir Next", -apple-system, system-ui, sans-serif; pointer-events: none; }
+  .ws-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .ws-svg line { stroke-linecap: round; stroke-width: 0.78; }
+  .ws-found { opacity: 0.45; }
+  .ws-sel { stroke: #FFB800; opacity: 0.5; }
+  .ws-hint { fill: none; stroke: #FF6B4A; stroke-width: 0.12; animation: gateBob 0.7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+  /* dot-to-dot */
+  .dt-head { display: flex; gap: 10px; align-items: center; }
+  .dt-rule, .dt-next { font-size: 14px; font-weight: 900; padding: 6px 12px; border-radius: 999px; }
+  .dt-rule { background: rgba(196,181,253,0.18); border: 2px solid rgba(196,181,253,0.5); }
+  .dt-next { background: rgba(255,217,61,0.15); border: 2px solid rgba(255,217,61,0.5); color: var(--gold); }
+  .dt-next:empty { display: none; }
+  .dt-box { touch-action: none; -webkit-user-select: none; user-select: none; background: #F7F4EA; border-radius: 18px; box-shadow: 0 6px 0 rgba(0,0,0,0.25); }
+  .dt-box svg { display: block; }
+  .dt-dot { fill: #1E2749; }
+  .dt-dot.on { fill: #4AA8FF; }
+  .dt-dot.hint { fill: #FF6B4A; animation: gateBob 0.7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .dt-num { font-size: 4.4px; font-weight: 900; fill: #1E2749; text-anchor: middle; font-family: system-ui, sans-serif; }
+  .dt-num.on { fill: #9AA5CC; }
+  .dt-num.hint { fill: #FF6B4A; font-size: 5.6px; }
+  .dt-line { fill: none; stroke: #4AA8FF; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .dt-rubber { stroke: rgba(74,168,255,0.45); stroke-width: 1; stroke-dasharray: 2 2; }
+  .dt-fill { animation: dtIn 0.8s ease-out both; }
+  @keyframes dtIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* color by number */
+  .cb-key { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .cb-swatch { display: flex; align-items: center; gap: 6px; padding: 5px 12px 5px 5px; border-radius: 999px; cursor: pointer; font: inherit;
+    border: 3px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: var(--ink); }
+  .cb-swatch i { width: 30px; height: 30px; border-radius: 50%; background: var(--sw); border: 2px solid rgba(0,0,0,0.35); }
+  .cb-swatch b { font-size: 19px; font-weight: 900; }
+  .cb-swatch.on { border-color: var(--gold); background: rgba(255,217,61,0.18); transform: scale(1.08); }
+  .cb-box { background: #F7F4EA; border-radius: 14px; padding: 6px; box-shadow: 0 6px 0 rgba(0,0,0,0.25); touch-action: manipulation; }
+  .cb-box svg { display: block; }
+  .cb-cell { transition: fill 0.25s; cursor: pointer; }
+  .cb-edge { fill: none; stroke: #1E2749; stroke-width: 0.7; stroke-linecap: square; pointer-events: none; }
+  .cb-t { font-weight: 900; text-anchor: middle; fill: #1E2749; font-family: "Avenir Next", system-ui, sans-serif; pointer-events: none; }
+  .cb-left { font-size: 14px; font-weight: 800; color: var(--muted); }
+
+  /* match-up */
+  .mu-moves { font-size: 14px; font-weight: 900; color: var(--muted); }
+  .mu-grid { max-width: 420px; }
+  .mu-card .mem-face.long { font-size: 24px; }
+  .mu-card .mem-face.xlong { font-size: 14px; line-height: 1.15; padding: 0 4px; font-weight: 800; }
+  .mu-card.up .mem-face.ans { color: #1E40AF; }
+  .mu-card.done .mem-face { color: #fff; }
+
+  /* mini sudoku */
+  .sd-grid { display: grid; border: 4px solid #1E2749; border-radius: 12px; overflow: hidden; background: #F7F4EA; box-shadow: 0 6px 0 rgba(0,0,0,0.25); }
+  .sd-cell { border: 1px solid #C8C3B4; background: transparent; font: inherit; font-weight: 900; color: #1E2749; cursor: pointer; padding: 0;
+    display: flex; align-items: center; justify-content: center; font-family: "Avenir Next", system-ui, sans-serif; line-height: 1; }
+  .sd-cell.given { background: #E8E3D3; cursor: default; }
+  .sd-cell.mine { color: #1D6FD6; }
+  .sd-cell.br { border-right: 3px solid #1E2749; }
+  .sd-cell.bb { border-bottom: 3px solid #1E2749; }
+  .sd-cell.sel { background: #FFE9A8; box-shadow: inset 0 0 0 3px #F5A800; }
+  .sd-cell.bad { background: #FFC9C2; animation: nope 0.4s ease-out; }
+  .sd-cell.hint { animation: gateBob 0.8s ease-in-out infinite; background: #FFE9A8; }
+  .sd-pad { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .sd-key { min-width: 54px; height: 54px; border-radius: 14px; border: 3px solid #B45309; background: linear-gradient(135deg, #FFE066, #F5A800);
+    color: #3A2200; font: 900 26px/1 "Avenir Next", system-ui, sans-serif; box-shadow: 0 4px 0 #8A5A00; cursor: pointer; }
+  .sd-key.erase { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: var(--ink); box-shadow: none; font-size: 20px; }
+  .sd-key:active { transform: translateY(2px); }
+
+  /* scramble */
+  .sc-count, .tr-count, .sm-level { font-size: 14px; font-weight: 900; color: var(--muted); }
+  .sc-clue { min-height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .sc-pic { font-size: 64px; line-height: 1; }
+  .sc-text { font-size: 20px; font-weight: 800; padding: 10px 16px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,217,61,0.45); }
+  .sc-slots { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .sc-slot { width: 50px; height: 58px; border-radius: 12px; border: 3px dashed rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center;
+    font: 900 32px/1 "Avenir Next", system-ui, sans-serif; color: var(--ink); }
+  .sc-slot.next { border-color: var(--gold); border-style: solid; }
+  .sc-slot.on { border-style: solid; border-color: var(--sprout); background: rgba(74,222,128,0.15); }
+  .sc-tiles { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+  .sc-tile { width: 58px; height: 62px; border-radius: 14px; border: 3px solid #B45309; background: linear-gradient(135deg, #FFE066, #F5A800); color: #3A2200;
+    font: 900 32px/1 "Avenir Next", system-ui, sans-serif; box-shadow: 0 4px 0 #8A5A00; cursor: pointer; }
+  .sc-tile.used { visibility: hidden; }
+  .sc-tile.nope { animation: nope 0.4s ease-out; background: linear-gradient(135deg, #FFB4A8, #F2705E); }
+  .sc-tile.hint { animation: gateBob 0.8s ease-in-out infinite; box-shadow: 0 0 0 5px rgba(125,211,252,0.6), 0 4px 0 #8A5A00; }
+
+  /* simon */
+  .sm-board { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; max-width: 360px; }
+  .sm-board.watch .sm-pad { pointer-events: none; }
+  .sm-pad { aspect-ratio: 1; border-radius: 28px; border: 4px solid var(--pc); background: rgba(255,255,255,0.06); cursor: pointer; position: relative; overflow: hidden;
+    font: 900 48px/1 "Avenir Next", system-ui, sans-serif; color: var(--ink); transition: transform 0.12s, background 0.12s; box-shadow: 0 6px 0 rgba(0,0,0,0.3); }
+  .sm-pad::before { content: ''; position: absolute; inset: 0; background: var(--pc); opacity: 0.35; transition: opacity 0.12s; z-index: -1; }
+  .sm-pad { isolation: isolate; }
+  .sm-pad.lit { transform: scale(1.06); color: #1E2749; box-shadow: 0 0 34px var(--pc), 0 6px 0 rgba(0,0,0,0.3); }
+  .sm-pad.lit::before { opacity: 1; }
+  .sm-pad:active::before { opacity: 0.8; }
+
+  /* pattern train */
+  .tr-track { width: 100%; overflow: hidden; padding: 10px 0 16px; border-bottom: 5px solid #6B7280; position: relative; }
+  .tr-track::after { content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 5px; background: repeating-linear-gradient(90deg, #A0673D 0 10px, transparent 10px 22px); }
+  .tr-train { display: flex; align-items: flex-end; gap: 4px; flex-wrap: nowrap; justify-content: center; }
+  .tr-train.in { animation: trainIn 0.9s cubic-bezier(0.2, 0.9, 0.3, 1); }
+  .tr-train.out { transition: transform 0.9s ease-in; transform: translateX(-120%); }
+  @keyframes trainIn { from { transform: translateX(110%); } to { transform: translateX(0); } }
+  .tr-engine { font-size: 40px; line-height: 1; transform: scaleX(-1); }
+  .tr-car { position: relative; min-width: 42px; height: 48px; padding: 0 5px; border-radius: 8px; background: #4AA8FF; border: 3px solid #1E40AF;
+    display: flex; align-items: center; justify-content: center; }
+  .tr-car b { font: 900 22px/1 "Avenir Next", system-ui, sans-serif; color: #fff; }
+  .tr-car i { position: absolute; bottom: -9px; width: 12px; height: 12px; border-radius: 50%; background: #1E2749; border: 2px solid #9AA5CC; }
+  .tr-car i:first-of-type { left: 5px; } .tr-car i:last-of-type { right: 5px; }
+  .tr-car.empty { background: rgba(255,255,255,0.08); border-style: dashed; border-color: var(--gold); animation: gateBob 1.2s ease-in-out infinite; }
+  .tr-car.empty b { color: var(--gold); }
+  .tr-car.filled { background: var(--sprout); border-color: #15803D; animation: matchPop 0.5s ease-out; }
+  .tr-opts { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+  .tr-opt { min-width: 76px; height: 70px; padding: 0 14px; border-radius: 16px; border: 3px solid #B45309; background: linear-gradient(135deg, #FFE066, #F5A800);
+    color: #3A2200; font: 900 30px/1 "Avenir Next", system-ui, sans-serif; box-shadow: 0 4px 0 #8A5A00; cursor: pointer; }
+  .tr-opt.pic { font-size: 36px; }
+  .tr-opt.nope { animation: nope 0.4s ease-out; }
+  .tr-opt:disabled { opacity: 0.35; }
+
+  /* shape puzzle */
+  .sp-board { touch-action: none; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 18px; }
+  .sp-board svg { display: block; overflow: visible; }
+  .sp-hole { fill: #28305E; stroke: rgba(255,255,255,0.12); stroke-width: 0.03; }
+  .sp-outline { fill: none; stroke: var(--gold); stroke-width: 0.09; stroke-linecap: round; pointer-events: none; }
+  .sp-tray { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; min-height: 60px; }
+  .sp-piece { position: relative; padding: 6px; border-radius: 12px; background: rgba(255,255,255,0.06); touch-action: none; cursor: grab; }
+  .sp-piece svg { display: block; pointer-events: none; }
+  .sp-turn { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #1E2749;
+    font-size: 14px; font-weight: 900; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .sp-ghost { position: fixed; z-index: 90; pointer-events: none; opacity: 0.85; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)); }
+
+  /* crossword */
+  .cw-clue { width: 100%; font-size: 16px; font-weight: 700; line-height: 1.35; padding: 10px 14px; border-radius: 14px; background: rgba(255,217,61,0.12); border: 2px solid rgba(255,217,61,0.45); }
+  .cw-clue b { color: var(--gold); margin-right: 4px; }
+  .cw-clue span { color: var(--muted); font-size: 13px; }
+  .cw-grid { display: grid; gap: 2px; }
+  .cw-x { background: transparent; }
+  .cw-c { position: relative; border: 2px solid #1E2749; background: #F7F4EA; border-radius: 4px; padding: 0; cursor: pointer;
+    font: 900 1em/1 "Avenir Next", system-ui, sans-serif; color: #1E2749; }
+  .cw-c i { position: absolute; top: 1px; left: 2px; font-size: 9px; font-style: normal; font-weight: 800; color: #6B7280; }
+  .cw-c.on { background: #DCEBFF; }
+  .cw-c.cur { background: #FFE9A8; box-shadow: inset 0 0 0 2px #F5A800; }
+  .cw-c.ok { background: #BBF7D0; color: #14532D; }
+  .cw-c.bad { background: #FFC9C2; color: #B91C1C; }
+  .cw-kbd { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .cw-kbd div { display: flex; gap: 5px; justify-content: center; }
+  .cw-kbd button { flex: 1; max-width: 40px; height: 44px; border-radius: 8px; border: none; background: rgba(255,255,255,0.12); color: var(--ink);
+    font: 900 18px/1 system-ui, sans-serif; cursor: pointer; }
+  .cw-kbd button:active { background: var(--gold); color: #2A1A00; }
+  .cw-list { width: 100%; display: grid; gap: 10px; }
+  .cw-list h4 { margin: 0 0 4px; font-size: 13px; color: var(--gold); letter-spacing: 0.5px; }
+  .cw-list button { display: block; width: 100%; text-align: left; padding: 6px 8px; border-radius: 8px; border: none; background: none; color: var(--ink); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .cw-list button.on { background: rgba(255,217,61,0.15); }
+  .cw-list button.done { color: var(--sprout); text-decoration: line-through; }
+  .cw-list button b { color: var(--muted); margin-right: 4px; }
 </style>
 </head>
 <body>
@@ -1131,6 +1353,7 @@
         <button class="fb-btn" data-r="boring" onclick="giveFeedback(this)"><span>😴</span>Boring</button>
       </div>
     </div>
+    <div id="brain-offer"></div>
     <button class="btn btn-primary" onclick="afterLevel()">Continue →</button>
   </div>
 
@@ -1285,6 +1508,30 @@
     <div class="ex-tabs" id="ex-tabs"></div>
     <div class="ex-banner" id="ex-banner">Tap anything to hear it!</div>
     <div class="ex-grid" id="ex-grid"></div>
+  </div>
+
+  <!-- ══════════ BRAIN GAMES ══════════ -->
+  <div id="brainpick-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" id="bp-back" onclick="buildMap(); show('map-screen')">←</button>
+      <h2>Brain Games</h2>
+      <div class="beat-pill world">🧩 PLAY</div>
+    </div>
+    <p class="bp-sub" id="bp-sub"></p>
+    <div class="bp-grid" id="bp-grid"></div>
+  </div>
+
+  <div id="brain-screen" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" onclick="brainQuit()">←</button>
+      <h2 id="bg-title">Brain Break</h2>
+      <div class="coin-pill">🪙 <span id="bg-coins">0</span></div>
+    </div>
+    <div class="stage">
+      <div class="teach-row"><svg id="bg-buddy" viewBox="0 0 100 100"></svg><div class="t-say" id="bg-say"></div></div>
+      <div class="bg-area" id="bg-area"></div>
+      <div class="lesson-actions" id="bg-btns"></div>
+    </div>
   </div>
 
     <!-- ══════════ RESET MODAL ══════════ -->
@@ -8058,8 +8305,7 @@ function voiceTag(v) {
 }
 function voiceCard() {
   const vs = englishVoices().filter(v => voiceScore(v) > -20);
-  const hasGood = vs.some(v => voiceQuality(v) >= 2);
-  const list = voiceShowAll ? vs : vs.slice(0, 6);
+    const list = voiceShowAll ? vs : vs.slice(0, 6);
   const cur = VOICE ? VOICE.name : '';
   const sp = voiceSpeed();
   const rows = list.map((v, i) => `
@@ -8073,9 +8319,8 @@ function voiceCard() {
     <div class="vspeed"><span>Speed</span>
       ${[[0.88, '🐢 Slower'], [1, 'Normal'], [1.1, '🐇 Faster']].map(([k, t]) => `<button class="${Math.abs(sp - k) < 0.01 ? 'on' : ''}" onclick="chooseSpeed(${k})">${t}</button>`).join('')}
     </div>` : `<div class="gp-empty">This browser didn't list any voices yet. Close and reopen the app, then check here again.</div>`}
-    <div class="vtip${hasGood ? '' : ' warn'}">
-      <b>${hasGood ? 'Tip:' : 'Want a more natural voice?'}</b> On iPad, open <b>Settings › Accessibility › Spoken Content › Voices › English</b>,
-      tap <b>Ava (Premium)</b> or <b>Zoe (Premium)</b> and download it (free, Wi-Fi). Then fully close and reopen the game. It will pick the new voice automatically.
+    <div class="vtip">
+      <b>Note:</b> iPads only let websites use their built-in voices. Voices you download in Settings (like Ava or Zoe) work in Apple's own apps but won't show up here. <b>Samantha</b> is usually the best choice on iPad.
     </div>
   </div>`;
 }
@@ -8103,6 +8348,1729 @@ openGrownups = function () {
 };
 if ('speechSynthesis' in window) {
   try { window.speechSynthesis.addEventListener('voiceschanged', () => { pickVoice(); refreshVoiceCard(); }); } catch (e) {}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BRAIN BREAKS: short puzzle games at the end of a level
+   (also free-play from the map). Each game uses the level's
+   content: its questions, its words, its numbers.
+   ═══════════════════════════════════════════════════════════ */
+const BRAIN = {
+  maze:  { name: 'Critter Maze', icon: '🌀', blurb: 'Answer at each fork to find the way home' },
+  words: { name: 'Word Search',  icon: '🔎', blurb: 'Find the hidden words' },
+  dots:  { name: 'Dot-to-Dot',   icon: '✏️', blurb: 'Connect the dots to make a picture' }
+};
+const BRAIN_ORDER = ['maze', 'words', 'dots'];
+let bg = null;
+
+function bgAlive(tok) { return bg && !bg.dead && (tok === undefined || tok === bg.tok); }
+function brainSay(text, spoken) {
+  const el = document.getElementById('bg-say');
+  el.textContent = text;
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  if (spoken !== false) speakAuto(spoken || text, { rate: rateL() });
+}
+function brainSrcLevel(lv) {
+  const levels = PATHS[pathId].levels;
+  const ok = l => l && !l.activity;
+  if (ok(lv)) return lv;
+  if (lv) {
+    const same = levels.filter(l => l.w === lv.w && ok(l) && !l.boss);
+    if (same.length) return same[0];
+  }
+  const last = levels.find(l => l.n === P.lastLevel);
+  if (ok(last)) return last;
+  const cleared = levels.filter(l => ok(l) && isCleared(l.n));
+  return cleared.length ? cleared[cleared.length - 1] : levels.find(l => ok(l) && !l.boss);
+}
+function brainSuggest(lv) {
+  const s = (lv && lv.skill) || '';
+  const wordy = /sight|letter|case|rhyme|blend|word|vowel|digraph|endsound|abc|bdpq|prefix|suffix|context|homophone|synant|passage|infer|habitats|living|forces|lifecycles|trace/.test(s);
+  const county = /count|skip|mult|teens|numid|nummatch|bonds|doubles|div|missing|decompose/.test(s);
+  let g = wordy ? 'words' : county ? 'dots' : 'maze';
+  if (P.brainLast === g) g = BRAIN_ORDER[(BRAIN_ORDER.indexOf(g) + 1) % BRAIN_ORDER.length];
+  return g;
+}
+
+/* done-screen offer */
+function renderBrainOffer() {
+  const el = document.getElementById('brain-offer');
+  if (!el || !run || !run.level) return;
+  const g = brainSuggest(run.level), B = BRAIN[g];
+  el.innerHTML = `
+    <button class="brain-card" onclick="startBrain('${g}', true)">
+      <span class="bc-icon">${B.icon}</span>
+      <span class="bc-body"><small>🧩 BRAIN BREAK</small><b>${B.name}</b><i>${B.blurb}</i></span>
+      <span class="bc-go">Play ›</span>
+    </button>
+    <button class="bc-other" onclick="openBrainPicker(true)">or pick a different game</button>`;
+}
+const _finishLevel = finishLevel;
+finishLevel = function () {
+  _finishLevel.apply(this, arguments);
+  try { P.lastLevel = run.level.n; persist(); } catch (e) {}
+  renderBrainOffer();
+};
+const _renderMapCards = renderMapCards;
+renderMapCards = function (inner) {
+  _renderMapCards(inner);
+  let wrap = inner.querySelector('.map-cards');
+  if (!wrap) { wrap = document.createElement('div'); wrap.className = 'map-cards'; inner.appendChild(wrap); }
+  wrap.insertAdjacentHTML('beforeend', `<button class="map-card brain" onclick="openBrainPicker(false)"><span class="mc-icon">🧩</span>
+      <span class="mc-body"><b>Brain Games</b><small>Mazes, word searches, dot-to-dots &amp; more</small></span><span class="mc-go">›</span></button>`);
+};
+
+/* picker */
+function openBrainPicker(fromLevel) {
+  hush();
+  const lv = brainSrcLevel(fromLevel ? run.level : null);
+  const back = fromLevel ? "show('done-screen')" : "buildMap(); show('map-screen')";
+  document.getElementById('bp-back').setAttribute('onclick', back);
+  document.getElementById('bp-sub').textContent = lv ? `Using what you learned in ${lv.title}` : '';
+  document.getElementById('bp-grid').innerHTML = Object.keys(BRAIN).map(id => `
+    <button class="bp-tile" onclick="startBrain('${id}', ${fromLevel})">
+      <span class="bp-icon">${BRAIN[id].icon}</span><b>${BRAIN[id].name}</b><small>${BRAIN[id].blurb}</small>
+      ${P.brain && P.brain.by && P.brain.by[id] ? `<em>Played ${P.brain.by[id]}×</em>` : ''}
+    </button>`).join('');
+  show('brainpick-screen');
+  speakAuto('Pick a brain game!', { rate: rateL() });
+}
+
+function startBrain(id, fromLevel) {
+  stopBrain(); hush();
+  const lv = brainSrcLevel(fromLevel ? run.level : null);
+  bg = { id, fromLevel: !!fromLevel, lv, tok: 0, dead: false, misses: 0, t0: Date.now() };
+  P.brainLast = id;
+  document.getElementById('bg-title').textContent = BRAIN[id].name;
+  document.getElementById('bg-coins').textContent = P.coins;
+  paintCritter(document.getElementById('bg-buddy'), buddyFor());
+  document.getElementById('bg-btns').innerHTML = '';
+  show('brain-screen');
+  BRAIN_START[id]();
+}
+function stopBrain() { if (bg) { bg.dead = true; bg.tok++; if (bg.cleanup) try { bg.cleanup(); } catch (e) {} } }
+function brainQuit() {
+  const from = bg && bg.fromLevel;
+  stopBrain(); hush();
+  if (from) show('done-screen');
+  else { buildMap(); show('map-screen'); }
+}
+function brainWin(msg, spoken) {
+  if (!bgAlive()) return;
+  bg.won = true;
+  const coins = bg.misses <= 1 ? 20 : 15;
+  P.coins += coins;
+  if (!P.brain) P.brain = { n: 0, by: {} };
+  P.brain.n++; P.brain.by[bg.id] = (P.brain.by[bg.id] || 0) + 1;
+  persist();
+  document.getElementById('bg-coins').textContent = P.coins;
+  confetti(36); setTimeout(() => confetti(18), 400); sfx('big');
+  brainSay(`${msg} +${coins} 🪙`, spoken || msg);
+  const id = bg.id, from = bg.fromLevel;
+  document.getElementById('bg-btns').innerHTML = `
+    <button class="btn btn-ghost" onclick="startBrain('${id}', ${from})">🔁 New puzzle</button>
+    <button class="btn btn-ghost" onclick="openBrainPicker(${from})">🧩 Other games</button>
+    <button class="btn btn-primary" onclick="stopBrain(); ${from ? 'afterLevel()' : "buildMap(); show('map-screen')"}">Done →</button>`;
+}
+function bgBox() {
+  const area = document.getElementById('bg-area');
+  return Math.min(area.clientWidth || 340, 448);
+}
+const BRAIN_START = {};
+
+/* ═════════════ CRITTER MAZE ═════════════
+   A perfect maze (one way through). At a few forks on the way home a
+   question appears and each path is labeled with an answer: walk down
+   the right one to keep going. */
+const OPP = { n: 's', s: 'n', e: 'w', w: 'e' };
+function mazeGen(cols, rows, newest) {
+  // "growing tree": mostly extend the newest cell (long winding paths),
+  // sometimes branch from an older one (more forks and dead ends)
+  const N = cols * rows, open = Array.from({ length: N }, () => ({ n: false, s: false, e: false, w: false }));
+  const seen = new Array(N).fill(false), list = [0];
+  seen[0] = true;
+  if (newest === undefined) newest = 0.6;
+  while (list.length) {
+    const li = Math.random() < newest ? list.length - 1 : rnd(0, list.length - 1);
+    const c = list[li], x = c % cols, y = Math.floor(c / cols), nb = [];
+    if (y > 0 && !seen[c - cols]) nb.push(['n', c - cols]);
+    if (y < rows - 1 && !seen[c + cols]) nb.push(['s', c + cols]);
+    if (x > 0 && !seen[c - 1]) nb.push(['w', c - 1]);
+    if (x < cols - 1 && !seen[c + 1]) nb.push(['e', c + 1]);
+    if (!nb.length) { list.splice(li, 1); continue; }
+    const [d, nc] = pick(nb);
+    open[c][d] = true; open[nc][OPP[d]] = true; seen[nc] = true; list.push(nc);
+  }
+  return open;
+}
+function mazeNbrs(m, c) {
+  const o = m.open[c], r = [];
+  if (o.n) r.push(c - m.cols); if (o.s) r.push(c + m.cols); if (o.w) r.push(c - 1); if (o.e) r.push(c + 1);
+  return r;
+}
+function mazePath(m, a, b, limit) {
+  const prev = new Map([[a, -1]]), q = [[a, 0]];
+  while (q.length) {
+    const [c, d] = q.shift();
+    if (c === b) break;
+    if (limit && d >= limit) continue;
+    for (const n of mazeNbrs(m, c)) if (!prev.has(n)) { prev.set(n, c); q.push([n, d + 1]); }
+  }
+  if (!prev.has(b)) return null;
+  const p = []; for (let c = b; c !== -1; c = prev.get(c)) p.push(c);
+  return p.reverse();
+}
+function mazeQuestion(lv) {
+  const fits = q => q && !q.renderChoice && !q.longChoices && (q.forceChoices || q.choices || []).length >= 2 &&
+    (q.forceChoices || q.choices).every(c => String(c).length <= 6);
+  for (let i = 0; i < 10; i++) { try { const q = buildQuestion(lv); if (fits(q)) return q; } catch (e) {} }
+  const fb = pathId === 'k' ? pick([{ skill: 'count', arg: 10, goal: 1 }, { skill: 'add', arg: 5, goal: 1 }, { skill: 'letternames', arg: 0, goal: 1 }])
+                            : { skill: 'mult', arg: [2, 3, 4, 5, 6, 7, 8, 9], goal: 1 };
+  for (let i = 0; i < 10; i++) { const q = buildQuestion(fb); if (fits(q)) return q; }
+  return buildQuestion(fb);
+}
+BRAIN_START.maze = function () {
+  const K = pathId === 'k';
+  const cols = K ? 5 : 8, rows = K ? 6 : 10, gates = K ? 2 : 3;
+  let m, best = null;
+  for (let t = 0; t < 60; t++) {
+    const open = mazeGen(cols, rows, K ? 0.5 : 0.7);
+    m = { cols, rows, open };
+    const path = mazePath(m, 0, cols * rows - 1);
+    const js = [];
+    for (let i = 2; i < path.length - 2; i++) {
+      const wrong = mazeNbrs(m, path[i]).filter(n => n !== path[i - 1] && n !== path[i + 1]);
+      if (wrong.length) js.push({ i, cell: path[i], right: path[i + 1], wrong });
+    }
+    // spread them out along the way
+    const chosen = [];
+    js.forEach(j => { if (!chosen.length || j.i - chosen[chosen.length - 1].i >= (K ? 3 : 4)) chosen.push(j); });
+    const pickN = [];
+    if (chosen.length) {
+      const step = chosen.length / Math.min(gates, chosen.length);
+      for (let k = 0; k < Math.min(gates, chosen.length); k++) pickN.push(chosen[Math.floor(k * step + step / 2)]);
+    }
+    if (!best || pickN.length > best.gates.length || (pickN.length === best.gates.length && path.length > best.path.length))
+      best = { open, path, gates: pickN };
+    if (pickN.length >= gates && path.length >= (K ? 12 : 26)) break;
+  }
+  m = { cols, rows, open: best.open, path: best.path };
+  m.gates = best.gates.map(g => {
+    const q = mazeQuestion(bg.lv);
+    const all = (q.forceChoices || q.choices).map(String), ans = String(q.answer);
+    const wrongs = shuffle(all.filter(c => c !== ans)).slice(0, g.wrong.length);
+    const labels = { [g.right]: ans };
+    g.wrong.forEach((c, i) => { labels[c] = wrongs[i] !== undefined ? wrongs[i] : '✗'; });
+    return Object.assign(g, { q, labels, done: false, tries: 0 });
+  });
+  Object.assign(bg, { m, cur: 0, trail: [0], active: null, hold: false });
+  document.getElementById('bg-area').innerHTML = `
+    <div class="mz-q" id="mz-q"><button class="q-speak" onclick="mazeReadQ()">🔊</button>
+      <p class="q-prompt" id="mz-prompt"></p><p class="q-big" id="mz-big"></p><div class="q-visual" id="mz-visual"></div></div>
+    <div class="mz-box" id="mz-box"></div>
+    <div class="mz-key"><span>${gateLeft()}</span></div>`;
+  mazeQIdle();
+  mazeDraw();
+  mazeInput();
+  brainSay(`Help your critter get home! Drag it along the path. At each ❓ answer the question to pick the right way.`,
+           `Help your critter get home! Drag it along the path. When you reach a question mark, answer the question to pick the right way.`);
+};
+function gateLeft() {
+  const g = bg.m.gates, d = g.filter(x => x.done).length;
+  return g.map((x, i) => x.done ? '✅' : '❓').join(' ') + ` &nbsp;${d} of ${g.length} gates`;
+}
+function mazeQIdle() {
+  const box = document.getElementById('mz-q');
+  box.classList.add('idle');
+  document.getElementById('mz-prompt').textContent = 'Walk to the ❓ to get a question!';
+  document.getElementById('mz-big').style.display = 'none';
+  document.getElementById('mz-visual').innerHTML = '';
+}
+function mazeShowQ(g) {
+  const box = document.getElementById('mz-q'), q = g.q;
+  box.classList.remove('idle'); box.classList.remove('pop'); void box.offsetWidth; box.classList.add('pop');
+  document.getElementById('mz-prompt').textContent = cleanPrompt(q.prompt).replace(/^🔊\s*/, '').replace(/^(Tap|Pick|Choose|Find) (the|a|an) /i, 'Walk to the ');
+  const big = document.getElementById('mz-big');
+  big.textContent = q.big || ''; big.style.display = q.big ? '' : 'none';
+  big.className = 'q-big' + ((q.bigSmall || q.story) ? ' small' : '');
+  renderVisual((pathId === 'k' || !q.big) ? (q.visual || null) : null, document.getElementById('mz-visual'));
+  mazeReadQ();
+}
+function mazeReadQ() {
+  const g = bg && bg.active;
+  if (g) say(qSpeech(g.q) + ' Walk down the path with the answer.', { rate: rateQ() });
+}
+function mazeDraw() {
+  const m = bg.m, W = bgBox(), cs = W / m.cols, H = cs * m.rows;
+  const cx = c => (c % m.cols + 0.5) * 10, cy = c => (Math.floor(c / m.cols) + 0.5) * 10;
+  let walls = '';
+  for (let c = 0; c < m.cols * m.rows; c++) {
+    const x = (c % m.cols) * 10, y = Math.floor(c / m.cols) * 10, o = m.open[c];
+    if (!o.n) walls += `M${x} ${y}h10`;
+    if (!o.w) walls += `M${x} ${y}v10`;
+    if (!o.s && Math.floor(c / m.cols) === m.rows - 1) walls += `M${x} ${y + 10}h10`;
+    if (!o.e && c % m.cols === m.cols - 1) walls += `M${x + 10} ${y}v10`;
+  }
+  const trail = bg.trail.map(c => `${cx(c)},${cy(c)}`).join(' ');
+  let marks = '';
+  m.gates.forEach(g => {
+    if (g.done) { marks += `<text x="${cx(g.cell)}" y="${cy(g.cell) + 2.4}" class="mz-ok">✓</text>`; return; }
+    if (bg.active === g) {
+      Object.keys(g.labels).forEach(k => {
+        const c = +k, t = g.labels[k], w = Math.max(7, 2.6 + t.length * 2.2);
+        marks += `<g class="mz-label${g.tries >= 2 && c === g.right ? ' hint' : ''}${bg.nopeCell === c ? ' nope' : ''}" id="mzl-${c}">
+          <rect x="${cx(c) - w / 2}" y="${cy(c) - 3.6}" width="${w}" height="7.2" rx="3.4"/>
+          <text x="${cx(c)}" y="${cy(c) + 1.9}">${t}</text></g>`;
+      });
+    } else marks += `<g class="mz-gate"><circle cx="${cx(g.cell)}" cy="${cy(g.cell)}" r="3.4"/><text x="${cx(g.cell)}" y="${cy(g.cell) + 1.8}">?</text></g>`;
+  });
+  const end = m.cols * m.rows - 1;
+  document.getElementById('mz-box').innerHTML = `
+    <svg id="mz-svg" viewBox="-1 -1 ${m.cols * 10 + 2} ${m.rows * 10 + 2}" width="${W}" height="${H + cs * 0.2}">
+      <rect x="0" y="0" width="${m.cols * 10}" height="${m.rows * 10}" class="mz-floor"/>
+      <polyline points="${trail}" class="mz-trail"/>
+      <text x="${cx(end)}" y="${cy(end) + 2.6}" class="mz-home">🏠</text>
+      ${marks}
+      <path d="${walls}" class="mz-wall"/>
+      <g id="mz-critter" style="transform: translate(${cx(bg.cur) - 4.4}px, ${cy(bg.cur) - 4.4}px)"><svg width="8.8" height="8.8" viewBox="0 0 100 100">${critterSVG(CRITTERS[buddyFor()])}</svg></g>
+    </svg>`;
+  document.querySelector('.mz-key span').innerHTML = gateLeft();
+}
+function mazeCellAt(e) {
+  const svg = document.getElementById('mz-svg'), r = svg.getBoundingClientRect(), m = bg.m;
+  const x = (e.clientX - r.left) / r.width * (m.cols * 10 + 2) - 1, y = (e.clientY - r.top) / r.height * (m.rows * 10 + 2) - 1;
+  const col = Math.floor(x / 10), row = Math.floor(y / 10);
+  if (col < 0 || row < 0 || col >= m.cols || row >= m.rows) return -1;
+  return row * m.cols + col;
+}
+function mazeInput() {
+  const box = document.getElementById('mz-box');
+  let down = false;
+  const go = e => {
+    if (!bgAlive() || bg.won || bg.hold) return;
+    const c = mazeCellAt(e);
+    if (c >= 0 && c !== bg.cur) mazeToward(c);
+  };
+  box.onpointerdown = e => { e.preventDefault(); hush(); down = true; try { box.setPointerCapture(e.pointerId); } catch (_) {} go(e); };
+  box.onpointermove = e => { if (down) { e.preventDefault(); go(e); } };
+  box.onpointerup = box.onpointercancel = () => { down = false; if (bg) bg.hold = false; };
+}
+function mazeToward(target) {
+  const p = mazePath(bg.m, bg.cur, target, 4);
+  if (!p) return;
+  for (let i = 1; i < p.length; i++) { if (!mazeStep(p[i])) break; }
+  mazeDraw();
+}
+function mazeStep(next) {
+  const m = bg.m, g = bg.active;
+  if (g && !g.done && bg.cur === g.cell && g.labels[next] !== undefined) {
+    if (next !== g.right) {
+      g.tries++; bg.misses++;
+      sfx('miss');
+      bg.nopeCell = next;
+      const tok = bg.tok;
+      setTimeout(() => { if (bgAlive(tok)) { bg.nopeCell = null; mazeDraw(); } }, 600);
+      brainSay(g.tries >= 2 ? `Not that way. Look for the glowing path!` : `Not that way! Look at the question again.`);
+      bg.hold = true;
+      mazeDraw();
+      return false;
+    }
+    g.done = true; bg.active = null;
+    sfx('win'); confetti(10);
+    const left = m.gates.filter(x => !x.done).length;
+    brainSay(`${pick(['Right!', 'Yes!', 'Correct!'])} ${g.q.say ? g.q.say.replace(/!?$/, '!') : ''} ${left ? 'Keep going!' : 'Now find your way home!'}`.replace(/\s+/g, ' '));
+    mazeQIdle();
+  }
+  bg.cur = next;
+  const back = bg.trail.lastIndexOf(next);
+  if (back >= 0 && back === bg.trail.length - 2) bg.trail.pop(); else bg.trail.push(next);
+  const gate = m.gates.find(x => !x.done && x.cell === next);
+  if (gate && bg.active !== gate) {
+    bg.active = gate; bg.hold = true;
+    sfx('hit');
+    brainSay('A question gate! Answer it to pick your path.', false);
+    mazeShowQ(gate);
+    return false;
+  }
+  if (next === m.cols * m.rows - 1) {
+    mazeDraw();
+    brainWin('You made it home!', 'You made it home! Amazing maze work!');
+    return false;
+  }
+  return true;
+}
+
+/* ═════════════ WORD SEARCH ═════════════ */
+const WS_WORDS = {
+  math: ['ADD', 'SUM', 'EQUAL', 'TIMES', 'ARRAY', 'FACTOR', 'PRODUCT', 'DIVIDE', 'GROUP', 'ROWS', 'FRACTION', 'HALF', 'ROUND', 'AREA', 'TOTAL', 'DIGIT', 'EVEN', 'ODD', 'NUMBER', 'MINUS'],
+  measure: ['CLOCK', 'HOUR', 'MINUTE', 'SHAPE', 'SQUARE', 'ANGLE', 'GRAPH', 'SIDES', 'LENGTH', 'INCH', 'TALLY', 'CORNER', 'RHOMBUS', 'DATA'],
+  science: ['PUSH', 'PULL', 'FORCE', 'MAGNET', 'GRAVITY', 'MOTION', 'SPEED', 'EGG', 'LARVA', 'PUPA', 'ADULT', 'SEED', 'SPROUT', 'TADPOLE', 'PLANT', 'FROG', 'CHANGE'],
+  reading: ['STORY', 'CHARACTER', 'SETTING', 'PLOT', 'CLUE', 'MEANING', 'OPPOSITE', 'PREFIX', 'SUFFIX', 'READER', 'AUTHOR', 'TITLE', 'SENTENCE', 'DETAIL', 'TOPIC']
+};
+const WS_BLOCK = ['ASS', 'SEX', 'FUK', 'FUC', 'SHIT', 'CUM', 'TIT', 'DIK', 'DICK', 'FAG', 'POO', 'PEE', 'BUTT', 'KILL', 'DIE', 'NAZI', 'HELL', 'DAMN', 'CRAP', 'PISS', 'GUN'];
+function wsTheme(lv) {
+  const s = lv ? lv.skill : '', K = pathId === 'k';
+  if (K) {
+    if (s === 'sightword') return { name: 'sight words', words: SIGHT_1.filter(w => w.length >= 2 && w.length <= 4).map(w => ({ w })) };
+    if (/sightword[23]/.test(s)) return { name: 'sight words', words: SIGHT_2.filter(w => w.length <= 5).map(w => ({ w })) };
+    return { name: 'picture words', words: CVC.map(c => ({ w: c.w, e: c.e })) };
+  }
+  let key = 'math';
+  if (/prefix|suffix|context|homophone|synant|passage|infer/.test(s)) key = 'reading';
+  else if (/forces|lifecycles/.test(s)) key = 'science';
+  else if (/time|quads|graphs|perim|tens10|addsub/.test(s)) key = 'measure';
+  let words = WS_WORDS[key].map(w => ({ w }));
+  if (s === 'prefix') words = PREFIX_ITEMS.map(i => ({ w: i.w.toUpperCase(), m: i.m })).filter(i => i.w.length <= 9);
+  if (s === 'suffix') words = SUFFIX_ITEMS.map(i => ({ w: i.w.toUpperCase(), m: i.m })).filter(i => i.w.length <= 9);
+  return { name: key === 'math' ? 'math words' : key === 'measure' ? 'measuring words' : key === 'science' ? 'science words' : 'reading words', words };
+}
+function wsBuild(words, n, dirs, lower) {
+  const FILL = lower ? 'abcdefghijklmnoprstuwy' : 'ABCDEFGHIJKLMNOPRSTUVWY';
+  const up = w => w.toUpperCase();
+  for (let attempt = 0; attempt < 300; attempt++) {
+    const g = Array.from({ length: n }, () => Array(n).fill(''));
+    const placed = [];
+    let ok = true;
+    for (const w of words.slice().sort((a, b) => b.length - a.length)) {
+      let done = false;
+      for (let t = 0; t < 300 && !done; t++) {
+        const [dx, dy] = pick(dirs), x0 = rnd(0, n - 1), y0 = rnd(0, n - 1);
+        const x1 = x0 + dx * (w.length - 1), y1 = y0 + dy * (w.length - 1);
+        if (x1 < 0 || x1 >= n || y1 < 0 || y1 >= n) continue;
+        let fit = true;
+        for (let i = 0; i < w.length; i++) { const c = g[y0 + dy * i][x0 + dx * i]; if (c && c !== w[i]) { fit = false; break; } }
+        if (!fit) continue;
+        for (let i = 0; i < w.length; i++) g[y0 + dy * i][x0 + dx * i] = w[i];
+        placed.push({ w, cells: Array.from({ length: w.length }, (_, i) => [x0 + dx * i, y0 + dy * i]) });
+        done = true;
+      }
+      if (!done) { ok = false; break; }
+    }
+    if (!ok) continue;
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!g[y][x]) g[y][x] = FILL[rnd(0, FILL.length - 1)];
+    // every line of letters, both ways
+    const lines = [];
+    const ALL = [[1, 0], [0, 1], [1, 1], [1, -1]];
+    for (const [dx, dy] of ALL) for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const px = x - dx, py = y - dy;
+      if (px >= 0 && py >= 0 && px < n && py < n) continue;
+      let s = '', cx = x, cy = y;
+      while (cx >= 0 && cy >= 0 && cx < n && cy < n) { s += g[cy][cx]; cx += dx; cy += dy; }
+      lines.push(up(s), up(s).split('').reverse().join(''));
+    }
+    const text = lines.join('|');
+    if (WS_BLOCK.some(b => text.includes(b) && !words.some(w => up(w).includes(b)))) continue;
+    const count = w => { let k = 0, i = -1; while ((i = text.indexOf(up(w), i + 1)) >= 0) k++; return k; };
+    // each word must be findable in exactly one spot (palindromes show twice)
+    if (words.some(w => count(w) !== (up(w) === up(w).split('').reverse().join('') ? 2 : 1))) continue;
+    return { g, placed };
+  }
+  return null;
+}
+BRAIN_START.words = function () {
+  const K = pathId === 'k', th = wsTheme(bg.lv);
+  const n = K ? (th.words.some(w => w.w.length > 4) ? 6 : 5) : 10;
+  const cnt = K ? 3 : 7;
+  const dirs = K ? [[1, 0], [0, 1]] : [[1, 0], [0, 1], [1, 1], [-1, 0], [0, -1], [1, -1], [-1, -1], [-1, 1]];
+  let built = null, list;
+  for (let t = 0; t < 20 && !built; t++) {
+    if (t <= 10) list = shuffle(th.words.filter(w => w.w.length <= n)).slice(0, cnt);
+    built = wsBuild(list.map(w => K ? w.w.toLowerCase() : w.w.toUpperCase()), n, dirs, K);
+    if (!built && t > 10) list = list.slice(0, Math.max(2, list.length - 2));
+  }
+  Object.assign(bg, { n, list, grid: built.g, placed: built.placed, found: [], anchor: null, sel: null });
+  document.getElementById('bg-area').innerHTML = `
+    <div class="ws-bank" id="ws-bank"></div>
+    <div class="ws-box" id="ws-box"><svg class="ws-svg" id="ws-svg"></svg><div class="ws-grid" id="ws-grid"></div></div>`;
+  document.getElementById('bg-btns').innerHTML = `<button class="btn btn-ghost" onclick="wsHint()">💡 Hint</button>`;
+  wsRender();
+  wsInput();
+  brainSay(K ? `Find the ${cnt} hidden words! Drag across a word, or tap its first letter and then its last.`
+             : `Find all ${cnt} ${th.name}! They can go across, down, diagonal, even backwards. Drag across each one.`);
+};
+function wsCellSize() { return bgBox() / bg.n; }
+function wsRender() {
+  const n = bg.n, cs = wsCellSize(), W = cs * n, K = pathId === 'k';
+  const grid = document.getElementById('ws-grid'), svg = document.getElementById('ws-svg'), box = document.getElementById('ws-box');
+  box.style.width = W + 'px'; box.style.height = W + 'px';
+  grid.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+  grid.style.fontSize = Math.round(cs * (K ? 0.56 : 0.5)) + 'px';
+  grid.innerHTML = bg.grid.map((row, y) => row.map((ch, x) => `<span data-x="${x}" data-y="${y}">${ch}</span>`).join('')).join('');
+  svg.setAttribute('viewBox', `0 0 ${n} ${n}`);
+  wsDrawMarks();
+  document.getElementById('ws-bank').innerHTML = bg.list.map((w, i) => {
+    const f = bg.found.includes(i);
+    return `<button class="ws-chip${f ? ' found' : ''}" onclick="wsHear(${i})" style="--c:${PALETTE[i % PALETTE.length]}">
+      ${w.e ? `<span class="ws-e">${w.e}</span>` : ''}<b>${K ? w.w.toLowerCase() : w.w}</b>${f ? ' ✓' : ''}</button>`;
+  }).join('');
+}
+function wsCap(cells, cls, color) {
+  const [a, b] = [cells[0], cells[cells.length - 1]];
+  return `<line x1="${a[0] + 0.5}" y1="${a[1] + 0.5}" x2="${b[0] + 0.5}" y2="${b[1] + 0.5}" class="${cls}" ${color ? `style="stroke:${color}"` : ''}/>`;
+}
+function wsDrawMarks() {
+  let h = '';
+  bg.found.forEach(i => { h += wsCap(bg.placed.find(p => p.w.toUpperCase() === bg.list[i].w.toUpperCase()).cells, 'ws-found', PALETTE[i % PALETTE.length]); });
+  if (bg.sel) h += wsCap(bg.sel, 'ws-sel');
+  else if (bg.anchor) h += wsCap([bg.anchor], 'ws-sel');
+  if (bg.hint) h += `<circle cx="${bg.hint[0] + 0.5}" cy="${bg.hint[1] + 0.5}" r="0.46" class="ws-hint"/>`;
+  document.getElementById('ws-svg').innerHTML = h;
+}
+function wsCellAt(e) {
+  const r = document.getElementById('ws-box').getBoundingClientRect(), n = bg.n;
+  return [Math.max(0, Math.min(n - 1, Math.floor((e.clientX - r.left) / r.width * n))),
+          Math.max(0, Math.min(n - 1, Math.floor((e.clientY - r.top) / r.height * n)))];
+}
+function wsLine(a, b) {
+  const dx = b[0] - a[0], dy = b[1] - a[1];
+  if (!dx && !dy) return [a];
+  const ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4));
+  const ux = Math.round(Math.cos(ang * Math.PI / 4)), uy = Math.round(Math.sin(ang * Math.PI / 4));
+  if (pathId === 'k' && ux && uy) return null;   // no diagonals for Kindergarten
+  let len = Math.max(Math.abs(dx), Math.abs(dy));
+  const out = [];
+  for (let i = 0; i <= len; i++) {
+    const x = a[0] + ux * i, y = a[1] + uy * i;
+    if (x < 0 || y < 0 || x >= bg.n || y >= bg.n) break;
+    out.push([x, y]);
+  }
+  return out;
+}
+function wsInput() {
+  const box = document.getElementById('ws-box');
+  let start = null, moved = false;
+  box.onpointerdown = e => {
+    if (!bgAlive() || bg.won) return;
+    e.preventDefault(); hush();
+    try { box.setPointerCapture(e.pointerId); } catch (_) {}
+    start = wsCellAt(e); moved = false;
+    bg.sel = [start]; bg.hint = null; wsDrawMarks();
+  };
+  box.onpointermove = e => {
+    if (!start) return;
+    e.preventDefault();
+    const c = wsCellAt(e);
+    if (c[0] !== start[0] || c[1] !== start[1]) moved = true;
+    const l = wsLine(start, c);
+    if (l) { bg.sel = l; wsDrawMarks(); }
+  };
+  box.onpointerup = e => {
+    if (!start) return;
+    const s = start; start = null;
+    if (!moved) {
+      // tap mode: first tap sets an anchor, second tap finishes the word
+      if (bg.anchor && (bg.anchor[0] !== s[0] || bg.anchor[1] !== s[1])) {
+        const l = wsLine(bg.anchor, s);
+        bg.anchor = null;
+        if (l) { bg.sel = l; wsCheck(); } else { bg.sel = null; wsDrawMarks(); }
+      } else { bg.anchor = bg.anchor ? null : s; bg.sel = null; wsDrawMarks(); }
+      return;
+    }
+    bg.anchor = null;
+    wsCheck();
+  };
+}
+function wsCheck() {
+  const sel = bg.sel || [];
+  const key = cs => cs.map(c => c.join(',')).join(';');
+  const k1 = key(sel), k2 = key(sel.slice().reverse());
+  const i = bg.list.findIndex((w, idx) => !bg.found.includes(idx) &&
+    bg.placed.some(p => p.w.toUpperCase() === w.w.toUpperCase() && (key(p.cells) === k1 || key(p.cells) === k2)));
+  bg.sel = null;
+  if (i >= 0) {
+    bg.found.push(i);
+    sfx('win');
+    const w = bg.list[i], K = pathId === 'k';
+    const left = bg.list.length - bg.found.length;
+    wsRender();
+    if (!left) { setTimeout(() => brainWin(`You found every word!`), 500); return; }
+    brainSay(`${K ? w.w.toLowerCase() : w.w}! ${w.m ? '(' + w.m + ') ' : ''}${left} to go.`,
+             `${w.w.toLowerCase()}! ${w.m ? 'It means ' + w.m + '. ' : ''}${left} more to find.`);
+  } else {
+    if (sel.length > 1) { bg.misses++; sfx('miss'); brainSay('Not a word on the list. Keep looking!'); }
+    wsDrawMarks();
+  }
+}
+function wsHear(i) { const w = bg.list[i]; say(w.w.toLowerCase() + (w.m ? '. ' + w.m : ''), { rate: rateQ() }); }
+function wsHint() {
+  if (!bgAlive() || bg.won) return;
+  const left = bg.list.map((w, i) => i).filter(i => !bg.found.includes(i));
+  if (!left.length) return;
+  const i = pick(left), w = bg.list[i];
+  const p = bg.placed.find(p => p.w.toUpperCase() === w.w.toUpperCase());
+  bg.hint = p.cells[0]; bg.misses++;
+  wsDrawMarks();
+  brainSay(`${pathId === 'k' ? w.w.toLowerCase() : w.w} starts at the circle!`, `${w.w.toLowerCase()} starts at the circle.`);
+  const tok = bg.tok;
+  setTimeout(() => { if (bgAlive(tok)) { bg.hint = null; wsDrawMarks(); } }, 2600);
+}
+
+/* ═════════════ DOT-TO-DOT ═════════════ */
+function starPts() {
+  const o = [];
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? 19 : 44; o.push([50 + r * Math.cos(a), 54 + r * Math.sin(a)]); }
+  return o;
+}
+const DOT_PICS = [
+  { id: 'star', name: 'a star', color: '#FFD93D', pts: starPts() },
+  { id: 'crown', name: 'a crown', color: '#FFD93D', pts: [[12, 80], [12, 30], [31, 54], [41, 20], [50, 46], [59, 20], [69, 54], [88, 30], [88, 80]],
+    extra: '<circle cx="30" cy="68" r="4" fill="#FF6B4A"/><circle cx="50" cy="68" r="4" fill="#4AA8FF"/><circle cx="70" cy="68" r="4" fill="#4ADE80"/>' },
+  { id: 'house', name: 'a house', color: '#FF8FAB', pts: [[20, 90], [20, 50], [8, 50], [50, 12], [92, 50], [80, 50], [80, 90], [58, 90], [58, 66], [42, 66], [42, 90]],
+    extra: '<rect x="26" y="56" width="10" height="10" fill="#7DD3FC"/><rect x="64" y="56" width="10" height="10" fill="#7DD3FC"/>' },
+  { id: 'fish', name: 'a fish', color: '#4AA8FF', pts: [[8, 50], [18, 36], [32, 28], [48, 26], [62, 30], [72, 40], [88, 24], [93, 28], [84, 50], [93, 72], [88, 76], [72, 60], [62, 70], [48, 74], [32, 72], [18, 64]],
+    extra: '<circle cx="22" cy="46" r="3.4" fill="#fff"/><circle cx="22" cy="46" r="1.6" fill="#1E2749"/><path d="M42 36 Q50 50 42 64" stroke="#1E2749" stroke-width="1.6" fill="none" opacity=".45"/>' },
+  { id: 'rocket', name: 'a rocket', color: '#C4B5FD', pts: [[50, 5], [60, 17], [64, 33], [64, 64], [77, 77], [77, 91], [62, 83], [56, 91], [44, 91], [38, 83], [23, 91], [23, 77], [36, 64], [36, 33], [40, 17]],
+    extra: '<circle cx="50" cy="42" r="7" fill="#7DD3FC" stroke="#1E2749" stroke-width="1.5"/><path d="M44 92 L50 99 L56 92" fill="#FF6B4A"/>' },
+  { id: 'boat', name: 'a sailboat', color: '#FFB86B', pts: [[52, 6], [84, 58], [55, 58], [55, 66], [93, 66], [79, 87], [23, 87], [8, 66], [47, 66], [47, 12]],
+    extra: '<path d="M4 94 Q14 88 24 94 T44 94 T64 94 T84 94 T100 94" stroke="#7DD3FC" stroke-width="2.5" fill="none"/>' },
+  { id: 'cat', name: 'a cat', color: '#FFB86B', pts: [[18, 16], [34, 34], [50, 30], [66, 34], [82, 16], [86, 48], [79, 70], [63, 84], [50, 86], [37, 84], [21, 70], [14, 48]],
+    extra: '<circle cx="37" cy="52" r="4" fill="#1E2749"/><circle cx="63" cy="52" r="4" fill="#1E2749"/><path d="M46 64 L54 64 L50 69 Z" fill="#FF8FAB"/><path d="M40 66 L22 62 M40 70 L22 72 M60 66 L78 62 M60 70 L78 72" stroke="#1E2749" stroke-width="1.2"/>' },
+  { id: 'tree', name: 'a tree', color: '#4ADE80', pts: [[50, 5], [71, 30], [61, 30], [79, 52], [65, 52], [85, 74], [56, 74], [56, 93], [44, 93], [44, 74], [15, 74], [35, 52], [21, 52], [39, 30], [29, 30]],
+    extra: '<rect x="44" y="74" width="12" height="19" fill="#A0673D"/><circle cx="40" cy="42" r="3" fill="#FF6B4A"/><circle cx="60" cy="60" r="3" fill="#FF6B4A"/><circle cx="36" cy="64" r="3" fill="#FFD93D"/>' },
+  { id: 'heart', name: 'a heart', color: '#FF6B4A', pts: [[50, 28], [58, 16], [70, 10], [83, 13], [91, 25], [90, 40], [82, 54], [70, 67], [59, 79], [50, 90], [41, 79], [30, 67], [18, 54], [10, 40], [9, 25], [17, 13], [30, 10], [42, 16]] },
+  { id: 'butterfly', name: 'a butterfly', color: '#FF8FAB', pts: [[50, 30], [62, 14], [82, 10], [91, 24], [84, 42], [66, 50], [82, 60], [84, 78], [70, 88], [56, 76], [50, 62], [44, 76], [30, 88], [16, 78], [18, 60], [34, 50], [16, 42], [9, 24], [18, 10], [38, 14]],
+    extra: '<rect x="47" y="28" width="6" height="42" rx="3" fill="#1E2749"/><circle cx="72" cy="30" r="5" fill="#FFD93D"/><circle cx="28" cy="30" r="5" fill="#FFD93D"/><path d="M48 28 Q44 18 40 16 M52 28 Q56 18 60 16" stroke="#1E2749" stroke-width="1.5" fill="none"/>' }
+];
+function inPoly(p, pts) {
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i], [xj, yj] = pts[j];
+    if ((yi > p[1]) !== (yj > p[1]) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+function segDist(p, a, b) {
+  const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy || 1;
+  const t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L));
+  return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy);
+}
+/* Put each number next to its dot, pointing out of the picture, without
+   touching other dots, other numbers or the lines the child will draw. */
+function dotLabelPos(pts, labels) {
+  const n = pts.length, out = [];
+  const nrm = v => { const d = Math.hypot(v[0], v[1]) || 1; return [v[0] / d, v[1] / d]; };
+  pts.forEach((p, i) => {
+    const a = pts[(i - 1 + n) % n], b = pts[(i + 1) % n];
+    const u = nrm([p[0] - a[0], p[1] - a[1]]), v = nrm([p[0] - b[0], p[1] - b[1]]);
+    let d = [u[0] + v[0], u[1] + v[1]];
+    if (Math.hypot(d[0], d[1]) < 0.3) d = [-(b[1] - a[1]), b[0] - a[0]];
+    d = nrm(d);
+    if (inPoly([p[0] + d[0] * 3, p[1] + d[1] * 3], pts)) d = [-d[0], -d[1]];
+    const w = String(labels[i]).length * 1.35 + 1;          // half-width of the number
+    let best = null, bestScore = -1e9;
+    for (const dist of [6, 7.5, 9.5]) for (const ang of [0, 25, -25, 50, -50, 80, -80, 115, -115, 180]) {
+      const r = ang * Math.PI / 180, dx = d[0] * Math.cos(r) - d[1] * Math.sin(r), dy = d[0] * Math.sin(r) + d[1] * Math.cos(r);
+      const c = [p[0] + dx * dist, p[1] + dy * dist];
+      let score = -dist * 0.4 - Math.abs(ang) * 0.02;
+      if (c[0] - w < -5 || c[0] + w > 105 || c[1] < -3 || c[1] > 104) score -= 50;
+      pts.forEach((q, k) => { if (k !== i) { const dd = Math.hypot(q[0] - c[0], (q[1] - c[1]) * 1.3); if (dd < w + 3) score -= 20 + (w + 3 - dd) * 3; } });
+      for (let k = 0; k < n; k++) { const dd = segDist(c, pts[k], pts[(k + 1) % n]); if (dd < 3.2) score -= 12 + (3.2 - dd) * 4; }
+      out.forEach((o, k) => { const ow = String(labels[k]).length * 1.35 + 1; if (Math.abs(o[0] - c[0]) < w + ow + 0.8 && Math.abs(o[1] - 1.6 - c[1]) < 5) score -= 30; });
+      if (score > bestScore) { bestScore = score; best = c; }
+    }
+    out.push([best[0], best[1] + 1.6]);
+  });
+  return out;
+}
+function dotsPlan(lv) {
+  const s = lv ? lv.skill : '', K = pathId === 'k';
+  if (K) {
+    if (s === 'skip10') return { step: 10, start: 10, max: 10, say: 'Count by tens!' };
+    if (s === 'count100') { const st = pick([21, 31, 41, 51, 61, 71]); return { step: 1, start: st, max: 20, say: `Start at ${st} and count up!` }; }
+    const small = lv && (lv.w === 0 || (lv.w === 1 && lv.n <= 4));
+    return { step: 1, start: 1, max: small ? 12 : 20, say: 'Count from 1!' };
+  }
+  let step = pick([2, 3, 4, 5, 6, 7, 8, 9]);
+  if (s === 'mult' && Array.isArray(lv.arg)) step = pick(lv.arg.filter(x => x > 1));
+  if (s === 'tens10') step = pick([10, 20, 50]);
+  return { step, start: step, max: 20, say: `Count by ${step}s!` };
+}
+BRAIN_START.dots = function (force) {
+  const plan = dotsPlan(bg.lv);
+  const pics = DOT_PICS.filter(p => p.pts.length <= plan.max && p.id !== P.lastDotPic);
+  const pic = DOT_PICS.find(p => p.id === force) || pick(pics.length ? pics : DOT_PICS.filter(p => p.pts.length <= plan.max));
+  P.lastDotPic = pic.id;
+  const labels = pic.pts.map((_, i) => plan.start + i * plan.step);
+  // put each number just outside its dot, away from the middle of the picture
+  const lpos = dotLabelPos(pic.pts, labels);
+  Object.assign(bg, { pic, plan, labels, lpos, next: 1, wrongAt: 0 });
+  document.getElementById('bg-area').innerHTML = `
+    <div class="dt-head"><span class="dt-rule">${plan.step === 1 ? `Count by 1s` : `Count by ${plan.step}s`}</span><span class="dt-next" id="dt-next"></span></div>
+    <div class="dt-box" id="dt-box"></div>`;
+  dotsDraw();
+  dotsInput();
+  brainSay(`Connect the dots in order to make a secret picture! ${plan.say} Start at ${labels[0]}.`);
+};
+function dotsDraw(rubber) {
+  const W = bgBox(), b = bg, pts = b.pic.pts, done = b.next >= pts.length + 1;
+  const vis = pts.slice(0, Math.min(b.next, pts.length)).map(p => p.join(',')).join(' ');
+  let h = `<svg id="dt-svg" viewBox="-6 -6 112 112" width="${W}" height="${W}">`;
+  if (done) h += `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="${b.pic.color}" class="dt-fill"/>${b.pic.extra ? `<g class="dt-fill">${b.pic.extra}</g>` : ''}`;
+  h += `<polyline points="${vis}" class="dt-line"/>`;
+  if (done) h += `<line x1="${pts[pts.length - 1][0]}" y1="${pts[pts.length - 1][1]}" x2="${pts[0][0]}" y2="${pts[0][1]}" class="dt-line"/>`;
+  if (rubber && b.next > 0 && !done) { const a = pts[b.next - 1]; h += `<line x1="${a[0]}" y1="${a[1]}" x2="${rubber[0]}" y2="${rubber[1]}" class="dt-rubber"/>`; }
+  if (!done) pts.forEach((p, i) => {
+    const on = i < b.next, isNext = i === b.next, hint = isNext && b.wrongAt >= 2;
+    h += `<circle cx="${p[0]}" cy="${p[1]}" r="${isNext ? 2.3 : 1.8}" class="dt-dot${on ? ' on' : ''}${hint ? ' hint' : ''}"/>`;
+    h += `<text x="${b.lpos[i][0]}" y="${b.lpos[i][1]}" class="dt-num${on ? ' on' : ''}${hint ? ' hint' : ''}">${b.labels[i]}</text>`;
+  });
+  h += '</svg>';
+  document.getElementById('dt-box').innerHTML = h;
+  document.getElementById('dt-next').textContent = done ? '' : `Next: ${b.labels[Math.min(b.next, pts.length - 1)]}`;
+}
+function dotsInput() {
+  const box = document.getElementById('dt-box');
+  let down = false;
+  const pos = e => { const r = box.querySelector('svg').getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 112 - 6, (e.clientY - r.top) / r.height * 112 - 6]; };
+  const near = p => { let best = -1, bd = 7.5; bg.pic.pts.forEach((q, i) => { const d = Math.hypot(q[0] - p[0], q[1] - p[1]); if (d < bd) { bd = d; best = i; } }); return best; };
+  const hit = (p, tapped) => {
+    const i = near(p);
+    if (i < 0) return;
+    const n = bg.pic.pts.length;
+    if (bg.next === 0) { if (i === 0) dotsConnect(); else if (tapped) dotsWrong(i); return; }
+    if (i === bg.next) dotsConnect();
+    else if (bg.next === n && i === 0) dotsConnect();
+    else if (tapped && i >= bg.next) dotsWrong(i);
+  };
+  box.onpointerdown = e => {
+    if (!bgAlive() || bg.won) return;
+    e.preventDefault(); hush(); down = true;
+    try { box.setPointerCapture(e.pointerId); } catch (_) {}
+    hit(pos(e), true);
+  };
+  box.onpointermove = e => {
+    if (!down || !bgAlive() || bg.won) return;
+    e.preventDefault();
+    const p = pos(e);
+    hit(p, false);
+    if (bgAlive() && !bg.won) dotsDraw(p);
+  };
+  box.onpointerup = box.onpointercancel = () => { down = false; if (bgAlive() && !bg.won) dotsDraw(); };
+}
+function dotsConnect() {
+  const n = bg.pic.pts.length;
+  if (bg.next === n) {                     // closing the shape
+    bg.next = n + 1;
+    dotsDraw();
+    sfx('win');
+    setTimeout(() => brainWin(`You made ${bg.pic.name}!`, `Look! You made ${bg.pic.name}!`), 450);
+    return;
+  }
+  const lab = bg.labels[bg.next];
+  bg.next++; bg.wrongAt = 0;
+  sfx('hit');
+  if (bg.next === n) brainSay(`Now join ${bg.labels[n - 1]} back to ${bg.labels[0]} to finish!`);
+  else if (pathId === 'k' || bg.plan.step > 1) say(String(lab), { rate: 1 });
+  dotsDraw();
+}
+function dotsWrong(i) {
+  bg.wrongAt++; bg.misses++;
+  sfx('miss');
+  const want = bg.labels[Math.min(bg.next, bg.labels.length - 1)], prev = bg.next ? bg.labels[bg.next - 1] : null;
+  brainSay(prev === null ? `Start at ${want}!` : bg.plan.step === 1 ? `That's ${bg.labels[i]}. What comes after ${prev}? Find ${want}.`
+                                                  : `That's ${bg.labels[i]}. ${prev} plus ${bg.plan.step} is ${want}.`);
+  dotsDraw();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BRAIN GAMES, batch 2: Color by Number, Match-Up, Mini Sudoku
+   ═══════════════════════════════════════════════════════════ */
+Object.assign(BRAIN, {
+  color:  { name: 'Color by Number', icon: '🎨', blurb: 'Solve each spot to find its color' },
+  match:  { name: 'Match-Up',        icon: '🃏', blurb: 'Flip cards to match each question with its answer' },
+  sudoku: { name: 'Mini Sudoku',     icon: '🔢', blurb: 'Every row, column and box gets one of each' }
+});
+BRAIN_ORDER.push('color', 'match', 'sudoku');
+
+const mathy = s => /count|compare|add|sub|doubles|bonds|teens|skip|decompose|numid|nummatch|mult|div|missing|area|round|tens10|addsub|perim|mixK\b|mixK2|mixG3$/.test(s || '');
+const lettery = s => /letternames|abcorder|casematch|casepairs|bdpq|trace|memory|mixK0/.test(s || '');
+
+/* ═════════════ COLOR BY NUMBER ═════════════
+   Pixel pictures split into spots. Each spot shows a little problem; the
+   key says which answer goes with which color. */
+const CBN_COLORS = { r: ['#FF5A4A', 'red'], o: ['#FF9F43', 'orange'], y: ['#FFD93D', 'yellow'], g: ['#4ADE80', 'green'], b: ['#4AA8FF', 'blue'],
+                     p: ['#A78BFA', 'purple'], k: ['#FF8FAB', 'pink'], w: ['#FFFFFF', 'white'], n: ['#A0673D', 'brown'], d: ['#2B3257', 'black'] };
+const CBN_PICS = [
+  { name: 'a mushroom', rows: ['..rrrrrr..', '.rrwrrwrr.', 'rrwwrrwwrr', 'rrrrrrrrrr', 'rwrrrrrrwr', '..wwwwww..', '..wdwwdw..', '..wwwwww..', '...wwww...', '.gggggggg.'] },
+  { name: 'a fish', rows: ['b.........', '..yyyyy...', '.yyyyyyy.o', 'yydyyyyyoo', 'yyyyyyyyoo', '.yyyyyyy.o', '..yyyyy...', '......b...', '...b......', '.gg....gg.'] },
+  { name: 'the sun', rows: ['....yy....', '.y..yy..y.', '..yyyyyy..', '..yooooy..', 'yyyoooooyy', 'yyyoooooyy', '..yooooy..', '..yyyyyy..', '.y..yy..y.', '....yy....'] },
+  { name: 'a heart', rows: ['.kk...kk..', 'kwkk.kkkk.', 'kwkkkkkkkk', 'kkkkkkkkkk', '.kkkkkkkk.', '..kkkkkk..', '...kkkk...', '....kk....'] },
+  { name: 'a rocket', rows: ['....rr....', '...rrrr...', '...wwww...', '..wwbbww..', '..wbbbbw..', '..wwbbww..', '..wwwwww..', '.rwwwwwwr.', 'rr.oooo.rr', '....oo....'] },
+  { name: 'an ice cream', rows: ['...kkkk...', '..kkkkkk..', '.kkwkkkkk.', '.kkkkkkkk.', '.yyyyyyyy.', '..nnnnnn..', '..nnnnnn..', '...nnnn...', '...nnnn...', '....nn....'] },
+  { name: 'a tree', rows: ['....gg....', '...gggg...', '..ggrggg..', '.gggggggg.', '..gggggg..', '.gggrgggg.', 'gggggggggg', '....nn....', '....nn....', '...nnnn...'] },
+  { name: 'a house', rows: ['....rr....', '...rrrr...', '..rrrrrr..', '.rrrrrrrr.', '..yyyyyy..', '..ybyyby..', '..yyyyyy..', '..yyynyy..', '..yyynyy..', 'gggggggggg'] },
+  { name: 'an owl', rows: ['.n......n.', '.nnnnnnnn.', 'nwwnnnnwwn', 'nwdnnnnwdn', 'nwwnnnnwwn', 'nnnnoonnnn', '.nnkkkknn.', '.nkkkkkkn.', '..nnnnnn..', '...o..o...'] }
+];
+function cbnRegions(rows, target) {
+  const H = rows.length, W = rows[0].length, id = rows.map(r => Array(W).fill(-1));
+  let regions = [];
+  const comp = (cells) => {           // split a cell list into connected pieces
+    const set = new Set(cells.map(c => c.join(','))), out = [];
+    while (set.size) {
+      const start = set.values().next().value.split(',').map(Number), q = [start], piece = [];
+      set.delete(start.join(','));
+      while (q.length) {
+        const [y, x] = q.shift(); piece.push([y, x]);
+        for (const [dy, dx] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const k = (y + dy) + ',' + (x + dx);
+          if (set.has(k)) { set.delete(k); q.push([y + dy, x + dx]); }
+        }
+      }
+      out.push(piece);
+    }
+    return out;
+  };
+  const byColor = {};
+  rows.forEach((r, y) => r.split('').forEach((c, x) => { if (c !== '.') (byColor[c] = byColor[c] || []).push([y, x]); }));
+  Object.keys(byColor).forEach(c => comp(byColor[c]).forEach(cells => regions.push({ c, cells })));
+  // split the biggest spots until there are enough problems to solve
+  for (let guard = 0; guard < 40 && regions.length < target; guard++) {
+    regions.sort((a, b) => b.cells.length - a.cells.length);
+    const R = regions[0];
+    if (R.cells.length < 6) break;
+    const sorted = R.cells.slice().sort((a, b) => (a[0] - b[0]) || (a[1] - b[1]));
+    const tall = (sorted[sorted.length - 1][0] - sorted[0][0]) >= (Math.max(...R.cells.map(c => c[1])) - Math.min(...R.cells.map(c => c[1])));
+    const key = tall ? (a => a[0] * 100 + a[1]) : (a => a[1] * 100 + a[0]);
+    const s2 = R.cells.slice().sort((a, b) => key(a) - key(b)), half = Math.ceil(s2.length / 2);
+    regions.shift();
+    [s2.slice(0, half), s2.slice(half)].forEach(part => comp(part).forEach(cells => regions.push({ c: R.c, cells })));
+  }
+  regions.forEach((R, i) => R.cells.forEach(([y, x]) => { id[y][x] = i; }));
+  return { regions, id, W, H };
+}
+function cbnPlan(lv) {
+  const s = lv ? lv.skill : '', K = pathId === 'k';
+  if (K) {
+    if (lettery(s)) return { kind: 'case', key: L => L, label: L => /casematch|casepairs|memory/.test(s) ? L.toLowerCase() : L, vals: shuffle(AZ.filter(l => !'IJLO'.includes(l))) };
+    if (!mathy(s)) return { kind: 'sound', vals: shuffle(START_WORDS.filter(w => !'XQU'.includes(w.l)).map(w => w.l)), key: L => L, label: L => START_WORDS.find(w => w.l === L).e };
+    if (/add|doubles|bonds|sub/.test(s)) return { kind: 'sum', vals: shuffle([3, 4, 5, 6, 7, 8, 9]), key: n => n,
+      label: n => pick([() => { const a = rnd(0, n); return `${a}+${n - a}`; }, () => { const b = rnd(1, 3); return `${n + b}−${b}`; }])() };
+    return { kind: 'num', vals: shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]), key: n => n, label: n => String(n) };
+  }
+  if (/div/.test(s)) return { kind: 'div', vals: shuffle([2, 3, 4, 5, 6, 7, 8, 9]), key: n => n, label: n => { const d = rnd(2, 9); return `${n * d}÷${d}`; } };
+  if (/round/.test(s)) return { kind: 'round', vals: shuffle([20, 30, 40, 50, 60, 70, 80]), key: n => n, label: n => { let v; do { v = n + rnd(-5, 4); } while (v === n); return `≈${v}`; } };
+  if (/addsub|tens10/.test(s)) return { kind: 'sum', vals: shuffle([40, 50, 60, 70, 80, 90]), key: n => n, label: n => { const a = rnd(1, n / 10 - 1) * 10; return `${a}+${n - a}`; } };
+  const facts = { 12: [[3, 4], [2, 6]], 16: [[4, 4], [2, 8]], 18: [[3, 6], [2, 9]], 24: [[4, 6], [3, 8]], 30: [[5, 6], [3, 10]], 36: [[6, 6], [4, 9]], 40: [[5, 8], [4, 10]], 20: [[4, 5], [2, 10]] };
+  return { kind: 'mult', vals: shuffle(Object.keys(facts).map(Number)), key: n => n,
+    label: n => { const [a, b] = pick(facts[n]); return Math.random() < 0.5 ? `${a}×${b}` : `${b}×${a}`; } };
+}
+BRAIN_START.color = function () {
+  const K = pathId === 'k', plan = cbnPlan(bg.lv);
+  const pics = CBN_PICS.filter(p => p.name !== P.lastCbn), pic = pick(pics);
+  P.lastCbn = pic.name;
+  const R = cbnRegions(pic.rows, K ? 8 : 13);
+  const colors = [...new Set(R.regions.map(r => r.c))];
+  const keyOf = {}; colors.forEach((c, i) => { keyOf[c] = plan.vals[i]; });
+  R.regions.forEach(r => {
+    r.val = keyOf[r.c]; r.text = plan.label(r.val); r.done = false;
+    // label spot: prefer two side-by-side cells near the middle (room for "6×4")
+    const cy = r.cells.reduce((a, c) => a + c[0], 0) / r.cells.length, cx = r.cells.reduce((a, c) => a + c[1], 0) / r.cells.length;
+    const has = (y, x) => r.cells.some(c => c[0] === y && c[1] === x);
+    const wide = r.cells.filter(([y, x]) => has(y, x + 1)).map(([y, x]) => [y, x + 0.5]);
+    const pool = wide.length ? wide : r.cells;
+    r.wide = !!wide.length;
+    if (!r.wide) for (let k = 0; k < 8; k++) { const t = plan.label(r.val); if ([...t].length < [...r.text].length) r.text = t; }
+    r.at = pool.slice().sort((a, b) => Math.hypot(a[0] - cy, a[1] - cx) - Math.hypot(b[0] - cy, b[1] - cx))[0];
+  });
+  Object.assign(bg, { pic, R, colors, keyOf, plan, brush: null });
+  document.getElementById('bg-area').innerHTML = `<div class="cb-key" id="cb-key"></div><div class="cb-box" id="cb-box"></div><div class="cb-left" id="cb-left"></div>`;
+  cbnDraw();
+  const how = { case: 'Each spot has a letter. Find that letter in the paint key.', sound: 'Each spot has a picture. What sound does it start with? Find that letter in the paint key.',
+    sum: 'Solve the problem in each spot, then find the answer in the paint key.', num: 'Each spot has a number. Find it in the paint key.' }[plan.kind] || 'Solve the problem in each spot, then find the answer in the paint key.';
+  brainSay(`Tap a paint color, then tap a spot to paint it. ${how}`);
+};
+function cbnDraw() {
+  const b = bg, W = bgBox(), cs = W / b.R.W, K = pathId === 'k';
+  document.getElementById('cb-key').innerHTML = b.colors.map(c => {
+    const [hex, nm] = CBN_COLORS[c];
+    return `<button class="cb-swatch${b.brush === c ? ' on' : ''}" style="--sw:${hex}" onclick="cbnBrush('${c}')" aria-label="${nm}"><i></i><b>${b.keyOf[c]}</b></button>`;
+  }).join('');
+  let h = `<svg id="cb-svg" viewBox="0 0 ${b.R.W * 10} ${b.R.H * 10}" width="${W}" height="${cs * b.R.H}">`;
+  b.R.regions.forEach((r, i) => {
+    r.cells.forEach(([y, x]) => { h += `<rect x="${x * 10}" y="${y * 10}" width="10" height="10" class="cb-cell" data-r="${i}" fill="${r.done ? CBN_COLORS[r.c][0] : r.flash ? '#FFC2BA' : '#E2DDCC'}"/>`; });
+  });
+  // outlines between different spots
+  let path = '';
+  for (let y = 0; y < b.R.H; y++) for (let x = 0; x < b.R.W; x++) {
+    const me = b.R.id[y][x];
+    if (me < 0) continue;
+    if (y === 0 || b.R.id[y - 1][x] !== me) path += `M${x * 10} ${y * 10}h10`;
+    if (y === b.R.H - 1 || b.R.id[y + 1][x] !== me) path += `M${x * 10} ${y * 10 + 10}h10`;
+    if (x === 0 || b.R.id[y][x - 1] !== me) path += `M${x * 10} ${y * 10}v10`;
+    if (x === b.R.W - 1 || b.R.id[y][x + 1] !== me) path += `M${x * 10 + 10} ${y * 10}v10`;
+  }
+  h += `<path d="${path}" class="cb-edge"/>`;
+  b.R.regions.forEach(r => {
+    if (r.done) return;
+    const [y, x] = r.at, t = r.text, L = [...t].length;
+    const fs = r.wide ? (L >= 5 ? 4.4 : L >= 4 ? 5 : L === 3 ? 5.4 : 6) : (L >= 5 ? 2.5 : L >= 4 ? 2.9 : L === 3 ? 3.5 : 5.6);
+    h += `<text x="${x * 10 + 5}" y="${y * 10 + 5 + fs * 0.36}" class="cb-t" style="font-size:${fs}px">${t}</text>`;
+  });
+  h += '</svg>';
+  document.getElementById('cb-box').innerHTML = h;
+  const left = b.R.regions.filter(r => !r.done).length;
+  document.getElementById('cb-left').textContent = left ? `${left} spot${left === 1 ? '' : 's'} left` : '';
+  document.getElementById('cb-svg').onpointerdown = e => {
+    const t = e.target.closest('[data-r]');
+    if (t) cbnTap(+t.dataset.r);
+  };
+}
+function cbnBrush(c) {
+  if (!bgAlive() || bg.won) return;
+  bg.brush = c; sfx('hit');
+  cbnDraw();
+  say(`${CBN_COLORS[c][1]}. ${bg.keyOf[c]}.`, { rate: 1 });
+}
+function cbnTap(i) {
+  if (!bgAlive() || bg.won) return;
+  const r = bg.R.regions[i];
+  if (r.done) return;
+  if (!bg.brush) { brainSay('First tap a paint color at the top!'); return; }
+  if (bg.brush === r.c) {
+    r.done = true; sfx('win');
+    cbnDraw();
+    if (bg.R.regions.every(x => x.done)) setTimeout(() => brainWin(`You painted ${bg.pic.name}!`), 500);
+    return;
+  }
+  bg.misses++; sfx('miss');
+  r.flash = true; cbnDraw();
+  const tok = bg.tok;
+  setTimeout(() => { if (bgAlive(tok)) { r.flash = false; cbnDraw(); } }, 500);
+  const p = bg.plan, ans = r.val;
+  const why = p.kind === 'sound' ? `${START_WORDS.find(w => w.l === ans).w} starts with ${ans}.`
+            : p.kind === 'case' || p.kind === 'num' ? `This spot is ${r.text}.`
+            : p.kind === 'round' ? `${r.text.slice(1)} rounds to ${ans}.`
+            : `${r.text.replace('×', ' times ').replace('÷', ' divided by ').replace('−', ' minus ').replace('+', ' plus ')} is ${ans}.`;
+  brainSay(`Not that color. ${why} Which paint has ${ans}?`);
+}
+
+/* ═════════════ MATCH-UP (memory with questions and answers) ═════════════ */
+const SHAPE_PAIRS = [['🔺', 'triangle'], ['🟦', 'square'], ['⚪', 'circle'], ['⭐', 'star'], ['❤️', 'heart'], ['🔷', 'diamond'], ['▬', 'rectangle']];
+function matchPairs(lv, n) {
+  const s = lv ? lv.skill : '', K = pathId === 'k', out = [], seen = new Set();
+  const add = (a, b, say) => { if (seen.has(String(b)) || seen.has(String(a))) return; seen.add(String(b)); seen.add(String(a)); out.push({ a: String(a), b: String(b), say }); };
+  let guard = 0;
+  const fill = f => { while (out.length < n && guard++ < 400) f(); };
+  if (K) {
+    if (lettery(s)) fill(() => { const L = pick(AZ); add(L, L.toLowerCase(), `${L} and little ${L}`); });
+    else if (/shape/.test(s)) shuffle(SHAPE_PAIRS).slice(0, n).forEach(([e, w]) => add(e, w, w));
+    else if (/add|doubles|bonds/.test(s)) fill(() => { const t = rnd(2, 10), a = rnd(0, t); add(`${a}+${t - a}`, t, `${a} plus ${t - a} is ${t}`); });
+    else if (/sub/.test(s)) fill(() => { const a = rnd(3, 10), b = rnd(1, a - 1); add(`${a}−${b}`, a - b, `${a} minus ${b} is ${a - b}`); });
+    else if (mathy(s)) fill(() => { const k = rnd(1, 10); add('●'.repeat(k), k, `${k}`); });
+    else fill(() => { const w = pick(START_WORDS); add(w.e, w.l.toLowerCase(), `${w.w} starts with ${w.l}`); });
+    return out;
+  }
+  if (/div/.test(s)) fill(() => { const d = rnd(2, 9), q = rnd(2, 9); add(`${d * q}÷${d}`, q, `${d * q} divided by ${d} is ${q}`); });
+  else if (/prefix/.test(s)) shuffle(PREFIX_ITEMS).slice(0, n).forEach(i => add(i.w, i.m, `${i.w} means ${i.m}`));
+  else if (/suffix/.test(s)) shuffle(SUFFIX_ITEMS).slice(0, n).forEach(i => add(i.w, i.m, `${i.w} means ${i.m}`));
+  else if (/synant|context|homophone|passage|infer/.test(s)) shuffle(WORD_PAIRS).slice(0, n).forEach(i => add(i.w, i.s, `${i.w} and ${i.s} mean the same thing`));
+  else if (/round/.test(s)) fill(() => { const t = rnd(2, 9) * 10, v = t + rnd(-5, 4); if (v !== t) add(`${v}→10s`, t, `${v} rounds to ${t}`); });
+  else {
+    const tables = s === 'mult' && Array.isArray(lv.arg) ? lv.arg : [2, 3, 4, 5, 6, 7, 8, 9];
+    fill(() => { const a = pick(tables), b = rnd(2, 10); add(`${a}×${b}`, a * b, `${a} times ${b} is ${a * b}`); });
+  }
+  return out;
+}
+BRAIN_START.match = function () {
+  const K = pathId === 'k', n = K ? 4 : 6;
+  const pairs = matchPairs(bg.lv, n);
+  const cards = shuffle(pairs.flatMap((p, i) => [{ t: p.a, i, side: 'a' }, { t: p.b, i, side: 'b' }]));
+  Object.assign(bg, { pairs, cards, open: [], moves: 0, found: 0, busy: false });
+  document.getElementById('bg-area').innerHTML = `<div class="mu-moves" id="mu-moves">Moves: 0</div><div class="pair-grid mem mu-grid" id="mu-grid"></div>`;
+  const grid = document.getElementById('mu-grid');
+  grid.style.gridTemplateColumns = `repeat(${K ? 4 : 4}, 1fr)`;
+  cards.forEach((c, k) => {
+    const b = document.createElement('button');
+    const long = c.t.length > 6 ? ' xlong' : c.t.length > 3 ? ' long' : '';
+    b.className = 'mem-card mu-card';
+    b.innerHTML = `<span class="mem-back">?</span><span class="mem-face${long}${c.side === 'b' ? ' ans' : ''}">${c.t}</span>`;
+    b.onclick = () => muTap(b, c);
+    grid.appendChild(b);
+  });
+  brainSay(K ? 'Flip two cards. Find a card and its partner!' : 'Flip two cards. Match each problem with its answer!');
+};
+function muTap(b, c) {
+  if (!bgAlive() || bg.won || bg.busy || b.classList.contains('up')) return;
+  b.classList.add('up');
+  sfx('hit');
+  bg.open.push({ b, c });
+  if (bg.open.length < 2) return;
+  bg.moves++;
+  document.getElementById('mu-moves').textContent = `Moves: ${bg.moves}`;
+  const [x, y] = bg.open;
+  bg.open = [];
+  if (x.c.i === y.c.i) {
+    x.b.classList.add('done'); y.b.classList.add('done');
+    bg.found++;
+    const p = bg.pairs[x.c.i];
+    brainSay(`Match! ${p.say.replace(/^./, m => m.toUpperCase())}.`);
+    if (bg.found === bg.pairs.length) {
+      const par = bg.pairs.length + 3;
+      bg.misses = Math.max(0, bg.moves - par);
+      setTimeout(() => brainWin(`All matched in ${bg.moves} moves!`), 700);
+    }
+  } else {
+    bg.busy = true;
+    brainSay(pick(['Not a match. Remember where they are!', 'Nope! Try to remember those two.', 'Not a pair. Keep going!']), false);
+    const tok = bg.tok;
+    setTimeout(() => { if (!bgAlive(tok)) return; x.b.classList.remove('up'); y.b.classList.remove('up'); bg.busy = false; }, 1100);
+  }
+}
+
+/* ═════════════ MINI SUDOKU ═════════════ */
+function sdkSolve(g, size, bw, bh, limit) {
+  let count = 0;
+  const ok = (i, v) => {
+    const r = Math.floor(i / size), c = i % size;
+    for (let k = 0; k < size; k++) if (g[r * size + k] === v || g[k * size + c] === v) return false;
+    const br = r - r % bh, bc = c - c % bw;
+    for (let y = br; y < br + bh; y++) for (let x = bc; x < bc + bw; x++) if (g[y * size + x] === v) return false;
+    return true;
+  };
+  const go = () => {
+    const i = g.indexOf(0);
+    if (i < 0) { count++; return count >= limit; }
+    for (let v = 1; v <= size; v++) if (ok(i, v)) { g[i] = v; if (go()) { g[i] = 0; return true; } g[i] = 0; }
+    return false;
+  };
+  go();
+  return count;
+}
+function sdkMake(size, bw, bh, holes) {
+  // a valid full grid, shuffled
+  const base = [];
+  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++)
+    base.push(((r % bh) * bw + Math.floor(r / bh) + c) % size + 1);
+  const perm = shuffle(Array.from({ length: size }, (_, i) => i + 1));
+  let g = base.map(v => perm[v - 1]);
+  const bands = shuffle(Array.from({ length: size / bh }, (_, i) => i));
+  const rowOrder = bands.flatMap(b => shuffle(Array.from({ length: bh }, (_, i) => b * bh + i)));
+  const stacks = shuffle(Array.from({ length: size / bw }, (_, i) => i));
+  const colOrder = stacks.flatMap(s => shuffle(Array.from({ length: bw }, (_, i) => s * bw + i)));
+  const sol = [];
+  rowOrder.forEach(r => colOrder.forEach(c => sol.push(g[r * size + c])));
+  const puz = sol.slice();
+  let removed = 0;
+  for (const i of shuffle(Array.from({ length: size * size }, (_, i) => i))) {
+    if (removed >= holes) break;
+    const keep = puz[i]; puz[i] = 0;
+    if (sdkSolve(puz.slice(), size, bw, bh, 2) !== 1) puz[i] = keep; else removed++;
+  }
+  return { sol, puz };
+}
+const SDK_PICS = ['🍎', '🍌', '🍇', '🍊'];
+BRAIN_START.sudoku = function () {
+  const K = pathId === 'k', size = K ? 4 : 6, bw = K ? 2 : 3, bh = 2;
+  const { sol, puz } = sdkMake(size, bw, bh, K ? 6 : 16);
+  const sym = v => K ? SDK_PICS[v - 1] : String(v);
+  Object.assign(bg, { size, bw, bh, sol, cur: puz.slice(), given: puz.map(v => v > 0), sel: null, sym });
+  document.getElementById('bg-area').innerHTML = `<div class="sd-grid" id="sd-grid"></div><div class="sd-pad" id="sd-pad"></div>`;
+  document.getElementById('bg-btns').innerHTML = `<button class="btn btn-ghost" onclick="sdkHint()">💡 Hint</button>`;
+  sdkDraw();
+  brainSay(K ? 'Fill the empty boxes! Each row, each column, and each thick square gets one of each fruit. Tap a box, then tap a fruit.'
+             : 'Fill the grid with 1 to 6. Every row, column and thick box gets each number once. Tap a box, then a number.');
+};
+function sdkDraw() {
+  const b = bg, n = b.size, W = Math.min(bgBox(), pathId === 'k' ? 340 : 420);
+  const grid = document.getElementById('sd-grid');
+  grid.style.width = W + 'px'; grid.style.height = W + 'px';
+  grid.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+  grid.style.fontSize = Math.round(W / n * (pathId === 'k' ? 0.55 : 0.5)) + 'px';
+  grid.innerHTML = b.cur.map((v, i) => {
+    const r = Math.floor(i / n), c = i % n;
+    const cls = ['sd-cell', b.given[i] ? 'given' : 'open', b.sel === i ? 'sel' : '', v && !b.given[i] ? 'mine' : '', b.flash === i ? 'bad' : '', b.hintAt === i ? 'hint' : '',
+      c % b.bw === b.bw - 1 && c < n - 1 ? 'br' : '', r % b.bh === b.bh - 1 && r < n - 1 ? 'bb' : ''].filter(Boolean).join(' ');
+    return `<button class="${cls}" onclick="sdkSel(${i})">${v ? b.sym(v) : ''}</button>`;
+  }).join('');
+  document.getElementById('sd-pad').innerHTML = Array.from({ length: n }, (_, k) => k + 1).map(v =>
+    `<button class="sd-key" onclick="sdkPut(${v})">${b.sym(v)}</button>`).join('') +
+    `<button class="sd-key erase" onclick="sdkPut(0)">⌫</button>`;
+}
+function sdkSel(i) {
+  if (!bgAlive() || bg.won || bg.given[i]) return;
+  bg.sel = i; bg.hintAt = null; sdkDraw();
+}
+function sdkConflict(i, v) {
+  const b = bg, n = b.size, r = Math.floor(i / n), c = i % n;
+  for (let k = 0; k < n; k++) {
+    if (k !== c && b.cur[r * n + k] === v) return 'row';
+    if (k !== r && b.cur[k * n + c] === v) return 'column';
+  }
+  const br = r - r % b.bh, bc = c - c % b.bw;
+  for (let y = br; y < br + b.bh; y++) for (let x = bc; x < bc + b.bw; x++) if ((y * n + x) !== i && b.cur[y * n + x] === v) return 'box';
+  return '';
+}
+function sdkPut(v) {
+  if (!bgAlive() || bg.won) return;
+  const i = bg.sel;
+  if (i === null || i === undefined) { brainSay('First tap an empty box.'); return; }
+  if (!v) { bg.cur[i] = 0; sdkDraw(); return; }
+  const clash = sdkConflict(i, v);
+  if (clash) {
+    bg.misses++; sfx('miss');
+    bg.flash = i; sdkDraw();
+    const tok = bg.tok;
+    setTimeout(() => { if (bgAlive(tok)) { bg.flash = null; sdkDraw(); } }, 600);
+    brainSay(`There's already ${pathId === 'k' ? 'a ' + bg.sym(v) : 'a ' + v} in that ${clash === 'box' ? 'thick box' : clash}. Try another.`,
+             `There's already one of those in that ${clash === 'box' ? 'box' : clash}. Try another.`);
+    return;
+  }
+  if (bg.sol[i] !== v) {
+    bg.misses++; sfx('miss');
+    bg.flash = i; sdkDraw();
+    const tok = bg.tok;
+    setTimeout(() => { if (bgAlive(tok)) { bg.flash = null; sdkDraw(); } }, 600);
+    brainSay('That fits for now, but it won\'t work out later. Look at what else is missing in that row.');
+    return;
+  }
+  bg.cur[i] = v; sfx('hit');
+  const next = bg.cur.findIndex((x, k) => !x && k > i);
+  bg.sel = next >= 0 ? next : bg.cur.indexOf(0);
+  if (bg.sel < 0) bg.sel = null;
+  sdkDraw();
+  if (bg.cur.every((x, k) => x === bg.sol[k])) setTimeout(() => brainWin('Puzzle solved! Great thinking!'), 400);
+}
+function sdkHint() {
+  if (!bgAlive() || bg.won) return;
+  // find a box where only one choice fits
+  const n = bg.size;
+  for (let i = 0; i < n * n; i++) {
+    if (bg.cur[i]) continue;
+    const fits = Array.from({ length: n }, (_, k) => k + 1).filter(v => !sdkConflict(i, v));
+    if (fits.length === 1) {
+      bg.sel = i; bg.hintAt = i; bg.misses++;
+      sdkDraw();
+      brainSay('Look at the glowing box. Only one thing can go there!');
+      return;
+    }
+  }
+  const i = bg.cur.findIndex(x => !x);
+  bg.sel = i; bg.hintAt = i; bg.misses++; sdkDraw();
+  brainSay(`Try ${bg.sym(bg.sol[i])} in the glowing box.`);
+}
+
+/* smarter suggestions now that there are more games: pick the one played least
+   among games that suit the level */
+brainSuggest = function (lv) {
+  const s = (lv && lv.skill) || '', K = pathId === 'k';
+  const wordy = /sight|letter|case|rhyme|blend|word|vowel|digraph|endsound|abc|bdpq|prefix|suffix|context|homophone|synant|passage|infer|habitats|living|forces|lifecycles|trace|memory/.test(s);
+  let pool = wordy ? ['words', 'match', 'scramble', 'color', 'cross', 'maze']
+           : mathy(s) ? ['dots', 'color', 'match', 'maze', 'train', 'cross']
+           : ['maze', 'sudoku', 'shapes', 'simon', 'color', 'train'];
+  if (/shape|quads|perim|area/.test(s)) pool = ['shapes', 'maze', 'sudoku', 'color'];
+  if (/pattern/.test(s)) pool = ['train', 'simon', 'sudoku', 'maze'];
+  pool = pool.filter(id => BRAIN[id] && !(K && id === 'cross'));
+  const by = (P.brain && P.brain.by) || {};
+  const cands = pool.filter(id => id !== P.brainLast);
+  return cands.slice().sort((a, b) => (by[a] || 0) - (by[b] || 0) || cands.indexOf(a) - cands.indexOf(b))[0] || pool[0];
+};
+
+/* ═══════════════════════════════════════════════════════════
+   BRAIN GAMES, batch 3: Scramble, Simon Says, Pattern Train,
+   Shape Puzzle, Crossword
+   ═══════════════════════════════════════════════════════════ */
+Object.assign(BRAIN, {
+  scramble: { name: 'Scramble',      icon: '🔤', blurb: 'Put the letters in order to spell the word' },
+  simon:    { name: 'Simon Says',    icon: '🎵', blurb: 'Watch the lights, then copy the order' },
+  train:    { name: 'Pattern Train', icon: '🚂', blurb: 'Finish each train\'s pattern' },
+  shapes:   { name: 'Shape Puzzle',  icon: '🧱', blurb: 'Fit the blocks to fill the shape' },
+  cross:    { name: 'Crossword',     icon: '📝', blurb: 'Use the clues to fill in the words', g3: true }
+});
+BRAIN_ORDER.push('scramble', 'simon', 'train', 'shapes', 'cross');
+
+// Crossword is a reading puzzle for the older path only
+const _openBrainPicker = openBrainPicker;
+openBrainPicker = function (fromLevel) {
+  _openBrainPicker(fromLevel);
+  if (pathId === 'k') document.querySelectorAll('#bp-grid .bp-tile').forEach(t => { if (/Crossword/.test(t.textContent)) t.remove(); });
+};
+
+function tone(freq, ms) {
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime;
+    o.type = 'triangle'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + ms / 1000);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + ms / 1000 + 0.05);
+  } catch (e) {}
+}
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ═════════════ SCRAMBLE ═════════════ */
+function scrWords(lv) {
+  const s = lv ? lv.skill : '', K = pathId === 'k';
+  if (K) {
+    if (/sightword/.test(s)) return shuffle((s === 'sightword' ? SIGHT_1 : SIGHT_2).filter(w => w.length >= 2 && w.length <= 5)).map(w => ({ w }));
+    return shuffle(CVC.concat(END_WORDS.filter(w => w.w.length <= 4))).filter((w, i, a) => a.findIndex(x => x.w === w.w) === i).map(w => ({ w: w.w, e: w.e }));
+  }
+  if (s === 'prefix') return shuffle(PREFIX_ITEMS).map(i => ({ w: i.w, clue: i.m }));
+  if (s === 'suffix') return shuffle(SUFFIX_ITEMS).map(i => ({ w: i.w, clue: i.m }));
+  if (/synant|context|homophone|passage|infer/.test(s)) return shuffle(WORD_PAIRS).map(i => ({ w: i.w, clue: `means the same as "${i.s}"` }));
+  const bank = /forces|lifecycles/.test(s) ? 'science' : /time|quads|graphs|perim/.test(s) ? 'measure' : 'math';
+  return shuffle(CW_CLUES[bank]).map(([w, c]) => ({ w: w.toLowerCase(), clue: c }));
+}
+BRAIN_START.scramble = function () {
+  const K = pathId === 'k';
+  const words = scrWords(bg.lv).filter(w => w.w.length <= (K ? 5 : 9)).slice(0, K ? 4 : 5);
+  Object.assign(bg, { words, wi: 0 });
+  document.getElementById('bg-area').innerHTML = `<div class="sc-count" id="sc-count"></div><div class="sc-clue" id="sc-clue"></div>
+    <div class="sc-slots" id="sc-slots"></div><div class="sc-tiles" id="sc-tiles"></div>`;
+  document.getElementById('bg-btns').innerHTML = `<button class="btn btn-ghost" onclick="scrHear()">🔊 Hear it</button><button class="btn btn-ghost" onclick="scrHint()">💡 Hint</button>`;
+  scrWord();
+};
+function scrWord() {
+  const w = bg.words[bg.wi], letters = w.w.split('');
+  let order;
+  do { order = shuffle(letters.map((c, i) => i)); } while (letters.length > 1 && order.every((v, i) => letters[v] === letters[i]));
+  bg.tiles = order.map(i => ({ c: letters[i], used: false }));
+  bg.filled = 0; bg.wrongHere = 0;
+  scrDraw();
+  const K = pathId === 'k';
+  brainSay(w.e ? `Spell the word for the picture!` : w.clue ? `Unscramble the word that ${/^means/.test(w.clue) ? '' : 'means '}${w.clue}.` : `Spell the word you hear!`,
+           w.e ? `Spell ${w.w}.` : w.clue ? `Unscramble the word that ${/^means/.test(w.clue) ? '' : 'means '}${w.clue}.` : `Spell ${w.w}.`);
+}
+function scrDraw() {
+  const w = bg.words[bg.wi];
+  document.getElementById('sc-count').textContent = `Word ${bg.wi + 1} of ${bg.words.length}`;
+  document.getElementById('sc-clue').innerHTML = w.e ? `<span class="sc-pic">${w.e}</span>` : w.clue ? `<span class="sc-text">${w.clue}</span>` : `<span class="sc-pic">🔊</span>`;
+  document.getElementById('sc-slots').innerHTML = w.w.split('').map((c, i) => `<span class="sc-slot${i < bg.filled ? ' on' : ''}${i === bg.filled ? ' next' : ''}">${i < bg.filled ? c : ''}</span>`).join('');
+  document.getElementById('sc-tiles').innerHTML = bg.tiles.map((t, i) => `<button class="sc-tile${t.used ? ' used' : ''}${bg.hintTile === i ? ' hint' : ''}" onclick="scrTap(${i})">${t.c}</button>`).join('');
+}
+function scrTap(i) {
+  if (!bgAlive() || bg.won || bg.busy) return;
+  const t = bg.tiles[i], w = bg.words[bg.wi];
+  if (t.used) return;
+  bg.hintTile = null;
+  if (t.c !== w.w[bg.filled]) {
+    bg.misses++; bg.wrongHere++; sfx('miss');
+    const btn = document.querySelectorAll('.sc-tile')[i];
+    if (btn) { btn.classList.remove('nope'); void btn.offsetWidth; btn.classList.add('nope'); }
+    const sofar = w.w.slice(0, bg.filled);
+    brainSay(bg.filled ? `Not yet. We have "${sofar}". What letter comes next?` : `Not first. Say the word slowly: what sound starts it?`,
+             bg.filled ? `Not yet. Say it slowly: ${w.w}. What comes after ${sofar.split('').join(' ')}?` : `Say it slowly: ${w.w}. What sound does it start with?`);
+    if (bg.wrongHere >= 2) scrHint(true);
+    return;
+  }
+  t.used = true; bg.filled++; bg.wrongHere = 0;
+  tone(440 + bg.filled * 60, 140);
+  scrDraw();
+  if (bg.filled === w.w.length) {
+    sfx('win'); bg.busy = true;
+    brainSay(`${w.w}! ${pick(['Nice spelling!', 'You got it!', 'Great job!'])}`, `${w.w}! ${w.w.split('').join(', ')}. ${w.w}!`);
+    const tok = bg.tok;
+    setTimeout(() => {
+      if (!bgAlive(tok)) return;
+      bg.busy = false; bg.wi++;
+      if (bg.wi >= bg.words.length) brainWin('You unscrambled every word!');
+      else scrWord();
+    }, 1800);
+  }
+}
+function scrHear() { const w = bg && bg.words[bg.wi]; if (w) say(w.w + (w.clue ? '. ' + w.clue : ''), { rate: rateQ() }); }
+function scrHint(auto) {
+  if (!bgAlive() || bg.won) return;
+  const w = bg.words[bg.wi], need = w.w[bg.filled];
+  bg.hintTile = bg.tiles.findIndex(t => !t.used && t.c === need);
+  if (!auto) bg.misses++;
+  scrDraw();
+  if (!auto) brainSay(`Next is the glowing letter: ${need}.`);
+}
+
+/* ═════════════ SIMON SAYS ═════════════ */
+const SIMON_COLORS = ['#FF5A4A', '#4AA8FF', '#FFD93D', '#4ADE80'];
+const SIMON_FREQ = [330, 392, 494, 587];
+function simonLabels(lv) {
+  const s = lv ? lv.skill : '', K = pathId === 'k';
+  if (K && lettery(s)) { const L = shuffle(AZ).slice(0, 4); return { t: L, say: L }; }
+  if (K && /count|numid|nummatch|teens|compare/.test(s)) { const n = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 4); return { t: n.map(String), say: n.map(String) }; }
+  if (K && /shape/.test(s)) return { t: ['🔺', '🟦', '⚪', '⭐'], say: ['triangle', 'square', 'circle', 'star'] };
+  if (K) { const w = shuffle(CVC).slice(0, 4); return { t: w.map(x => x.e), say: w.map(x => x.w) }; }
+  if (/mult|area|missing|div/.test(s)) { const a = lv.arg && Array.isArray(lv.arg) ? pick(lv.arg.filter(x => x > 1)) : rnd(3, 9); const n = [1, 2, 3, 4].map(k => a * k); return { t: n.map(String), say: n.map(String), skip: a }; }
+  return { t: ['🐸', '🐙', '🦊', '🐝'], say: ['frog', 'octopus', 'fox', 'bee'] };
+}
+BRAIN_START.simon = function () {
+  const K = pathId === 'k', lab = simonLabels(bg.lv);
+  Object.assign(bg, { lab, seq: [], pos: 0, goal: K ? 5 : 7, locked: true, tries: 0, best: 0 });
+  document.getElementById('bg-area').innerHTML = `<div class="sm-level" id="sm-level"></div>
+    <div class="sm-board" id="sm-board">${lab.t.map((t, i) => `<button class="sm-pad" id="sm-${i}" style="--pc:${SIMON_COLORS[i]}" onclick="simonTap(${i})">${t}</button>`).join('')}</div>`;
+  brainSay(`Watch the pads light up, then tap them in the same order! ${lab.skip ? `Tip: they're counting by ${lab.skip}s.` : ''}`);
+  const tok = bg.tok;
+  setTimeout(() => { if (bgAlive(tok)) simonNext(); }, 1800);
+};
+function simonNext() {
+  bg.seq.push(rnd(0, 3));
+  if (bg.seq.length === 1) bg.seq.push(rnd(0, 3));
+  bg.tries = 0;
+  simonPlay();
+}
+async function simonPlay() {
+  const tok = bg.tok, K = pathId === 'k';
+  bg.locked = true; bg.pos = 0;
+  document.getElementById('sm-level').textContent = `Remember ${bg.seq.length} · goal ${bg.goal}`;
+  document.getElementById('sm-board').classList.add('watch');
+  brainSay('Watch…', false);
+  await wait(600);
+  for (const i of bg.seq) {
+    if (!bgAlive(tok)) return;
+    simonFlash(i, true);
+    await wait(K ? 750 : 560);
+  }
+  if (!bgAlive(tok)) return;
+  document.getElementById('sm-board').classList.remove('watch');
+  bg.locked = false;
+  brainSay('Your turn!', false);
+}
+function simonFlash(i, speak) {
+  const el = document.getElementById('sm-' + i);
+  if (!el) return;
+  el.classList.add('lit'); tone(SIMON_FREQ[i], 380);
+  if (speak && pathId === 'k') say(bg.lab.say[i], { rate: 1.05 });
+  setTimeout(() => el.classList.remove('lit'), 380);
+}
+function simonTap(i) {
+  if (!bgAlive() || bg.won || bg.locked) return;
+  simonFlash(i, false);
+  if (bg.seq[bg.pos] !== i) {
+    bg.misses++; bg.tries++; bg.locked = true;
+    sfx('miss');
+    const tok = bg.tok;
+    if (bg.tries >= 2) {
+      const got = bg.seq.length - 1;
+      setTimeout(() => { if (bgAlive(tok)) brainWin(`You remembered ${got} in a row!`, `Great memory! You remembered ${got} in a row!`); }, 600);
+      return;
+    }
+    brainSay('Oops! Watch one more time.');
+    setTimeout(() => { if (bgAlive(tok)) simonPlay(); }, 1200);
+    return;
+  }
+  bg.pos++;
+  if (bg.pos === bg.seq.length) {
+    bg.locked = true;
+    const tok = bg.tok;
+    if (bg.seq.length >= bg.goal) { setTimeout(() => { if (bgAlive(tok)) brainWin(`Wow! You remembered all ${bg.goal}!`); }, 500); return; }
+    brainSay(pick(['Yes! One more this time.', 'Perfect! Getting longer…', 'Great memory! Here comes another.']), false);
+    setTimeout(() => { if (bgAlive(tok)) simonNext(); }, 1100);
+  }
+}
+
+/* ═════════════ PATTERN TRAIN ═════════════ */
+function trainRound(K, k) {
+  if (K) {
+    const set = shuffle(pick(PATTERN_SETS).slice());
+    const units = { AB: [0, 1], AAB: [0, 0, 1], ABB: [0, 1, 1], ABC: [0, 1, 2], AABB: [0, 0, 1, 1] };
+    const kinds = k < 2 ? ['AB', 'AB', 'AAB'] : ['AB', 'AAB', 'ABB', 'ABC', 'AABB'];
+    const kind = pick(kinds), unit = units[kind];
+    const len = Math.max(6, unit.length * 2 + 1);
+    const seq = Array.from({ length: len + 1 }, (_, i) => set[unit[i % unit.length]]);
+    const ans = seq[len];
+    const choices = shuffle([...new Set([ans, ...set.slice(0, Math.max(3, new Set(unit).size + 1))])]).slice(0, 3);
+    if (!choices.includes(ans)) choices[0] = ans;
+    const unitTxt = unit.map(i => set[i]).join(' ');
+    return { cars: seq.slice(0, len), ans, choices: shuffle(choices), why: `The pattern repeats: ${unitTxt}.`, speak: `The pattern repeats. What comes next?` };
+  }
+  const t = pick(k < 2 ? ['add', 'sub', 'add'] : ['add', 'sub', 'times', 'grow', 'alt']);
+  let seq = [], why = '';
+  if (t === 'add') { const d = rnd(2, 9), s = rnd(1, 20); seq = Array.from({ length: 6 }, (_, i) => s + i * d); why = `Each car adds ${d}.`; }
+  if (t === 'sub') { const d = rnd(2, 8), s = rnd(40, 80); seq = Array.from({ length: 6 }, (_, i) => s - i * d); why = `Each car takes away ${d}.`; }
+  if (t === 'times') { const m = pick([2, 3]), s = rnd(1, 3); seq = Array.from({ length: 6 }, (_, i) => s * Math.pow(m, i)); why = `Each car is ${m === 2 ? 'double' : 'triple'} the one before.`; }
+  if (t === 'grow') { const s = rnd(1, 10); seq = [s]; for (let i = 1; i < 6; i++) seq.push(seq[i - 1] + i); why = 'Add 1, then 2, then 3, then 4… one more each time.'; }
+  if (t === 'alt') { const a = rnd(2, 5), b = rnd(6, 10), s = rnd(1, 10); seq = [s]; for (let i = 1; i < 6; i++) seq.push(seq[i - 1] + (i % 2 ? a : b)); why = `It goes +${a}, +${b}, +${a}, +${b}…`; }
+  const ans = seq[5];
+  const opts = new Set([ans]);
+  const near = [ans + 1, ans - 1, ans + 2, ans - 2, seq[4] + (seq[4] - seq[3]) + (seq[3] - seq[2] === seq[4] - seq[3] ? 1 : 0), seq[4] * 2, ans + 10, ans - 10];
+  for (const v of shuffle(near)) { if (opts.size >= 4) break; if (v > 0 && v !== ans) opts.add(v); }
+  return { cars: seq.slice(0, 5), ans, choices: shuffle([...opts]), why, speak: 'What number comes next?' };
+}
+BRAIN_START.train = function () {
+  const K = pathId === 'k';
+  Object.assign(bg, { round: 0, rounds: K ? 5 : 6, K });
+  document.getElementById('bg-area').innerHTML = `<div class="tr-count" id="tr-count"></div><div class="tr-track"><div class="tr-train" id="tr-train"></div></div><div class="tr-opts" id="tr-opts"></div>`;
+  trainNext(true);
+};
+function trainNext(first) {
+  const r = trainRound(bg.K, bg.round);
+  bg.r = r; bg.tries = 0; bg.busy = false;
+  document.getElementById('tr-count').textContent = `Train ${bg.round + 1} of ${bg.rounds}`;
+  const car = (t, cls) => `<span class="tr-car ${cls || ''}"><b>${t}</b><i></i><i></i></span>`;
+  document.getElementById('tr-train').innerHTML = `<span class="tr-engine">🚂</span>` + r.cars.map(t => car(t)).join('') + car('?', 'empty');
+  const tr = document.getElementById('tr-train');
+  tr.classList.remove('in'); void tr.offsetWidth; tr.classList.add('in');
+  document.getElementById('tr-opts').innerHTML = r.choices.map(c => `<button class="tr-opt${bg.K ? ' pic' : ''}" onclick="trainPick(this, '${String(c).replace(/'/g, "\\'")}')">${c}</button>`).join('');
+  brainSay(first ? `Look at the pattern on the train. What goes in the empty car?` : r.speak.replace('The pattern repeats. ', ''), first ? undefined : r.speak);
+}
+function trainPick(btn, v) {
+  if (!bgAlive() || bg.won || bg.busy) return;
+  const r = bg.r;
+  if (String(r.ans) !== v) {
+    bg.misses++; bg.tries++; sfx('miss');
+    btn.classList.remove('nope'); void btn.offsetWidth; btn.classList.add('nope');
+    btn.disabled = true;
+    brainSay(`Not quite. ${r.why} ${bg.tries >= 2 ? 'Look closely at the last few cars.' : 'Try again!'}`);
+    return;
+  }
+  bg.busy = true; sfx('win');
+  const empty = document.querySelector('.tr-car.empty');
+  empty.classList.remove('empty'); empty.classList.add('filled');
+  empty.querySelector('b').textContent = r.ans;
+  brainSay(`Yes! ${r.why}`);
+  const tr = document.getElementById('tr-train');
+  const tok = bg.tok;
+  setTimeout(() => { if (bgAlive(tok)) { tr.classList.add('out'); tone(262, 200); } }, 1400);
+  setTimeout(() => {
+    if (!bgAlive(tok)) return;
+    tr.classList.remove('out');
+    bg.round++;
+    if (bg.round >= bg.rounds) brainWin('All aboard! Every train is finished!');
+    else trainNext(false);
+  }, 2300);
+}
+
+/* ═════════════ SHAPE PUZZLE ═════════════
+   Fill an outline on a grid with block pieces. Kindergarten pieces come
+   already turned the right way; 3rd grade pieces need turning, and the
+   finished shape tells you its area. */
+const SP_PIECES = {
+  I2: [[0, 0], [0, 1]], I3: [[0, 0], [0, 1], [0, 2]], I2v: [[0, 0], [1, 0]], I3v: [[0, 0], [1, 0], [2, 0]], L3: [[0, 0], [1, 0], [1, 1]], O4: [[0, 0], [0, 1], [1, 0], [1, 1]],
+  T4: [[0, 0], [0, 1], [0, 2], [1, 1]], L4: [[0, 0], [1, 0], [2, 0], [2, 1]], S4: [[0, 1], [0, 2], [1, 0], [1, 1]], I4: [[0, 0], [0, 1], [0, 2], [0, 3]]
+};
+const SP_MASKS_K = [
+  { name: 'a square', rows: ['###', '###', '###'] }, { name: 'a boat', rows: ['#...', '###.', '####'] },
+  { name: 'a house', rows: ['.#.', '###', '###'] }, { name: 'stairs', rows: ['#..', '##.', '###'] },
+  { name: 'a wall', rows: ['####', '####'] }, { name: 'a T', rows: ['###', '.#.', '.#.'] }
+];
+const SP_MASKS_G = [
+  { name: 'a rocket', rows: ['.##.', '####', '####', '####', '#..#'] }, { name: 'a castle', rows: ['#.#.#', '#####', '#####', '##.##'] },
+  { name: 'a plus sign', rows: ['.##.', '####', '####', '.##.'] }, { name: 'stairs', rows: ['#...', '##..', '###.', '####'] },
+  { name: 'a boat', rows: ['..#..', '..##.', '#####', '.###.'] }, { name: 'a big L', rows: ['##..', '##..', '####', '####'] },
+  { name: 'a bridge', rows: ['######', '######', '##..##'] }, { name: 'a heart', rows: ['##.##', '#####', '.###.', '..#..'] }
+];
+function spNorm(cells) {
+  const mr = Math.min(...cells.map(c => c[0])), mc = Math.min(...cells.map(c => c[1]));
+  return cells.map(([r, c]) => [r - mr, c - mc]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+}
+function spRot(cells) { return spNorm(cells.map(([r, c]) => [c, -r])); }
+function spOrients(cells) {
+  const out = [], seen = new Set();
+  let cur = spNorm(cells);
+  for (let k = 0; k < 4; k++) { const key = JSON.stringify(cur); if (!seen.has(key)) { seen.add(key); out.push(cur); } cur = spRot(cur); }
+  return out;
+}
+function spTile(mask, names, rotate) {
+  const H = mask.length, W = mask[0].length, grid = mask.map(r => r.split('').map(ch => ch === '#' ? 0 : -1));
+  const placed = [];
+  const go = () => {
+    let at = null;
+    for (let r = 0; r < H && !at; r++) for (let c = 0; c < W; c++) if (grid[r][c] === 0) { at = [r, c]; break; }
+    if (!at) return true;
+    for (const nm of shuffle(names.slice())) {
+      for (const o of (rotate ? shuffle(spOrients(SP_PIECES[nm])) : [spNorm(SP_PIECES[nm])])) {
+        const [fr, fc] = o[0], cells = o.map(([r, c]) => [r - fr + at[0], c - fc + at[1]]);
+        if (cells.every(([r, c]) => r >= 0 && c >= 0 && r < H && c < W && grid[r][c] === 0)) {
+          cells.forEach(([r, c]) => { grid[r][c] = placed.length + 1; });
+          placed.push({ nm, cells });
+          if (go()) return true;
+          placed.pop(); cells.forEach(([r, c]) => { grid[r][c] = 0; });
+        }
+      }
+    }
+    return false;
+  };
+  return go() ? placed : null;
+}
+BRAIN_START.shapes = function () {
+  const K = pathId === 'k';
+  let mask, sol;
+  for (let t = 0; t < 30 && !sol; t++) {
+    mask = pick((K ? SP_MASKS_K : SP_MASKS_G).filter(m => m.name !== P.lastSp)) || pick(K ? SP_MASKS_K : SP_MASKS_G);
+    sol = spTile(mask.rows, K ? ['I2', 'I3', 'I2v', 'I3v', 'L3', 'O4'] : ['L3', 'O4', 'T4', 'L4', 'S4', 'I3', 'I4'], !K);
+    if (sol && (sol.length < 3 || sol.length > (K ? 4 : 7))) sol = null;
+  }
+  P.lastSp = mask.name;
+  const pieces = sol.map((p, i) => {
+    let cells = spNorm(p.cells);
+    if (!K) { const turns = rnd(1, 3); for (let k = 0; k < turns; k++) cells = spRot(cells); }
+    return { id: i, cells, color: PALETTE[i % PALETTE.length], at: null };
+  });
+  const H = mask.rows.length, W = mask.rows[0].length;
+  Object.assign(bg, { mask, H, W, pieces, occ: mask.rows.map(r => r.split('').map(ch => ch === '#' ? 0 : -1)), drag: null, area: mask.rows.join('').split('#').length - 1 });
+  document.getElementById('bg-area').innerHTML = `<div class="sp-board" id="sp-board"></div><div class="sp-tray" id="sp-tray"></div>`;
+  spDraw();
+  brainSay(K ? `Drag the blocks into the shape to fill it up!` : `Fill ${mask.name} with the blocks. Tap a block in the tray to turn it. Drag it onto the grid.`);
+};
+function spCell() { return Math.min(Math.floor(Math.min(bgBox(), 420) / Math.max(bg.W, 4)), 72); }
+function spPieceSvg(p, cs) {
+  const h = Math.max(...p.cells.map(c => c[0])) + 1, w = Math.max(...p.cells.map(c => c[1])) + 1;
+  return `<svg width="${w * cs}" height="${h * cs}" viewBox="0 0 ${w} ${h}">${p.cells.map(([r, c]) => `<rect x="${c + 0.04}" y="${r + 0.04}" width="0.92" height="0.92" rx="0.14" fill="${p.color}" stroke="rgba(0,0,0,0.35)" stroke-width="0.05"/>`).join('')}</svg>`;
+}
+function spDraw() {
+  const cs = spCell(), b = bg;
+  let h = `<svg id="sp-svg" width="${b.W * cs}" height="${b.H * cs}" viewBox="0 0 ${b.W} ${b.H}">`;
+  b.occ.forEach((row, r) => row.forEach((v, c) => { if (v >= 0) h += `<rect x="${c}" y="${r}" width="1" height="1" class="sp-hole"/>`; }));
+  b.pieces.filter(p => p.at).forEach(p => p.cells.forEach(([r, c]) => {
+    h += `<rect x="${c + p.at[1] + 0.04}" y="${r + p.at[0] + 0.04}" width="0.92" height="0.92" rx="0.14" fill="${p.color}" stroke="rgba(0,0,0,0.35)" stroke-width="0.05" data-p="${p.id}"/>`;
+  }));
+  // outline of the whole shape
+  let path = '';
+  const inM = (r, c) => r >= 0 && c >= 0 && r < b.H && c < b.W && b.occ[r][c] >= 0;
+  for (let r = 0; r < b.H; r++) for (let c = 0; c < b.W; c++) if (inM(r, c)) {
+    if (!inM(r - 1, c)) path += `M${c} ${r}h1`; if (!inM(r + 1, c)) path += `M${c} ${r + 1}h1`;
+    if (!inM(r, c - 1)) path += `M${c} ${r}v1`; if (!inM(r, c + 1)) path += `M${c + 1} ${r}v1`;
+  }
+  h += `<path d="${path}" class="sp-outline"/></svg>`;
+  document.getElementById('sp-board').innerHTML = h;
+  const tcs = Math.round(cs * 0.62);
+  document.getElementById('sp-tray').innerHTML = b.pieces.filter(p => !p.at).map(p =>
+    `<div class="sp-piece" data-id="${p.id}">${spPieceSvg(p, tcs)}${pathId === 'k' ? '' : '<span class="sp-turn">↻</span>'}</div>`).join('') || '';
+  spInput();
+}
+function spInput() {
+  const cs = spCell();
+  document.querySelectorAll('.sp-piece').forEach(el => {
+    el.onpointerdown = e => {
+      if (!bgAlive() || bg.won) return;
+      e.preventDefault(); hush();
+      const p = bg.pieces[+el.dataset.id];
+      spStartDrag(p, e, el);
+    };
+  });
+  const svg = document.getElementById('sp-svg');
+  svg.onpointerdown = e => {
+    const t = e.target.closest('[data-p]');
+    if (!t || !bgAlive() || bg.won) return;
+    e.preventDefault();
+    const p = bg.pieces[+t.dataset.p];
+    p.cells.forEach(([r, c]) => { bg.occ[r + p.at[0]][c + p.at[1]] = 0; });
+    p.at = null; sfx('hit');
+    spDraw();
+  };
+}
+function spStartDrag(p, e, srcEl) {
+  const cs = spCell();
+  const ghost = document.createElement('div');
+  ghost.className = 'sp-ghost';
+  ghost.innerHTML = spPieceSvg(p, cs);
+  document.body.appendChild(ghost);
+  const sx = e.clientX, sy = e.clientY;
+  let moved = false;
+  const place = (x, y) => { ghost.style.left = (x - cs / 2) + 'px'; ghost.style.top = (y - cs / 2) + 'px'; };
+  place(sx, sy);
+  const move = ev => { ev.preventDefault(); if (Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) moved = true; place(ev.clientX, ev.clientY); };
+  const up = ev => {
+    window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up);
+    ghost.remove();
+    if (!bgAlive()) return;
+    if (!moved) {                          // a tap turns the piece (3rd grade)
+      if (pathId !== 'k') { p.cells = spRot(p.cells); tone(520, 90); spDraw(); }
+      return;
+    }
+    const r = document.getElementById('sp-svg').getBoundingClientRect();
+    const col = Math.round((ev.clientX - cs / 2 - r.left) / cs), row = Math.round((ev.clientY - cs / 2 - r.top) / cs);
+    spTryPlace(p, row, col);
+  };
+  window.addEventListener('pointermove', move, { passive: false });
+  window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+}
+function spTryPlace(p, row, col) {
+  const b = bg;
+  // try the drop spot, then a nearby spot so it's forgiving for little fingers
+  const spots = [[0, 0], [0, -1], [0, 1], [-1, 0], [1, 0], [-1, -1], [1, 1], [-1, 1], [1, -1]];
+  for (const [dr, dc] of spots) {
+    const at = [row + dr, col + dc];
+    const fits = p.cells.every(([r, c]) => { const R = r + at[0], C = c + at[1]; return R >= 0 && C >= 0 && R < b.H && C < b.W && b.occ[R][C] === 0; });
+    if (fits) {
+      p.at = at;
+      p.cells.forEach(([r, c]) => { b.occ[r + at[0]][c + at[1]] = p.id + 1; });
+      sfx('hit'); tone(600, 120);
+      spDraw();
+      if (b.occ.every(row => row.every(v => v !== 0))) {
+        setTimeout(() => brainWin(pathId === 'k' ? `You filled ${b.mask.name}!` : `You filled ${b.mask.name}! Its area is ${b.area} square units.`,
+                                  pathId === 'k' ? `You filled ${b.mask.name}!` : `You filled ${b.mask.name}! It covers ${b.area} squares, so its area is ${b.area} square units.`), 400);
+      } else if (!b.pieces.some(x => !x.at)) {
+        brainSay('Hmm, the blocks are all used but there are gaps. Tap a block on the grid to take it back.');
+      }
+      return;
+    }
+  }
+  b.misses++; sfx('miss');
+  brainSay(pathId === 'k' ? 'That block doesn\'t fit there. Try another spot!' : 'That doesn\'t fit there. Try another spot, or tap it in the tray to turn it.');
+}
+
+/* ═════════════ CROSSWORD (3rd grade) ═════════════ */
+const CW_CLUES = {
+  math: [['PRODUCT', 'The answer to a times problem'], ['FACTOR', 'A number you multiply by'], ['ARRAY', 'Objects in rows and columns'], ['DIVIDE', 'Split into equal groups'],
+         ['EQUAL', 'The same amount'], ['SUM', 'The answer to an adding problem'], ['EVEN', '2, 4, 6 and 8 are ___ numbers'], ['ODD', '1, 3, 5 and 7 are ___ numbers'],
+         ['HALF', 'One of two equal parts'], ['AREA', 'How much space covers a flat shape'], ['ROW', 'A line of things going across'], ['DIGIT', '0 through 9 are each one of these'],
+         ['ROUND', 'To change 47 to 50, you ___ to the nearest ten'], ['TOTAL', 'All of them added together'], ['QUOTIENT', 'The answer to a dividing problem'], ['GROUP', 'A set of things together'],
+         ['TENS', 'In 45, the 4 is in the ___ place'], ['ONES', 'In 45, the 5 is in the ___ place'], ['FRACTION', 'A number like one half or three fourths']],
+  measure: [['HOUR', '60 minutes'], ['MINUTE', '60 seconds'], ['CLOCK', 'It tells the time'], ['SQUARE', 'A shape with 4 equal sides and 4 square corners'],
+            ['GRAPH', 'A picture that shows data'], ['SIDES', 'A triangle has three of these'], ['PERIMETER', 'The distance all the way around a shape'], ['INCH', 'A short unit for measuring length'],
+            ['NOON', '12 o\'clock in the daytime'], ['ANGLE', 'Where two sides meet'], ['TALLY', 'Marks you make to count'], ['RHOMBUS', 'A shape with 4 equal sides, like a diamond'],
+            ['LENGTH', 'How long something is'], ['CORNER', 'A point where two sides meet']],
+  science: [['PUSH', 'Move something away from you'], ['PULL', 'Move something toward you'], ['GRAVITY', 'The force that pulls things down to Earth'], ['MAGNET', 'It sticks to iron'],
+            ['FRICTION', 'The force that slows things that rub together'], ['LARVA', 'The baby stage of an insect'], ['PUPA', 'The stage inside a cocoon'], ['TADPOLE', 'A baby frog'],
+            ['SEED', 'Many plants start as one'], ['ADULT', 'Fully grown'], ['EGG', 'The first stage for a chicken or a butterfly'], ['FORCE', 'A push or a pull'],
+            ['MOTION', 'Moving from place to place'], ['SPROUT', 'A tiny new plant'], ['NECTAR', 'Sweet juice bees get from flowers']]
+};
+function cwClues(lv) {
+  const s = lv ? lv.skill : '';
+  if (s === 'prefix') return PREFIX_ITEMS.map(i => [i.w.toUpperCase(), i.m]);
+  if (s === 'suffix') return SUFFIX_ITEMS.map(i => [i.w.toUpperCase(), i.m]);
+  if (/synant|context|homophone|passage|infer/.test(s))
+    return WORD_PAIRS.flatMap(i => [[i.w.toUpperCase(), `Means the same as "${i.s}"`], [i.a.toUpperCase(), `The opposite of "${i.w}"`]]);
+  if (/forces|lifecycles/.test(s)) return CW_CLUES.science;
+  if (/time|quads|graphs|perim/.test(s)) return CW_CLUES.measure;
+  return CW_CLUES.math;
+}
+function cwBuild(list, want) {
+  let best = null;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    const words = shuffle(list.filter(([w]) => w.length >= 3 && w.length <= 9));
+    const cells = new Map(), placed = [];
+    const key = (r, c) => r + ',' + c;
+    const put = (w, r, c, dr, dc, clue) => { for (let i = 0; i < w.length; i++) cells.set(key(r + dr * i, c + dc * i), w[i]); placed.push({ w, r, c, dr, dc, clue }); };
+    const [w0, c0] = words[0];
+    put(w0, 0, 0, 0, 1, c0);
+    const canPut = (w, r, c, dr, dc) => {
+      let cross = 0;
+      if (cells.has(key(r - dr, c - dc)) || cells.has(key(r + dr * w.length, c + dc * w.length))) return -1;
+      for (let i = 0; i < w.length; i++) {
+        const R = r + dr * i, C = c + dc * i, ch = cells.get(key(R, C));
+        if (ch) { if (ch !== w[i]) return -1; cross++; }
+        else if (cells.has(key(R + dc, C + dr)) || cells.has(key(R - dc, C - dr))) return -1;   // no side-by-side letters
+      }
+      return cross;
+    };
+    for (const [w, clue] of words.slice(1)) {
+      if (placed.length >= want) break;
+      if (placed.some(p => p.w === w)) continue;
+      const opts = [];
+      for (const p of placed) for (let i = 0; i < p.w.length; i++) for (let j = 0; j < w.length; j++) {
+        if (p.w[i] !== w[j]) continue;
+        const dr = p.dc, dc = p.dr, R = p.r + p.dr * i - dr * j, C = p.c + p.dc * i - dc * j;
+        const x = canPut(w, R, C, dr, dc);
+        if (x > 0) opts.push([R, C, dr, dc]);
+      }
+      if (opts.length) { const [R, C, dr, dc] = pick(opts); put(w, R, C, dr, dc, clue); }
+    }
+    const rs = [...cells.keys()].map(k => +k.split(',')[0]), cs = [...cells.keys()].map(k => +k.split(',')[1]);
+    const H = Math.max(...rs) - Math.min(...rs) + 1, W = Math.max(...cs) - Math.min(...cs) + 1;
+    const score = placed.length * 10 - (H * W) / 10 - (H > 10 || W > 10 ? 100 : 0);
+    if (!best || score > best.score) best = { score, placed, cells, H, W, r0: Math.min(...rs), c0: Math.min(...cs) };
+    if (placed.length >= want) break;
+  }
+  // normalize coordinates and number the words
+  const b = best;
+  b.placed.forEach(p => { p.r -= b.r0; p.c -= b.c0; });
+  const starts = [...new Set(b.placed.map(p => p.r * 100 + p.c))].sort((a, c) => a - c);
+  b.placed.forEach(p => { p.num = starts.indexOf(p.r * 100 + p.c) + 1; });
+  b.placed.sort((a, c) => a.num - c.num || a.dc - c.dc);
+  return b;
+}
+BRAIN_START.cross = function () {
+  const cw = cwBuild(cwClues(bg.lv), 6);
+  const grid = Array.from({ length: cw.H }, () => Array(cw.W).fill(null));
+  cw.placed.forEach(p => { for (let i = 0; i < p.w.length; i++) grid[p.r + p.dr * i][p.c + p.dc * i] = { ch: p.w[i], v: '', ok: false }; });
+  Object.assign(bg, { cw, grid, wsel: 0, ci: 0 });
+  document.getElementById('bg-area').innerHTML = `<div class="cw-clue" id="cw-clue"></div><div class="cw-grid" id="cw-grid"></div><div class="cw-kbd" id="cw-kbd"></div><div class="cw-list" id="cw-list"></div>`;
+  document.getElementById('bg-btns').innerHTML = `<button class="btn btn-ghost" onclick="cwHint()">💡 Reveal a letter</button>`;
+  document.getElementById('cw-kbd').innerHTML = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM⌫'].map(r => `<div>${r.split('').map(k => `<button onclick="cwKey('${k}')">${k}</button>`).join('')}</div>`).join('');
+  cwDraw();
+  brainSay(`Read a clue, then type the answer. Tap any word in the grid or the list to switch clues.`);
+};
+function cwWordCells(p) { return Array.from({ length: p.w.length }, (_, i) => [p.r + p.dr * i, p.c + p.dc * i]); }
+function cwDraw() {
+  const b = bg, cw = b.cw, p = cw.placed[b.wsel], cs = Math.min(Math.floor(Math.min(bgBox(), 440) / cw.W), 46);
+  const on = new Set(cwWordCells(p).map(([r, c]) => r + ',' + c)), cur = cwWordCells(p)[b.ci];
+  const nums = {}; cw.placed.forEach(q => { nums[q.r + ',' + q.c] = q.num; });
+  const g = document.getElementById('cw-grid');
+  g.style.gridTemplateColumns = `repeat(${cw.W}, ${cs}px)`; g.style.gridAutoRows = cs + 'px'; g.style.fontSize = Math.round(cs * 0.55) + 'px';
+  g.innerHTML = b.grid.map((row, r) => row.map((cell, c) => {
+    if (!cell) return '<span class="cw-x"></span>';
+    const k = r + ',' + c, cls = ['cw-c', on.has(k) ? 'on' : '', cur && cur[0] === r && cur[1] === c ? 'cur' : '', cell.ok ? 'ok' : '', cell.bad ? 'bad' : ''].filter(Boolean).join(' ');
+    return `<button class="${cls}" onclick="cwCell(${r},${c})">${nums[k] ? `<i>${nums[k]}</i>` : ''}${cell.v}</button>`;
+  }).join('')).join('');
+  document.getElementById('cw-clue').innerHTML = `<b>${p.num} ${p.dc ? 'Across' : 'Down'}</b> ${p.clue} <span>(${p.w.length} letters)</span>`;
+  const solved = q => cwWordCells(q).every(([r, c]) => b.grid[r][c].ok);
+  document.getElementById('cw-list').innerHTML = ['Across', 'Down'].map(dir => {
+    const qs = cw.placed.filter(q => (dir === 'Across') === !!q.dc);
+    return qs.length ? `<div><h4>${dir}</h4>${qs.map(q => `<button class="${q === p ? 'on' : ''}${solved(q) ? ' done' : ''}" onclick="cwPick(${cw.placed.indexOf(q)})"><b>${q.num}</b> ${q.clue}</button>`).join('')}</div>` : '';
+  }).join('');
+}
+function cwPick(i) {
+  if (!bgAlive() || bg.won) return;
+  bg.wsel = i;
+  const cells = cwWordCells(bg.cw.placed[i]);
+  bg.ci = Math.max(0, cells.findIndex(([r, c]) => !bg.grid[r][c].ok));
+  cwDraw();
+  say(bg.cw.placed[i].clue, { rate: rateQ() });
+}
+function cwCell(r, c) {
+  if (!bgAlive() || bg.won) return;
+  const here = bg.cw.placed.map((p, i) => [p, i]).filter(([p]) => cwWordCells(p).some(([R, C]) => R === r && C === c));
+  let pickIt = here.find(([p, i]) => i === bg.wsel);
+  if (pickIt && here.length > 1 && cwWordCells(pickIt[0])[bg.ci][0] === r && cwWordCells(pickIt[0])[bg.ci][1] === c) pickIt = here.find(([p, i]) => i !== bg.wsel);
+  const [p, i] = pickIt || here[0];
+  bg.wsel = i;
+  bg.ci = cwWordCells(p).findIndex(([R, C]) => R === r && C === c);
+  cwDraw();
+}
+function cwKey(k) {
+  if (!bgAlive() || bg.won) return;
+  const p = bg.cw.placed[bg.wsel], cells = cwWordCells(p);
+  if (k === '⌫') {
+    let i = bg.ci;
+    const [r, c] = cells[i];
+    if (!bg.grid[r][c].v || bg.grid[r][c].ok) i = Math.max(0, i - 1);
+    const [R, C] = cells[i];
+    if (!bg.grid[R][C].ok) bg.grid[R][C].v = '';
+    bg.ci = i; cwDraw(); return;
+  }
+  const [r, c] = cells[bg.ci];
+  if (!bg.grid[r][c].ok) bg.grid[r][c].v = k;
+  tone(500, 50);
+  // next empty square in this word
+  let n = bg.ci + 1;
+  while (n < cells.length && bg.grid[cells[n][0]][cells[n][1]].ok) n++;
+  if (n < cells.length) bg.ci = n;
+  if (cells.every(([R, C]) => bg.grid[R][C].v)) cwCheck(p);
+  else cwDraw();
+}
+function cwCheck(p) {
+  const cells = cwWordCells(p);
+  const right = cells.every(([r, c]) => bg.grid[r][c].v === bg.grid[r][c].ch);
+  if (right) {
+    cells.forEach(([r, c]) => { bg.grid[r][c].ok = true; });
+    sfx('win');
+    const left = bg.cw.placed.filter(q => !cwWordCells(q).every(([r, c]) => bg.grid[r][c].ok));
+    if (!left.length) { cwDraw(); setTimeout(() => brainWin('Crossword complete!'), 500); return; }
+    brainSay(`${p.w}! ${left.length} to go.`, `${p.w.toLowerCase()}! Correct.`);
+    bg.wsel = bg.cw.placed.indexOf(left[0]);
+    bg.ci = Math.max(0, cwWordCells(left[0]).findIndex(([r, c]) => !bg.grid[r][c].ok));
+    cwDraw();
+    return;
+  }
+  bg.misses++; sfx('miss');
+  cells.forEach(([r, c]) => { const g = bg.grid[r][c]; if (!g.ok && g.v !== g.ch) g.bad = true; });
+  cwDraw();
+  brainSay('Some letters aren\'t right. The red squares need a change.');
+  const tok = bg.tok;
+  setTimeout(() => {
+    if (!bgAlive(tok)) return;
+    cells.forEach(([r, c]) => { const g = bg.grid[r][c]; if (g.bad) { g.bad = false; g.v = ''; } });
+    bg.ci = Math.max(0, cells.findIndex(([r, c]) => !bg.grid[r][c].v));
+    cwDraw();
+  }, 900);
+}
+function cwHint() {
+  if (!bgAlive() || bg.won) return;
+  const p = bg.cw.placed[bg.wsel], cells = cwWordCells(p);
+  const i = cells.findIndex(([r, c]) => bg.grid[r][c].v !== bg.grid[r][c].ch);
+  if (i < 0) return;
+  const [r, c] = cells[i];
+  bg.grid[r][c].v = bg.grid[r][c].ch; bg.grid[r][c].ok = true; bg.misses++;
+  bg.ci = Math.min(cells.length - 1, i + 1);
+  if (cells.every(([R, C]) => bg.grid[R][C].v)) cwCheck(p); else cwDraw();
 }
 
 /* ───────── BOOT ───────── */
