@@ -1272,6 +1272,143 @@
   .ad-table td:first-child { color: var(--gold); }
   .ad-ex { font: 800 17px/1.6 "Avenir Next", system-ui, sans-serif; padding: 10px 14px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,217,61,0.4); text-align: center; }
   .ad-eqs { font: 900 24px/1.5 "Avenir Next", system-ui, sans-serif; text-align: center; }
+
+  /* ══════════ v8: SHOW MY WORK ══════════ */
+  .tk-btn { position: absolute; top: 8px; left: 8px; width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255,217,61,0.55);
+    background: rgba(255,217,61,0.12); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; }
+  .tk-btn.on { background: var(--gold); border-color: var(--gold); }
+  .tk-panel { display: none; width: 100%; max-width: 460px; margin: 6px auto 8px; padding: 8px; box-sizing: border-box; border-radius: 18px;
+    background: rgba(255,255,255,0.05); border: 2px solid rgba(255,217,61,0.4); flex-shrink: 0; }
+  .tk-panel.open { display: block; animation: sayPop 0.25s ease-out; }
+  .tk-tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 8px; -webkit-overflow-scrolling: touch; }
+  .tk-tab { flex: 0 0 auto; display: flex; align-items: center; gap: 5px; padding: 7px 11px; border-radius: 999px; border: 2px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04); color: var(--ink); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+  .tk-tab span { font-size: 16px; }
+  .tk-tab.on { border-color: var(--gold); background: rgba(255,217,61,0.16); }
+  .tk-tab.close { margin-left: auto; }
+  .tk-body { width: 100%; }
+  .pad-tools, .ctr-bar { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+  .pad-color { width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); background: var(--pc); cursor: pointer; }
+  .pad-color.on { border-color: var(--gold); transform: scale(1.12); }
+  .pad-btn { min-width: 38px; height: 36px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: var(--ink); font: inherit; font-size: 16px; cursor: pointer; }
+  .pad-btn.wide { padding: 0 10px; font-size: 13px; font-weight: 800; }
+  .pad-btn.on { border-color: var(--gold); background: rgba(255,217,61,0.2); }
+  .pad-box { position: relative; border-radius: 12px; overflow: hidden; touch-action: none; }
+  .pad-box canvas { position: absolute; left: 0; top: 0; touch-action: none; }
+  .ctr-add { height: 36px; padding: 0 12px; border-radius: 10px; border: 2px solid var(--cc, rgba(255,255,255,0.3)); background: rgba(255,255,255,0.06); color: var(--ink); font: inherit; font-size: 14px; font-weight: 900; cursor: pointer; }
+  .ctr-add.on { background: var(--cc); color: #1E2749; }
+  .ctr-add.five { --cc: #9AA5CC; }
+  .ctr-box { position: relative; border-radius: 12px; background: #FBF9F2; overflow: hidden; touch-action: none; }
+  .ctr-split { position: absolute; left: 50%; top: 8px; bottom: 8px; border-left: 2px dashed rgba(30,39,73,0.15); }
+  .ctr-trash { position: absolute; right: 6px; bottom: 6px; width: 40px; height: 40px; border-radius: 10px; background: rgba(30,39,73,0.08); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .ctr { position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #BFE4FF, #4AA8FF 60%, #1D6FD6);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.2); touch-action: none; cursor: grab; color: #fff; font: 900 13px/30px system-ui, sans-serif; text-align: center; transition: box-shadow 0.1s; }
+  .ctr.red { background: radial-gradient(circle at 35% 30%, #FFD0C2, #FF6B4A 60%, #D43C1E); }
+  .ctr.drag { box-shadow: 0 8px 14px rgba(0,0,0,0.35); z-index: 5; }
+  .ctr.counted { outline: 3px solid #FFD93D; }
+  .ctr-total { margin-top: 6px; font-size: 14px; font-weight: 800; color: var(--muted); text-align: center; min-height: 20px; }
+  .ctr-total b { color: var(--gold); font-size: 17px; }
+  .ctr-total .blue { color: #7DD3FC; } .ctr-total .red { color: #FF9F8A; }
+  .tf-wrap { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .tf-frame { display: grid; grid-template-columns: repeat(5, 48px); gap: 4px; padding: 5px; background: #FBF9F2; border-radius: 10px; border: 3px solid #1E2749; }
+  .tf-box { width: 48px; height: 48px; border: 2px solid #C8C3B4; border-radius: 6px; background: transparent; cursor: pointer; position: relative; }
+  .tf-box.f1::after, .tf-box.f2::after { content: ''; position: absolute; inset: 6px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #BFE4FF, #4AA8FF 60%, #1D6FD6); }
+  .tf-box.f2::after { background: radial-gradient(circle at 35% 30%, #FFD0C2, #FF6B4A 60%, #D43C1E); }
+  .bt-area { display: flex; gap: 8px; background: #FBF9F2; border-radius: 12px; padding: 8px; min-height: 150px; }
+  .bt-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; border-right: 2px dashed rgba(30,39,73,0.12); }
+  .bt-col:last-child { border-right: none; }
+  .bt-col small { font-size: 11px; font-weight: 900; color: #6B7280; text-transform: uppercase; }
+  .bt-stack { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; align-content: flex-start; }
+  .bt-flat { width: 62px; height: 62px; display: grid; grid-template-columns: repeat(10, 1fr); gap: 1px; background: #7C5CD6; padding: 1px; cursor: pointer; border-radius: 3px; }
+  .bt-flat i { background: #C4B5FD; }
+  .bt-rod { width: 9px; height: 62px; display: grid; grid-template-rows: repeat(10, 1fr); gap: 1px; background: #16A34A; padding: 1px; cursor: pointer; border-radius: 2px; }
+  .bt-rod i { background: #86EFAC; }
+  .bt-stack.ones { max-width: 70px; }
+  .bt-one { width: 10px; height: 10px; background: #FFD93D; border: 1px solid #B45309; border-radius: 2px; }
+  .ar-ctrl { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .ar-step { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--muted); }
+  .ar-step button { width: 34px; height: 34px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); color: var(--ink); font: 900 18px/1 system-ui; cursor: pointer; }
+  .ar-step b { min-width: 22px; text-align: center; font-size: 18px; color: var(--ink); }
+  .ar-grid { display: flex; flex-direction: column; gap: 4px; align-items: center; background: #FBF9F2; border-radius: 12px; padding: 10px; }
+  .ar-row { display: flex; gap: 4px; align-items: center; padding: 2px 6px; border-radius: 8px; cursor: pointer; position: relative; }
+  .ar-row i { border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFE9A0, #F5A800); }
+  .ar-row.lit { background: rgba(74,168,255,0.18); }
+  .ar-row em { position: absolute; right: -34px; font-style: normal; font: 900 14px/1 system-ui; color: #1D6FD6; }
+  .nl-box { background: #FBF9F2; border-radius: 12px; touch-action: none; }
+  .nl-box svg { display: block; }
+  .nl-axis { stroke: #1E2749; stroke-width: 3; }
+  .nl-tick { stroke: #1E2749; stroke-width: 2; }
+  .nl-num { font: 800 11px/1 system-ui, sans-serif; fill: #1E2749; text-anchor: middle; }
+  .nl-num.zero { fill: #C2185B; font-size: 13px; }
+  .nl-start { fill: #16A34A; }
+  .nl-dot { fill: #1D6FD6; }
+  .nl-hop { fill: none; stroke: #1D6FD6; stroke-width: 3; }
+  .nl-hop.back { stroke: #E03E1A; }
+  .nl-lab { font: 900 13px/1 system-ui, sans-serif; fill: #1D6FD6; text-anchor: middle; }
+  .nl-lab.back { fill: #E03E1A; }
+
+  /* ══════════ v8: GROWING CRITTERS, BADGES ══════════ */
+  .rw-overlay { position: absolute; inset: 0; z-index: 80; background: rgba(5,8,25,0.78); display: none; align-items: center; justify-content: center; padding: 20px; }
+  .rw-overlay.open { display: flex; }
+  .rw-card { width: 100%; max-width: 360px; background: linear-gradient(160deg, #2A3566, #1E2749); border: 3px solid var(--gold); border-radius: 26px; padding: 20px; text-align: center; animation: sayPop 0.35s ease-out; }
+  .rw-card h3 { margin: 6px 0 4px; font-size: 22px; font-weight: 900; }
+  .rw-card p { margin: 0 0 10px; font-size: 15px; font-weight: 700; color: var(--muted); }
+  .rw-kicker { font-size: 12px; font-weight: 900; letter-spacing: 1.2px; color: var(--gold); }
+  .rw-crit { width: 150px; height: 150px; display: block; margin: 4px auto; }
+  .rw-crit.pop { animation: matchPop 0.6s ease-out; }
+  .rw-badge { font-size: 64px; line-height: 1.1; }
+  .rw-secret { margin: 8px 0 12px; padding: 10px; border-radius: 16px; background: rgba(255,217,61,0.1); border: 2px dashed rgba(255,217,61,0.5); }
+  .rw-secret span { font-size: 11px; font-weight: 900; letter-spacing: 1px; color: var(--gold); }
+  .rw-secret .rw-crit { width: 110px; height: 110px; }
+  .rw-coins { font-size: 20px !important; color: var(--gold) !important; font-weight: 900 !important; }
+  .rw-card .btn { width: 100%; margin-top: 6px; }
+  .rw-actions { display: flex; flex-direction: column; gap: 6px; }
+  .is-buddy { font-weight: 900; color: var(--sprout); padding: 8px; }
+  .evo { position: relative; width: 150px; height: 150px; margin: 4px auto; }
+  .evo svg { position: absolute; inset: 0; width: 150px; height: 150px; }
+  .evo-a { animation: evoOut 2.4s ease-in forwards; }
+  .evo-b { opacity: 0; animation: evoIn 2.4s ease-out forwards; }
+  @keyframes evoOut { 0%,20% { opacity: 1; filter: brightness(1); } 25%,35%,45%,55%,65% { filter: brightness(6); } 30%,40%,50%,60% { filter: brightness(1); } 75%,100% { opacity: 0; filter: brightness(8); transform: scale(1.2); } }
+  @keyframes evoIn { 0%,70% { opacity: 0; transform: scale(0.6); filter: brightness(8); } 85% { opacity: 1; transform: scale(1.12); filter: brightness(2); } 100% { opacity: 1; transform: scale(1); filter: brightness(1); } }
+  .lv { font-size: 14px; padding: 3px 9px; border-radius: 999px; background: var(--gold); color: #2A1A00; vertical-align: middle; }
+  .xp { height: 12px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden; margin: 6px 0 4px; }
+  .xp i { display: block; height: 100%; background: linear-gradient(90deg, #4ADE80, #FFD93D); border-radius: 999px; }
+  .xpt { font-size: 13px !important; }
+  .evo-hint { color: #C4B5FD !important; }
+  .dex-tabs { grid-column: 1 / -1; display: flex; gap: 8px; margin-bottom: 4px; }
+  .dex-tabs button { flex: 1; padding: 10px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); color: var(--ink); font: inherit; font-weight: 900; cursor: pointer; }
+  .dex-tabs button.on { border-color: var(--gold); background: rgba(255,217,61,0.15); }
+  .dex-help, .dex-sec, .dex-stats { grid-column: 1 / -1; font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
+  .dex-sec { margin-top: 10px; color: var(--gold); letter-spacing: 0.5px; }
+  .dex-cell.buddy { border-color: var(--gold) !important; box-shadow: 0 0 0 3px rgba(255,217,61,0.3); }
+  .dex-cell .dx-lvl { font-size: 11px; font-weight: 900; color: var(--gold); }
+  .dex-cell.secret svg { filter: brightness(0) !important; opacity: 0.55; }
+  .dex-cell.secret { opacity: 0.85 !important; cursor: pointer; }
+  .dex-grid.badges { display: flex !important; flex-direction: column; gap: 8px; }
+  .badge-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.08); opacity: 0.7; }
+  .badge-row.got { opacity: 1; border-color: rgba(255,217,61,0.5); background: rgba(255,217,61,0.08); }
+  .badge-row .bi { font-size: 30px; }
+  .badge-row > div { flex: 1; display: flex; flex-direction: column; }
+  .badge-row b { font-size: 15px; } .badge-row small { font-size: 12.5px; color: var(--muted); font-weight: 700; }
+  .badge-row svg { width: 46px; height: 46px; } .badge-row svg.mystery { filter: brightness(0); opacity: 0.5; }
+  .badge-row em { font-style: normal; font-weight: 900; color: var(--gold); font-size: 13px; }
+  .bp { height: 6px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow: hidden; margin-top: 4px; } .bp i { display: block; height: 100%; background: var(--gold); }
+  .bpt { font-size: 11px; color: var(--muted); font-weight: 800; }
+
+  /* daily quests + team goal */
+  .map-card.quest { border-color: rgba(255,217,61,0.6); background: linear-gradient(135deg, rgba(255,217,61,0.16), rgba(255,107,74,0.08)); }
+  .map-card.team { border-color: rgba(74,222,128,0.5); background: linear-gradient(135deg, rgba(74,222,128,0.14), rgba(74,168,255,0.08)); cursor: default; }
+  .map-card.team .mc-body small { display: block; }
+  .team-bar { height: 10px; border-radius: 999px; background: rgba(255,255,255,0.12); overflow: hidden; margin: 5px 0 3px; }
+  .team-bar i { display: block; height: 100%; background: linear-gradient(90deg, #4ADE80, #FFD93D); border-radius: 999px; }
+  .team-per { color: var(--muted); font-weight: 800; }
+  .qx-list { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 10px; text-align: left; }
+  .qx { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); }
+  .qx.done { border-color: rgba(74,222,128,0.5); background: rgba(74,222,128,0.1); }
+  .qx-body { flex: 1; display: flex; flex-direction: column; }
+  .qx-body b { font-size: 15px; }
+  .qx-go { padding: 8px 14px; border-radius: 999px; border: none; background: var(--gold); color: #2A1A00; font: inherit; font-weight: 900; cursor: pointer; }
+  .qx-done { font-size: 22px; color: var(--sprout); font-weight: 900; }
 </style>
   <meta name="cq-cloud" content='{"url": "https://hbujllyeaepkvxmbmvzj.supabase.co", "key": "sb_publishable_uQUb0RQfOZOR9zfBfsNH6A_E6xxkYae"}'>
 </head>
@@ -1588,6 +1725,8 @@
     </div>
     <div class="gp-scroll" id="fam-body"></div>
   </div>
+
+  <div class="rw-overlay" id="rw-overlay"><div class="rw-card" id="rw-card"></div></div>
 
     <!-- ══════════ RESET MODAL ══════════ -->
   <div class="backdrop" id="reset-modal">
@@ -11021,6 +11160,25 @@ function mergeP(a, b) {
   }
   if (older.placementDone && newer.placementDone) out.placementDone = Math.min(older.placementDone, newer.placementDone);
   else out.placementDone = older.placementDone || newer.placementDone;
+  // growth, badges, stats and tool use only ever go up
+  ['grow', 'toolUse', 'teamPts'].forEach(maxMap);
+  // the newest team goal wins; a finished copy of the same goal beats an unfinished one
+  const tg = [older.teamGoal, newer.teamGoal].filter(Boolean).sort((x, y) => (y.id - x.id) || ((y.doneAt ? 1 : 0) - (x.doneAt ? 1 : 0)))[0];
+  if (tg) out.teamGoal = tg;
+  // today's quests: keep the copy with more progress
+  if (older.quest && newer.quest && older.quest.day === newer.quest.day) {
+    const sc = Q => Q.items.reduce((a, q) => a + q.prog, 0) + (Q.chest ? 100 : 0);
+    out.quest = sc(older.quest) > sc(newer.quest) ? older.quest : newer.quest;
+  }
+  out.badges = Object.assign({}, older.badges || {}, newer.badges || {});
+  const os = older.stats || {}, ns = newer.stats || {};
+  out.stats = Object.assign({}, os, ns);
+  for (const k in os) if (typeof os[k] === 'number' && typeof ns[k] === 'number' && k !== 'streak') out.stats[k] = Math.max(os[k], ns[k]);
+  if (older.toolStats || newer.toolStats) {
+    const ot = older.toolStats || { with: { att: 0, cor: 0 }, without: { att: 0, cor: 0 } }, nt = newer.toolStats || ot;
+    out.toolStats = (ot.with.att + ot.without.att) > (nt.with.att + nt.without.att) ? ot : nt;
+  }
+  out.critters = [...new Set([...(older.critters || []), ...(newer.critters || [])])];
   out._t = Math.max(a._t || 0, b._t || 0);
   return out;
 }
@@ -11112,7 +11270,7 @@ async function syncKid(kidId) {
     if (error) throw error;
     const remote = rows && rows[0];
     let merged = local.data;
-    if (remote && remote.data && Object.keys(remote.data).length) merged = local.data && hasProgress(local.data) ? mergeP(local.data, remote.data) : remote.data;
+    if (remote && remote.data && Object.keys(remote.data).length) merged = local.data && (local.dirty || hasProgress(local.data)) ? mergeP(local.data, remote.data) : remote.data;
     merged = normalizeP(merged || freshPath());
     const changedRemote = !remote || JSON.stringify(remote.data) !== JSON.stringify(merged);
     if (changedRemote) {
@@ -11528,6 +11686,957 @@ matchPairs = function (lv, n) {
   }
   return _matchPairsAd(lv, n);
 };
+
+/* ═══════════════════════════════════════════════════════════
+   SHOW MY WORK: an expandable toolkit under each question
+   ✏️ draw · 🔵 counters · 🔟 ten frames · 🧱 base-ten blocks · ▦ arrays · 📏 number line
+   Nothing here gives the answer: the child builds the model.
+   ═══════════════════════════════════════════════════════════ */
+const TOOLS = {
+  draw:     { icon: '✏️', name: 'Draw' },
+  counters: { icon: '🔵', name: 'Counters' },
+  tenframe: { icon: '🔟', name: 'Ten frames' },
+  blocks:   { icon: '🧱', name: 'Blocks' },
+  array:    { icon: '▦', name: 'Array' },
+  line:     { icon: '📏', name: 'Number line' }
+};
+let tk = { open: false, tool: null, used: false };
+
+function toolsForPath() {
+  if (pathId === 'k') return ['counters', 'tenframe', 'line', 'draw'];
+  if (pathId === 'g3') return ['draw', 'array', 'blocks', 'line', 'counters'];
+  return ['draw', 'line'];
+}
+function toolForSkill(skill) {
+  const s = skill || '';
+  if (pathId === 'k') {
+    if (/teens|decompose|bonds|count100|skip10/.test(s)) return 'tenframe';
+    if (/add|sub|doubles|count|compare|kword|nummatch/.test(s)) return 'counters';
+    return 'draw';
+  }
+  if (pathId === 'g3') {
+    if (/mult|area|missing|div/.test(s)) return 'array';
+    if (/tens10|addsub3/.test(s)) return 'blocks';
+    if (/rounding/.test(s)) return 'line';
+    return 'draw';
+  }
+  if (/al_neg|al_ineq/.test(s)) return 'line';
+  return 'draw';
+}
+
+/* ── the button on the question card + the panel ── */
+(function mountToolkit() {
+  const card = document.querySelector('#game-screen .q-card');
+  if (!card || document.getElementById('tk-btn')) return;
+  card.insertAdjacentHTML('afterbegin', '<button class="tk-btn" id="tk-btn" onclick="toggleToolkit()" aria-label="Show my work">🧰</button>');
+  card.insertAdjacentHTML('afterend', `<div class="tk-panel" id="tk-panel">
+      <div class="tk-tabs" id="tk-tabs"></div>
+      <div class="tk-body" id="tk-body"></div>
+    </div>`);
+})();
+function toggleToolkit(force) {
+  tk.open = force !== undefined ? force : !tk.open;
+  const panel = document.getElementById('tk-panel'), btn = document.getElementById('tk-btn');
+  panel.classList.toggle('open', tk.open);
+  btn.classList.toggle('on', tk.open);
+  if (tk.open) {
+    tk.tool = toolForSkill(run && run.q && (run.q.skill || (run.level && run.level.skill)));
+    if (toolsForPath().indexOf(tk.tool) < 0) tk.tool = toolsForPath()[0];
+    markToolUsed();
+    renderToolkit(true);
+    setTimeout(() => { const st = document.querySelector('#game-screen .stage'); if (st && panel.getBoundingClientRect().bottom > window.innerHeight) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 60);
+    if (pathId === 'k') say(`Here are your tools! Use the ${TOOLS[tk.tool].name.toLowerCase()} to figure it out.`, { rate: rateL() });
+  } else hush();
+}
+function markToolUsed() {
+  if (run && run.q && !run.q.__toolUsed) {
+    run.q.__toolUsed = true;
+    if (!P.toolUse) P.toolUse = {};
+    P.toolUse[tk.tool] = (P.toolUse[tk.tool] || 0) + 1;
+  }
+}
+function pickTool(id) { tk.tool = id; markToolUsed(); renderToolkit(true); }
+function renderToolkit(reset) {
+  document.getElementById('tk-tabs').innerHTML = toolsForPath().map(id =>
+    `<button class="tk-tab${tk.tool === id ? ' on' : ''}" onclick="pickTool('${id}')"><span>${TOOLS[id].icon}</span>${TOOLS[id].name}</button>`).join('') +
+    `<button class="tk-tab close" onclick="toggleToolkit(false)">✕</button>`;
+  if (reset) TOOL_INIT[tk.tool]();
+}
+// a fresh workspace for each new question
+const _renderQuestionTk = renderQuestion;
+renderQuestion = function (q) {
+  _renderQuestionTk.apply(this, arguments);
+  if (tk.open) { tk.tool = toolForSkill(q && (q.skill || (run.level && run.level.skill))); if (toolsForPath().indexOf(tk.tool) < 0) tk.tool = toolsForPath()[0]; markToolUsed(); renderToolkit(true); }
+};
+const _quitLevelTk = quitLevel;
+quitLevel = function () { toggleToolkit(false); return _quitLevelTk.apply(this, arguments); };
+
+// track whether the toolkit helps (for the grown-ups report)
+const _answerTk = answer;
+answer = function (btn, choice) {
+  const q = run && run.q, first = q && !q.__tkCounted && run.mode !== 'place';
+  const r = _answerTk.apply(this, arguments);
+  if (first) {
+    q.__tkCounted = true;
+    if (!P.toolStats) P.toolStats = { with: { att: 0, cor: 0 }, without: { att: 0, cor: 0 } };
+    const b = q.__toolUsed ? P.toolStats.with : P.toolStats.without;
+    b.att++; if (String(choice) === String(q.answer)) b.cor++;
+  }
+  return r;
+};
+function tkWidth() { const p = document.getElementById('tk-body'); return Math.min((p && p.clientWidth) || 340, 448); }
+
+const TOOL_INIT = {};
+
+/* ═════ ✏️ DRAW: a scratch pad for fingers or Apple Pencil ═════ */
+let pad = null;
+TOOL_INIT.draw = function () {
+  const W = tkWidth(), H = Math.round(Math.min(300, W * 0.66));
+  document.getElementById('tk-body').innerHTML = `
+    <div class="pad-tools">
+      ${['#1E2749', '#1D6FD6', '#E03E1A', '#16A34A'].map((c, i) => `<button class="pad-color${i === 0 ? ' on' : ''}" style="--pc:${c}" onclick="padColor('${c}', this)"></button>`).join('')}
+      <button class="pad-btn" id="pad-eraser" onclick="padEraser(this)">🧽</button>
+      <button class="pad-btn" onclick="padPaper()">📄</button>
+      <button class="pad-btn" onclick="padUndo()">↶</button>
+      <button class="pad-btn" onclick="padClear()">🗑️</button>
+    </div>
+    <div class="pad-box"><canvas id="pad-bg"></canvas><canvas id="pad-ink"></canvas></div>`;
+  pad = { W, H, strokes: [], color: '#1E2749', erase: false, paper: pathId === 'g3' || pathId === 'ad' ? 'grid' : 'lines' };
+  const dpr = Math.min(window.devicePixelRatio || 1, 3);
+  ['pad-bg', 'pad-ink'].forEach(id => { const c = document.getElementById(id); c.width = W * dpr; c.height = H * dpr; c.style.width = W + 'px'; c.style.height = H + 'px'; c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0); });
+  document.querySelector('.pad-box').style.height = H + 'px';
+  padDrawPaper();
+  const ink = document.getElementById('pad-ink');
+  let cur = null;
+  const pt = e => { const r = ink.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  ink.onpointerdown = e => { e.preventDefault(); hush(); try { ink.setPointerCapture(e.pointerId); } catch (_) {} cur = { c: pad.color, er: pad.erase, w: pad.erase ? 22 : (e.pointerType === 'pen' ? 3.5 : 4.5), pts: [pt(e)] }; pad.strokes.push(cur); padRender(); };
+  ink.onpointermove = e => { if (!cur) return; e.preventDefault(); (e.getCoalescedEvents ? e.getCoalescedEvents() : [e]).forEach(ev => cur.pts.push(pt(ev))); padRender(); };
+  ink.onpointerup = ink.onpointercancel = () => { cur = null; };
+};
+function padDrawPaper() {
+  const x = document.getElementById('pad-bg').getContext('2d'), { W, H } = pad;
+  x.clearRect(0, 0, W, H); x.fillStyle = '#FBF9F2'; x.fillRect(0, 0, W, H);
+  x.strokeStyle = 'rgba(30,39,73,0.12)'; x.lineWidth = 1;
+  if (pad.paper === 'grid') { for (let i = 22; i < W; i += 22) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, H); x.stroke(); } for (let j = 22; j < H; j += 22) { x.beginPath(); x.moveTo(0, j); x.lineTo(W, j); x.stroke(); } }
+  if (pad.paper === 'lines') { for (let j = 46; j < H; j += 46) { x.strokeStyle = 'rgba(74,120,220,0.35)'; x.beginPath(); x.moveTo(0, j); x.lineTo(W, j); x.stroke(); } }
+}
+function padRender() {
+  const x = document.getElementById('pad-ink').getContext('2d');
+  x.clearRect(0, 0, pad.W, pad.H);
+  pad.strokes.forEach(s => {
+    x.save(); x.globalCompositeOperation = s.er ? 'destination-out' : 'source-over';
+    x.strokeStyle = s.c; x.lineWidth = s.w; x.lineCap = 'round'; x.lineJoin = 'round';
+    x.beginPath(); s.pts.forEach((p, i) => i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1]));
+    if (s.pts.length === 1) x.lineTo(s.pts[0][0] + 0.1, s.pts[0][1]);
+    x.stroke(); x.restore();
+  });
+}
+function padColor(c, el) { pad.color = c; pad.erase = false; document.querySelectorAll('.pad-color').forEach(b => b.classList.toggle('on', b === el)); document.getElementById('pad-eraser').classList.remove('on'); }
+function padEraser(el) { pad.erase = !pad.erase; el.classList.toggle('on', pad.erase); }
+function padUndo() { pad.strokes.pop(); padRender(); }
+function padClear() { pad.strokes = []; padRender(); }
+function padPaper() { pad.paper = { lines: 'grid', grid: 'plain', plain: 'lines' }[pad.paper]; padDrawPaper(); }
+
+/* ═════ 🔵 COUNTERS: drag bubbles, two colors, tap to count ═════ */
+let ctr = null;
+TOOL_INIT.counters = function () {
+  const W = tkWidth(), H = 230;
+  document.getElementById('tk-body').innerHTML = `
+    <div class="ctr-bar">
+      <button class="ctr-add" style="--cc:#4AA8FF" onclick="ctrAdd(0, 1)">＋ 🔵</button>
+      <button class="ctr-add" style="--cc:#FF6B4A" onclick="ctrAdd(1, 1)">＋ 🔴</button>
+      <button class="ctr-add five" onclick="ctrAdd(0, 5)">＋5</button>
+      <button class="pad-btn" onclick="ctrCount()" title="Count them">🔢</button>
+      <button class="pad-btn" onclick="ctrClear()">🗑️</button>
+    </div>
+    <div class="ctr-box" id="ctr-box" style="height:${H}px"><div class="ctr-split"></div><div class="ctr-trash" id="ctr-trash">🗑️</div></div>
+    <div class="ctr-total" id="ctr-total"></div>`;
+  ctr = { W, H, items: [], next: 1, counting: 0, countTok: 0 };
+  ctrRender();
+};
+function ctrAdd(color, n) {
+  for (let i = 0; i < n; i++) {
+    if (ctr.items.length >= 40) break;
+    const side = color === 0 ? 0 : 1, k = ctr.items.filter(it => it.c === color).length;
+    const col = k % 5, row = Math.floor(k / 5);
+    ctr.items.push({ id: ctr.next++, c: color, x: (side ? ctr.W / 2 + 14 : 14) + col * 34 + (row % 2) * 4, y: 14 + row * 34, n: 0 });
+  }
+  tone(520 + ctr.items.length * 12, 60);
+  ctrRender();
+}
+function ctrRender() {
+  const box = document.getElementById('ctr-box');
+  box.querySelectorAll('.ctr').forEach(e => e.remove());
+  ctr.items.forEach(it => {
+    const d = document.createElement('div');
+    d.className = 'ctr' + (it.c ? ' red' : '') + (it.n ? ' counted' : '');
+    d.style.transform = `translate(${it.x}px, ${it.y}px)`;
+    d.textContent = it.n || '';
+    d.dataset.id = it.id;
+    box.appendChild(d);
+  });
+  const b = ctr.items.filter(i => !i.c).length, r = ctr.items.length - b;
+  document.getElementById('ctr-total').innerHTML = ctr.items.length
+    ? `<span class="blue">🔵 ${b}</span>${r ? ` <span class="red">🔴 ${r}</span>` : ''}${ctr.counting ? ` · counted <b>${ctr.counting}</b>` : ''}`
+    : 'Tap ＋ to add counters. Drag them around. Drag to 🗑️ to take one away.';
+  ctrInput();
+}
+function ctrInput() {
+  const box = document.getElementById('ctr-box');
+  box.querySelectorAll('.ctr').forEach(el => {
+    el.onpointerdown = e => {
+      e.preventDefault(); hush();
+      const it = ctr.items.find(i => i.id === +el.dataset.id), r = box.getBoundingClientRect();
+      const ox = e.clientX - r.left - it.x, oy = e.clientY - r.top - it.y;
+      let moved = false;
+      try { el.setPointerCapture(e.pointerId); } catch (_) {}
+      el.classList.add('drag');
+      el.onpointermove = ev => {
+        const nx = Math.max(0, Math.min(ctr.W - 30, ev.clientX - r.left - ox)), ny = Math.max(0, Math.min(ctr.H - 30, ev.clientY - r.top - oy));
+        if (Math.hypot(nx - it.x, ny - it.y) > 3) moved = true;
+        it.x = nx; it.y = ny; el.style.transform = `translate(${nx}px, ${ny}px)`;
+      };
+      el.onpointerup = el.onpointercancel = ev => {
+        el.onpointermove = null; el.classList.remove('drag');
+        const t = document.getElementById('ctr-trash').getBoundingClientRect();
+        if (ev.clientX > t.left - 10 && ev.clientY > t.top - 10) { ctr.items = ctr.items.filter(i => i !== it); sfx('hit'); ctrRenumber(); ctrRender(); return; }
+        if (!moved) { it.c = it.c ? 0 : 1; tone(it.c ? 440 : 600, 70); ctrRender(); }   // tap flips the color
+      };
+    };
+  });
+}
+function ctrRenumber() { if (ctr.counting) { let k = 0; ctr.items.forEach(i => { if (i.n) i.n = ++k; }); ctr.counting = k; } }
+function ctrCount() {
+  // number the counters one by one, out loud: 1, 2, 3…
+  const order = ctr.items.slice().sort((a, b) => (a.y - b.y) || (a.x - b.x));
+  ctr.items.forEach(i => { i.n = 0; }); ctr.counting = 0; ctrRender();
+  const tok = ++ctr.countTok;
+  order.forEach((it, k) => setTimeout(() => {
+    if (!ctr || ctr.countTok !== tok) return;
+    it.n = k + 1; ctr.counting = k + 1; ctrRender(); tone(500 + k * 18, 90);
+    if (pathId === 'k') say(String(k + 1), { rate: 1.1 });
+  }, 420 * k));
+}
+function ctrClear() { ctr.items = []; ctr.counting = 0; ctr.countTok = (ctr.countTok || 0) + 1; ctrRender(); }
+
+/* ═════ 🔟 TEN FRAMES: tap boxes to fill ═════ */
+let tf = null;
+TOOL_INIT.tenframe = function () {
+  tf = { cells: Array(20).fill(0), color: 1 };
+  document.getElementById('tk-body').innerHTML = `
+    <div class="ctr-bar">
+      <button class="ctr-add${tf.color === 1 ? ' on' : ''}" id="tf-c1" style="--cc:#4AA8FF" onclick="tfColor(1)">🔵</button>
+      <button class="ctr-add" id="tf-c2" style="--cc:#FF6B4A" onclick="tfColor(2)">🔴</button>
+      <button class="pad-btn" onclick="tfClear()">🗑️</button>
+    </div>
+    <div class="tf-wrap" id="tf-wrap"></div><div class="ctr-total" id="tf-total"></div>`;
+  tfRender();
+};
+function tfColor(c) { tf.color = c; document.getElementById('tf-c1').classList.toggle('on', c === 1); document.getElementById('tf-c2').classList.toggle('on', c === 2); }
+function tfRender() {
+  document.getElementById('tf-wrap').innerHTML = [0, 1].map(f => `<div class="tf-frame">${tf.cells.slice(f * 10, f * 10 + 10).map((v, i) =>
+    `<button class="tf-box${v ? ' f' + v : ''}" onclick="tfTap(${f * 10 + i})"></button>`).join('')}</div>`).join('');
+  const b = tf.cells.filter(v => v === 1).length, r = tf.cells.filter(v => v === 2).length;
+  const tot = b + r;
+  document.getElementById('tf-total').innerHTML = tot ? `<span class="blue">🔵 ${b}</span>${r ? ` <span class="red">🔴 ${r}</span>` : ''}${tot >= 10 ? ` · one full ten${tot > 10 ? ` and ${tot - 10} more` : ''}!` : ` · ${10 - tot} more make 10`}` : 'Tap the boxes to fill them. A full frame is 10!';
+}
+function tfTap(i) { tf.cells[i] = tf.cells[i] ? 0 : tf.color; tone(480 + i * 15, 60); tfRender(); }
+function tfClear() { tf.cells.fill(0); tfRender(); }
+
+/* ═════ 🧱 BASE-TEN BLOCKS: hundreds, tens, ones; tap a ten to break it ═════ */
+let bt = null;
+TOOL_INIT.blocks = function () {
+  bt = { h: 0, t: 0, o: 0 };
+  document.getElementById('tk-body').innerHTML = `
+    <div class="ctr-bar">
+      <button class="ctr-add" style="--cc:#C4B5FD" onclick="btAdd('h')">＋100</button>
+      <button class="ctr-add" style="--cc:#4ADE80" onclick="btAdd('t')">＋10</button>
+      <button class="ctr-add" style="--cc:#FFD93D" onclick="btAdd('o')">＋1</button>
+      <button class="pad-btn" onclick="btTrade()" title="Trade 10 ones for a ten">🔄</button>
+      <button class="pad-btn" onclick="bt.h=bt.t=bt.o=0; btRender()">🗑️</button>
+    </div>
+    <div class="bt-area" id="bt-area"></div><div class="ctr-total" id="bt-total"></div>`;
+  btRender();
+};
+function btAdd(k) { if ((k === 'h' && bt.h < 9) || (k === 't' && bt.t < 19) || (k === 'o' && bt.o < 29)) { bt[k]++; tone(k === 'h' ? 330 : k === 't' ? 440 : 600, 70); btRender(); } }
+function btBreak(k) {
+  if (k === 'h' && bt.h > 0 && bt.t <= 9) { bt.h--; bt.t += 10; sfx('hit'); }
+  if (k === 't' && bt.t > 0 && bt.o <= 19) { bt.t--; bt.o += 10; sfx('hit'); }
+  btRender();
+}
+function btTrade() {
+  if (bt.o >= 10) { bt.o -= 10; bt.t++; sfx('win'); }
+  else if (bt.t >= 10) { bt.t -= 10; bt.h++; sfx('win'); }
+  btRender();
+}
+function btRender() {
+  const flat = '<div class="bt-flat" onclick="btBreak(\'h\')">' + '<i></i>'.repeat(100) + '</div>';
+  const rod = '<div class="bt-rod" onclick="btBreak(\'t\')">' + '<i></i>'.repeat(10) + '</div>';
+  document.getElementById('bt-area').innerHTML =
+    `<div class="bt-col"><small>hundreds</small><div class="bt-stack">${flat.repeat(bt.h)}</div></div>
+     <div class="bt-col"><small>tens</small><div class="bt-stack rods">${rod.repeat(bt.t)}</div></div>
+     <div class="bt-col"><small>ones</small><div class="bt-stack ones">${'<div class="bt-one"></div>'.repeat(bt.o)}</div></div>`;
+  const v = bt.h * 100 + bt.t * 10 + bt.o;
+  document.getElementById('bt-total').innerHTML = v ? `${bt.h} hundreds + ${bt.t} tens + ${bt.o} ones = <b>${v}</b>${bt.o >= 10 || bt.t >= 10 ? ' · tap 🔄 to trade 10 for 1 bigger block' : ''}` : 'Build a number with blocks. Tap a block to break it into 10 smaller ones.';
+}
+
+/* ═════ ▦ ARRAY: rows × columns for multiplication & division ═════ */
+let ar = null;
+TOOL_INIT.array = function () {
+  ar = { r: 3, c: 4, shown: 0, tok: 0 };
+  document.getElementById('tk-body').innerHTML = `
+    <div class="ar-ctrl">
+      <div class="ar-step"><span>Rows</span><button onclick="arSet('r',-1)">−</button><b id="ar-r"></b><button onclick="arSet('r',1)">＋</button></div>
+      <div class="ar-step"><span>In each row</span><button onclick="arSet('c',-1)">−</button><b id="ar-c"></b><button onclick="arSet('c',1)">＋</button></div>
+      <button class="pad-btn" onclick="arCount()" title="Skip count">🔢</button>
+    </div>
+    <div class="ar-grid" id="ar-grid"></div><div class="ctr-total" id="ar-total"></div>`;
+  arRender();
+};
+function arSet(k, d) { ar[k] = Math.max(1, Math.min(12, ar[k] + d)); ar.shown = 0; ar.tok++; tone(500 + ar[k] * 20, 60); arRender(); }
+function arRender() {
+  document.getElementById('ar-r').textContent = ar.r; document.getElementById('ar-c').textContent = ar.c;
+  const size = Math.max(10, Math.min(26, Math.floor((tkWidth() - 60) / Math.max(ar.c, 1)) - 4, Math.floor(200 / ar.r) - 4));
+  document.getElementById('ar-grid').innerHTML = Array.from({ length: ar.r }, (_, i) =>
+    `<div class="ar-row${i < ar.shown ? ' lit' : ''}" onclick="arRowTap(${i})">${('<i style="width:' + size + 'px;height:' + size + 'px"></i>').repeat(ar.c)}<em>${i < ar.shown ? (i + 1) * ar.c : ''}</em></div>`).join('');
+  document.getElementById('ar-total').innerHTML = `${ar.r} rows of ${ar.c}${ar.shown === ar.r ? ` = <b>${ar.r * ar.c}</b>` : ' · tap 🔢 or each row to skip count'}`;
+}
+function arRowTap(i) { ar.shown = Math.max(ar.shown, i + 1); tone(440 + i * 30, 80); arRender(); }
+function arCount() {
+  ar.shown = 0; const tok = ++ar.tok; arRender();
+  for (let i = 0; i < ar.r; i++) setTimeout(() => { if (ar.tok !== tok) return; ar.shown = i + 1; tone(440 + i * 30, 90); arRender(); if (i === ar.r - 1 || pathId !== 'ad') say(String((i + 1) * ar.c), { rate: 1.1 }); }, 650 * i);
+}
+
+/* ═════ 📏 NUMBER LINE: tap to start, tap again to hop ═════ */
+let nl = null;
+TOOL_INIT.line = function () {
+  const ranges = pathId === 'k' ? [[0, 20, 1]] : pathId === 'g3' ? [[0, 100, 10], [0, 20, 1], [0, 1000, 100]] : [[-10, 10, 1], [-20, 20, 5]];
+  nl = { ranges, ri: 0, marks: [] };
+  document.getElementById('tk-body').innerHTML = `
+    <div class="ctr-bar">
+      ${ranges.length > 1 ? `<button class="pad-btn wide" onclick="nlRange()" id="nl-range"></button>` : ''}
+      <button class="pad-btn" onclick="nl.marks.pop(); nlRender()">↶</button>
+      <button class="pad-btn" onclick="nl.marks=[]; nlRender()">🗑️</button>
+    </div>
+    <div class="nl-box" id="nl-box"></div><div class="ctr-total" id="nl-total"></div>`;
+  nlRender();
+};
+function nlRange() { nl.ri = (nl.ri + 1) % nl.ranges.length; nl.marks = []; nlRender(); }
+function nlRender() {
+  const [lo, hi, step] = nl.ranges[nl.ri], W = tkWidth(), pad = 18, y = 120;
+  const xOf = v => pad + (v - lo) / (hi - lo) * (W - 2 * pad);
+  const minor = (hi - lo) <= 40 ? 1 : step / 2 >= 1 ? step / 2 : 1;
+  let s = `<svg width="${W}" height="170" id="nl-svg"><line x1="${pad}" y1="${y}" x2="${W - pad}" y2="${y}" class="nl-axis"/>`;
+  for (let v = lo; v <= hi; v += minor) {
+    const big = (v - lo) % step === 0 || (hi - lo) <= 20;
+    s += `<line x1="${xOf(v)}" y1="${y - (big ? 9 : 5)}" x2="${xOf(v)}" y2="${y + (big ? 9 : 5)}" class="nl-tick"/>`;
+    if (big && ((hi - lo) <= 20 || (v - lo) % step === 0)) s += `<text x="${xOf(v)}" y="${y + 28}" class="nl-num${v === 0 ? ' zero' : ''}">${fmtN(v)}</text>`;
+  }
+  nl.marks.forEach((m, i) => {
+    if (i === 0) { s += `<circle cx="${xOf(m)}" cy="${y}" r="8" class="nl-start"/>`; return; }
+    const a = nl.marks[i - 1], mid = (xOf(a) + xOf(m)) / 2, hgt = Math.min(80, 22 + Math.abs(xOf(m) - xOf(a)) * 0.35), d = m - a;
+    s += `<path d="M${xOf(a)} ${y - 4} Q${mid} ${y - hgt} ${xOf(m)} ${y - 4}" class="nl-hop ${d < 0 ? 'back' : ''}"/>
+          <circle cx="${xOf(m)}" cy="${y}" r="6" class="nl-dot"/>
+          <text x="${mid}" y="${y - hgt / 2 - 8}" class="nl-lab ${d < 0 ? 'back' : ''}">${d > 0 ? '+' : MINUS}${Math.abs(d)}</text>`;
+  });
+  s += '</svg>';
+  const box = document.getElementById('nl-box');
+  box.innerHTML = s;
+  const rb = document.getElementById('nl-range'); if (rb) rb.textContent = `${fmtN(lo)} to ${fmtN(hi)}`;
+  document.getElementById('nl-total').innerHTML = !nl.marks.length ? 'Tap where you start. Then tap where you land to draw a hop.'
+    : nl.marks.length === 1 ? `Start at <b>${fmtN(nl.marks[0])}</b>. Tap to hop.` : `Start ${fmtN(nl.marks[0])} → land on <b>${fmtN(nl.marks[nl.marks.length - 1])}</b> (${nl.marks.length - 1} hop${nl.marks.length > 2 ? 's' : ''})`;
+  box.querySelector('svg').onpointerdown = e => {
+    const r = e.currentTarget.getBoundingClientRect(), x = e.clientX - r.left;
+    const snap = (hi - lo) <= 40 ? 1 : (hi - lo) <= 200 ? 1 : 10;
+    let v = Math.round((lo + (x - pad) / (W - 2 * pad) * (hi - lo)) / snap) * snap;
+    v = Math.max(lo, Math.min(hi, v));
+    if (nl.marks.length && nl.marks[nl.marks.length - 1] === v) return;
+    nl.marks.push(v); tone(420 + (v - lo) / (hi - lo) * 400, 90);
+    if (pathId === 'k') say(String(v), { rate: 1.1 });
+    nlRender();
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CRITTERS THAT GROW + BADGES + SECRET CRITTERS
+   · Your buddy earns XP from correct answers, stars and brain games.
+   · XP grows it through 5 levels (it looks fancier each level).
+   · At level 3 a critter with an evolved form EVOLVES, and you collect that form too.
+   · Badges for milestones; 7 secret critters are hidden behind special badges.
+   ═══════════════════════════════════════════════════════════ */
+Object.assign(TYPES, {
+  cosmic: { name: 'Cosmic', c1: '#8E7BFF', c2: '#2A1F7A', accent: '#FFD6FF' },
+  gold:   { name: 'Golden', c1: '#FFE9A0', c2: '#C99412', accent: '#FFF8DC' },
+  ruby:   { name: 'Ruby',   c1: '#FF8FAB', c2: '#C2185B', accent: '#FFD1DC' },
+  prism:  { name: 'Prism',  c1: '#7DF9FF', c2: '#D946EF', accent: '#FFFFFF' }
+});
+const SECRET = {
+  aurelion:    { name: 'Aurelion',    type: 'gold',   stage: 3, body: 'chunk', top: 'crown',    eyes: 'big',    tail: 'puff',  belly: 1, wings: 1, cheeks: 1 },
+  novabug:     { name: 'Novabug',     type: 'cosmic', stage: 2, body: 'egg',   top: 'antenna',  eyes: 'wide',   tail: 'bolt',  belly: 1, wings: 1 },
+  rubyfox:     { name: 'Rubyfox',     type: 'ruby',   stage: 2, body: 'round', top: 'ears',     eyes: 'fierce', tail: 'puff',  belly: 1, cheeks: 1 },
+  moondrop:    { name: 'Moondrop',    type: 'cosmic', stage: 1, body: 'drop',  top: 'crest',    eyes: 'sleepy', tail: 'fin',   belly: 1, cheeks: 1 },
+  prismo:      { name: 'Prismo',      type: 'prism',  stage: 2, body: 'round', top: 'crest',    eyes: 'big',    tail: 'fin',   belly: 1, cheeks: 1 },
+  emberwing:   { name: 'Emberwing',   type: 'ember',  stage: 2, body: 'drop',  top: 'flametuft',eyes: 'fierce', tail: 'flame', belly: 1, wings: 1 },
+  glimmerling: { name: 'Glimmerling', type: 'prism',  stage: 3, body: 'egg',   top: 'crown',    eyes: 'wide',   tail: 'puff',  belly: 1, wings: 1, cheeks: 1 }
+};
+Object.keys(SECRET).forEach(id => { CRITTERS[id] = Object.assign({ secret: 1 }, SECRET[id]); });
+
+/* evolution lines: each stage-2/3 critter grows from the stage before it, same type, defined just before it */
+const EVOLVES = {};
+(() => {
+  const ids = Object.keys(CRITTERS).filter(id => !CRITTERS[id].secret);
+  ids.forEach((id, i) => {
+    const c = CRITTERS[id];
+    if (c.stage < 2) return;
+    for (let j = i - 1; j >= 0 && j >= i - 3; j--) {
+      const p = CRITTERS[ids[j]];
+      if (p.type === c.type && p.stage === c.stage - 1 && !EVOLVES[ids[j]]) { EVOLVES[ids[j]] = id; break; }
+    }
+  });
+})();
+
+const XP_AT = [0, 40, 120, 250, 450];   // XP needed for levels 1–5
+function growLevel(xp) { let l = 1; XP_AT.forEach((t, i) => { if (xp >= t) l = i + 1; }); return l; }
+function critXP(id) { return ((P && P.grow) || {})[id] || 0; }
+
+/* ── art: grown critters get fancier ── */
+const _critterSVGBase = critterSVG;
+critterSVG = function (spec, opts) {
+  opts = opts || {};
+  const base = _critterSVGBase(spec, opts), g = opts.grow || 1;
+  if (g <= 1) return base;
+  const star = (x, y, r, c) => `<path d="M${x} ${y - r} L${x + r * 0.3} ${y - r * 0.3} L${x + r} ${y} L${x + r * 0.3} ${y + r * 0.3} L${x} ${y + r} L${x - r * 0.3} ${y + r * 0.3} L${x - r} ${y} L${x - r * 0.3} ${y - r * 0.3}Z" fill="${c}"/>`;
+  let back = '', front = '';
+  if (g >= 3) back += `<circle cx="50" cy="54" r="46" fill="none" stroke="${g >= 5 ? '#FFD93D' : 'rgba(255,255,255,0.55)'}" stroke-width="${g >= 5 ? 3 : 2}" stroke-dasharray="${g >= 4 ? '2 5' : '1 6'}" opacity="0.9"/>`;
+  if (g >= 5) back += `<circle cx="50" cy="54" r="44" fill="#FFD93D" opacity="0.18"/>`;
+  front += star(16, 22, 5, '#FFE066') + star(84, 30, 4, '#FFFFFF');
+  if (g >= 3) front += star(86, 74, 4.5, '#FFE066');
+  if (g >= 4) front += star(13, 70, 4, '#FFFFFF') + star(50, 6, 5, '#FFD93D');
+  if (g >= 5) front += `<text x="50" y="99" text-anchor="middle" font-size="11" font-weight="900" fill="#FFD93D" font-family="system-ui">★ MAX ★</text>`;
+  const sc = 1 + (g - 1) * 0.025;
+  return `${back}<g transform="translate(50,54) scale(${sc}) translate(-50,-54)">${base}</g>${front}`;
+};
+
+/* ── the buddy: you pick it; it's who grows ── */
+const _buddyForBase = buddyFor;
+buddyFor = function () {
+  if (P && P.companion && P.critters.includes(P.companion)) return P.companion;
+  return _buddyForBase();
+};
+const _paintCritterBase = paintCritter;
+paintCritter = function (el, id) {
+  const c = CRITTERS[id];
+  if (!el || !c) return;
+  el.innerHTML = critterSVG(c, { grow: growLevel(critXP(id)) });
+};
+
+/* ── XP and stats ── */
+function stat(k, n) { if (!P.stats) P.stats = {}; P.stats[k] = (P.stats[k] || 0) + (n === undefined ? 1 : n); }
+let rewardQ = [];
+function addXP(n, why) {
+  const id = buddyFor();
+  if (!id || !P.critters.includes(id)) return;
+  if (!P.grow) P.grow = {};
+  const before = growLevel(P.grow[id] || 0);
+  P.grow[id] = (P.grow[id] || 0) + n;
+  const after = growLevel(P.grow[id]);
+  if (after > before) {
+    rewardQ.push({ kind: 'grow', id, level: after });
+    if (after >= 3 && EVOLVES[id] && !P.critters.includes(EVOLVES[id])) rewardQ.push({ kind: 'evolve', from: id, to: EVOLVES[id] });
+    if (after === 5) stat('maxed');
+    if (typeof toast === 'function' && document.getElementById('game-screen').classList.contains('active')) toast(`⬆️ ${CRITTERS[id].name} Lv ${after}!`);
+  }
+  checkBadges();
+}
+function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+function touchStreak() {
+  if (!P.stats) P.stats = {};
+  const today = dayKey(), y = new Date(); y.setDate(y.getDate() - 1);
+  if (P.stats.lastDay === today) return;
+  P.stats.streak = P.stats.lastDay === dayKey(y) ? (P.stats.streak || 0) + 1 : 1;
+  P.stats.bestStreak = Math.max(P.stats.bestStreak || 0, P.stats.streak);
+  P.stats.lastDay = today;
+}
+const _answerXP = answer;
+answer = function (btn, choice) {
+  const q = run && run.q, first = q && !q.__xpDone && run.mode !== 'place';
+  const r = _answerXP.apply(this, arguments);
+  if (q && run.mode !== 'place') {
+    const ok = String(choice) === String(q.answer);
+    if (ok && !q.__xpOk) {
+      q.__xpOk = true; touchStreak();
+      stat('correct'); if (first) stat('firstTry');
+      if (q.__toolUsed) stat('toolCorrect');
+      addXP(first ? 3 : 1);
+    }
+    if (first) q.__xpDone = true;
+  }
+  return r;
+};
+const _finishLevelXP = finishLevel;
+finishLevel = function () {
+  const lv = run.level, starsNow = starsFor(run.firstTry + run.fixed, run.asked);
+  _finishLevelXP.apply(this, arguments);
+  stat('levels'); stat('fixed', run.fixed || 0);
+  if (lv && lv.boss) stat('bosses');
+  addXP(starsNow * 10 + (lv && lv.boss ? 20 : 0));
+  persist();
+  setTimeout(showRewards, 1600);
+};
+const _brainWinXP = brainWin;
+brainWin = function () {
+  const was = bg && bg.won;
+  _brainWinXP.apply(this, arguments);
+  if (!was && bg) { addXP(8); persist(); setTimeout(showRewards, 1800); }
+};
+
+/* ── badges ── */
+const BADGES = [
+  { id: 'first',    icon: '🎉', name: 'First Steps',    desc: 'Finish your first level',              need: S => S.levels >= 1,               coins: 20 },
+  { id: 'threestar',icon: '⭐', name: 'Star Power',      desc: 'Get 3 stars on a level',              need: (S, P) => threeStars(P) >= 1,    coins: 20 },
+  { id: 'streak3',  icon: '🔥', name: 'On a Roll',       desc: 'Play 3 days in a row',                need: S => (S.bestStreak || 0) >= 3,    coins: 30 },
+  { id: 'century',  icon: '💯', name: 'Century',         desc: '100 correct answers',                 need: S => (S.correct || 0) >= 100,     coins: 40 },
+  { id: 'boss',     icon: '👑', name: 'World Champion',  desc: 'Beat a world boss level',             need: S => (S.bosses || 0) >= 1,        coins: 40 },
+  { id: 'collector',icon: '🗂️', name: 'Collector',       desc: 'Collect 10 critters',                 need: (S, P) => P.critters.length >= 10, coins: 50 },
+  { id: 'grow3',    icon: '🌱', name: 'Growing Up',      desc: 'Grow a critter to level 3',           need: (S, P) => Object.values(P.grow || {}).some(x => growLevel(x) >= 3), coins: 30 },
+  // secret critters
+  { id: 'perfect10',icon: '🏆', name: 'Perfectionist',   desc: '3 stars on 10 levels',                need: (S, P) => threeStars(P) >= 10,   critter: 'aurelion' },
+  { id: 'streak7',  icon: '🌙', name: 'Week Warrior',    desc: 'Play 7 days in a row',                need: S => (S.bestStreak || 0) >= 7,    critter: 'novabug' },
+  { id: 'sharp300', icon: '🎯', name: 'Sharpshooter',    desc: '300 answers right on the first try',  need: S => (S.firstTry || 0) >= 300,    critter: 'rubyfox' },
+  { id: 'thinker',  icon: '🧰', name: 'Deep Thinker',    desc: 'Use Show My Work on 15 right answers',need: S => (S.toolCorrect || 0) >= 15,  critter: 'moondrop' },
+  { id: 'puzzler',  icon: '🧩', name: 'Puzzle Master',   desc: 'Play every kind of Brain Game',       need: (S, P) => Object.keys(BRAIN).filter(k => !(BRAIN[k].g3 && pathId === 'k')).every(k => P.brain && P.brain.by && P.brain.by[k]), critter: 'prismo' },
+  { id: 'comeback', icon: '🦅', name: 'Comeback Kid',    desc: 'Fix 25 missed questions on a second try', need: S => (S.fixed || 0) >= 25,     critter: 'emberwing' },
+  { id: 'maxed',    icon: '✨', name: 'Best Buddies',    desc: 'Grow a critter all the way to level 5', need: S => (S.maxed || 0) >= 1,       critter: 'glimmerling' }
+];
+function threeStars(P) { return Object.values(P.stars || {}).filter(s => s >= 3).length; }
+function checkBadges() {
+  if (!P) return;
+  if (!P.badges) P.badges = {};
+  const S = P.stats || {};
+  BADGES.forEach(b => {
+    if (P.badges[b.id]) return;
+    let ok = false; try { ok = b.need(S, P); } catch (e) {}
+    if (!ok) return;
+    P.badges[b.id] = Date.now();
+    if (b.coins) P.coins += b.coins;
+    if (b.critter && !P.critters.includes(b.critter)) P.critters.push(b.critter);
+    rewardQ.push({ kind: 'badge', b });
+  });
+}
+
+/* ── celebration cards (shown at natural pauses, never mid-question) ── */
+function rewardOK() {
+  const a = document.querySelector('.screen.active'), id = a && a.id;
+  return id === 'done-screen' || id === 'map-screen' || id === 'dex-screen' || (id === 'brain-screen' && bg && bg.won);
+}
+function showRewards() {
+  checkBadges();
+  if (!rewardQ.length || document.getElementById('rw-overlay').classList.contains('open') || !rewardOK()) return;
+  const it = rewardQ.shift();
+  const el = document.getElementById('rw-overlay'), card = document.getElementById('rw-card');
+  let html = '', spoken = '';
+  if (it.kind === 'grow') {
+    const c = CRITTERS[it.id];
+    html = `<div class="rw-kicker">LEVEL UP!</div><svg class="rw-crit pop" viewBox="0 0 100 100">${critterSVG(c, { grow: it.level })}</svg>
+      <h3>${c.name} grew to level ${it.level}!</h3><p>${it.level >= 5 ? 'Maximum power! Your best buddy is fully grown.' : EVOLVES[it.id] && it.level < 3 ? `Keep going! At level 3 something special happens…` : 'Keep learning together to grow even more.'}</p>`;
+    spoken = `${c.name} grew to level ${it.level}!`;
+  } else if (it.kind === 'evolve') {
+    const a = CRITTERS[it.from], b = CRITTERS[it.to];
+    if (!P.critters.includes(it.to)) P.critters.push(it.to);
+    P.companion = it.to;
+    persist();
+    html = `<div class="rw-kicker">WHAT'S HAPPENING?!</div><div class="evo"><svg class="evo-a" viewBox="0 0 100 100">${critterSVG(a, { grow: 3 })}</svg><svg class="evo-b" viewBox="0 0 100 100">${critterSVG(b)}</svg></div>
+      <h3>${a.name} evolved into ${b.name}!</h3><p>${b.name} joined your Critter Dex and is your new buddy.</p>`;
+    spoken = `Whoa! ${a.name} is evolving! ${a.name} evolved into ${b.name}!`;
+  } else if (it.kind === 'badge') {
+    const b = it.b, c = b.critter && CRITTERS[b.critter];
+    html = `<div class="rw-kicker">NEW BADGE</div><div class="rw-badge">${b.icon}</div><h3>${b.name}</h3><p>${b.desc}</p>
+      ${c ? `<div class="rw-secret"><span>🔓 SECRET CRITTER UNLOCKED</span><svg class="rw-crit pop" viewBox="0 0 100 100">${critterSVG(c)}</svg><b>${c.name}</b></div>` : `<p class="rw-coins">+${b.coins} 🪙</p>`}`;
+    spoken = c ? `New badge: ${b.name}! You unlocked a secret critter: ${c.name}!` : `New badge: ${b.name}! Plus ${b.coins} coins.`;
+  }
+  else if (it.kind === 'card') {
+    html = `<div class="rw-kicker">${it.kicker}</div><div class="rw-badge">${it.icon}</div><h3>${it.title}</h3><p>${it.text}</p>${it.extra || ''}`;
+    spoken = it.spoken || it.title;
+  }
+  card.innerHTML = html + `<button class="btn btn-primary" onclick="closeReward()">Awesome!</button>`;
+  el.classList.add('open');
+  confetti(it.kind === 'grow' ? 18 : 36);
+  sfx('big');
+  say(spoken, { rate: rateL() });
+}
+function closeReward() {
+  document.getElementById('rw-overlay').classList.remove('open');
+  hush();
+  if (document.getElementById('dex-screen').classList.contains('active')) openDex();
+  setTimeout(showRewards, 250);
+}
+
+/* ═════ Critter Dex: buddies, growth, badges, secrets ═════ */
+let dexTab = 'critters';
+openDex = function (tab) {
+  if (tab) dexTab = tab;
+  checkBadges();
+  const grid = document.getElementById('dex-grid');
+  const roster = [];
+  PATHS[pathId].levels.forEach(lv => { if (lv.reward && roster.indexOf(lv.reward) < 0) roster.push(lv.reward); });
+  Object.keys(EVOLVES).forEach(f => { const t = EVOLVES[f]; if (roster.indexOf(f) >= 0 && roster.indexOf(t) < 0) roster.push(t); });
+  const secrets = Object.keys(SECRET);
+  const owned = id => P.critters.includes(id);
+  document.getElementById('dex-count').textContent = `${roster.concat(secrets).filter(owned).length}/${roster.length + secrets.length}`;
+  const tabs = `<div class="dex-tabs"><button class="${dexTab === 'critters' ? 'on' : ''}" onclick="openDex('critters')">🐾 Critters</button><button class="${dexTab === 'badges' ? 'on' : ''}" onclick="openDex('badges')">🏅 Badges</button></div>`;
+  if (dexTab === 'badges') {
+    const S = P.stats || {};
+    grid.className = 'dex-grid badges';
+    grid.innerHTML = tabs + BADGES.map(b => {
+      const got = P.badges && P.badges[b.id], c = b.critter && CRITTERS[b.critter];
+      return `<div class="badge-row${got ? ' got' : ''}"><span class="bi">${b.icon}</span><div><b>${b.name}</b><small>${b.desc}</small>
+        ${badgeProgress(b, S)}</div>${c ? `<svg viewBox="0 0 100 100" class="${got ? '' : 'mystery'}">${critterSVG(c)}</svg>` : `<em>${got ? '✓' : '+' + b.coins + '🪙'}</em>`}</div>`;
+    }).join('') + `<div class="dex-stats">🔥 Streak: ${S.streak || 0} day${S.streak === 1 ? '' : 's'} (best ${S.bestStreak || 0}) · ✅ ${S.correct || 0} correct</div>`;
+  } else {
+    grid.className = 'dex-grid';
+    const cell = id => {
+      const c = CRITTERS[id], o = owned(id), xp = critXP(id), lvl = growLevel(xp), isBuddy = buddyFor() === id;
+      return `<div class="dex-cell${o ? '' : ' locked'}${isBuddy ? ' buddy' : ''}" ${o ? `onclick="dexDetail('${id}')"` : ''}>
+        <svg viewBox="0 0 100 100">${critterSVG(c, { grow: o ? lvl : 1 })}</svg>
+        <div class="dx-name">${o ? c.name : '???'}</div>${o ? `<div class="dx-lvl">${isBuddy ? '🤝 ' : ''}Lv ${lvl}</div>` : ''}</div>`;
+    };
+    grid.innerHTML = tabs + `<div class="dex-help">Tap a critter to make it your buddy. Your buddy grows as you learn!</div>` +
+      roster.map(cell).join('') + `<div class="dex-sec">🔒 Secret critters</div>` +
+      secrets.map(id => owned(id) ? cell(id) : `<div class="dex-cell locked secret" onclick="dexSecretHint('${id}')"><svg viewBox="0 0 100 100">${critterSVG(CRITTERS[id])}</svg><div class="dx-name">???</div></div>`).join('');
+  }
+  show('dex-screen');
+};
+function badgeProgress(b, S) {
+  const m = { century: [S.correct, 100], sharp300: [S.firstTry, 300], thinker: [S.toolCorrect, 15], comeback: [S.fixed, 25], streak3: [S.bestStreak, 3], streak7: [S.bestStreak, 7], perfect10: [threeStars(P), 10], collector: [P.critters.length, 10] }[b.id];
+  if (!m || (P.badges && P.badges[b.id])) return '';
+  const pct = Math.min(100, Math.round((m[0] || 0) / m[1] * 100));
+  return `<div class="bp"><i style="width:${pct}%"></i></div><span class="bpt">${Math.min(m[0] || 0, m[1])} / ${m[1]}</span>`;
+}
+function dexSecretHint(id) {
+  const b = BADGES.find(x => x.critter === id);
+  toast('🔒 ' + (b ? b.desc : 'Keep exploring!'));
+  say(`This is a secret critter. To find it: ${b ? b.desc : 'keep exploring'}.`, { rate: rateL() });
+}
+function dexDetail(id) {
+  const c = CRITTERS[id], xp = critXP(id), lvl = growLevel(xp), next = XP_AT[lvl] || null, evo = EVOLVES[id];
+  const el = document.getElementById('rw-overlay'), card = document.getElementById('rw-card');
+  const pct = next ? Math.round((xp - XP_AT[lvl - 1]) / (next - XP_AT[lvl - 1]) * 100) : 100;
+  card.innerHTML = `<svg class="rw-crit" viewBox="0 0 100 100">${critterSVG(c, { grow: lvl })}</svg>
+    <h3>${c.name} <span class="lv">Lv ${lvl}</span></h3><p>${TYPES[c.type].name} type${c.secret ? ' · secret critter' : ''}</p>
+    <div class="xp"><i style="width:${pct}%"></i></div><p class="xpt">${next ? `${xp} / ${next} XP to level ${lvl + 1}` : 'Fully grown! ★'}</p>
+    ${evo ? `<p class="evo-hint">${P.critters.includes(evo) ? `Evolves into ${CRITTERS[evo].name} ✓` : lvl >= 3 ? 'Ready to evolve!' : 'Grows into something new at level 3…'}</p>` : ''}
+    <div class="rw-actions">${buddyFor() === id ? '<span class="is-buddy">🤝 Your buddy</span>' : `<button class="btn btn-primary" onclick="setBuddy('${id}')">Make my buddy</button>`}
+    <button class="btn btn-ghost" onclick="closeReward()">Close</button></div>`;
+  el.classList.add('open');
+  say(`${c.name}. Level ${lvl}.`, { rate: rateL() });
+}
+function setBuddy(id) {
+  P.companion = id; persist();
+  // a buddy at level 3+ that hasn't evolved yet evolves right away
+  if (growLevel(critXP(id)) >= 3 && EVOLVES[id] && !P.critters.includes(EVOLVES[id])) rewardQ.push({ kind: 'evolve', from: id, to: EVOLVES[id] });
+  document.getElementById('rw-overlay').classList.remove('open');
+  say(`${CRITTERS[id].name} is your buddy now!`, { rate: rateL() });
+  openDex();
+  setTimeout(showRewards, 400);
+}
+// rewards waiting from another screen show when you get back to the map
+const _showVX = show;
+show = function (id) {
+  _showVX(id);
+  const ov = document.getElementById('rw-overlay');
+  if (ov && ov.classList.contains('open') && !rewardOK()) ov.classList.remove('open');
+  if (id === 'map-screen' && P) { checkBadges(); if (rewardQ.length) setTimeout(showRewards, 500); }
+};
+
+/* Grown-ups: does Show My Work help? + growth summary */
+const _openGrownupsV = openGrownups;
+openGrownups = function () {
+  _openGrownupsV.apply(this, arguments);
+  const body = document.getElementById('gp-body');
+  if (!body) return;
+  const T = P.toolStats || { with: { att: 0, cor: 0 }, without: { att: 0, cor: 0 } }, U = P.toolUse || {};
+  const pct = b => b.att ? Math.round(b.cor / b.att * 100) + '%' : '—';
+  const used = Object.keys(U).sort((a, b) => U[b] - U[a]).map(k => `${TOOLS[k] ? TOOLS[k].icon + ' ' + TOOLS[k].name : k} ${U[k]}×`).join(' · ');
+  const S = P.stats || {}, buddy = buddyFor();
+  const html = `<div class="gp-card"><h3>🧰 Show My Work</h3>
+      <div class="gp-line"><span>Questions using a tool</span><b>${T.with.att}</b></div>
+      <div class="gp-line"><span>First-try accuracy with a tool</span><b>${pct(T.with)}</b></div>
+      <div class="gp-line"><span>First-try accuracy without</span><b>${pct(T.without)}</b></div>
+      ${used ? `<div class="gp-empty" style="margin-top:6px">${used}</div>` : '<div class="gp-empty" style="margin-top:6px">Not used yet. It is the 🧰 button on each question.</div>'}
+    </div>
+    <div class="gp-card"><h3>🐾 Buddy &amp; badges</h3>
+      <div class="gp-line"><span>Buddy</span><b>${CRITTERS[buddy] ? CRITTERS[buddy].name + ' · Lv ' + growLevel(critXP(buddy)) : '—'}</b></div>
+      <div class="gp-line"><span>Badges earned</span><b>${Object.keys(P.badges || {}).length} / ${BADGES.length}</b></div>
+      <div class="gp-line"><span>Play streak (best)</span><b>${S.streak || 0} days (${S.bestStreak || 0})</b></div>
+    </div>`;
+  const vc = document.getElementById('voice-card');
+  if (vc) vc.insertAdjacentHTML('afterend', html); else body.insertAdjacentHTML('afterbegin', html);
+};
+
+/* ═══════════════════════════════════════════════════════════
+   🎯 DAILY QUESTS (per child) + 🤝 SIBLING TEAM GOAL (whole family)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ───────── DAILY QUESTS ─────────
+   Three small goals each day. The first always targets the skill the
+   child struggles with most; the others mix in variety. */
+function openLevels() { return PATHS[pathId].levels.filter(l => isLevelOpen(l)); }
+function levelForSkill(skill) {
+  const L = PATHS[pathId].levels;
+  return L.find(l => l.skill === skill && isLevelOpen(l) && !l.boss) || L.find(l => l.skill === skill && !l.boss);
+}
+function weakSkills() {
+  const played = new Set(PATHS[pathId].levels.filter(l => isCleared(l.n) || (P.stars[l.n] !== undefined)).map(l => l.skill));
+  return Object.keys(P.skills || {})
+    .filter(k => P.skills[k].att >= 4 && played.has(k) && levelForSkill(k) && !/^mix|memory|trace|casepairs/.test(k))
+    .map(k => ({ k, acc: P.skills[k].cor / P.skills[k].att }))
+    .sort((a, b) => a.acc - b.acc);
+}
+function nextLevel() {
+  return openLevels().find(l => !isCleared(l.n) && !l.boss && !l.activity) || openLevels().find(l => !l.activity && !l.boss) || PATHS[pathId].levels[0];
+}
+function makeQuests() {
+  const weak = weakSkills().filter(w => w.acc < 0.92);
+  const items = [];
+  const label = k => (SKILL_LABEL[k] || (levelForSkill(k) || {}).title || k);
+  if (weak.length) items.push({ kind: 'skill', skill: weak[0].k, target: 5, text: `Get 5 right in ${label(weak[0].k)}`, why: 'practice' });
+  else { const nl = nextLevel(); items.push({ kind: 'skill', skill: nl.skill, target: 5, text: `Get 5 right in ${nl.title}`, why: 'new' }); }
+  const mid = pathId === 'k' ? ['brain', 'tool', 'stars'] : pathId === 'ad' ? ['stars', 'brain', 'answers'] : ['brain', 'tool', 'stars'];
+  const k2 = mid[Math.floor(Date.now() / 864e5) % mid.length];
+  items.push({ brain: { kind: 'brain', target: 1, text: 'Win a Brain Game' }, tool: { kind: 'tool', target: 3, text: 'Get 3 right using 🧰 Show My Work' },
+               stars: { kind: 'stars', target: 1, text: 'Earn 3 ⭐ on any level' }, answers: { kind: 'answers', target: 15, text: 'Get 15 answers right' } }[k2]);
+  if (weak.length > 1 && Math.random() < 0.5) items.push({ kind: 'skill', skill: weak[1].k, target: 3, text: `Get 3 right in ${label(weak[1].k)}` });
+  else items.push(pathId === 'ad' ? { kind: 'answers', target: 10, text: 'Get 10 answers right' } : { kind: 'level', target: 1, text: 'Finish any level' });
+  items.forEach((q, i) => { q.id = i; q.prog = 0; q.done = false; });
+  return items;
+}
+function questsToday() {
+  if (!P) return null;
+  const today = dayKey();
+  if (!P.quest || P.quest.day !== today) P.quest = { day: today, items: makeQuests(), chest: false };
+  return P.quest;
+}
+function questBump(kind, n, skill) {
+  const Q = questsToday();
+  if (!Q) return;
+  let changed = false;
+  Q.items.forEach(q => {
+    if (q.done || q.kind !== kind || (kind === 'skill' && q.skill !== skill)) return;
+    q.prog = Math.min(q.target, q.prog + (n || 1)); changed = true;
+    if (q.prog >= q.target) {
+      q.done = true;
+      P.coins += 15; addXP(10);
+      rewardQ.push({ kind: 'card', kicker: 'QUEST COMPLETE', icon: '🎯', title: q.text + '!', text: '+15 🪙 and 10 XP for your buddy.', spoken: `Quest complete! ${q.text.replace(/🧰|⭐/g, '')}!` });
+      if (typeof toast === 'function') toast('🎯 Quest complete!');
+    }
+  });
+  if (changed && Q.items.every(q => q.done) && !Q.chest) {
+    Q.chest = true;
+    P.coins += 40; stat('questDays');
+    rewardQ.push({ kind: 'card', kicker: 'ALL QUESTS DONE', icon: '🧰🎁', title: 'Daily treasure chest!', text: 'You finished every quest today. +40 🪙! New quests tomorrow.', spoken: 'You finished all of today\'s quests! Here\'s a treasure chest with forty coins!' });
+  }
+  if (changed) refreshQuestCard();
+}
+// count progress
+const _answerQ = answer;
+answer = function (btn, choice) {
+  const q = run && run.q, already = q && q.__qDone;
+  const r = _answerQ.apply(this, arguments);
+  if (q && !already && run.mode !== 'place' && String(choice) === String(q.answer)) {
+    q.__qDone = true;
+    questBump('skill', 1, q.skill || (run.level && run.level.skill));
+    questBump('answers', 1);
+    if (q.__toolUsed) questBump('tool', 1);
+    teamAdd(1);
+  }
+  return r;
+};
+const _finishLevelQ = finishLevel;
+finishLevel = function () {
+  const s = starsFor(run.firstTry + run.fixed, run.asked);
+  _finishLevelQ.apply(this, arguments);
+  questBump('level', 1);
+  if (s >= 3) questBump('stars', 1);
+  persist();
+};
+const _brainWinQ = brainWin;
+brainWin = function () {
+  const was = bg && bg.won;
+  _brainWinQ.apply(this, arguments);
+  if (!was) { questBump('brain', 1); persist(); }
+};
+BADGES.push({ id: 'quests5', icon: '🗺️', name: 'Quest Hero', desc: 'Finish all daily quests on 5 days', need: S => (S.questDays || 0) >= 5, critter: 'questling' });
+CRITTERS.questling = { name: 'Questling', type: 'gold', stage: 2, body: 'egg', top: 'ears', eyes: 'big', tail: 'leaf', belly: 1, cheeks: 1, wings: 1, secret: 1 };
+SECRET.questling = CRITTERS.questling;
+
+/* quest panel */
+function openQuests() {
+  const Q = questsToday();
+  const el = document.getElementById('rw-overlay'), card = document.getElementById('rw-card');
+  const go = q => q.done ? '<span class="qx-done">✓</span>'
+    : q.kind === 'skill' ? `<button class="qx-go" onclick="questGo('skill','${q.skill}')">Go ›</button>`
+    : q.kind === 'brain' ? `<button class="qx-go" onclick="questGo('brain')">Go ›</button>`
+    : q.kind === 'tool' ? `<button class="qx-go" onclick="questGo('tool')">Go ›</button>` : '';
+  card.innerHTML = `<div class="rw-kicker">TODAY'S QUESTS</div><div class="rw-badge">🎯</div>
+    <div class="qx-list">${Q.items.map(q => `<div class="qx${q.done ? ' done' : ''}"><div class="qx-body"><b>${q.text}</b>
+      <div class="bp"><i style="width:${Math.round(q.prog / q.target * 100)}%"></i></div><span class="bpt">${q.prog} / ${q.target}</span></div>${go(q)}</div>`).join('')}</div>
+    <p>${Q.chest ? '🎁 Chest opened! New quests tomorrow.' : 'Finish all 3 for a treasure chest 🎁'}</p>
+    <button class="btn btn-ghost" onclick="closeReward()">Close</button>`;
+  el.classList.add('open');
+  if (pathId === 'k') say(`Today's quests! ${Q.items.filter(q => !q.done).map(q => q.text.replace(/🧰|⭐/g, '')).join('. ')}.`, { rate: rateL() });
+}
+function questGo(kind, skill) {
+  document.getElementById('rw-overlay').classList.remove('open');
+  hush();
+  if (kind === 'brain') { openBrainPicker(false); return; }
+  const Q = questsToday();
+  const s = skill || (Q.items.find(q => q.kind === 'skill') || {}).skill;
+  const lv = levelForSkill(s) || nextLevel();
+  if (lv) startLevel(lv);
+  if (kind === 'tool') setTimeout(() => toast('Tap 🧰 on a question to use your tools!'), 1500);
+}
+function refreshQuestCard() {
+  const el = document.getElementById('quest-card-prog');
+  if (!el) return;
+  const Q = questsToday(), d = Q.items.filter(q => q.done).length;
+  el.textContent = Q.chest ? 'All done! 🎁' : `${d} of 3 done`;
+}
+
+/* ───────── SIBLING TEAM GOAL ─────────
+   Every right answer by any kid fills one shared meter toward a prize the
+   parent picks. Lives in each child's save so it syncs with cloud saves. */
+function teamMembers() {
+  // signed in with child profiles → every child (not grown-up profiles)
+  if (typeof sbUser !== 'undefined' && sbUser && cloud.kids.length) {
+    return cloud.kids.filter(k => k.path !== 'ad').map(k => {
+      const live = activeKid() && activeKid().id === k.id && P && pathId === k.path ? P : (kidBlob(k.id) || {}).data;
+      return { id: k.id, name: k.name, data: live || {} };
+    });
+  }
+  return ['k', 'g3'].map(id => ({ id, name: PATHS[id].name, data: save[id] || {} }));
+}
+function currentGoal() {
+  let g = null;
+  teamMembers().forEach(m => { const t = m.data.teamGoal; if (t && (!g || t.id > g.id)) g = t; });
+  return g;
+}
+function teamTotals(g) {
+  g = g || currentGoal();
+  if (!g) return null;
+  const per = teamMembers().map(m => ({ name: m.name, pts: ((m.data.teamPts || {})[g.id]) || 0 }));
+  return { goal: g, per, total: per.reduce((a, b) => a + b.pts, 0) };
+}
+function teamAdd(n) {
+  if (!P || pathId === 'ad') return;
+  const g = currentGoal();
+  if (!g || g.doneAt) return;
+  if (!P.teamGoal || P.teamGoal.id !== g.id) P.teamGoal = g;
+  if (!P.teamPts) P.teamPts = {};
+  P.teamPts[g.id] = (P.teamPts[g.id] || 0) + n;
+  const T = teamTotals(g);
+  if (T.total >= g.target && !g.doneAt) {
+    const done = Object.assign({}, g, { doneAt: Date.now() });
+    teamWriteGoal(done);
+    rewardQ.push({ kind: 'card', kicker: 'TEAM GOAL REACHED', icon: '🏆', title: `${g.prize}!`, text: `You did it together! ${T.per.map(p => `${p.name}: ${p.pts}`).join(' · ')}`,
+      extra: '<p class="rw-coins">Go tell a grown-up! 🎉</p>', spoken: `Team goal reached! You earned ${g.prize}! Go tell a grown-up!` });
+    confetti(40);
+  }
+  refreshTeamCard();
+}
+// write the goal into every child's save (and the cloud, if signed in)
+function teamWriteGoal(goal) {
+  if (typeof sbUser !== 'undefined' && sbUser && cloud.kids.length) {
+    cloud.kids.filter(k => k.path !== 'ad').forEach(k => {
+      const ak = activeKid();
+      if (ak && ak.id === k.id && P && pathId === k.path) { P.teamGoal = goal; return; }
+      const b = kidBlob(k.id) || { data: freshPath(), rev: 0 };
+      b.data = b.data || freshPath(); b.data.teamGoal = goal; b.data._t = Date.now(); b.dirty = true;
+      setKidBlob(k.id, b);
+    });
+    persist();
+    if (typeof syncAll === 'function') syncAll();
+  } else {
+    ['k', 'g3'].forEach(id => { if (save[id]) save[id].teamGoal = goal; });
+    persist();
+  }
+}
+function refreshTeamCard() {
+  const el = document.getElementById('team-card-body');
+  if (!el) return;
+  el.innerHTML = teamCardBody();
+}
+function teamCardBody() {
+  const T = teamTotals();
+  if (!T) return '<small>A grown-up can set a team prize in 👪 Grown-ups.</small>';
+  const pct = Math.min(100, Math.round(T.total / T.goal.target * 100));
+  return `<small>${T.goal.doneAt ? '🏆 Reached! ' : ''}${escapeHtml(T.goal.prize)} · ${Math.min(T.total, T.goal.target)} / ${T.goal.target}</small>
+    <div class="team-bar"><i style="width:${pct}%"></i></div>
+    <small class="team-per">${T.per.map(p => `${escapeHtml(p.name)} ${p.pts}`).join(' · ')}</small>`;
+}
+// pull every child's latest progress so the team meter is current
+let teamPulledAt = 0;
+async function teamRefresh() {
+  if (typeof sb === 'undefined' || !sb || !sbUser || Date.now() - teamPulledAt < 30000) return;
+  teamPulledAt = Date.now();
+  try {
+    const { data } = await sb.from('progress').select('kid_id,data');
+    (data || []).forEach(row => {
+      const ak = activeKid();
+      if (ak && ak.id === row.kid_id) return;
+      const b = kidBlob(row.kid_id);
+      if (b && b.dirty) return;
+      setKidBlob(row.kid_id, Object.assign(b || { rev: 0 }, { data: row.data }));
+    });
+    refreshTeamCard();
+  } catch (e) {}
+}
+
+/* ── map cards ── */
+const _renderMapCardsW = renderMapCards;
+renderMapCards = function (inner) {
+  _renderMapCardsW(inner);
+  let wrap = inner.querySelector('.map-cards');
+  if (!wrap) { wrap = document.createElement('div'); wrap.className = 'map-cards'; inner.appendChild(wrap); }
+  const Q = questsToday(), d = Q.items.filter(q => q.done).length;
+  let h = `<button class="map-card quest" onclick="openQuests()"><span class="mc-icon">🎯</span>
+    <span class="mc-body"><b>Today's Quests</b><small id="quest-card-prog">${Q.chest ? 'All done! 🎁' : `${d} of 3 done`}</small></span><span class="mc-go">›</span></button>`;
+  if (pathId !== 'ad') h += `<div class="map-card team"><span class="mc-icon">🤝</span><span class="mc-body"><b>Team Goal</b><span id="team-card-body">${teamCardBody()}</span></span></div>`;
+  wrap.insertAdjacentHTML('afterbegin', h);
+  teamRefresh();
+};
+
+/* ── grown-ups: set the team prize, see today's quests ── */
+const _openGrownupsW = openGrownups;
+openGrownups = function () {
+  _openGrownupsW.apply(this, arguments);
+  const body = document.getElementById('gp-body');
+  if (!body) return;
+  const T = teamTotals(), Q = questsToday();
+  const html = `<div class="gp-card" id="team-admin"><h3>🤝 Team goal (all kids together)</h3>
+      ${T ? `<div class="gp-line"><span>${escapeHtml(T.goal.prize)}</span><b>${Math.min(T.total, T.goal.target)} / ${T.goal.target}${T.goal.doneAt ? ' 🏆' : ''}</b></div>
+        ${T.per.map(p => `<div class="gp-line"><span>${escapeHtml(p.name)}</span><b>${p.pts} right answers</b></div>`).join('')}` : '<div class="gp-empty" style="margin-bottom:8px">No team goal yet. Every right answer from any child fills one shared meter.</div>'}
+      <label class="fam-label" style="margin-top:10px">${T ? 'Start a new goal' : 'Prize'}</label>
+      <input class="fam-input" id="team-prize" maxlength="40" placeholder="Pizza night, park trip, extra screen time…">
+      <div class="fam-paths">${[150, 300, 500].map((n, i) => `<button class="fam-path${i === 1 ? ' on' : ''}" data-n="${n}" onclick="document.querySelectorAll('#team-admin .fam-path').forEach(b=>b.classList.toggle('on', b===this))">${n} right</button>`).join('')}</div>
+      <button class="btn btn-primary fam-btn" onclick="teamStart()">Start team goal</button>
+      <div class="gp-empty" style="margin-top:8px">Tip: 300 right answers is about a week for two kids playing 15–20 minutes a day.</div>
+    </div>
+    <div class="gp-card"><h3>🎯 Today's quests</h3>
+      ${Q.items.map(q => `<div class="gp-line"><span>${q.text}</span><b>${q.done ? '✓' : q.prog + ' / ' + q.target}</b></div>`).join('')}
+      <div class="gp-empty" style="margin-top:6px">The first quest always targets the skill with the lowest first-try accuracy. Quest days completed: ${(P.stats && P.stats.questDays) || 0}.</div>
+    </div>`;
+  const vc = document.getElementById('voice-card');
+  if (vc) vc.insertAdjacentHTML('afterend', html); else body.insertAdjacentHTML('afterbegin', html);
+};
+function teamStart() {
+  const prize = (document.getElementById('team-prize').value || '').trim();
+  if (!prize) { toast('Type a prize first'); return; }
+  const on = document.querySelector('#team-admin .fam-path.on');
+  const target = on ? +on.dataset.n : 300;
+  teamWriteGoal({ id: Date.now(), prize: prize.slice(0, 40), target, start: dayKey() });
+  toast('🤝 Team goal started!');
+  openGrownups();
+}
 
 /* ───────── BOOT ───────── */
 (function init() {
