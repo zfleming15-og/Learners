@@ -18801,6 +18801,24 @@ function rockChart(song, diffId) {
 let RK = null;
 function startRock(songId, diffId) {
   const song = SONG(songId); if (!song) return;
+  hush(); muCtx(); if (RK && !RK.done) rockStop();
+  const D = ROCK_DIFFS[diffId];
+  show('rock-screen');
+  document.getElementById('rk-title').innerHTML = `${escapeHtml(song.rockTitle || song.title)} <small>${D.label}</small>`;
+  document.getElementById('rk-frets').innerHTML = Array.from({ length: D.lanes }, (_, i) => `<button class="rk-fret" style="--c:${LANE_COLORS[i]}"><span>${LANE_KEYS[i][0]}</span></button>`).join('');
+  const cv = document.getElementById('rk-canvas'); cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
+  const el = document.getElementById('rk-results');
+  el.innerHTML = `<div class="rk-res-card rk-how"><div class="rk-res-kick">HOW TO PLAY</div><h2>${escapeHtml(song.rockTitle || song.title)}</h2><div class="rk-res-diff">${D.label} · ${D.lanes} buttons</div>
+    <div class="rk-how-demo">${Array.from({ length: D.lanes }, (_, i) => `<i style="--c:${LANE_COLORS[i]}"></i>`).join('')}</div>
+    <ol class="rk-how-list"><li>Colored <b>gems</b> slide down the highway.</li><li>When a gem reaches its <b>circle</b>, tap the button of the <b>same color</b>.</li><li>Gems with a <b>tail</b>? Keep holding for bonus points.</li><li>Hit 10 in a row and your points <b>double</b>!</li></ol>
+    <div class="rk-res-btns"><button class="btn btn-primary" onclick="rockBegin('${song.id}','${diffId}')">Let's rock! 🤘</button><button class="btn btn-ghost" onclick="openRockSelect()">Songs</button></div></div>`;
+  el.classList.add('open');
+  const M = musicState(); M.rockHow = (M.rockHow || 0) + 1;
+  if (M.rockHow <= 3 || pathId === 'k') muSay(`${song.rockTitle || song.title}. When a gem reaches its circle, tap the button with the same color. Hold the button for long gems. Ready? Tap Let's rock!`);
+  else muSay(`${song.rockTitle || song.title}. Tap Let's rock when you're ready!`);
+}
+function rockBegin(songId, diffId) {
+  const song = SONG(songId); if (!song) return;
   hush(); muCtx(); muNewSongBus();
   const C = rockChart(song, diffId);
   RK = { song, diffId, D: C.D, arr: C.arr, gems: C.gems, auto: C.auto, score: 0, streak: 0, best: 0, hits: 0, perfect: 0, judged: 0,
@@ -18998,12 +19016,12 @@ function rockFinish() {
     <h2>${escapeHtml(song.rockTitle || song.title)}</h2><div class="rk-res-diff">${RK.D.label}</div>
     <div class="rk-res-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
     <div class="rk-res-grid"><div><b>${RK.score.toLocaleString()}</b><span>score${newBest ? ' · best!' : ''}</span></div><div><b>${Math.round(acc * 100)}%</b><span>notes hit</span></div><div><b>${RK.best}</b><span>best streak</span></div><div><b>+${coins}</b><span>coins</span></div></div>
-    <div class="rk-res-btns"><button class="btn btn-primary" onclick="startRock('${song.id}','${diff}')">Play again</button>
+    <div class="rk-res-btns"><button class="btn btn-primary" onclick="rockBegin('${song.id}','${diff}')">Play again</button>
       ${stars >= 2 && diff !== 'expert' ? `<button class="btn btn-ghost" onclick="startRock('${song.id}','${Object.keys(ROCK_DIFFS)[Object.keys(ROCK_DIFFS).indexOf(diff) + 1]}')">Try ${ROCK_DIFFS[Object.keys(ROCK_DIFFS)[Object.keys(ROCK_DIFFS).indexOf(diff) + 1]].label}</button>` : ''}
       <button class="btn btn-ghost" onclick="openRockSelect()">Songs</button></div></div>`;
   el.classList.add('open');
   sfx(stars >= 2 ? 'big' : 'win'); if (stars) confetti(stars * 12);
-  say(stars === 3 ? 'Rock legend! Three stars!' : stars ? `${stars} star${stars === 1 ? '' : 's'}! Nice jam!` : 'Keep practicing, you\'re getting there!', { always: true });
+  muSay(stars === 3 ? 'Rock legend! Three stars!' : stars ? `${stars} star${stars === 1 ? '' : 's'}! Nice jam!${stars >= 2 && diff !== 'expert' ? ' Ready for a harder level?' : ''}` : 'Keep practicing, you\'re getting there! Try Easy first.');
   musicCheckRewards();
 }
 
@@ -19070,7 +19088,7 @@ function openMusic(view) {
   hush(); muCtx(); beatStop(); pianoStopAll();
   muView = view || 'hub';
   const M = musicState(), S = musicStars(), body = document.getElementById('mu-body');
-  document.getElementById('mu-stars').textContent = `★ ${S.total}`;
+  document.getElementById('mu-stars').innerHTML = `${muNarrBtn()}<span>★ ${S.total}</span>`;
   const back = document.getElementById('mu-back');
   back.onclick = () => muView === 'hub' ? goHome() : openMusic('hub');
   if (muView === 'hub') {
@@ -19083,7 +19101,7 @@ function openMusic(view) {
       <button class="mu-card free" onclick="openPiano({ mode: 'free' })"><div class="mu-art">✨</div><div><h3>Free play</h3><p>Just play. Piano, rock guitar or synth.</p><span>No rules</span></div></button>
     </div>
     ${next ? `<div class="mu-next"><svg viewBox="0 0 100 100" class="${S.total >= next.at ? '' : 'locked'}">${critterSVG(CRITTERS[next.id])}</svg><div><b>Music critter at ★ ${next.at}</b><div class="mu-bar"><i style="width:${Math.min(100, S.total / next.at * 100)}%"></i></div><small>${S.total} / ${next.at} stars from songs and lessons</small></div></div>` : `<div class="mu-next"><b>🎉 The whole band is here!</b></div>`}`;
-    if (pathId === 'k') say('Music Studio! Pick Rock Stage, Piano, or Beat Lab.', { always: true });
+    muSayOnce('hub', 'Welcome to the Music Studio! Pick Rock Stage to play guitar, Piano to learn the keys, or Beat Lab to make your own beats.');
   } else if (muView === 'rock') {
     document.getElementById('mu-h').textContent = '🎸 Rock Stage';
     const tiers = [0, 3, 9, 18], diff = M.diff;
@@ -19095,6 +19113,7 @@ function openMusic(view) {
           <div class="mu-song-t"><b>${escapeHtml(s.rockTitle || s.title)}</b><small>${s.orig ? 'Original' + (s.style === 'pop' ? ' pop song' : ' riff') : (s.remix ? (s.style === 'techno' ? 'Techno' : 'Pop') + ' remix · ' : 'Classic · ') + escapeHtml(s.by)}</small></div>
           <div class="mu-song-s">${locked ? `★ ${need}` : `<span class="st">${[0, 1, 2].map(i => `<i class="${i < st ? 'on' : ''}">★</i>`).join('')}</span><span class="cr">${Object.keys(ROCK_DIFFS).map(d => `<i class="${(rec[d] || 0) >= 2 ? 'on' : ''}" title="${ROCK_DIFFS[d].label}">${d === 'expert' ? 'X' : ROCK_DIFFS[d].label[0]}</i>`).join('')}</span>`}</div></button>`; }).join('')}</div>
       <p class="mu-tip">Tip: on a keyboard, use keys 1 to 5. Hold the long notes for bonus points.</p>`;
+    muSayOnce('rock', 'Rock Stage! Pick a difficulty at the top, then pick a song. Easy has three buttons. Expert has five, and it\'s fast!');
   } else if (muView === 'piano') {
     document.getElementById('mu-h').textContent = '🎹 Piano';
     const order = PIANO_SONGS.map(SONG);
@@ -19106,6 +19125,7 @@ function openMusic(view) {
         return `<div class="mu-psong${locked ? ' locked' : ''}"><div><b>${locked ? '🔒 ' : ''}${escapeHtml(s.title)}</b><small>${escapeHtml(s.by)}</small></div>
           <button ${locked ? 'disabled' : ''} onclick="openPiano({ mode: 'follow', song: '${s.id}' })">Learn ${'★'.repeat(r.follow || 0)}</button>
           <button ${locked ? 'disabled' : ''} onclick="openPiano({ mode: 'play', song: '${s.id}' })">Play along ${'★'.repeat(r.play || 0)}</button></div>`; }).join('')}</div>`;
+    muSayOnce('piano', Object.keys(M.lessons).length ? 'Piano! Keep going with the next lesson, or play a song. Learn mode waits for you. Play along keeps the beat.' : 'Piano! Start with the first lesson, Find C. Each lesson teaches you first, then you try it.');
   }
   show('music-screen');
   setTimeout(showRewards, 400);
@@ -19120,301 +19140,7 @@ renderHome = function () {
 };
 
 /* ═════════════ PIANO ═════════════ */
-const KEY_COLORS = { C: '#E53935', D: '#FB8C00', E: '#FDD835', F: '#43A047', G: '#00ACC1', A: '#5E35B1', B: '#D81B60' };
-const PIANO_SONGS = ['hotcross', 'mary', 'twinkle', 'oldmac', 'rowrow', 'bday', 'ode', 'jingle', 'saints', 'yankee', 'minuet', 'elise', 'entertainer'];
-const PIANO_LESSONS = [
-  { id: 'findc', icon: '🔍', title: 'Find C', sub: 'The key left of two black keys', open: 1 },
-  { id: 'cde', icon: '🔤', title: 'C, D and E', sub: 'Your first three notes' },
-  { id: 'cdefg', icon: '🖐️', title: 'C to G', sub: 'Five notes, five fingers' },
-  { id: 'all', icon: '🌈', title: 'All seven letters', sub: 'A B C D E F G' },
-  { id: 'highlow', icon: '⬆️', title: 'High or low?', sub: 'Train your ears' },
-  { id: 'sharps', icon: '♯', title: 'Black keys', sub: 'Sharps and flats' },
-  { id: 'chords', icon: '🎶', title: 'Chords', sub: 'Three notes at once' },
-  { id: 'staff', icon: '🎼', title: 'Read the staff', sub: 'Notes on lines and spaces' }
-];
-(function () {
-  const s = document.createElement('div');
-  s.id = 'piano-screen'; s.className = 'screen';
-  s.innerHTML = `<div class="topbar"><button class="icon-btn" onclick="pianoExit()" aria-label="Back">←</button><h2 id="pn-h">Piano</h2><div class="pn-tools" id="pn-tools"></div></div>
-    <div class="pn-main" id="pn-main"></div><div class="pn-kbd-wrap"><div class="pn-kbd" id="pn-kbd"></div></div>`;
-  APP.appendChild(s);
-})();
-let PN = null;
-function pianoRange(lo, hi, minWhite) {
-  lo -= ((lo % 12) + 12) % 12 === 0 ? 0 : 0;
-  while (![0, 5].includes(((lo % 12) + 12) % 12)) lo--;          // start on C or F
-  while (![4, 11].includes(((hi % 12) + 12) % 12)) hi++;         // end on E or B
-  const whites = () => { let n = 0; for (let m = lo; m <= hi; m++) if (!isBlack(m)) n++; return n; };
-  while (whites() < (minWhite || 8)) { hi++; while (![4, 11].includes(((hi % 12) + 12) % 12)) hi++; }
-  return [lo, hi];
-}
-function pianoBuild(lo, hi, opts) {
-  opts = opts || {};
-  const el = document.getElementById('pn-kbd');
-  const whites = []; for (let m = lo; m <= hi; m++) if (!isBlack(m)) whites.push(m);
-  const w = 100 / whites.length;
-  let html = '';
-  whites.forEach((m, i) => {
-    const L = midiLetter(m);
-    html += `<div class="pk w" data-m="${m}" style="left:${i * w}%;width:${w}%;--kc:${KEY_COLORS[L]}">${opts.labels ? `<span class="pk-l">${L}${opts.octave && L === 'C' ? `<sub>${Math.floor(m / 12) - 1}</sub>` : ''}</span>` : ''}${opts.colors ? '<i class="pk-dot"></i>' : ''}</div>`;
-  });
-  for (let m = lo; m <= hi; m++) if (isBlack(m)) {
-    const i = whites.filter(x => x < m).length;
-    html += `<div class="pk b" data-m="${m}" style="left:${i * w - w * 0.31}%;width:${w * 0.62}%">${opts.labels && opts.blackLabels ? `<span class="pk-l">${midiLetter(m)}</span>` : ''}</div>`;
-  }
-  el.innerHTML = html;
-  el.dataset.lo = lo; el.dataset.hi = hi;
-  const down = new Map();
-  const keyAt = (x, y) => { const t = document.elementFromPoint(x, y); const k = t && t.closest && t.closest('.pk'); return k && el.contains(k) ? k : null; };
-  const press = (k, id) => { if (!k) return; const m = +k.dataset.m; down.set(id, m); k.classList.add('down'); pianoKeyDown(m); };
-  const release = id => { const m = down.get(id); if (m === undefined) return; down.delete(id); if (![...down.values()].includes(m)) { const k = el.querySelector(`.pk[data-m="${m}"]`); k && k.classList.remove('down'); } };
-  el.onpointerdown = e => { e.preventDefault(); try { el.setPointerCapture(e.pointerId); } catch (er) {} press(keyAt(e.clientX, e.clientY), e.pointerId); };
-  el.onpointermove = e => { if (!down.has(e.pointerId)) return; const k = keyAt(e.clientX, e.clientY); if (k && +k.dataset.m !== down.get(e.pointerId)) { release(e.pointerId); press(k, e.pointerId); } };
-  el.onpointerup = el.onpointercancel = e => release(e.pointerId);
-  return { lo, hi, whites };
-}
-const pkEl = m => document.querySelector(`#pn-kbd .pk[data-m="${m}"]`);
-function pkGlow(m, cls) { document.querySelectorAll('#pn-kbd .pk.' + (cls || 'target')).forEach(k => k.classList.remove(cls || 'target')); if (m != null) { const k = pkEl(m); k && k.classList.add(cls || 'target'); } }
-function pkFlash(m, cls) { const k = pkEl(m); if (!k) return; k.classList.remove(cls); void k.offsetWidth; k.classList.add(cls); setTimeout(() => k.classList.remove(cls), 500); }
-const PN_SOUNDS = { piano: '🎹 Piano', guitar: '🎸 Rock guitar', synth: '🎛️ Synth' };
-function pianoSound(m, dur) {
-  const t = AC.currentTime, s = (PN && PN.sound) || 'piano';
-  if (s === 'guitar') vLead(t, m, dur || 0.5, 0.9); else if (s === 'synth') vPluck(t, m, dur || 0.4, 1.2); else vPiano(t, m, dur || 0.6, 1);
-}
-function pianoKeyDown(m) {
-  if (!PN) return;
-  muCtx(); pianoSound(m);
-  PN.lastPlay = Date.now();
-  if (PN.onKey) PN.onKey(m);
-}
-function pianoStopAll() { if (PN) { PN.seq && PN.seq.stop(); PN.raf && cancelAnimationFrame(PN.raf); PN.done = true; } muStopSongBus(); }
-function pianoExit() {
-  if (PN) musicLog(Math.round((Date.now() - PN.started) / 1000), PN.logExtra);
-  pianoStopAll(); const back = PN && PN.mode === 'free' ? 'hub' : 'piano'; PN = null; openMusic(back);
-}
-function openPiano(o) {
-  hush(); muCtx(); pianoStopAll();
-  PN = Object.assign({ started: Date.now(), sound: 'piano' }, o);
-  const main = document.getElementById('pn-main'), tools = document.getElementById('pn-tools');
-  tools.innerHTML = ''; main.innerHTML = ''; PN.onKey = null;
-  const narrow = window.innerWidth < 700;
-  if (o.mode === 'free') {
-    document.getElementById('pn-h').textContent = '🎶 Free play';
-    PN.oct = 4;
-    const draw = () => { const [lo, hi] = narrow ? [12 * (PN.oct + 1), 12 * (PN.oct + 1) + 16] : [12 * PN.oct, 12 * PN.oct + 35]; pianoBuild(lo, hi, { labels: true, colors: true, octave: true }); };
-    tools.innerHTML = `<select onchange="PN.sound=this.value">${Object.entries(PN_SOUNDS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>
-      <button class="pn-oct" onclick="PN.oct=Math.max(2,PN.oct-1); PN.redraw()">◀ Lower</button><button class="pn-oct" onclick="PN.oct=Math.min(5,PN.oct+1); PN.redraw()">Higher ▶</button>`;
-    PN.redraw = draw; draw();
-    main.innerHTML = `<div class="pn-free"><div class="pn-free-art">🎹</div><p>Play anything! Slide your finger across the keys for a glissando.</p><button class="btn btn-ghost" onclick="openBeat()">🎛️ Jam with a beat</button></div>`;
-    PN.onKey = m => { const a = document.querySelector('.pn-free-art'); if (a) { a.textContent = midiLetter(m); a.style.color = KEY_COLORS[midiLetter(m)[0]] || '#fff'; } };
-  } else if (o.mode === 'lesson') startLesson(o.lesson);
-  else if (o.mode === 'follow') startFollow(o.song);
-  else if (o.mode === 'play') startPlayAlong(o.song, o.slow);
-  show('piano-screen');
-}
-
-/* ── Learn a song: the next key glows and waits ── */
-function songKeyRange(song) { const ns = parseMel(song.mel).notes.map(n => n.midi); return pianoRange(Math.min(...ns), Math.max(...ns), window.innerWidth < 700 ? 8 : 10); }
-function startFollow(id) {
-  const song = SONG(id), notes = parseMel(song.mel).notes;
-  document.getElementById('pn-h').textContent = song.title;
-  const [lo, hi] = songKeyRange(song);
-  pianoBuild(lo, hi, { labels: true, colors: true });
-  Object.assign(PN, { song, notes, i: 0, wrong: 0, wrongHere: 0, logExtra: { song: id } });
-  const bud = buddyFor(), budSvg = bud && CRITTERS[bud] ? `<svg viewBox="0 0 100 100">${critterSVG(CRITTERS[bud])}</svg>` : '';
-  document.getElementById('pn-main').innerHTML = `<div class="pn-follow"><div class="pn-band"><div class="pn-bud" id="pn-bud">${budSvg}</div>${typeof pupHas === 'function' && pupHas() ? `<div class="pn-pup pup-holder" id="pn-pup">${pupBox('', 'happy')}</div>` : ''}</div><div class="pn-prompt" id="pn-prompt">Play the glowing key!</div><div class="pn-strip" id="pn-strip"></div>
-    <div class="pn-row"><button class="btn btn-ghost" onclick="followHear()">🔊 Hear the song</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'follow', song: '${id}' })">↺ Start over</button></div></div>`;
-  followDraw();
-  PN.onKey = m => {
-    if (PN.i >= PN.notes.length) return;
-    const want = PN.notes[PN.i].midi, okPc = pathId === 'k' && ((m - want) % 12 === 0);
-    if (m === want || okPc) {
-      pkFlash(m, 'good'); PN.i++; PN.wrongHere = 0;
-      const bd = document.getElementById('pn-bud'); if (bd) { bd.classList.remove('bop'); void bd.offsetWidth; bd.classList.add('bop'); }
-      if (PN.i % 8 === 0) { const pp = document.querySelector('#pn-pup .pup'); pp && pupDo(pp, 'jump'); }
-      if (PN.i >= PN.notes.length) followDone(); else followDraw();
-    } else {
-      PN.wrong++; PN.wrongHere++; pkFlash(m, 'bad');
-      if (PN.wrongHere >= 2) { const L = midiLetter(want); document.getElementById('pn-prompt').innerHTML = `Find <b style="color:${KEY_COLORS[L[0]]}">${L.replace('#', '♯')}</b>. It's glowing!`; if (PN.wrongHere === 2) say(L.replace('#', ' sharp'), { always: true }); }
-    }
-  };
-}
-function followDraw() {
-  const n = PN.notes[PN.i]; pkGlow(n.midi);
-  const strip = PN.notes.slice(Math.max(0, PN.i - 2), PN.i + 9).map((x, j) => { const k = Math.max(0, PN.i - 2) + j, L = midiLetter(x.midi);
-    return `<span class="${k < PN.i ? 'done' : k === PN.i ? 'now' : ''}" style="--kc:${KEY_COLORS[L[0]]}">${L.replace('#', '♯')}</span>`; }).join('');
-  document.getElementById('pn-strip').innerHTML = strip;
-  document.getElementById('pn-prompt').textContent = `${PN.i} of ${PN.notes.length} notes`;
-}
-function followHear() { const arr = arrange(PN.song, { leadIn: 0, soft: true }); muNewSongBus(); const at = AC.currentTime + 0.1; PN.seq && PN.seq.stop();
-  PN.seq = playArrangement(arr, at, arr.notes.map(n => ({ t: at + n.t, fn: t => { vPiano(t, n.midi, n.dur, 1); setTimeout(() => pkFlash(n.midi, 'good'), Math.max(0, (t - AC.currentTime) * 1000)); } }))); }
-function followDone() {
-  pkGlow(null);
-  const stars = PN.wrong <= 1 ? 3 : PN.wrong <= 5 ? 2 : 1, M = musicState(), r = M.piano[PN.song.id] || (M.piano[PN.song.id] = {});
-  const prev = r.follow || 0; r.follow = Math.max(prev, stars); P.coins += stars + (stars > prev ? 3 : 0);
-  musicLog(Math.round((Date.now() - PN.started) / 1000), { song: PN.song.id }); PN.started = Date.now();
-  persist(); musicCheckRewards();
-  document.getElementById('pn-main').innerHTML = `<div class="pn-done"><div class="pn-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
-    <h2>You played ${escapeHtml(PN.song.title)}!</h2><p>${PN.wrong ? `${PN.wrong} wrong key${PN.wrong === 1 ? '' : 's'} along the way. ` : 'Not one wrong key! '}${stars < 3 ? 'Play it again for 3 stars.' : 'Ready to try it in rhythm?'}</p>
-    <div class="pn-row"><button class="btn btn-primary" onclick="followHear()">🔊 Hear it with the band</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'follow', song: '${PN.song.id}' })">Again</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'play', song: '${PN.song.id}' })">Play along ›</button></div></div>`;
-  confetti(stars * 10); sfx('big'); say(`You played ${PN.song.title}!`, { always: true });
-}
-
-/* ── Play along: notes fall onto the keys, in rhythm ── */
-function startPlayAlong(id, slow) {
-  const song = SONG(id), speed = slow === false ? 1 : (slow || (pathId === 'k' ? 0.6 : 0.8));
-  document.getElementById('pn-h').textContent = song.title;
-  const [lo, hi] = songKeyRange(song), kb = pianoBuild(lo, hi, { labels: true, colors: true });
-  const arr = arrange(song, { speed, soft: true });
-  Object.assign(PN, { song, arr, kb, speed, hits: 0, judged: 0, startAt: 0, logExtra: { song: id } });
-  PN.notes = arr.notes.map(n => Object.assign({}, n));
-  document.getElementById('pn-tools').innerHTML = `<button class="pn-oct ${speed < 0.7 ? 'on' : ''}" onclick="openPiano({ mode: 'play', song: '${id}', slow: 0.6 })">🐢 Slow</button><button class="pn-oct ${speed >= 0.7 && speed < 1 ? 'on' : ''}" onclick="openPiano({ mode: 'play', song: '${id}', slow: 0.8 })">Medium</button><button class="pn-oct ${speed >= 1 ? 'on' : ''}" onclick="openPiano({ mode: 'play', song: '${id}', slow: false })">🐇 Full</button>`;
-  document.getElementById('pn-main').innerHTML = `<canvas id="pn-canvas"></canvas><div class="pn-pa-hud" id="pn-hud"></div>`;
-  const cv = document.getElementById('pn-canvas'), box = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
-  cv.width = box.width * dpr; cv.height = box.height * dpr; PN.dpr = dpr; PN.cw = box.width; PN.ch = box.height;
-  muNewSongBus(); PN.startAt = AC.currentTime + 0.6; PN.lat = (AC.outputLatency || 0) + (AC.baseLatency || 0);
-  const extra = arr.beats.filter(b => b.lead).map(b => ({ t: PN.startAt + b.t, fn: t => vClick(t, b.accent) }));
-  PN.notes.forEach(n => extra.push({ t: PN.startAt + n.t, fn: t => vPiano(t, n.midi, n.dur, 0.18) }));   // quiet guide melody
-  PN.seq = playArrangement(arr, PN.startAt, extra);
-  PN.onKey = m => {
-    const now = AC.currentTime - PN.startAt - PN.lat, W = 0.24 / Math.max(0.6, speed);
-    const n = PN.notes.find(x => !x.judged && x.midi === m && Math.abs(x.t - now) <= W);
-    if (n) { n.judged = n.hit = true; PN.hits++; PN.judged++; pkFlash(m, 'good'); } else pkFlash(m, 'bad');
-  };
-  PN.raf = requestAnimationFrame(playFrame);
-}
-function playFrame() {
-  if (!PN || PN.done || PN.mode !== 'play') return;
-  const cv = document.getElementById('pn-canvas'); if (!cv) return;
-  const ctx = cv.getContext('2d'), now = AC.currentTime - PN.startAt - PN.lat, W = PN.cw, H = PN.ch, pps = H / 2.6;
-  ctx.setTransform(PN.dpr, 0, 0, PN.dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-  const kbd = document.getElementById('pn-kbd').getBoundingClientRect(), cvb = cv.getBoundingClientRect();
-  const xOf = m => { const k = pkEl(m); if (!k) return null; const r = k.getBoundingClientRect(); return [r.left - cvb.left, r.width]; };
-  // guide lines on C keys
-  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-  PN.notes.forEach(n => {
-    const missWin = 0.24 / Math.max(0.6, PN.speed);
-    if (!n.judged && now - n.t > missWin) { n.judged = true; PN.judged++; }
-    const y1 = H - (n.t - now) * pps, y0 = y1 - Math.max(10, n.dur * pps * 0.92);
-    if (y0 > H || y1 < -10) return;
-    const xw = xOf(n.midi); if (!xw) return;
-    const L = midiLetter(n.midi), col = isBlack(n.midi) ? '#9CA3AF' : KEY_COLORS[L[0]];
-    ctx.globalAlpha = n.hit ? 0.25 : n.judged ? 0.35 : 1;
-    ctx.fillStyle = col; const pad = xw[1] * 0.12;
-    const r = Math.min(10, xw[1] * 0.3); ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(xw[0] + pad, y0, xw[1] - pad * 2, y1 - y0, r); else ctx.rect(xw[0] + pad, y0, xw[1] - pad * 2, y1 - y0);
-    ctx.fill();
-    if (y1 - y0 > 22 && xw[1] > 22) { ctx.fillStyle = '#fff'; ctx.font = `900 ${Math.min(16, xw[1] * 0.45)}px system-ui`; ctx.textAlign = 'center'; ctx.fillText(L.replace('#', '♯'), xw[0] + xw[1] / 2, y1 - 8); }
-    ctx.globalAlpha = 1;
-  });
-  ctx.fillStyle = 'rgba(255,217,61,0.9)'; ctx.fillRect(0, H - 3, W, 3);
-  const total = PN.notes.length;
-  document.getElementById('pn-hud').textContent = `${PN.hits} / ${total} notes`;
-  if (now > PN.arr.end + 0.8) { playDone(); return; }
-  PN.raf = requestAnimationFrame(playFrame);
-}
-function playDone() {
-  const acc = PN.hits / PN.notes.length, stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : acc >= 0.45 ? 1 : 0;
-  const M = musicState(), r = M.piano[PN.song.id] || (M.piano[PN.song.id] = {}), prev = r.play || 0;
-  const bonus = PN.speed >= 1 ? 1 : 0;
-  r.play = Math.max(prev, stars); P.coins += stars * (1 + bonus) + (stars > prev ? 3 : 0);
-  PN.done = true; muStopSongBus();
-  musicLog(Math.round((Date.now() - PN.started) / 1000), { song: PN.song.id }); PN.started = Date.now();
-  persist(); musicCheckRewards();
-  document.getElementById('pn-main').innerHTML = `<div class="pn-done"><div class="pn-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
-    <h2>${Math.round(acc * 100)}% of the notes!</h2><p>${stars === 3 ? 'Right on the beat. Try the next speed up!' : stars ? 'Nice playing! Each time gets easier.' : 'Tricky one! Try "Learn" mode first, then come back.'}</p>
-    <div class="pn-row"><button class="btn btn-primary" onclick="openPiano({ mode: 'play', song: '${PN.song.id}', slow: ${PN.speed === 1 ? 'false' : PN.speed} })">Again</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'follow', song: '${PN.song.id}' })">Learn mode</button></div></div>`;
-  if (stars) confetti(stars * 10);
-}
-
-/* ── Lessons ── */
-function lessonRound() {
-  const L = PN.lesson, kbd = document.getElementById('pn-kbd'), pr = document.getElementById('pn-prompt'), [lo, hi] = [+kbd.dataset.lo, +kbd.dataset.hi];
-  const whites = []; for (let m = lo; m <= hi; m++) if (!isBlack(m)) whites.push(m);
-  PN.first = true; PN.chordSet = null; document.getElementById('pn-extra').innerHTML = '';
-  const letters = { cde: ['C', 'D', 'E'], cdefg: ['C', 'D', 'E', 'F', 'G'], all: ['C', 'D', 'E', 'F', 'G', 'A', 'B'] }[L];
-  if (L === 'findc') { PN.want = m => midiLetter(m) === 'C'; pr.innerHTML = 'Tap a <b>C</b>! Hint: it sits just left of the <b>two</b> black keys.'; PN.sayIt = 'Tap a C!'; }
-  else if (letters) { const x = pick(letters.filter(l => l !== PN.lastL)); PN.lastL = x; PN.want = m => midiLetter(m) === x; pr.innerHTML = `Tap <b style="color:${KEY_COLORS[x]}">${x}</b>`; PN.sayIt = 'Tap ' + x; }
-  else if (L === 'sharps') {
-    const opts = [['C#', 'C♯', 'D♭'], ['D#', 'D♯', 'E♭'], ['F#', 'F♯', 'G♭'], ['G#', 'G♯', 'A♭'], ['A#', 'A♯', 'B♭']], o = pick(opts), flat = Math.random() < 0.4;
-    PN.want = m => midiLetter(m) === o[0]; pr.innerHTML = `Tap <b>${flat ? o[2] : o[1]}</b> <small>${flat ? `Flat ♭ means the black key just <b>left</b> of ${o[2][0]}` : `Sharp ♯ means the black key just <b>right</b> of ${o[1][0]}`}</small>`;
-    PN.sayIt = `Tap ${flat ? o[2][0] + ' flat' : o[1][0] + ' sharp'}`;
-  } else if (L === 'chords') {
-    const ch = pick([['C', [0, 4, 7]], ['F', [5, 9, 12]], ['G', [7, 11, 14]], ['A minor', [9, 12, 16]]]), base = lo + (lo % 12 === 0 ? 0 : 12 - (lo % 12));
-    const keys = ch[1].map(i => base + i).filter(m => m <= hi);
-    PN.chordSet = { keys, got: new Set() }; PN.want = m => keys.includes(m);
-    pr.innerHTML = `Play a <b>${ch[0]} chord</b>: ${keys.map(m => `<b style="color:${KEY_COLORS[midiLetter(m)[0]]}">${midiLetter(m)}</b>`).join(' + ')} <small>Tap all three. They light up as you go.</small>`;
-    keys.forEach(m => pkEl(m) && pkEl(m).classList.add('hint')); PN.sayIt = ch[0] + ' chord';
-  } else if (L === 'highlow') {
-    const a = 55 + Math.floor(Math.random() * 14); let b; do { b = 55 + Math.floor(Math.random() * 14); } while (Math.abs(b - a) < (PN.round < 4 ? 5 : 2));
-    PN.hl = [a, b]; pr.innerHTML = 'Listen… was the <b>second</b> note higher or lower?';
-    document.getElementById('pn-extra').innerHTML = `<div class="pn-hl"><button class="btn btn-ghost" onclick="lessonHear()">🔊 Play again</button><button class="pn-big" onclick="lessonHL(1)">⬆️ Higher</button><button class="pn-big" onclick="lessonHL(0)">⬇️ Lower</button></div>`;
-    setTimeout(lessonHear, 350); PN.want = () => false; return;
-  } else if (L === 'staff') {
-    const pool = whites.filter(m => m >= 60 && m <= 81), m = pick(pool.filter(x => x !== PN.lastM) || pool); PN.lastM = m;
-    PN.want = x => x === m; pr.innerHTML = 'Which key is this note?';
-    document.getElementById('pn-extra').innerHTML = staffSVG(m);
-  }
-  if (PN.sayIt && pathId === 'k') say(PN.sayIt, { always: true });
-}
-function staffSVG(m) {
-  const order = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 }, oct = Math.floor(m / 12) - 1, step = (oct - 4) * 7 + order[midiLetter(m)];   // C4 = 0
-  const y = s => 100 - s * 7;   // E4 (step 2) sits on the bottom line at y=86
-  const lines = [2, 4, 6, 8, 10].map(s => `<line x1="20" x2="280" y1="${y(s)}" y2="${y(s)}" stroke="#2A2140" stroke-width="2"/>`).join('');
-  const ledger = step <= 0 ? `<line x1="128" x2="172" y1="${y(0)}" y2="${y(0)}" stroke="#2A2140" stroke-width="2"/>` : step >= 12 ? `<line x1="128" x2="172" y1="${y(12)}" y2="${y(12)}" stroke="#2A2140" stroke-width="2"/>` : '';
-  return `<svg class="pn-staff" viewBox="0 0 300 130"><rect width="300" height="130" rx="14" fill="#FFFDF7"/>${lines}<text x="26" y="${y(4) + 22}" font-size="74" fill="#2A2140" font-family="serif">𝄞</text>${ledger}
-    <ellipse cx="150" cy="${y(step)}" rx="10" ry="7.5" fill="#2A2140" transform="rotate(-20 150 ${y(step)})"/><line x1="${step >= 6 ? 140.5 : 159.5}" x2="${step >= 6 ? 140.5 : 159.5}" y1="${y(step)}" y2="${y(step) + (step >= 6 ? 34 : -34)}" stroke="#2A2140" stroke-width="2"/></svg>`;
-}
-function lessonHear() { const [a, b] = PN.hl, t = AC.currentTime + 0.05; vPiano(t, a, 0.6, 1); vPiano(t + 0.75, b, 0.6, 1); }
-function lessonHL(up) { const ok = (PN.hl[1] > PN.hl[0]) === !!up; lessonResult(ok, ok ? (up ? 'Yes! It went up.' : 'Yes! It went down.') : `Listen again: it went ${PN.hl[1] > PN.hl[0] ? 'up' : 'down'}.`); }
-function lessonResult(ok, msg) {
-  const pr = document.getElementById('pn-prompt');
-  if (ok) { if (PN.first) PN.right++; PN.round++; sfx('hit'); pr.innerHTML = `✅ ${msg || 'Yes!'}`; document.getElementById('pn-dots').innerHTML = lessonDots();
-    setTimeout(() => { if (!PN || PN.mode !== 'lesson') return; document.querySelectorAll('#pn-kbd .pk.hint').forEach(k => k.classList.remove('hint')); if (PN.round >= PN.total) lessonDone(); else lessonRound(); }, 900); }
-  else { PN.first = false; sfx('miss'); pr.innerHTML = `${msg || 'Not quite, try again!'}`; }
-}
-const lessonDots = () => Array.from({ length: PN.total }, (_, i) => `<i class="${i < PN.round ? 'on' : ''}"></i>`).join('');
-function startLesson(id) {
-  const L = PIANO_LESSONS.find(x => x.id === id), narrow = window.innerWidth < 700;
-  document.getElementById('pn-h').textContent = L.icon + ' ' + L.title;
-  const labels = ['highlow', 'chords'].includes(id), [lo, hi] = narrow ? [60, 76] : id === 'staff' ? [60, 84] : [48, 71];
-  pianoBuild(lo, hi, { labels, colors: labels });
-  Object.assign(PN, { lesson: id, round: 0, right: 0, total: id === 'chords' ? 5 : 8, logExtra: { lesson: id } });
-  const intro = {
-    findc: 'Look at the black keys: they come in groups of <b>two</b> and <b>three</b>. C is the white key just left of each group of two.',
-    cde: 'C is left of the two black keys. D is <b>between</b> them. E is just right of them.',
-    cdefg: 'Put your thumb on C. Each finger gets the next key: C D E F G.',
-    all: 'The white keys go C D E F G A B, then start over at C. After G comes A!',
-    highlow: 'Notes to the right sound <b>higher</b>, like a bird. Notes to the left sound <b>lower</b>, like a bear.',
-    sharps: 'A <b>sharp ♯</b> is the black key just to the right. A <b>flat ♭</b> is the black key just to the left. Same key, two names!',
-    chords: 'A chord is three notes together. Skip a key, play a key: C, skip D, E, skip F, G.',
-    staff: 'Music is written on five lines. Each line and each space is a note. Higher on the staff = higher note.'
-  }[id];
-  document.getElementById('pn-main').innerHTML = `<div class="pn-lesson"><div class="pn-intro">${intro}</div><div class="pn-dots" id="pn-dots">${lessonDots()}</div><div class="pn-prompt" id="pn-prompt"></div><div id="pn-extra"></div></div>`;
-  PN.onKey = m => {
-    if (PN.round >= PN.total) return;
-    if (PN.lesson === 'highlow') return;
-    if (PN.chordSet) {
-      if (PN.chordSet.keys.includes(m)) { PN.chordSet.got.add(m); const k = pkEl(m); k && k.classList.add('got'); if (PN.chordSet.got.size === PN.chordSet.keys.length) { PN.chordSet.keys.forEach(x => { const k2 = pkEl(x); k2 && k2.classList.remove('got'); }); setTimeout(() => { PN.chordSet.keys.forEach(x => vPiano(AC.currentTime, x, 1.2, 0.9)); }, 150); lessonResult(true, 'That\'s a chord! Hear how the notes blend?'); } }
-      else { pkFlash(m, 'bad'); lessonResult(false, `That's ${midiLetter(m)}. Look for the lit-up keys.`); }
-      return;
-    }
-    if (PN.want(m)) { pkFlash(m, 'good'); const k = pkEl(m); if (k && !k.querySelector('.pk-l')) { k.insertAdjacentHTML('beforeend', `<span class="pk-l pk-reveal">${midiLetter(m)}</span>`); setTimeout(() => { const s = k.querySelector('.pk-reveal'); s && s.remove(); }, 900); }
-      lessonResult(true, PN.lesson === 'staff' ? `It's ${midiLetter(m)}!` : null); }
-    else { pkFlash(m, 'bad'); lessonResult(false, `That's ${midiLetter(m).replace('#', '♯')}. Try again!`); }
-  };
-  lessonRound();
-}
-function lessonDone() {
-  const acc = PN.right / PN.total, stars = acc >= 0.85 ? 3 : acc >= 0.6 ? 2 : 1, M = musicState(), prev = M.lessons[PN.lesson] || 0;
-  M.lessons[PN.lesson] = Math.max(prev, stars); P.coins += stars + (stars > prev ? 3 : 0);
-  musicLog(Math.round((Date.now() - PN.started) / 1000), { lesson: PN.lesson }); PN.started = Date.now();
-  persist(); musicCheckRewards();
-  const idx = PIANO_LESSONS.findIndex(l => l.id === PN.lesson), next = PIANO_LESSONS[idx + 1];
-  document.getElementById('pn-main').innerHTML = `<div class="pn-done"><div class="pn-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
-    <h2>${PN.right} of ${PN.total} on the first try!</h2><div class="pn-row"><button class="btn btn-ghost" onclick="openPiano({ mode: 'lesson', lesson: '${PN.lesson}' })">Again</button>${next ? `<button class="btn btn-primary" onclick="openPiano({ mode: 'lesson', lesson: '${next.id}' })">Next: ${next.title} ›</button>` : ''}</div></div>`;
-  confetti(stars * 10); sfx('big');
-}
+/* (piano lives in mod_piano.js) */
 
 /* ═════════════ BEAT LAB ═════════════ */
 const BEAT_ROWS = [
@@ -19452,6 +19178,8 @@ function openBeat() {
   if (!BT.pat.name) BT.pat.name = 'My beat';
   beatRender();
   show('beat-screen');
+  muSay(M.beatSeen ? 'Beat Lab! Pick a beat, or make your own.' : 'Welcome to Beat Lab! Tap a beat at the top to hear it. Each row is a sound, and each square is a moment in time. Tap squares to turn sounds on or off. Then jam on the colored pads at the bottom!');
+  M.beatSeen = 1; persist();
 }
 function beatRender() {
   const p = BT.pat;
@@ -19460,11 +19188,12 @@ function beatRender() {
       <label>Speed <input type="range" min="70" max="175" value="${p.bpm}" oninput="BT.pat.bpm=+this.value; document.getElementById('bt-bpm').textContent=this.value"><b id="bt-bpm">${p.bpm}</b></label>
       <label>Chords <select onchange="BT.pat.prog=this.value; beatSave()">${Object.entries(BEAT_PROGS).map(([k, v]) => `<option value="${k}" ${p.prog === k ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>
       <button class="btn btn-ghost" onclick="beatClear()">Clear</button></div>
+    <div class="bt-help">👆 Each row is a sound. Each square is a moment in time: the yellow box shows where the beat is. Tap squares to add or remove sounds. ${muNarrBtn()}</div>
     <div class="bt-grid" id="bt-grid">${BEAT_ROWS.map(r => `<div class="bt-row"><div class="bt-lab"><span>${r.icon}</span>${r.label}</div>${(p[r.id] || S16([])).map((v, i) => `<button class="bt-cell${v ? ' on' : ''}${i % 4 === 0 ? ' q' : ''}" data-r="${r.id}" data-i="${i}" onclick="beatCell('${r.id}',${i})"></button>`).join('')}</div>`).join('')}</div>
     <div class="bt-jam"><div class="bt-jam-h">Jam on top <select onchange="BT.sound=this.value">${Object.entries(PN_SOUNDS).map(([k, v]) => `<option value="${k}" ${BT.sound === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
       <div class="bt-pads">${PAD_NOTES.map((m, i) => `<button class="bt-pad" style="--kc:${KEY_COLORS[midiLetter(m)[0]]}" onpointerdown="event.preventDefault(); beatPad(${m}, this)">${midiLetter(m)}</button>`).join('')}</div></div>`;
 }
-function beatPreset(k) { const keepBpm = false; BT.pat = JSON.parse(JSON.stringify(BEAT_PRESETS[k])); beatSave(); beatRender(); if (!BT.playing) beatToggle(); }
+function beatPreset(k) { muSay(BEAT_PRESETS[k].name); BT.pat = JSON.parse(JSON.stringify(BEAT_PRESETS[k])); beatSave(); beatRender(); if (!BT.playing) beatToggle(); }
 function beatCell(r, i) { if (!BT.pat[r]) BT.pat[r] = S16([]); BT.pat[r][i] = BT.pat[r][i] ? 0 : 1; if (BT.pat.name !== 'My beat') BT.pat.name = 'My beat'; beatSave();
   const c = document.querySelector(`.bt-cell[data-r="${r}"][data-i="${i}"]`); c && c.classList.toggle('on', !!BT.pat[r][i]);
   document.querySelectorAll('.bt-presets button').forEach(b => b.classList.remove('on'));
@@ -19529,7 +19258,7 @@ renderReportText = function (r) { const t = _renderReportTextMusic.apply(this, a
 #music-screen, #piano-screen, #beat-screen { background: radial-gradient(ellipse at 20% -10%, #3B2A8C 0%, transparent 55%), radial-gradient(ellipse at 100% 110%, #7A1F6B 0%, transparent 50%), linear-gradient(180deg, #181238 0%, #120E2A 100%); color: #F4F1FF; }
 #music-screen .topbar h2, #piano-screen .topbar h2, #beat-screen .topbar h2 { color: #FFFFFF; }
 #music-screen .icon-btn, #piano-screen .icon-btn, #beat-screen .icon-btn { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.2); }
-.mu-stars { margin-left: auto; font-weight: 900; color: #FFD93D; font-size: 18px; }
+.mu-stars { margin-left: auto; font-weight: 900; color: #FFD93D; font-size: 18px; display: flex; gap: 10px; align-items: center; }
 .mu-body { flex: 1; overflow-y: auto; padding: 4px 2px 30px; max-width: 980px; width: 100%; margin: 0 auto; }
 .mu-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
 .mu-card { display: flex; gap: 16px; align-items: center; text-align: left; font: inherit; color: #fff; border: 0; border-radius: 24px; padding: 20px; cursor: pointer; box-shadow: 0 14px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.25); }
@@ -19613,6 +19342,11 @@ renderReportText = function (r) { const t = _renderReportTextMusic.apply(this, a
 .rk-results { position: absolute; inset: 0; display: none; place-items: center; background: rgba(8,6,24,.78); z-index: 10; padding: 20px; }
 .rk-results.open { display: grid; }
 .rk-res-card { background: linear-gradient(160deg, #2A1E66, #1A1340); border: 2px solid rgba(255,255,255,.15); border-radius: 28px; padding: 22px; width: min(440px, 100%); text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+.rk-how-demo { display: flex; gap: 10px; justify-content: center; margin: 14px 0 6px; }
+.rk-how-demo i { width: 38px; height: 38px; border-radius: 50%; border: 4px solid var(--c); box-shadow: 0 0 14px var(--c); animation: howPulse 1.2s ease-in-out infinite; }
+.rk-how-demo i:nth-child(2) { animation-delay: .2s; } .rk-how-demo i:nth-child(3) { animation-delay: .4s; } .rk-how-demo i:nth-child(4) { animation-delay: .6s; } .rk-how-demo i:nth-child(5) { animation-delay: .8s; }
+@keyframes howPulse { 50% { background: var(--c); } }
+.rk-how-list { text-align: left; font-size: 15.5px; line-height: 1.5; margin: 10px auto 16px; padding-left: 22px; max-width: 360px; }
 .rk-res-kick { font-weight: 900; letter-spacing: .12em; color: #FF8FB1; font-size: 13px; }
 .rk-res-card h2 { margin: 6px 0 2px; }
 .rk-res-diff { display: inline-block; font-weight: 900; font-size: 12px; background: #FFD93D; color: #2A2140; padding: 2px 10px; border-radius: 999px; }
@@ -19683,6 +19417,7 @@ renderReportText = function (r) { const t = _renderReportTextMusic.apply(this, a
 .bt-ctrl input[type=range] { width: 130px; accent-color: #F72585; }
 .bt-play { min-width: 110px; }
 .bt-grid { display: grid; gap: 6px; }
+.bt-help { font-size: 14px; opacity: .9; margin: 0 0 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .bt-row { display: grid; grid-template-columns: 92px repeat(16, 1fr); gap: 4px; align-items: center; }
 .bt-lab { font-weight: 800; font-size: 13px; display: flex; gap: 4px; align-items: center; white-space: nowrap; overflow: hidden; }
 .bt-cell { aspect-ratio: 1; border-radius: 8px; border: 0; background: rgba(255,255,255,.08); cursor: pointer; padding: 0; min-width: 0; }
@@ -19703,6 +19438,757 @@ renderReportText = function (r) { const t = _renderReportTextMusic.apply(this, a
   .mu-card { padding: 16px; } .mu-art { font-size: 42px; } .mu-card h3 { font-size: 20px; }
   .mu-psong { flex-wrap: wrap; } .mu-psong > div { flex-basis: 100%; }
   .rk-res-grid { grid-template-columns: repeat(2, 1fr); }
+}
+`; document.head.appendChild(st); })();
+
+/* ═══════════════════════════════════════════════════════════
+   MUSIC STUDIO · PIANO (teaching version)
+   · A narrator reads every instruction aloud (🔊 toggle).
+   · Key labels: letters, letters + sharps/flats, or off.
+   · Every lesson starts with short "learn it" slides that light up
+     and play the real keys, then the kid tries it.
+   · Songs start with a "get ready" card (which keys, where to put
+     your thumb, finger numbers), show the chord as you go, and give
+     a spoken hint if the kid is stuck.
+   · Free play has a chord helper and names the chord you play.
+   ═══════════════════════════════════════════════════════════ */
+const KEY_COLORS = { C: '#E53935', D: '#FB8C00', E: '#FDD835', F: '#43A047', G: '#00ACC1', A: '#5E35B1', B: '#D81B60' };
+const PIANO_SONGS = ['hotcross', 'mary', 'twinkle', 'oldmac', 'rowrow', 'bday', 'ode', 'jingle', 'saints', 'yankee', 'minuet', 'elise', 'entertainer'];
+const PIANO_LESSONS = [
+  { id: 'findc', icon: '🔍', title: 'Find C', sub: 'The key left of two black keys', open: 1 },
+  { id: 'cde', icon: '🔤', title: 'C, D and E', sub: 'Your first three notes' },
+  { id: 'cdefg', icon: '🖐️', title: 'C to G', sub: 'Five notes, five fingers' },
+  { id: 'all', icon: '🌈', title: 'All seven letters', sub: 'A B C D E F G' },
+  { id: 'highlow', icon: '⬆️', title: 'High or low?', sub: 'Train your ears' },
+  { id: 'sharps', icon: '♯', title: 'Black keys', sub: 'Sharps and flats' },
+  { id: 'chords', icon: '🎶', title: 'Chords', sub: 'Three notes at once' },
+  { id: 'staff', icon: '🎼', title: 'Read the staff', sub: 'Notes on lines and spaces' }
+];
+const sharpName = m => midiLetter(m).replace('#', '♯');
+const flatName = m => PC_FLAT[((m % 12) + 12) % 12].replace('b', '♭');
+const spokenNote = name => String(name).replace(/♯|#/g, ' sharp').replace(/♭/g, ' flat').replace(/\bA\b/g, 'Ay');
+
+/* ── narrator + label settings ── */
+const muNarrateOn = () => musicState().narrate !== false;
+const muOnce = {};
+function muSayOnce(key, t) { if (muOnce[key]) return; muOnce[key] = 1; muSay(t); }
+function muSay(t, cb) { if (muNarrateOn()) say(t, { always: true }, cb); else if (cb) setTimeout(cb, 250); }
+function muToggleNarr() { const M = musicState(); M.narrate = !muNarrateOn(); persist(); if (!M.narrate) hush(); document.querySelectorAll('.mu-narr').forEach(b => { b.classList.toggle('on', M.narrate); b.innerHTML = M.narrate ? '🔊 Narrator' : '🔇 Narrator'; }); }
+const muNarrBtn = () => `<button class="pn-oct mu-narr ${muNarrateOn() ? 'on' : ''}" onclick="muToggleNarr()">${muNarrateOn() ? '🔊 Narrator' : '🔇 Narrator'}</button>`;
+const LABEL_MODES = { letters: 'ABC', all: 'ABC ♯♭', off: 'No labels' };
+const pnLabels = () => musicState().labels || 'letters';
+function pnCycleLabels() {
+  const ks = Object.keys(LABEL_MODES), M = musicState(); M.labels = ks[(ks.indexOf(pnLabels()) + 1) % ks.length]; persist();
+  document.querySelectorAll('.pn-lab').forEach(b => b.innerHTML = '🏷️ ' + LABEL_MODES[pnLabels()]);
+  if (PN && PN.rebuild) PN.rebuild();
+  muSay({ letters: 'Keys show their letter names.', all: 'Keys show every name, including sharps and flats on the black keys.', off: 'Labels off. Can you play from memory?' }[pnLabels()]);
+}
+const pnLabBtn = () => `<button class="pn-oct pn-lab" onclick="pnCycleLabels()">🏷️ ${LABEL_MODES[pnLabels()]}</button>`;
+
+(function () {
+  const s = document.createElement('div');
+  s.id = 'piano-screen'; s.className = 'screen';
+  s.innerHTML = `<div class="topbar"><button class="icon-btn" onclick="pianoExit()" aria-label="Back">←</button><h2 id="pn-h">Piano</h2><div class="pn-tools" id="pn-tools"></div></div>
+    <div class="pn-main" id="pn-main"></div><div class="pn-chordbar" id="pn-chordbar"></div><div class="pn-kbd-wrap"><div class="pn-kbd" id="pn-kbd"></div></div>`;
+  APP.appendChild(s);
+})();
+let PN = null;
+function pianoRange(lo, hi, minWhite) {
+  while (![0, 5].includes(((lo % 12) + 12) % 12)) lo--;
+  while (![4, 11].includes(((hi % 12) + 12) % 12)) hi++;
+  const whites = () => { let n = 0; for (let m = lo; m <= hi; m++) if (!isBlack(m)) n++; return n; };
+  while (whites() < (minWhite || 8)) { hi++; while (![4, 11].includes(((hi % 12) + 12) % 12)) hi++; }
+  return [lo, hi];
+}
+/* opts.labels: 'letters' | 'all' | 'off' (default: the kid's setting) · opts.fingers: {midi: 1-5} */
+function pianoBuild(lo, hi, opts) {
+  opts = opts || {};
+  const mode = opts.labels || pnLabels(), el = document.getElementById('pn-kbd');
+  const whites = []; for (let m = lo; m <= hi; m++) if (!isBlack(m)) whites.push(m);
+  const w = 100 / whites.length, F = opts.fingers || {};
+  let html = '';
+  whites.forEach((m, i) => {
+    const L = midiLetter(m);
+    html += `<div class="pk w" data-m="${m}" style="left:${i * w}%;width:${w}%;--kc:${KEY_COLORS[L]}">${F[m] ? `<span class="pk-f">${F[m]}</span>` : ''}${mode !== 'off' ? `<span class="pk-l">${L}${L === 'C' && opts.octave ? `<sub>${Math.floor(m / 12) - 1}</sub>` : ''}</span><i class="pk-dot"></i>` : ''}</div>`;
+  });
+  for (let m = lo; m <= hi; m++) if (isBlack(m)) {
+    const i = whites.filter(x => x < m).length;
+    html += `<div class="pk b" data-m="${m}" style="left:${i * w - w * 0.31}%;width:${w * 0.62}%">${F[m] ? `<span class="pk-f">${F[m]}</span>` : ''}${mode === 'all' ? `<span class="pk-l">${sharpName(m)}<br>${flatName(m)}</span>` : ''}</div>`;
+  }
+  el.innerHTML = html;
+  el.dataset.lo = lo; el.dataset.hi = hi;
+  PN.held = new Set();
+  const down = new Map();
+  const keyAt = (x, y) => { const t = document.elementFromPoint(x, y); const k = t && t.closest && t.closest('.pk'); return k && el.contains(k) ? k : null; };
+  const press = (k, id) => { if (!k) return; const m = +k.dataset.m; down.set(id, m); PN.held.add(m); k.classList.add('down'); pianoKeyDown(m); };
+  const release = id => { const m = down.get(id); if (m === undefined) return; down.delete(id); if (![...down.values()].includes(m)) { PN.held.delete(m); const k = el.querySelector(`.pk[data-m="${m}"]`); k && k.classList.remove('down'); if (PN.onKeyUp) PN.onKeyUp(m); } };
+  el.onpointerdown = e => { e.preventDefault(); try { el.setPointerCapture(e.pointerId); } catch (er) {} press(keyAt(e.clientX, e.clientY), e.pointerId); };
+  el.onpointermove = e => { if (!down.has(e.pointerId)) return; const k = keyAt(e.clientX, e.clientY); if (k && +k.dataset.m !== down.get(e.pointerId)) { release(e.pointerId); press(k, e.pointerId); } };
+  el.onpointerup = el.onpointercancel = e => release(e.pointerId);
+  return { lo, hi, whites };
+}
+const pkEl = m => document.querySelector(`#pn-kbd .pk[data-m="${m}"]`);
+function pkGlow(m, cls) { document.querySelectorAll('#pn-kbd .pk.' + (cls || 'target')).forEach(k => k.classList.remove(cls || 'target')); if (m != null) [].concat(m).forEach(x => { const k = pkEl(x); k && k.classList.add(cls || 'target'); }); }
+function pkFlash(m, cls) { const k = pkEl(m); if (!k) return; k.classList.remove(cls); void k.offsetWidth; k.classList.add(cls); setTimeout(() => k.classList.remove(cls), 500); }
+function pkTint(pcs) { document.querySelectorAll('#pn-kbd .pk').forEach(k => k.classList.toggle('ch', !!pcs && pcs.includes((+k.dataset.m) % 12))); }
+const PN_SOUNDS = { piano: '🎹 Piano', guitar: '🎸 Rock guitar', synth: '🎛️ Synth' };
+function pianoSound(m, dur) {
+  const t = AC.currentTime, s = (PN && PN.sound) || 'piano';
+  if (s === 'guitar') vLead(t, m, dur || 0.5, 0.9); else if (s === 'synth') vPluck(t, m, dur || 0.4, 1.2); else vPiano(t, m, dur || 0.6, 1);
+}
+function pianoKeyDown(m) { if (!PN) return; muCtx(); pianoSound(m); PN.lastPlay = Date.now(); if (PN.onKey) PN.onKey(m); }
+function pianoStopAll() { if (PN) { PN.seq && PN.seq.stop(); PN.raf && cancelAnimationFrame(PN.raf); clearTimeout(PN.hintT); (PN.demoT || []).forEach(clearTimeout); PN.done = true; } muStopSongBus(); }
+function pianoExit() {
+  if (PN) musicLog(Math.round((Date.now() - PN.started) / 1000), PN.logExtra);
+  hush(); pianoStopAll(); const back = PN && PN.mode === 'free' ? 'hub' : 'piano'; PN = null; openMusic(back);
+}
+function pnPlaySeq(list, gap, cb) {          // play & light notes one after another; list items can be arrays (chords)
+  (PN.demoT || []).forEach(clearTimeout); PN.demoT = [];
+  list.forEach((m, i) => PN.demoT.push(setTimeout(() => {
+    [].concat(m).forEach(x => { vPiano(AC.currentTime, x, 0.7, 0.9); pkFlash(x, 'demo'); });
+  }, i * (gap || 450))));
+  if (cb) PN.demoT.push(setTimeout(cb, list.length * (gap || 450) + 200));
+}
+function openPiano(o) {
+  hush(); muCtx(); pianoStopAll();
+  PN = Object.assign({ started: Date.now(), sound: 'piano' }, o);
+  const main = document.getElementById('pn-main'), tools = document.getElementById('pn-tools');
+  tools.innerHTML = ''; main.innerHTML = ''; document.getElementById('pn-chordbar').innerHTML = ''; PN.onKey = PN.onKeyUp = null;
+  if (o.mode === 'free') startFree();
+  else if (o.mode === 'lesson') startLesson(o.lesson);
+  else if (o.mode === 'follow') startFollow(o.song);
+  else if (o.mode === 'play') startPlayAlong(o.song, o.slow);
+  show('piano-screen');
+}
+const pnTools = extra => { document.getElementById('pn-tools').innerHTML = (extra || '') + pnLabBtn() + muNarrBtn(); };
+
+/* ── chord names: what's being held? ── */
+const CHORD_TYPES = [[[0, 4, 7], ''], [[0, 3, 7], 'm'], [[0, 4, 7, 10], '7'], [[0, 3, 6], 'dim'], [[0, 4, 8], 'aug'], [[0, 5, 7], 'sus4'], [[0, 2, 7], 'sus2']];
+function chordName(midis) {
+  const pcs = [...new Set(midis.map(m => ((m % 12) + 12) % 12))];
+  if (pcs.length < 3) return null;
+  for (const r of pcs) for (const [ivs, q] of CHORD_TYPES) { const want = ivs.map(i => (r + i) % 12); if (want.length === pcs.length && want.every(x => pcs.includes(x))) return { name: PC_FLAT[r].replace('b', '♭') + q, root: r, q, pcs: want }; }
+  return null;
+}
+const chordWords = c => c.q === '' ? 'major: happy and bright' : c.q === 'm' ? 'minor: a little sad or mysterious' : c.q === '7' ? 'seventh: bluesy' : c.q === 'dim' ? 'diminished: spooky' : c.q === 'aug' ? 'augmented: dreamy' : 'suspended: floating, waiting to land';
+
+/* ═════════════ FREE PLAY + CHORD HELPER ═════════════ */
+const HELPER_CHORDS = ['C', 'Dm', 'Em', 'F', 'G', 'Am'];
+function startFree() {
+  document.getElementById('pn-h').textContent = '🎶 Free play';
+  PN.oct = 4; const narrow = window.innerWidth < 700;
+  PN.rebuild = () => { const [lo, hi] = narrow ? [12 * (PN.oct + 1), 12 * (PN.oct + 1) + 16] : [12 * PN.oct, 12 * PN.oct + 35]; pianoBuild(lo, hi, { octave: true }); };
+  pnTools(`<select onchange="PN.sound=this.value">${Object.entries(PN_SOUNDS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+    <button class="pn-oct" onclick="PN.oct=Math.max(2,PN.oct-1); PN.rebuild(); muSay('Lower')">◀ Lower</button><button class="pn-oct" onclick="PN.oct=Math.min(5,PN.oct+1); PN.rebuild(); muSay('Higher')">Higher ▶</button>`);
+  PN.rebuild();
+  document.getElementById('pn-main').innerHTML = `<div class="pn-free"><div class="pn-free-art" id="pn-free-art">🎹</div><div class="pn-free-sub" id="pn-free-sub">Play anything! Slide a finger across the keys for a glissando.</div>
+    <div class="pn-helper"><div class="pn-helper-h">🎶 Chord helper: tap a chord to see and hear it</div><div class="pn-helper-btns">${HELPER_CHORDS.map(c => `<button onclick="freeChord('${c}')">${c}</button>`).join('')}</div></div>
+    <button class="btn btn-ghost" onclick="openBeat()">🎛️ Jam with a beat</button></div>`;
+  PN.onKey = m => {
+    const a = document.getElementById('pn-free-art'), sub = document.getElementById('pn-free-sub'); if (!a) return;
+    setTimeout(() => {
+      const c = PN && PN.held && chordName([...PN.held]);
+      if (c) { a.textContent = c.name; a.style.color = '#FFD93D'; sub.innerHTML = `That's a <b>${c.name}</b> chord, ${chordWords(c)}.`; }
+      else { a.textContent = isBlack(m) ? `${sharpName(m)} / ${flatName(m)}` : midiLetter(m); a.style.color = isBlack(m) ? '#fff' : KEY_COLORS[midiLetter(m)]; }
+    }, 40);
+  };
+  muSay('Free play! Play anything you like. Tap a chord in the chord helper to see which keys make it.');
+}
+function freeChord(name) {
+  const c = chordObj(name), lo = +document.getElementById('pn-kbd').dataset.lo;
+  let base = lo; while (base % 12 !== c.root) base++;
+  const third = name.endsWith('m') ? 3 : 4, keys = [base, base + third, base + 7];
+  pkGlow(keys, 'hint'); setTimeout(() => pkGlow(null, 'hint'), 2600);
+  keys.forEach(m => vPiano(AC.currentTime, m, 1.2, 0.85));
+  const a = document.getElementById('pn-free-art'), sub = document.getElementById('pn-free-sub');
+  a.textContent = name; a.style.color = '#FFD93D';
+  const names = keys.map(m => midiLetter(m)).join(' + ');
+  sub.innerHTML = `<b>${name}</b> = ${keys.map(m => `<b style="color:${KEY_COLORS[midiLetter(m)]}">${midiLetter(m)}</b>`).join(' + ')} (${name.endsWith('m') ? 'minor' : 'major'}). Now you play it!`;
+  muSay(`${spokenNote(name.replace('m', ' minor'))} chord. ${keys.map(m => spokenNote(midiLetter(m))).join(', ')}.`);
+}
+
+/* ═════════════ LEARN SLIDES (before every lesson) ═════════════ */
+const C4 = 60;
+const groupOf2 = (lo, hi) => { const out = []; for (let m = lo; m <= hi; m++) if (m % 12 === 1 || m % 12 === 3) out.push(m); return out; };
+const groupOf3 = (lo, hi) => { const out = []; for (let m = lo; m <= hi; m++) if ([6, 8, 10].includes(m % 12)) out.push(m); return out; };
+const allOf = (pc, lo, hi) => { const out = []; for (let m = lo; m <= hi; m++) if (m % 12 === pc) out.push(m); return out; };
+const PIANO_TEACH = {
+  findc: [
+    { t: 'This is a piano keyboard. It has white keys and black keys, and the pattern repeats over and over.', glow: (lo, hi) => [], play: [60, 64, 67, 72] },
+    { t: 'Look at the black keys. Some are in groups of <b>two</b>…', glow: groupOf2, play: [61, 63] },
+    { t: '…and some are in groups of <b>three</b>.', glow: groupOf3, play: [66, 68, 70] },
+    { t: '<b>C</b> lives just to the <b>left</b> of every group of two black keys. Here are all the Cs!', glow: (lo, hi) => allOf(0, lo, hi), play: [48, 60, 72] },
+    { t: 'Your turn! When I say "Tap a C", find a white key just left of two black keys.', glow: (lo, hi) => allOf(0, lo, hi), last: 1 }
+  ],
+  cde: [
+    { t: 'Start on <b>C</b>: the white key just left of the two black keys.', glow: () => [60], play: [60] },
+    { t: '<b>D</b> is the white key right in the <b>middle</b> of the two black keys. D for "down in the middle".', glow: () => [62], play: [62] },
+    { t: '<b>E</b> is just to the <b>right</b> of the two black keys.', glow: () => [64], play: [64] },
+    { t: 'C, D, E. They go up like stairs. Listen!', glow: () => [60, 62, 64], play: [60, 62, 64, 62, 60] },
+    { t: 'Your turn! I\'ll name a note, and you find it. The labels will hide so you can practice from memory.', glow: () => [60, 62, 64], last: 1 }
+  ],
+  cdefg: [
+    { t: 'Let\'s use five fingers! Put your <b>right thumb</b> on C. Your thumb is finger <b>1</b>, and your pinky is finger <b>5</b>.', glow: () => [60], fingers: { 60: 1, 62: 2, 64: 3, 65: 4, 67: 5 }, play: [60] },
+    { t: 'Each finger gets its own key: C D E F G.', glow: () => [60, 62, 64, 65, 67], fingers: { 60: 1, 62: 2, 64: 3, 65: 4, 67: 5 }, play: [60, 62, 64, 65, 67] },
+    { t: '<b>F</b> is the white key just left of the group of <b>three</b> black keys. <b>G</b> comes right after it.', glow: () => [65, 67], play: [65, 67] },
+    { t: 'Your turn! Find the note I name.', glow: () => [60, 62, 64, 65, 67], fingers: { 60: 1, 62: 2, 64: 3, 65: 4, 67: 5 }, last: 1 }
+  ],
+  all: [
+    { t: 'Music only uses seven letters: <b>A B C D E F G</b>.', glow: () => [57, 59, 60, 62, 64, 65, 67], play: [57, 59, 60, 62, 64, 65, 67] },
+    { t: 'After G, the letters start over at A. Up and up it goes: G, A, B, C!', glow: () => [67, 69, 71, 72], play: [67, 69, 71, 72] },
+    { t: 'Two landmarks help you find any note: <b>C</b> is left of the two black keys, and <b>F</b> is left of the three.', glow: (lo, hi) => [...allOf(0, lo, hi), ...allOf(5, lo, hi)], play: [60, 65] },
+    { t: 'Your turn! Count up from C or F to find the note I name.', glow: () => [], last: 1 }
+  ],
+  highlow: [
+    { t: 'Keys to the <b>right</b> sound <b>higher</b>, like a tiny bird. 🐦', glow: () => [72, 74, 76, 77, 79], play: [60, 64, 67, 72, 76, 79] },
+    { t: 'Keys to the <b>left</b> sound <b>lower</b>, like a big bear. 🐻', glow: () => [48, 50, 52, 53, 55], play: [67, 64, 60, 55, 52, 48] },
+    { t: 'Here\'s a game: I play two notes. Did the second one go <b>up</b> or <b>down</b>? Listen: this one goes up.', glow: () => [60, 67], play: [60, 67] },
+    { t: 'Your turn! Listen carefully, then tap Higher or Lower.', glow: () => [], last: 1 }
+  ],
+  sharps: [
+    { t: 'Black keys have names too, and each one has <b>two</b> names!', glow: (lo, hi) => [...groupOf2(lo, hi), ...groupOf3(lo, hi)], play: [61, 63, 66, 68, 70], labels: 'all' },
+    { t: '<b>Sharp ♯</b> means one key <b>higher</b>. The black key just right of C is <b>C sharp</b>.', glow: () => [60, 61], play: [60, 61], labels: 'all' },
+    { t: '<b>Flat ♭</b> means one key <b>lower</b>. The black key just left of D is <b>D flat</b>.', glow: () => [62, 61], play: [62, 61], labels: 'all' },
+    { t: 'C♯ and D♭ are the <b>same key</b> with two names, like a nickname!', glow: () => [61], play: [61, 61], labels: 'all' },
+    { t: 'Your turn! Find the sharp or flat I name.', glow: () => [], last: 1 }
+  ],
+  chords: [
+    { t: 'A <b>chord</b> is three or more notes played <b>together</b>. Listen!', glow: () => [60, 64, 67], play: [[60, 64, 67]] },
+    { t: 'Easy recipe: play a key, <b>skip</b> a key, play a key, <b>skip</b> a key, play a key. C (skip D) E (skip F) G.', glow: () => [60, 64, 67], skip: [62, 65], play: [60, 64, 67, [60, 64, 67]] },
+    { t: 'A chord is named after its bottom note. This one starts on C, so it\'s a <b>C chord</b>. Major chords sound happy!', glow: () => [60, 64, 67], play: [[60, 64, 67]] },
+    { t: 'Start on A and use the same recipe: A, C, E. That\'s <b>A minor</b>. Minor chords sound a little sad.', glow: () => [57, 60, 64], play: [57, 60, 64, [57, 60, 64]] },
+    { t: 'Your turn! Tap all three keys of the chord I name. They\'ll light up to help you.', glow: () => [], last: 1 }
+  ],
+  staff: [
+    { t: 'Music is written on five lines called the <b>staff</b>. Each line and each space is a different note.', staff: [], play: [] },
+    { t: 'The curly sign is the <b>treble clef</b>. It\'s for higher notes, like the ones your right hand plays.', staff: [], play: [67] },
+    { t: 'Notes on the <b>lines</b>, bottom to top: E G B D F. Remember it with "<b>E</b>very <b>G</b>ood <b>B</b>ird <b>D</b>oes <b>F</b>ly."', staff: [64, 67, 71, 74, 77], glow: () => [64, 67, 71, 74, 77], play: [64, 67, 71, 74, 77] },
+    { t: 'Notes in the <b>spaces</b> spell a word: <b>F A C E</b>!', staff: [65, 69, 72, 76], glow: () => [65, 69, 72, 76], play: [65, 69, 72, 76] },
+    { t: '<b>Middle C</b> sits on its own little line just below the staff.', staff: [60], glow: () => [60], play: [60] },
+    { t: 'Your turn! Look at the note, then tap its key.', staff: [], last: 1 }
+  ]
+};
+function teachStart(id, done) {
+  PN.teach = { id, i: 0, done };
+  teachDraw();
+}
+function teachDraw() {
+  const T = PN.teach, slides = PIANO_TEACH[T.id], s = slides[T.i], kb = document.getElementById('pn-kbd');
+  pianoBuild(+kb.dataset.lo, +kb.dataset.hi, { labels: s.labels || 'letters', fingers: s.fingers });
+  const lo = +kb.dataset.lo, hi = +kb.dataset.hi;
+  pkGlow(null, 'teach'); pkGlow(null, 'skip');
+  const g = s.glow ? s.glow(lo, hi).filter(m => m >= lo && m <= hi) : [];
+  pkGlow(g, 'teach'); if (s.skip) pkGlow(s.skip, 'skip');
+  document.getElementById('pn-main').innerHTML = `<div class="pn-teach"><div class="pn-teach-k">LEARN IT · ${T.i + 1} of ${slides.length}</div>
+    <div class="pn-teach-t">${s.t}</div>${s.staff ? staffSVG(s.staff) : ''}
+    <div class="pn-row"><button class="btn btn-ghost" ${T.i ? '' : 'disabled'} onclick="teachGo(-1)">◀ Back</button><button class="btn btn-ghost" onclick="teachDraw()">🔊 Again</button>
+      <button class="btn btn-primary" onclick="${s.last ? 'teachDone()' : 'teachGo(1)'}">${s.last ? 'Let\'s try it! ▶' : 'Next ▶'}</button></div>
+    ${T.i === 0 ? `<button class="pn-skip" onclick="teachDone()">I know this, skip to the game</button>` : ''}</div>`;
+  PN.onKey = m => { if (g.includes(m)) pkFlash(m, 'good'); };
+  hush();
+  const plain = s.t.replace(/<[^>]+>/g, '').replace(/♯/g, ' sharp').replace(/♭/g, ' flat').replace(/[🐦🐻]/gu, '');
+  const play = () => { if (s.play && s.play.length && PN && PN.teach === T) pnPlaySeq(s.play, 480); };
+  if (muNarrateOn()) muSay(plain, play); else play();
+}
+function teachGo(d) { const T = PN.teach; T.i = Math.max(0, Math.min(PIANO_TEACH[T.id].length - 1, T.i + d)); teachDraw(); }
+function teachDone() { const T = PN.teach; PN.teach = null; hush(); (PN.demoT || []).forEach(clearTimeout); pkGlow(null, 'teach'); pkGlow(null, 'skip'); T.done(); }
+
+/* ═════════════ LESSONS (quiz after the slides) ═════════════ */
+const LESSON_QUIZ_LABELS = { findc: 'off', cde: 'off', cdefg: 'off', all: 'off', sharps: 'off', highlow: 'letters', chords: 'letters', staff: 'off' };
+function startLesson(id) {
+  const L = PIANO_LESSONS.find(x => x.id === id), narrow = window.innerWidth < 700;
+  document.getElementById('pn-h').textContent = L.icon + ' ' + L.title;
+  const [lo, hi] = narrow ? [60, 76] : id === 'staff' ? [60, 84] : [48, 71];
+  pianoBuild(lo, hi, { labels: 'letters' });
+  Object.assign(PN, { lesson: id, round: 0, right: 0, total: id === 'chords' ? 5 : 8, logExtra: { lesson: id } });
+  PN.rebuild = () => { if (PN.teach) teachDraw(); else { pianoBuild(lo, hi, { labels: pnLabels() === 'off' ? 'off' : LESSON_QUIZ_LABELS[id] === 'off' ? 'off' : pnLabels() }); if (PN.chordSet) PN.chordSet.keys.forEach(m => pkEl(m) && pkEl(m).classList.add('hint')); } };
+  pnTools(`<button class="pn-oct" onclick="lessonReview()">📖 How it works</button>`);
+  teachStart(id, () => lessonQuiz());
+}
+function lessonReview() { if (!PN || PN.mode !== 'lesson') return; teachStart(PN.lesson, () => lessonQuiz(true)); }
+function lessonQuiz(resume) {
+  const id = PN.lesson, kb = document.getElementById('pn-kbd');
+  pianoBuild(+kb.dataset.lo, +kb.dataset.hi, { labels: LESSON_QUIZ_LABELS[id] === 'off' ? 'off' : pnLabels() });
+  if (!resume) { PN.round = 0; PN.right = 0; }
+  document.getElementById('pn-main').innerHTML = `<div class="pn-lesson"><div class="pn-dots" id="pn-dots">${lessonDots()}</div><div class="pn-prompt" id="pn-prompt"></div><div id="pn-extra"></div>
+    <div class="pn-row"><button class="btn btn-ghost" onclick="muSay(PN.sayIt)">🔊 Say it again</button></div></div>`;
+  PN.onKey = lessonKey;
+  PN.prefix = resume ? '' : 'Let\'s go! ';
+  lessonRound();
+}
+function lessonRound() {
+  const L = PN.lesson, kbd = document.getElementById('pn-kbd'), pr = document.getElementById('pn-prompt'), lo = +kbd.dataset.lo, hi = +kbd.dataset.hi;
+  const whites = []; for (let m = lo; m <= hi; m++) if (!isBlack(m)) whites.push(m);
+  PN.first = true; PN.chordSet = null; document.getElementById('pn-extra').innerHTML = '';
+  pkGlow(null, 'hint');
+  const letters = { cde: ['C', 'D', 'E'], cdefg: ['C', 'D', 'E', 'F', 'G'], all: ['C', 'D', 'E', 'F', 'G', 'A', 'B'] }[L];
+  let after = null;
+  if (L === 'findc') { PN.want = m => midiLetter(m) === 'C'; pr.innerHTML = 'Tap a <b>C</b>! <small>It sits just left of the <b>two</b> black keys.</small>'; PN.sayIt = 'Tap a C.'; }
+  else if (letters) { const x = pick(letters.filter(l => l !== PN.lastL)); PN.lastL = x; PN.want = m => midiLetter(m) === x; pr.innerHTML = `Tap <b style="color:${KEY_COLORS[x]}">${x}</b>`; PN.sayIt = `Tap ${spokenNote(x)}.`; }
+  else if (L === 'sharps') {
+    const opts = [['C#', 'C♯', 'D♭'], ['D#', 'D♯', 'E♭'], ['F#', 'F♯', 'G♭'], ['G#', 'G♯', 'A♭'], ['A#', 'A♯', 'B♭']], o = pick(opts), flat = Math.random() < 0.4;
+    PN.want = m => midiLetter(m) === o[0];
+    pr.innerHTML = `Tap <b>${flat ? o[2] : o[1]}</b> <small>${flat ? `Flat ♭ = the black key just <b>left</b> of ${o[2][0]}` : `Sharp ♯ = the black key just <b>right</b> of ${o[1][0]}`}</small>`;
+    PN.sayIt = flat ? `Tap ${spokenNote(o[2])}. That's the black key just left of ${spokenNote(o[2][0])}.` : `Tap ${spokenNote(o[1])}. That's the black key just right of ${spokenNote(o[1][0])}.`;
+  } else if (L === 'chords') {
+    const ch = pick([['C', [0, 4, 7]], ['F', [5, 9, 12]], ['G', [7, 11, 14]], ['A minor', [9, 12, 16]], ['D minor', [2, 5, 9]]]);
+    let base = lo; while (base % 12 !== 0) base++;
+    const keys = ch[1].map(i => base + i).filter(m => m <= hi);
+    PN.chordSet = { keys, got: new Set() }; PN.want = m => keys.includes(m);
+    pr.innerHTML = `Play a <b>${ch[0]} chord</b>: ${keys.map(m => `<b style="color:${KEY_COLORS[midiLetter(m)]}">${midiLetter(m)}</b>`).join(' + ')} <small>Tap all three. They're lit up to help you.</small>`;
+    pkGlow(keys, 'hint'); PN.sayIt = `Play a ${ch[0]} chord: ${keys.map(m => spokenNote(midiLetter(m))).join(', ')}.`;
+  } else if (L === 'highlow') {
+    const a = 55 + Math.floor(Math.random() * 14); let b; do { b = 55 + Math.floor(Math.random() * 14); } while (Math.abs(b - a) < (PN.round < 4 ? 5 : 2));
+    PN.hl = [a, b]; pr.innerHTML = 'Listen… did the <b>second</b> note go higher or lower?';
+    document.getElementById('pn-extra').innerHTML = `<div class="pn-hl"><button class="btn btn-ghost" onclick="lessonHear()">🔊 Play the notes again</button><button class="pn-big" onclick="lessonHL(1)">⬆️ Higher</button><button class="pn-big" onclick="lessonHL(0)">⬇️ Lower</button></div>`;
+    PN.want = () => false; PN.sayIt = 'Listen. Did the second note go higher, or lower?'; after = lessonHear;
+  } else if (L === 'staff') {
+    const pool = whites.filter(m => m >= 60 && m <= 81), m = pick(pool.filter(x => x !== PN.lastM)); PN.lastM = m;
+    PN.want = x => x === m; pr.innerHTML = 'Which key is this note? <small>Lines: E G B D F · Spaces: F A C E</small>';
+    document.getElementById('pn-extra').innerHTML = staffSVG([m]); PN.sayIt = 'Which key is this note?';
+  }
+  muSay((PN.prefix || '') + PN.sayIt, after); PN.prefix = '';
+}
+function lessonKey(m) {
+  if (PN.round >= PN.total || PN.lesson === 'highlow') return;
+  if (PN.chordSet) {
+    if (PN.chordSet.keys.includes(m)) {
+      PN.chordSet.got.add(m); const k = pkEl(m); k && k.classList.add('got');
+      if (PN.chordSet.got.size === PN.chordSet.keys.length) { PN.chordSet.keys.forEach(x => { const k2 = pkEl(x); k2 && k2.classList.remove('got'); }); setTimeout(() => PN.chordSet && PN.chordSet.keys.forEach(x => vPiano(AC.currentTime, x, 1.2, 0.9)), 150); lessonResult(true, 'That\'s a chord! Hear how the notes blend together?'); }
+    } else { pkFlash(m, 'bad'); lessonResult(false, `That's ${sharpName(m)}. Look for the lit-up keys.`); }
+    return;
+  }
+  if (PN.want(m)) {
+    pkFlash(m, 'good');
+    const k = pkEl(m); if (k && !k.querySelector('.pk-l')) { k.insertAdjacentHTML('beforeend', `<span class="pk-l pk-reveal">${sharpName(m)}</span>`); setTimeout(() => { const s = k.querySelector('.pk-reveal'); s && s.remove(); }, 900); }
+    lessonResult(true, PN.lesson === 'staff' ? `It's ${midiLetter(m)}!` : `Yes! That's ${sharpName(m)}.`);
+  } else { pkFlash(m, 'bad'); lessonResult(false, `That's ${sharpName(m)}. Try again!`); }
+}
+function staffSVG(ms) {
+  ms = [].concat(ms);
+  const order = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
+  const stepOf = m => (Math.floor(m / 12) - 5) * 7 + order[midiLetter(m)[0]];
+  const y = s => 100 - s * 7;
+  const lines = [2, 4, 6, 8, 10].map(s => `<line x1="20" x2="290" y1="${y(s)}" y2="${y(s)}" stroke="#2A2140" stroke-width="2"/>`).join('');
+  const xs = ms.length <= 1 ? [165] : ms.map((_, i) => 110 + i * Math.min(42, 170 / (ms.length - 1)));
+  const notes = ms.map((m, i) => {
+    const st = stepOf(m), x = xs[i], up = st < 6;
+    const led = st <= 0 ? `<line x1="${x - 16}" x2="${x + 16}" y1="${y(0)}" y2="${y(0)}" stroke="#2A2140" stroke-width="2"/>` : st >= 12 ? `<line x1="${x - 16}" x2="${x + 16}" y1="${y(12)}" y2="${y(12)}" stroke="#2A2140" stroke-width="2"/>` : '';
+    return `${led}<ellipse cx="${x}" cy="${y(st)}" rx="9.5" ry="7" fill="${KEY_COLORS[midiLetter(m)[0]]}" stroke="#2A2140" stroke-width="1.5" transform="rotate(-20 ${x} ${y(st)})"/>
+      <line x1="${up ? x + 9 : x - 9}" x2="${up ? x + 9 : x - 9}" y1="${y(st)}" y2="${y(st) + (up ? -32 : 32)}" stroke="#2A2140" stroke-width="2"/>${ms.length > 1 ? `<text x="${x}" y="126" text-anchor="middle" font-size="13" font-weight="900" fill="${KEY_COLORS[midiLetter(m)[0]]}" font-family="system-ui">${midiLetter(m)}</text>` : ''}`;
+  }).join('');
+  return `<svg class="pn-staff" viewBox="0 0 310 134"><rect width="310" height="134" rx="14" fill="#FFFDF7"/>${lines}<text x="26" y="${y(4) + 22}" font-size="74" fill="#2A2140" font-family="serif">𝄞</text>${notes}</svg>`;
+}
+function lessonHear() { const [a, b] = PN.hl, t = AC.currentTime + 0.05; vPiano(t, a, 0.6, 1); vPiano(t + 0.75, b, 0.6, 1); }
+function lessonHL(up) { const ok = (PN.hl[1] > PN.hl[0]) === !!up; lessonResult(ok, ok ? (up ? 'Yes! It went up.' : 'Yes! It went down.') : `Listen again. It went ${PN.hl[1] > PN.hl[0] ? 'up' : 'down'}.`); }
+function lessonResult(ok, msg) {
+  const pr = document.getElementById('pn-prompt');
+  if (ok) {
+    if (PN.first) PN.right++; PN.round++; sfx('hit'); pr.innerHTML = `✅ ${msg || 'Yes!'}`; document.getElementById('pn-dots').innerHTML = lessonDots();
+    PN.prefix = pick(['Yes! ', 'Nice! ', 'You got it! ', 'Great job! ']);
+    setTimeout(() => { if (!PN || PN.mode !== 'lesson' || PN.teach) return; document.querySelectorAll('#pn-kbd .pk.got').forEach(k => k.classList.remove('got')); if (PN.round >= PN.total) lessonDone(); else lessonRound(); }, 950);
+  } else { PN.first = false; sfx('miss'); pr.innerHTML = msg || 'Not quite, try again!'; muSay(msg || 'Not quite. Try again!'); }
+}
+const lessonDots = () => Array.from({ length: PN.total }, (_, i) => `<i class="${i < PN.round ? 'on' : ''}"></i>`).join('');
+function lessonDone() {
+  const acc = PN.right / PN.total, stars = acc >= 0.85 ? 3 : acc >= 0.6 ? 2 : 1, M = musicState(), prev = M.lessons[PN.lesson] || 0;
+  M.lessons[PN.lesson] = Math.max(prev, stars); P.coins += stars + (stars > prev ? 3 : 0);
+  musicLog(Math.round((Date.now() - PN.started) / 1000), { lesson: PN.lesson }); PN.started = Date.now();
+  persist(); musicCheckRewards();
+  const idx = PIANO_LESSONS.findIndex(l => l.id === PN.lesson), next = PIANO_LESSONS[idx + 1];
+  document.getElementById('pn-main').innerHTML = `<div class="pn-done"><div class="pn-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
+    <h2>${PN.right} of ${PN.total} on the first try!</h2><div class="pn-row"><button class="btn btn-ghost" onclick="openPiano({ mode: 'lesson', lesson: '${PN.lesson}' })">Again</button>${next ? `<button class="btn btn-primary" onclick="openPiano({ mode: 'lesson', lesson: '${next.id}' })">Next: ${next.title} ›</button>` : ''}</div></div>`;
+  confetti(stars * 10); sfx('big');
+  muSay(`${PN.right} out of ${PN.total} on the first try! ${stars === 3 ? 'Three stars!' : 'Play again to earn more stars.'}${next ? ' Next up: ' + next.title + '.' : ''}`);
+}
+
+/* ═════════════ SONGS: get-ready card, then learn or play along ═════════════ */
+function songKeyRange(song) { const ns = parseMel(song.mel).notes.map(n => n.midi); return pianoRange(Math.min(...ns), Math.max(...ns), window.innerWidth < 700 ? 8 : 10); }
+function songFingers(song) {   // if the song fits under one hand, number the fingers from its lowest note
+  const ns = parseMel(song.mel).notes.map(n => n.midi), lo = Math.min(...ns), hi = Math.max(...ns);
+  const whites = []; for (let m = lo; m <= hi; m++) if (!isBlack(m)) whites.push(m);
+  if (whites.length > 5 || ns.some(isBlack)) return null;
+  const F = {}; whites.forEach((m, i) => F[m] = i + 1); return F;
+}
+function songIntro(song, mode, go) {
+  const ns = parseMel(song.mel).notes, used = [...new Set(ns.map(n => n.midi))].sort((a, b) => a - b), letters = [...new Set(used.map(m => sharpName(m)))];
+  const F = songFingers(song), first = ns[0].midi;
+  const [lo, hi] = songKeyRange(song);
+  pianoBuild(lo, hi, { labels: 'letters', fingers: F || undefined });
+  pkGlow(used, 'teach'); pkGlow(first, 'target');
+  const hand = F ? `Put your right hand on the keys: thumb (1) on <b>${midiLetter(Math.min(...used))}</b>. Each finger has a number on its key.` : `This song moves around, so your hand will slide as you go. Start on <b>${sharpName(first)}</b>.`;
+  const how = mode === 'follow' ? 'The next key will <b>glow yellow</b>. Take your time; the song waits for you!' : 'Colored bars will fall onto the keys. Press each key when its bar touches the <b>yellow line</b>. Start on Slow!';
+  document.getElementById('pn-main').innerHTML = `<div class="pn-teach"><div class="pn-teach-k">GET READY · ${escapeHtml(song.title)}</div>
+    <div class="pn-teach-t">This song uses ${letters.length} note${letters.length === 1 ? '' : 's'}: ${letters.map(l => `<b style="color:${KEY_COLORS[l[0]] || '#fff'}">${l}</b>`).join(' ')}</div>
+    <div class="pn-teach-s">${hand}</div><div class="pn-teach-s">${how}</div>
+    <div class="pn-row"><button class="btn btn-ghost" onclick="songPreview()">🔊 Hear it first</button><button class="btn btn-primary" onclick="songGo()">${mode === 'follow' ? 'Start learning ▶' : 'Start ▶'}</button></div></div>`;
+  PN.song = song; PN.introGo = go;
+  PN.onKey = m => { if (used.includes(m)) pkFlash(m, 'good'); };
+  muSay(`${song.title}. This song uses ${letters.length} notes: ${letters.map(spokenNote).join(', ')}. ${hand.replace(/<[^>]+>/g, '')} ${how.replace(/<[^>]+>/g, '')}`);
+}
+function songPreview() { hush(); const arr = arrange(PN.song, { leadIn: 0, soft: true }); muNewSongBus(); const at = AC.currentTime + 0.1; PN.seq && PN.seq.stop();
+  PN.seq = playArrangement(arr, at, arr.notes.map(n => ({ t: at + n.t, fn: t => { vPiano(t, n.midi, n.dur, 1); setTimeout(() => pkFlash(n.midi, 'good'), Math.max(0, (t - AC.currentTime) * 1000)); } }))); }
+function songGo() { hush(); PN.seq && PN.seq.stop(); muStopSongBus(); pkGlow(null, 'teach'); pkGlow(null, 'target'); const g = PN.introGo; PN.introGo = null; g(); }
+function songChordMap(song) {
+  const P0 = parseMel(song.mel), meter = song.meter || 4, len = Math.ceil(P0.len / meter - 0.001) * meter;
+  return harmonize(P0.notes, len, meter, song.key || 'C', song.per);
+}
+function chordBar(c, extra) {
+  const el = document.getElementById('pn-chordbar'); if (!el) return;
+  if (!c) { el.innerHTML = ''; return; }
+  const on = musicState().showChord;
+  el.innerHTML = `<span class="pn-cb-l">Chord</span><b>${c.name.replace('b', '♭')}</b><span class="pn-cb-n">${c.pcs.map(pc => PC_NAME[pc]).join(' + ')}</span>
+    <button class="pn-oct ${on ? 'on' : ''}" onclick="musicState().showChord=!musicState().showChord; persist(); PN.refresh && PN.refresh()">${on ? '🎨 Chord keys on' : '🎨 Show chord keys'}</button>${extra || ''}`;
+  pkTint(on ? c.pcs : null);
+}
+
+/* ── Learn mode: the next key glows and waits ── */
+function startFollow(id) {
+  const song = SONG(id), notes = parseMel(song.mel).notes;
+  document.getElementById('pn-h').textContent = song.title;
+  Object.assign(PN, { song, notes, i: 0, wrong: 0, wrongHere: 0, logExtra: { song: id }, chords: songChordMap(song), fingers: songFingers(song) });
+  const [lo, hi] = songKeyRange(song);
+  PN.rebuild = () => { pianoBuild(lo, hi, { fingers: PN.fingers || undefined }); if (!PN.introGo && PN.i < PN.notes.length && document.getElementById('pn-strip')) followDraw(true); };
+  pnTools(`<button class="pn-oct" onclick="openPiano({ mode: 'follow', song: '${id}' })">↺ Restart</button>`);
+  songIntro(song, 'follow', () => {
+    PN.rebuild();
+    const bud = buddyFor(), budSvg = bud && CRITTERS[bud] ? `<svg viewBox="0 0 100 100">${critterSVG(CRITTERS[bud])}</svg>` : '';
+    document.getElementById('pn-main').innerHTML = `<div class="pn-follow"><div class="pn-band"><div class="pn-bud" id="pn-bud">${budSvg}</div>${typeof pupHas === 'function' && pupHas() ? `<div class="pn-pup pup-holder" id="pn-pup">${pupBox('', 'happy')}</div>` : ''}</div>
+      <div class="pn-prompt" id="pn-prompt"></div><div class="pn-strip" id="pn-strip"></div>
+      <div class="pn-row"><button class="btn btn-ghost" onclick="songPreview()">🔊 Hear the song</button></div></div>`;
+    PN.refresh = () => followDraw(true);
+    followDraw();
+    muSay(`Here we go! Play ${spokenNote(sharpName(PN.notes[0].midi))}, the glowing key.`);
+    PN.onKey = m => {
+      if (PN.i >= PN.notes.length) return;
+      const want = PN.notes[PN.i].midi, okPc = pathId === 'k' && ((m - want) % 12 === 0);
+      if (m === want || okPc) {
+        pkFlash(m, 'good'); PN.i++; PN.wrongHere = 0;
+        const bd = document.getElementById('pn-bud'); if (bd) { bd.classList.remove('bop'); void bd.offsetWidth; bd.classList.add('bop'); }
+        if (PN.i % 8 === 0) { const pp = document.querySelector('#pn-pup .pup'); pp && pupDo(pp, 'jump'); }
+        if (PN.i >= PN.notes.length) followDone(); else followDraw();
+      } else {
+        PN.wrong++; PN.wrongHere++; pkFlash(m, 'bad');
+        const L = sharpName(want);
+        document.getElementById('pn-prompt').innerHTML = `That was ${sharpName(m)}. Find <b style="color:${KEY_COLORS[L[0]]}">${L}</b>, the glowing key!`;
+        if (PN.wrongHere <= 2) muSay(`That was ${spokenNote(sharpName(m))}. Find ${spokenNote(L)}. ${m < want ? 'Go a little to the right.' : 'Go a little to the left.'}`);
+      }
+    };
+  });
+}
+function followDraw(quiet) {
+  const n = PN.notes[PN.i]; pkGlow(n.midi);
+  const strip = PN.notes.slice(Math.max(0, PN.i - 2), PN.i + 9).map((x, j) => { const k = Math.max(0, PN.i - 2) + j, L = sharpName(x.midi);
+    return `<span class="${k < PN.i ? 'done' : k === PN.i ? 'now' : ''}" style="--kc:${KEY_COLORS[L[0]]}">${L}${PN.fingers && PN.fingers[x.midi] ? `<sub>${PN.fingers[x.midi]}</sub>` : ''}</span>`; }).join('');
+  document.getElementById('pn-strip').innerHTML = strip;
+  const L = sharpName(n.midi), fing = PN.fingers && PN.fingers[n.midi];
+  document.getElementById('pn-prompt').innerHTML = `Play <b style="color:${KEY_COLORS[L[0]]}">${L}</b>${fing ? ` <small>finger ${fing}</small>` : ''}<small>${PN.i} of ${PN.notes.length} notes</small>`;
+  const ch = PN.chords.find(h => n.b >= h.b && n.b < h.b + h.d);
+  chordBar(ch && ch.c);
+  if (!quiet) clearTimeout(PN.hintT);
+  if (!quiet) PN.hintT = setTimeout(() => { if (PN && PN.mode === 'follow' && PN.notes[PN.i] === n) muSay(`Play ${spokenNote(L)}${fing ? ', with finger ' + fing : ''}.`); }, 4000);
+}
+function followDone() {
+  pkGlow(null); clearTimeout(PN.hintT); chordBar(null);
+  const stars = PN.wrong <= 1 ? 3 : PN.wrong <= 5 ? 2 : 1, M = musicState(), r = M.piano[PN.song.id] || (M.piano[PN.song.id] = {});
+  const prev = r.follow || 0; r.follow = Math.max(prev, stars); P.coins += stars + (stars > prev ? 3 : 0);
+  musicLog(Math.round((Date.now() - PN.started) / 1000), { song: PN.song.id }); PN.started = Date.now();
+  persist(); musicCheckRewards();
+  document.getElementById('pn-main').innerHTML = `<div class="pn-done"><div class="pn-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
+    <h2>You played ${escapeHtml(PN.song.title)}!</h2><p>${PN.wrong ? `${PN.wrong} wrong key${PN.wrong === 1 ? '' : 's'} along the way. ` : 'Not one wrong key! '}${stars < 3 ? 'Play it again for 3 stars.' : 'Ready to try it in rhythm?'}</p>
+    <div class="pn-row"><button class="btn btn-primary" onclick="songPreview()">🔊 Hear it with the band</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'follow', song: '${PN.song.id}' })">Again</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'play', song: '${PN.song.id}' })">Play along ›</button></div></div>`;
+  confetti(stars * 10); sfx('big');
+  muSay(`You played ${PN.song.title}! ${stars === 3 ? 'Three stars! Now try Play along, to play it in rhythm.' : 'Play it again to earn three stars.'}`);
+}
+
+/* ── Play along: notes fall onto the keys, in rhythm ── */
+function startPlayAlong(id, slow) {
+  const song = SONG(id), speed = slow === false ? 1 : (slow || (pathId === 'k' ? 0.6 : 0.8));
+  document.getElementById('pn-h').textContent = song.title;
+  Object.assign(PN, { song, speed, logExtra: { song: id } });
+  pnTools(`<button class="pn-oct ${speed < 0.7 ? 'on' : ''}" onclick="openPiano({ mode: 'play', song: '${id}', slow: 0.6 })">🐢 Slow</button><button class="pn-oct ${speed >= 0.7 && speed < 1 ? 'on' : ''}" onclick="openPiano({ mode: 'play', song: '${id}', slow: 0.8 })">Medium</button><button class="pn-oct ${speed >= 1 ? 'on' : ''}" onclick="openPiano({ mode: 'play', song: '${id}', slow: false })">🐇 Full</button>`);
+  const [lo, hi] = songKeyRange(song);
+  PN.rebuild = () => pianoBuild(lo, hi, {});
+  const begin = () => {
+    PN.rebuild();
+    const arr = arrange(song, { speed, soft: true });
+    Object.assign(PN, { arr, hits: 0, judged: 0, startAt: 0, curChord: null });
+    PN.notes = arr.notes.map(n => Object.assign({}, n));
+    document.getElementById('pn-main').innerHTML = `<canvas id="pn-canvas"></canvas><div class="pn-pa-hud" id="pn-hud"></div>`;
+    const cv = document.getElementById('pn-canvas'), box = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = box.width * dpr; cv.height = box.height * dpr; PN.dpr = dpr; PN.cw = box.width; PN.ch = box.height;
+    muNewSongBus(); PN.startAt = AC.currentTime + 0.6; PN.lat = (AC.outputLatency || 0) + (AC.baseLatency || 0);
+    const extra = arr.beats.filter(b => b.lead).map(b => ({ t: PN.startAt + b.t, fn: t => vClick(t, b.accent) }));
+    PN.notes.forEach(n => extra.push({ t: PN.startAt + n.t, fn: t => vPiano(t, n.midi, n.dur, 0.18) }));
+    PN.seq = playArrangement(arr, PN.startAt, extra);
+    PN.refresh = () => { PN.curChord = null; };
+    PN.onKey = m => {
+      const now = AC.currentTime - PN.startAt - PN.lat, W = 0.24 / Math.max(0.6, speed);
+      const n = PN.notes.find(x => !x.judged && x.midi === m && Math.abs(x.t - now) <= W);
+      if (n) { n.judged = n.hit = true; PN.hits++; PN.judged++; pkFlash(m, 'good'); } else pkFlash(m, 'bad');
+    };
+    PN.raf = requestAnimationFrame(playFrame);
+  };
+  songIntro(song, 'play', () => { muSay('Get ready. Here come the notes!'); begin(); });
+}
+function playFrame() {
+  if (!PN || PN.done || PN.mode !== 'play') return;
+  const cv = document.getElementById('pn-canvas'); if (!cv) return;
+  const ctx = cv.getContext('2d'), now = AC.currentTime - PN.startAt - PN.lat, W = PN.cw, H = PN.ch, pps = H / 2.6;
+  ctx.setTransform(PN.dpr, 0, 0, PN.dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+  const cvb = cv.getBoundingClientRect();
+  const xOf = m => { const k = pkEl(m); if (!k) return null; const r = k.getBoundingClientRect(); return [r.left - cvb.left, r.width]; };
+  PN.notes.forEach(n => {
+    const missWin = 0.24 / Math.max(0.6, PN.speed);
+    if (!n.judged && now - n.t > missWin) { n.judged = true; PN.judged++; }
+    const y1 = H - (n.t - now) * pps, y0 = y1 - Math.max(10, n.dur * pps * 0.92);
+    if (y0 > H || y1 < -10) return;
+    const xw = xOf(n.midi); if (!xw) return;
+    const L = midiLetter(n.midi), col = isBlack(n.midi) ? '#9CA3AF' : KEY_COLORS[L[0]];
+    ctx.globalAlpha = n.hit ? 0.25 : n.judged ? 0.35 : 1;
+    ctx.fillStyle = col; const pad = xw[1] * 0.12, r = Math.min(10, xw[1] * 0.3);
+    ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(xw[0] + pad, y0, xw[1] - pad * 2, y1 - y0, r); else ctx.rect(xw[0] + pad, y0, xw[1] - pad * 2, y1 - y0); ctx.fill();
+    if (y1 - y0 > 22 && xw[1] > 22) { ctx.fillStyle = '#fff'; ctx.font = `900 ${Math.min(16, xw[1] * 0.45)}px system-ui`; ctx.textAlign = 'center'; ctx.fillText(sharpName(n.midi), xw[0] + xw[1] / 2, y1 - 8); }
+    ctx.globalAlpha = 1;
+  });
+  ctx.fillStyle = 'rgba(255,217,61,0.9)'; ctx.fillRect(0, H - 3, W, 3);
+  const ch = PN.arr.chords.find(c => now >= c.t && now < c.t + c.dur) || (now < (PN.arr.chords[0] || {}).t ? PN.arr.chords[0] : null);
+  if (ch && ch.c !== PN.curChord) { PN.curChord = ch.c; chordBar(ch.c); }
+  document.getElementById('pn-hud').textContent = `${PN.hits} / ${PN.notes.length} notes`;
+  if (now > PN.arr.end + 0.8) { playDone(); return; }
+  PN.raf = requestAnimationFrame(playFrame);
+}
+function playDone() {
+  const acc = PN.hits / PN.notes.length, stars = acc >= 0.9 ? 3 : acc >= 0.7 ? 2 : acc >= 0.45 ? 1 : 0;
+  const M = musicState(), r = M.piano[PN.song.id] || (M.piano[PN.song.id] = {}), prev = r.play || 0, bonus = PN.speed >= 1 ? 1 : 0;
+  r.play = Math.max(prev, stars); P.coins += stars * (1 + bonus) + (stars > prev ? 3 : 0);
+  PN.done = true; muStopSongBus(); chordBar(null);
+  musicLog(Math.round((Date.now() - PN.started) / 1000), { song: PN.song.id }); PN.started = Date.now();
+  persist(); musicCheckRewards();
+  document.getElementById('pn-main').innerHTML = `<div class="pn-done"><div class="pn-stars">${[0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('')}</div>
+    <h2>${Math.round(acc * 100)}% of the notes!</h2><p>${stars === 3 ? 'Right on the beat. Try the next speed up!' : stars ? 'Nice playing! Each time gets easier.' : 'Tricky one! Try Learn mode first, then come back.'}</p>
+    <div class="pn-row"><button class="btn btn-primary" onclick="openPiano({ mode: 'play', song: '${PN.song.id}', slow: ${PN.speed === 1 ? 'false' : PN.speed} })">Again</button><button class="btn btn-ghost" onclick="openPiano({ mode: 'follow', song: '${PN.song.id}' })">Learn mode</button></div></div>`;
+  if (stars) confetti(stars * 10);
+  muSay(`You hit ${Math.round(acc * 100)} percent of the notes! ${stars === 3 ? 'Right on the beat!' : stars ? 'Nice playing.' : 'Try Learn mode first, then come back.'}`);
+}
+
+(() => { const st = document.createElement('style'); st.textContent = `
+.mu-narr { color: #fff !important; }
+.mu-narr.on { background: rgba(110,231,154,.22) !important; border-color: #6EE79A !important; color: #fff !important; }
+.pn-teach { text-align: center; padding: 10px 12px; max-width: 760px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+.pn-teach-k { font-weight: 900; letter-spacing: .12em; font-size: 12.5px; color: #FFD93D; }
+.pn-teach-t { font-size: clamp(19px, 3vw, 26px); font-weight: 800; line-height: 1.35; margin: 8px 0 10px; }
+.pn-teach-s { font-size: clamp(15px, 2.2vw, 18px); line-height: 1.45; opacity: .9; margin: 6px 0; }
+.pn-skip { margin-top: 12px; font: inherit; font-size: 13px; font-weight: 700; color: #fff; opacity: .65; background: none; border: 0; text-decoration: underline; cursor: pointer; }
+.pn-chordbar { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 0; padding: 0 8px; font-weight: 800; }
+.pn-chordbar:not(:empty) { padding: 6px 8px; }
+.pn-chordbar b { font-size: 24px; color: #FFD93D; }
+.pn-cb-l { font-size: 12px; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
+.pn-cb-n { opacity: .85; }
+.pk.teach { box-shadow: inset 0 0 0 4px #7FD4FF, 0 0 18px rgba(127,212,255,.8); }
+.pk.w.teach { background: linear-gradient(180deg, #FFFFFF, #DDF1FF); }
+.pk.b.teach { background: linear-gradient(180deg, #2E6FA8, #18405F); }
+.pk.skip { background: repeating-linear-gradient(45deg, #F2F2F7, #F2F2F7 6px, #E1E1EA 6px, #E1E1EA 12px) !important; }
+.pk.skip::after { content: 'skip'; position: absolute; top: 66%; left: 0; right: 0; text-align: center; font-size: 11px; font-weight: 900; color: #8A84A0; }
+.pk.demo { background: linear-gradient(180deg, #FFF6C4, #FFD93D) !important; }
+.pk.b.demo { background: #C9A400 !important; }
+.pk.ch:not(.target):not(.down) { background: linear-gradient(180deg, #FFFFFF 15%, #CDB6FF); box-shadow: inset 0 -6px 0 #8B5CF6; }
+.pk.b.ch:not(.target):not(.down) { background: linear-gradient(180deg, #3A2E66, #5B3FC4); }
+.pk-f { position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; background: #2A2140; color: #fff; font-weight: 900; font-size: 13px; display: grid; place-items: center; z-index: 3; }
+.pk.b .pk-f { bottom: auto; top: 8px; background: #FFD93D; color: #2A2140; }
+.pk.b .pk-l { font-size: 10px; line-height: 1.15; bottom: 6px; }
+.pn-strip span sub { font-size: 11px; margin-left: 2px; opacity: .7; }
+.pn-prompt small { display: block; }
+.pn-helper { background: rgba(255,255,255,.07); border-radius: 16px; padding: 10px; margin: 10px auto; max-width: 560px; }
+.pn-helper-h { font-weight: 800; font-size: 14px; margin-bottom: 8px; }
+.pn-helper-btns { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.pn-helper-btns button { font: inherit; font-weight: 900; font-size: 17px; min-width: 52px; padding: 8px 12px; border-radius: 12px; border: 0; background: linear-gradient(135deg, #7209B7, #4361EE); color: #fff; cursor: pointer; }
+.pn-free-sub { font-size: 16px; opacity: .9; min-height: 1.4em; }
+@media (max-width: 699px) { #piano-screen .topbar { flex-wrap: wrap; row-gap: 8px; } #piano-screen .topbar h2 { flex: 1; min-width: 0; font-size: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } #piano-screen .pn-tools { order: 3; width: 100%; justify-content: flex-start; margin-left: 0; } .pn-tools .pn-oct { font-size: 12px; padding: 6px 8px; } .pn-chordbar b { font-size: 20px; } .pk-f { width: 18px; height: 18px; font-size: 11px; } }
+`; document.head.appendChild(st); })();
+
+/* ═══════════════════════════════════════════════════════════
+   VISUALS v2: richer question pictures + lesson backgrounds
+   · Every math picture sits on a soft "stage" card.
+   · Arrays: each row is its own colored tray of glossy gems, so
+     "3 rows of 4" reads at a glance (and division = sharing into trays).
+   · Area grids: two-tone tiles with "columns →" / "rows ↓" guides.
+   · Counting: items sit on little tokens; groups get their own bags;
+     take-away items float off; ten-frames look like real wooden frames
+     with red counters; fraction bars look like candy bars.
+   · Grade 3 lesson/game/finish screens get a twilight sky with an
+     aurora swirl at the bottom; the K finish screen gets the sky theme.
+   DOM order and class names (.dot, rect, .critter-count span, .tf-cell)
+   are kept, so "Watch me" / "Together" walkthroughs still highlight
+   the right pieces.
+   ═══════════════════════════════════════════════════════════ */
+const VIS_ROW = [['#FF6B6B', '255,107,107'], ['#FFA94D', '255,169,77'], ['#FFD43B', '255,212,59'], ['#69DB7C', '105,219,124'], ['#38D9A9', '56,217,169'],
+                 ['#4DABF7', '77,171,247'], ['#748FFC', '116,143,252'], ['#B197FC', '177,151,252'], ['#F783AC', '247,131,172'], ['#FF8787', '255,135,135']];
+const VIS_STAGE_KINDS = new Set(['array', 'grid', 'icons', 'twogroups', 'takeaway', 'tenframe', 'tenframes', 'fraction', 'fraccompare', 'pattern', 'split', 'clock', 'coins', 'blocks', 'digits', 'pairs', 'rect', 'bars', 'colmath', 'cycle']);
+
+EXTRA_VIS.array = function (v, box) {
+  const rows = v.rows, cols = Math.min(v.cols, 12), total = rows * cols;
+  const size = total > 70 ? 14 : total > 45 ? 17 : total > 24 ? 21 : 25;
+  const wrap = document.createElement('div'); wrap.className = 'va-wrap';
+  let i = 0;
+  for (let r = 0; r < rows; r++) {
+    const [c, rgb] = VIS_ROW[r % VIS_ROW.length];
+    const tray = document.createElement('div'); tray.className = 'va-row'; tray.style.setProperty('--c', c); tray.style.setProperty('--rgb', rgb);
+    for (let k = 0; k < cols; k++, i++) {
+      const d = document.createElement('div'); d.className = 'dot va-dot';
+      d.style.width = d.style.height = size + 'px';
+      d.style.animationDelay = (r * 0.06 + k * 0.012) + 's';
+      tray.appendChild(d);
+    }
+    wrap.appendChild(tray);
+  }
+  box.appendChild(wrap);
+};
+EXTRA_VIS.grid = function (v, box) {
+  const cell = v.cols > 8 || v.rows > 6 ? 22 : 28, gap = 3, W = v.cols * cell, H = v.rows * cell;
+  let cells = '';
+  for (let r = 0; r < v.rows; r++) for (let c = 0; c < v.cols; c++)
+    cells += `<rect x="${c * cell + gap / 2}" y="${r * cell + gap / 2}" width="${cell - gap}" height="${cell - gap}" rx="5" fill="${(r + c) % 2 ? '#34D399' : '#6EE7B7'}" stroke="#0F9F6E" stroke-width="1.2" style="animation-delay:${(r * v.cols + c) * 0.008}s"/>`;
+  box.innerHTML = `<div class="vg-area"><div class="vg-top">columns →</div><div class="vg-mid"><div class="vg-side">rows ↓</div>
+    <svg class="vg-svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${cells}</svg></div></div>`;
+};
+function visTokens(n, icon, cls) {
+  const g = document.createElement('div'); g.className = 'critter-count vc-tray' + (cls ? ' ' + cls : '');
+  for (let i = 0; i < n; i++) { const s = document.createElement('span'); s.className = 'vc-tok'; s.textContent = icon; s.style.animationDelay = (i * 0.045) + 's'; g.appendChild(s); }
+  return g;
+}
+EXTRA_VIS.icons = function (v, box) { box.appendChild(visTokens(v.count, v.icon, v.count > 10 ? 'many' : '')); };
+EXTRA_VIS.twogroups = function (v, box) {
+  const row = document.createElement('div'); row.className = 'vg-groups';
+  const bag = (n, cls) => { const b = document.createElement('div'); b.className = 'vg-bag ' + cls; b.appendChild(visTokens(n, v.icon, n > 8 ? 'many' : '')); return b; };
+  const op = document.createElement('div'); op.className = 'group-op vg-op' + (v.op ? '' : ' vs'); op.textContent = v.op || 'vs';
+  row.appendChild(bag(v.a, 'a')); row.appendChild(op); row.appendChild(bag(v.b, 'b'));
+  box.appendChild(row);
+};
+EXTRA_VIS.takeaway = function (v, box) {
+  const g = visTokens(v.total, v.icon, v.total > 10 ? 'many' : ''); g.classList.add('vc-take');
+  box.appendChild(g);
+  const spans = [...g.querySelectorAll('span')];
+  setTimeout(() => { for (let i = v.total - v.gone; i < v.total; i++) if (spans[i]) spans[i].classList.add('gone'); }, 520);
+};
+const _tenframesVis = EXTRA_VIS.tenframes;
+EXTRA_VIS.tenframe = function (v, box) {
+  const f = document.createElement('div'); f.className = 'tenframe vt-frame';
+  for (let i = 0; i < 10; i++) {
+    const c = document.createElement('div'); c.className = 'tf-cell' + (i < v.filled ? ' filled' : '');
+    if (i >= v.filled) c.textContent = '?'; c.style.animationDelay = (i * 0.04) + 's';
+    f.appendChild(c);
+  }
+  box.appendChild(f);
+};
+EXTRA_VIS.tenframes = function (v, box) { _tenframesVis(v, box); box.querySelectorAll('.tenframe').forEach(f => f.classList.add('vt-frame')); };
+fractionBar = function (num, den, width) {
+  const h = 46, seg = width / den;
+  let parts = '';
+  for (let i = 0; i < den; i++) parts += `<rect x="${i * seg + 1.5}" y="2" width="${seg - 3}" height="${h - 4}" rx="7" fill="${i < num ? 'url(#vfFill)' : 'rgba(255,255,255,0.10)'}" stroke="${i < num ? '#B45309' : 'rgba(255,255,255,0.45)'}" stroke-width="2"/>`;
+  const wrap = document.createElement('div'); wrap.className = 'vf-wrap';
+  wrap.innerHTML = `<svg class="vf-svg" width="${width}" height="${h}" viewBox="0 0 ${width} ${h}"><defs><linearGradient id="vfFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE58A"/><stop offset="0.55" stop-color="#FFC233"/><stop offset="1" stop-color="#F59E0B"/></linearGradient></defs>${parts}</svg>`;
+  return wrap;
+};
+const _patternVis = EXTRA_VIS.pattern;
+EXTRA_VIS.pattern = function (v, box) { _patternVis(v, box); box.querySelectorAll('.pattern-row').forEach(r => r.classList.add('vp-row')); };
+const _pairsVis = EXTRA_VIS.pairs;
+EXTRA_VIS.pairs = function (v, box) {
+  const cols = Math.ceil(v.n / 2), W = cols * 30 + 10;
+  let s = '';
+  for (let c = 0; c < cols; c++) { const both = c * 2 + 1 < v.n; if (both) s += `<rect x="${c * 30 + 3}" y="3" width="24" height="54" rx="12" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.35)" stroke-dasharray="3 3"/>`; }
+  for (let i = 0; i < v.n; i++) {
+    const c = Math.floor(i / 2), r = i % 2, lone = v.n % 2 === 1 && i === v.n - 1;
+    s += `<circle cx="${15 + c * 30}" cy="${17 + r * 26}" r="9.5" fill="${lone ? '#FF6B4A' : VIS_ROW[c % VIS_ROW.length][0]}" stroke="rgba(0,0,0,.25)" stroke-width="1.5"/><circle cx="${12 + c * 30}" cy="${14 + r * 26}" r="3" fill="#fff" opacity=".6"/>`;
+  }
+  box.innerHTML = `<svg width="${W}" height="62" viewBox="0 0 ${W} 62">${s}</svg>`;
+};
+// every math picture gets a stage card
+const _renderVisualStage = renderVisual;
+renderVisual = function (v, boxEl) {
+  const r = _renderVisualStage.apply(this, arguments);
+  const box = boxEl || document.getElementById('q-visual');
+  if (box) box.classList.toggle('vis-stage', !!(v && VIS_STAGE_KINDS.has(v.kind)));
+  return r;
+};
+
+(() => { const st = document.createElement('style');
+  const aurora = 'url("data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" preserveAspectRatio="none"><defs><linearGradient id="a" x1="0" x2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset=".5" stop-color="#22D3EE"/><stop offset="1" stop-color="#F472B6"/></linearGradient><linearGradient id="b" x1="0" x2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset=".6" stop-color="#A78BFA"/><stop offset="1" stop-color="#34D399"/></linearGradient></defs><path d="M0 170 C200 110 360 200 560 150 C760 100 900 190 1200 120 L1200 260 L0 260Z" fill="url(#a)" opacity=".38"/><path d="M0 210 C240 160 420 240 640 195 C860 150 1000 220 1200 180 L1200 260 L0 260Z" fill="url(#b)" opacity=".45"/><path d="M0 240 C300 215 520 255 760 232 C960 214 1080 240 1200 228 L1200 260 L0 260Z" fill="#1B2458" opacity=".9"/></svg>') + '")';
+  const stars = 'url("data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><g fill="#fff"><circle cx="30" cy="40" r="1.3" opacity=".6"/><circle cx="140" cy="90" r="1" opacity=".45"/><circle cx="230" cy="26" r="1.5" opacity=".7"/><circle cx="320" cy="120" r="1" opacity=".5"/><circle cx="380" cy="54" r="1.2" opacity=".6"/><circle cx="80" cy="190" r="1" opacity=".4"/><circle cx="270" cy="220" r="1.1" opacity=".45"/><circle cx="170" cy="270" r="1.2" opacity=".5"/></g></svg>') + '")';
+  st.textContent = `
+/* ── Grade 3 lesson, practice and finish screens: twilight + aurora ── */
+#app[data-path="g3"] #learn-screen, #app[data-path="g3"] #teach-screen, #app[data-path="g3"] #game-screen, #app[data-path="g3"] #done-screen, #app[data-path="g3"] #act-screen {
+  background: ${aurora} center bottom / 100% 190px no-repeat, ${stars} top left / 400px 300px repeat,
+    radial-gradient(ellipse at 85% -10%, rgba(124,92,255,.35) 0%, transparent 55%), radial-gradient(ellipse at 0% 40%, rgba(34,211,238,.12) 0%, transparent 45%),
+    linear-gradient(180deg, #1B2458 0%, #161D45 60%, #131A3A 100%); }
+#app[data-path="g3"] .q-card, #app[data-path="g3"] .lesson-card { background: linear-gradient(160deg, rgba(42,54,120,.92), rgba(30,38,92,.92)); border-color: rgba(167,139,250,.35); box-shadow: 0 16px 36px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08); }
+#app[data-path="g3"] #game-screen .choice { background: linear-gradient(180deg, rgba(58,72,150,.95), rgba(40,50,112,.95)); border-color: rgba(167,139,250,.35); }
+#app[data-path="g3"] #done-screen .reward-box { background: linear-gradient(160deg, rgba(42,54,120,.9), rgba(30,38,92,.9)); border-color: rgba(167,139,250,.35); }
+
+/* ── K finish screen: same sky as the rest of Sprout Scouts ── */
+#app[data-path="k"] #done-screen { background: url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0 120 C150 70 300 70 450 105 C600 140 720 60 900 70 C1030 78 1120 110 1200 95 L1200 200 L0 200 Z" fill="#CFEFC0"/><path d="M0 150 C180 110 330 125 500 145 C680 165 820 115 1000 120 C1100 123 1160 140 1200 135 L1200 200 L0 200 Z" fill="#B3E39E"/><path d="M0 178 C200 160 420 170 600 182 C800 194 1000 168 1200 172 L1200 200 L0 200 Z" fill="#9AD883"/></svg>')}") center bottom / 100% 130px no-repeat, linear-gradient(180deg, #BDE3FF 0%, #D9EFFF 40%, #F2FBEF 100%); color: #2A2140; }
+#app[data-path="k"] #done-screen .reward-box { background: #FFFFFF; border-color: transparent; box-shadow: 0 10px 26px rgba(46,90,160,.12); color: #2A2140; }
+#app[data-path="k"] #done-screen .rb-label, #app[data-path="k"] #done-screen .stat-line span { color: #5E5478; }
+#app[data-path="k"] #done-screen .stat-line b, #app[data-path="k"] #done-screen .hatch-name { color: #2A2140; }
+#app[data-path="k"] #done-screen .fb-btn { background: #F4F8FD; border-color: #D7E4F2; color: #2A2140; }
+#app[data-path="k"] #done-screen .fb-btn.on { background: #FFF1C2; border-color: #FFC83D; }
+#app[data-path="k"] #done-screen .brain-card { background: #FFFFFF; color: #2A2140; box-shadow: 0 10px 26px rgba(46,90,160,.12); }
+#app[data-path="k"] #done-screen .brain-card i { color: #5E5478; }
+#app[data-path="k"] #done-screen .brain-card small { color: #B7791F; }
+#app[data-path="k"] #done-screen .bc-other { color: #2563EB; background: transparent; }
+
+/* ── the stage card behind math pictures ── */
+.q-visual.vis-stage { padding: 14px 18px; border-radius: 22px; margin-left: auto; margin-right: auto; width: fit-content; max-width: 100%; box-sizing: border-box;
+  background: linear-gradient(160deg, rgba(124,92,255,.22), rgba(56,189,248,.12)); border: 1px solid rgba(255,255,255,.14); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 6px 18px rgba(0,0,0,.18); }
+#app[data-path="k"] .q-visual.vis-stage { background: linear-gradient(160deg, #FFF8E6, #EAF6FF); border: 2px solid #FFE7A8; box-shadow: 0 6px 16px rgba(46,90,160,.10); }
+#app[data-path="ad"] .q-visual.vis-stage { background: #F6F8FC; border: 1px solid #E3E8F2; box-shadow: none; }
+
+/* arrays: one colored tray per row */
+.va-wrap { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.va-row { display: flex; gap: 5px; padding: 5px 8px; border-radius: 999px; background: rgba(var(--rgb), .16); border: 1.5px dashed rgba(var(--rgb), .55); }
+.va-dot { border-radius: 50%; background: radial-gradient(circle at 34% 30%, #FFFFFF 0 14%, var(--c) 46%, rgba(0,0,0,.25) 100%), var(--c) !important; box-shadow: 0 2px 0 rgba(0,0,0,.22), inset -2px -3px 4px rgba(0,0,0,.18); animation: vaPop .34s cubic-bezier(.3,1.6,.5,1) backwards; }
+@keyframes vaPop { from { transform: scale(0) translateY(6px); } }
+#app[data-path="k"] .va-row { background: rgba(var(--rgb), .14); }
+/* area */
+.vg-area { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.vg-top, .vg-side { font-size: 12px; font-weight: 900; letter-spacing: .06em; color: #A7F3D0; text-transform: uppercase; }
+.vg-mid { display: flex; align-items: center; gap: 6px; }
+.vg-side { writing-mode: vertical-rl; transform: rotate(180deg); }
+.vg-svg { filter: drop-shadow(0 4px 8px rgba(0,0,0,.25)); }
+.vg-svg rect { animation: vaPop .3s ease-out backwards; transform-box: fill-box; transform-origin: center; }
+/* counting tokens & groups */
+.vc-tray { gap: 7px; max-width: 340px; }
+.vc-tok { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; font-size: 28px !important; background: radial-gradient(circle at 40% 30%, rgba(255,255,255,.22), rgba(255,255,255,.06)); box-shadow: 0 3px 0 rgba(0,0,0,.2); }
+.vc-tray.many .vc-tok { width: 36px; height: 36px; font-size: 22px !important; }
+#app[data-path="k"] .vc-tok { background: radial-gradient(circle at 40% 30%, #FFFFFF, #FFF1D0); box-shadow: 0 3px 0 #EBCB8B; }
+.vg-groups { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.vg-bag { padding: 10px; border-radius: 24px; border: 2.5px solid; min-width: 60px; }
+.vg-bag.a { border-color: #60A5FA; background: rgba(96,165,250,.14); }
+.vg-bag.b { border-color: #F472B6; background: rgba(244,114,182,.14); }
+.vg-bag .critter-count { max-width: 170px !important; }
+.vg-op { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(135deg, #FFD93D, #FF9F1C); color: #2A2140 !important; font-size: 26px !important; box-shadow: 0 4px 0 rgba(0,0,0,.2); }
+.vg-op.vs { font-size: 15px !important; }
+.vc-take .vc-tok.gone { animation: vcAway .7s ease-in forwards; }
+@keyframes vcAway { to { transform: translateY(-14px) scale(.8) rotate(-12deg); opacity: .25; filter: grayscale(1); } }
+.vc-take .vc-tok.gone::after { content: '✕'; position: absolute; font-size: 22px; color: #EF4444; font-weight: 900; }
+.vc-take .vc-tok { position: relative; }
+/* ten-frames */
+#app .q-visual .vt-frame, #app .vt-frame { background: linear-gradient(180deg, #D9A066, #B7773D); border: 0; padding: 8px; border-radius: 14px; box-shadow: 0 5px 0 #8A5527, inset 0 2px 0 rgba(255,255,255,.35); gap: 6px; }
+#app .vt-frame .tf-cell { width: 32px; height: 32px; border-radius: 9px; background: #FFF9EE; border: 0; box-shadow: inset 0 2px 4px rgba(0,0,0,.18); color: #C9A27A; font-size: 15px; }
+#app .vt-frame .tf-cell.filled { background: #FFF9EE; position: relative; }
+#app .vt-frame .tf-cell.filled::before { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #FFFFFF 0 12%, #FF5A5A 45%, #C81E1E 100%); box-shadow: 0 2px 0 rgba(0,0,0,.25); animation: vaPop .3s cubic-bezier(.3,1.6,.5,1) backwards; animation-delay: inherit; }
+/* fractions */
+.vf-svg { filter: drop-shadow(0 4px 8px rgba(0,0,0,.25)); }
+/* patterns */
+.vp-row span:not(.pat-q) { display: inline-grid; place-items: center; width: 50px; height: 50px; border-radius: 14px; background: rgba(255,255,255,.12); box-shadow: 0 3px 0 rgba(0,0,0,.18); }
+#app[data-path="k"] .vp-row span:not(.pat-q) { background: #FFFFFF; box-shadow: 0 3px 0 #E4D3A7; }
+.vp-row .pat-q { animation: vpQ 1.2s ease-in-out infinite; }
+@keyframes vpQ { 50% { transform: scale(1.12); } }
+@media (max-width: 699px) {
+  .vc-tok { width: 38px; height: 38px; font-size: 23px !important; } .vc-tray.many .vc-tok { width: 31px; height: 31px; font-size: 19px !important; }
+  .vg-bag { padding: 7px; } .vp-row span:not(.pat-q) { width: 42px; height: 42px; }
+  #app .vt-frame .tf-cell { width: 28px; height: 28px; }
+  .q-visual.vis-stage { padding: 10px 12px; }
 }
 `; document.head.appendChild(st); })();
 
